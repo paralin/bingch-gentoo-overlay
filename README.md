@@ -11,7 +11,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
 <repositories xmlns="" version="1.0">
   <repo quality="experimental" status="unofficial">
     <name>bingch</name>
-    <description>bingch's local ebuilds</description>
+    <description>bingch local ebuilds</description>
     <homepage>https://github.com/bingch/gentoo-overlay</homepage>
     <owner type="project">
        <email>bingquick@hotmail.com</email>

@@ -1,0 +1,15 @@
+gnome-base/gnome -extras
+gnome-base/gvfs afp archive bluray fuse mtp gphoto2 ios samba google 
+gnome-base/gnome-control-center bluetooth networkmanager
+=net-libs/gnome-online-accounts-3.26.2 vala
+dev-libs/folks -tracker
+>=media-libs/gd-2.2.5 fontconfig
+>=x11-libs/gtksourceview-3.24.7 vala
+# required by gnome-extra/gnome-boxes (argument)
+>=net-misc/spice-gtk-0.34-r2 smartcard vala
+>=app-emulation/qemu-2.11.1-r2 smartcard
+>=app-emulation/spice-0.14.0-r1 smartcard
+>=app-crypt/libsecret-0.18.6 vala
+>=net-libs/gtk-vnc-0.7.2 vala
+# required by gnome-extra/gnome-contacts-3.28.2-r1::bingch
+>=net-libs/gnome-online-accounts-3.28.0 vala

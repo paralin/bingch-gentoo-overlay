@@ -1,0 +1,12 @@
+diff --git a/intl/unicharutil/util/moz.build b/intl/unicharutil/util/moz.build
+index b12b3bb4f1fb..05f5ccfba1bb 100644
+--- a/intl/unicharutil/util/moz.build
++++ b/intl/unicharutil/util/moz.build
+@@ -25,4 +25,7 @@ UNIFIED_SOURCES += [
+     'nsUnicodeProperties.cpp',
+ ]
+ 
++if CONFIG['MOZ_SYSTEM_HARFBUZZ']:
++    CXXFLAGS += CONFIG['MOZ_HARFBUZZ_CFLAGS']
++
+ FINAL_LIBRARY = 'xul'

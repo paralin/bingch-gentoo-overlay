@@ -10,8 +10,8 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://anongit.freedesktop.org/git/cairo"
 	SRC_URI=""
 else
-	SRC_URI="http://cairographics.org/snapshots/cairo-${PV}.tar.xz"
-	KEYWORDS="alpha amd64 ~arm arm64 ~hppa ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+	SRC_URI="https://www.cairographics.org/releases/${P}.tar.xz"
+	KEYWORDS="alpha amd64 arm arm64 hppa ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 fi
 
 DESCRIPTION="A vector graphics library with cross-device output support"
@@ -42,17 +42,11 @@ RDEPEND=">=dev-libs/lzo-2.06-r1[${MULTILIB_USEDEP}]
 	)
 	xcb? (
 		>=x11-libs/libxcb-1.9.1[${MULTILIB_USEDEP}]
-	)
-	abi_x86_32? (
-		!<=app-emulation/emul-linux-x86-gtklibs-20131008-r1
-		!app-emulation/emul-linux-x86-gtklibs[-abi_x86_32(-)]
 	)"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	>=sys-devel/libtool-2
-	X? (
-		>=x11-proto/renderproto-0.11.1-r1[${MULTILIB_USEDEP}]
-	)"
+	X? ( x11-base/xorg-proto )"
 #[[ ${PV} == *9999* ]] && DEPEND="${DEPEND}
 #	doc? (
 #		>=dev-util/gtk-doc-1.6

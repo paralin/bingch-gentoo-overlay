@@ -263,7 +263,7 @@ mozconfig_config() {
 	fi
 	mozconfig_annotate '' --prefix="${EPREFIX}"/usr
 	mozconfig_annotate '' --libdir="${EPREFIX}"/usr/$(get_libdir)
-	#mozconfig_annotate 'Gentoo default' --enable-system-hunspell
+	mozconfig_annotate 'Gentoo default' --enable-system-hunspell
 	mozconfig_annotate '' --disable-crashreporter
 	mozconfig_annotate 'Gentoo default' --with-system-png
 	mozconfig_annotate '' --enable-system-ffi
@@ -331,8 +331,8 @@ mozconfig_config() {
 	mozconfig_use_with system-jpeg
 	mozconfig_use_with system-icu
 	mozconfig_use_with system-libvpx
-	#mozconfig_use_with system-harfbuzz
-	#mozconfig_use_with system-harfbuzz system-graphite2
+	mozconfig_use_with system-harfbuzz
+	mozconfig_use_with system-harfbuzz system-graphite2
 
 	# Modifications to better support ARM, bug 553364
 	if use neon ; then

@@ -24,13 +24,13 @@ if [[ ${MOZ_ESR} == 1 ]]; then
 fi
 
 # Patch version
-PATCH="${PN}-60.0-patches-02"
+PATCH="${PN}-61.0-patches-01"
 MOZ_HTTP_URI="https://archive.mozilla.org/pub/${PN}/releases"
 
 MOZCONFIG_OPTIONAL_WIFI=1
 
-inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6.60-wayland \
-		pax-utils xdg-utils autotools mozlinguas-v2
+inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils llvm \
+		mozconfig-v6.60-wayland pax-utils xdg-utils autotools mozlinguas-v2
 
 DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="http://www.mozilla.com/firefox"
@@ -56,8 +56,8 @@ ASM_DEPEND=">=dev-lang/yasm-1.1"
 RDEPEND="
 	system-icu? ( >=dev-libs/icu-60.2 )
 	jack? ( virtual/jack )
-	>=dev-libs/nss-3.35
-	>=dev-libs/nspr-4.18
+	>=dev-libs/nss-3.38
+	>=dev-libs/nspr-4.19
 	selinux? ( sec-policy/selinux-mozilla )"
 
 DEPEND="${RDEPEND}
@@ -77,6 +77,10 @@ BUILD_OBJ_DIR="${S}/ff"
 if [[ -z $GMP_PLUGIN_LIST ]]; then
 	GMP_PLUGIN_LIST=( gmp-gmpopenh264 gmp-widevinecdm )
 fi
+
+llvm_check_deps() {
+	has_version "sys-devel/clang:${LLVM_SLOT}"
+}
 
 pkg_setup() {
 	moz_pkgsetup
@@ -99,6 +103,8 @@ pkg_setup() {
 	fi
 
 	addpredict /proc/self/oom_score_adj
+
+	llvm_pkg_setup
 }
 
 pkg_pretend() {
@@ -117,6 +123,8 @@ src_unpack() {
 
 src_prepare() {
 	eapply "${WORKDIR}/firefox"
+
+	eapply "${FILESDIR}/bug_1461221.patch"
 
 	# Enable gnomebreakpad
 	if use debug ; then
@@ -202,9 +210,6 @@ src_configure() {
 		append-ldflags "-Wl,-z,relro,-z,now"
 		mozconfig_use_enable hardened hardening
 	fi
-
-	# Only available on mozilla-overlay for experimentation -- Removed in Gentoo repo per bug 571180
-	#use egl && mozconfig_annotate 'Enable EGL as GL provider' --with-gl-provider=EGL
 
 	# Setup api key for location services
 	echo -n "${_google_api_key}" > "${S}"/google-api-key

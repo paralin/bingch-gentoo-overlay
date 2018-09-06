@@ -29,7 +29,7 @@ MOZ_HTTP_URI="https://archive.mozilla.org/pub/${PN}/releases"
 
 MOZCONFIG_OPTIONAL_WIFI=1
 
-inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6.60-wayland \
+inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6.9999-wayland \
 		pax-utils xdg-utils autotools mozlinguas-v2 git-r3
 
 DESCRIPTION="Firefox Web Browser"

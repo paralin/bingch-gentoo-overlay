@@ -34,7 +34,7 @@ RDEPEND="
 	media-libs/clutter:1.0
 	media-libs/clutter-gtk:1.0
 	media-libs/libchamplain:0.12
-	net-libs/gnome-online-accounts:=[vala]
+	net-libs/gnome-online-accounts
 	>=net-libs/telepathy-glib-0.22
 	>=sci-geosciences/geocode-glib-3.15.3
 	x11-libs/cairo:=

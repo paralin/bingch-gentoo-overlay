@@ -1,0 +1,18 @@
+34c34
+< 		mozcoreconf-v6 pax-utils xdg-utils autotools mozlinguas-v2
+---
+> 		mozcoreconf-v6 pax-utils xdg-utils autotools mozlinguas-v2 git-r3
+39c39
+< KEYWORDS="~amd64 ~x86"
+---
+> KEYWORDS=""
+49,51c49,50
+< SRC_URI="${SRC_URI}
+< 	${MOZ_HTTP_URI}/${MOZ_PV}/source/firefox-${MOZ_PV}.source.tar.xz
+< 	${PATCH_URIS[@]}"
+---
+> EGIT_REPO_URI="https://github.com/mozilla/gecko-dev.git"                      |
+> SRC_URI="${PATCH_URIS[@]}"
+172a172,173
+> 	git-r3_fetch
+> 	git-r3_checkout

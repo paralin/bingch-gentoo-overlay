@@ -178,7 +178,7 @@ src_unpack() {
 }
 
 src_prepare() {
-	eapply "${WORKDIR}/firefox"
+	#eapply "${WORKDIR}/firefox"
 
 	# Enable gnomebreakpad
 	if use debug ; then
@@ -291,7 +291,7 @@ src_configure() {
 
 	mozconfig_use_enable !bindist official-branding
 	# Enable position independent executables
-	mozconfig_annotate 'enabled by Gentoo' --enable-pie
+#	mozconfig_annotate 'enabled by Gentoo' --enable-pie
 
 	mozconfig_use_enable debug
 	mozconfig_use_enable debug tests
@@ -338,8 +338,8 @@ src_configure() {
 	mozconfig_use_with system-jpeg
 	mozconfig_use_with system-icu
 	mozconfig_use_with system-libvpx
-	mozconfig_use_with system-harfbuzz
-	mozconfig_use_with system-harfbuzz system-graphite2
+#	mozconfig_use_with system-harfbuzz
+#	mozconfig_use_with system-harfbuzz system-graphite2
 	mozconfig_use_enable pulseaudio
 	# force the deprecated alsa sound code if pulseaudio is disabled
 	if use kernel_linux && ! use pulseaudio ; then

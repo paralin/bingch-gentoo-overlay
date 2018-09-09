@@ -1,18 +1,32 @@
 34c34
-< 		mozcoreconf-v6 pax-utils xdg-utils autotools mozlinguas-v2
+< 		mozcoreconf-v6 pax-utils xdg-utils autotools mozlinguas-v2 git-r3
 ---
-> 		mozcoreconf-v6 pax-utils xdg-utils autotools mozlinguas-v2 git-r3
+> 		mozcoreconf-v6 pax-utils xdg-utils autotools mozlinguas-v2
 39c39
-< KEYWORDS="~amd64 ~x86"
+< KEYWORDS=""
 ---
-> KEYWORDS=""
-49,51c49,50
-< SRC_URI="${SRC_URI}
-< 	${MOZ_HTTP_URI}/${MOZ_PV}/source/firefox-${MOZ_PV}.source.tar.xz
-< 	${PATCH_URIS[@]}"
+> KEYWORDS="~amd64 ~x86"
+49,50c49,51
+< EGIT_REPO_URI="https://github.com/mozilla/gecko-dev.git"
+< SRC_URI="${PATCH_URIS[@]}"
 ---
-> EGIT_REPO_URI="https://github.com/mozilla/gecko-dev.git"                      |
-> SRC_URI="${PATCH_URIS[@]}"
-172a172,173
-> 	git-r3_fetch
-> 	git-r3_checkout
+> SRC_URI="${SRC_URI}
+> 	${MOZ_HTTP_URI}/${MOZ_PV}/source/firefox-${MOZ_PV}.source.tar.xz
+> 	${PATCH_URIS[@]}"
+172,173d172
+< 	git-r3_fetch
+< 	git-r3_checkout
+181c180
+< 	#eapply "${WORKDIR}/firefox"
+---
+> 	eapply "${WORKDIR}/firefox"
+294c293
+< #	mozconfig_annotate 'enabled by Gentoo' --enable-pie
+---
+> 	mozconfig_annotate 'enabled by Gentoo' --enable-pie
+341,342c340,341
+< #	mozconfig_use_with system-harfbuzz
+< #	mozconfig_use_with system-harfbuzz system-graphite2
+---
+> 	mozconfig_use_with system-harfbuzz
+> 	mozconfig_use_with system-harfbuzz system-graphite2

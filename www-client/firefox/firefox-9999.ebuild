@@ -115,6 +115,7 @@ DEPEND="${CDEPEND}
 	) )
 	>=sys-devel/llvm-4.0.1
 	>=sys-devel/clang-4.0.1
+	>=dev-util/cbindgen-0.6.3
 	amd64? ( >=dev-lang/yasm-1.1 virtual/opengl )
 	x86? ( >=dev-lang/yasm-1.1 virtual/opengl )"
 

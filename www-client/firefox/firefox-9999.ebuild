@@ -50,8 +50,8 @@ EGIT_REPO_URI="https://github.com/mozilla/gecko-dev.git"
 SRC_URI="${PATCH_URIS[@]}"
 
 CDEPEND="
-	>=dev-libs/nss-3.38
-	>=dev-libs/nspr-4.19
+	>=dev-libs/nss-3.40
+	>=dev-libs/nspr-4.20
 	>=app-text/hunspell-1.5.4:=
 	dev-libs/atk
 	dev-libs/expat

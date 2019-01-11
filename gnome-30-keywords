@@ -62,6 +62,7 @@ gnome-extra/nautilus-tracker-tags
 >=media-video/cheese-3.26.0
 >=media-video/totem-3.26.0
 >=media-gfx/eog-3.26
+=media-video/pipewire-0.2.5 ~amd64
 >=net-irc/polari-3.26.0
 >=net-libs/gnome-online-accounts-3.26.0
 >=net-libs/libpsl-0.20.1 ~amd64

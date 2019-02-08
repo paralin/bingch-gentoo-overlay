@@ -3,6 +3,7 @@
 >=app-arch/file-roller-3.26.0
 >=app-editors/gedit-3.26.1 ~amd64
 >=app-misc/tracker-2.0.3
+=app-misc/tracker-miners-2.1.4-r1 ~amd64
 >=app-text/evince-3.26.2
 >=app-text/libgepub-0.6.0
 >=dev-cpp/glibmm-2.56.0

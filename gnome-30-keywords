@@ -10,14 +10,16 @@
 >=dev-lang/vala-0.36 ~amd64
 >=dev-libs/atk-2.26.1
 >=dev-libs/gjs-1.52.2 ~amd64
->=dev-libs/glib-2.54.1-r1
->=dev-util/glib-utils-2.56.2 ~amd64
+>=dev-libs/glib-2.59.0
+>=dev-util/glib-utils-2.59.0 ~amd64
+>=dev-util/gdbus-codegen-2.56.1-r1
 >=dev-libs/gobject-introspection-1.56.1
 >=dev-libs/gobject-introspection-common-1.56.1
 >=dev-libs/libgweather-3.26.1
 >=dev-libs/libsigc++-2.99.11 ~amd64
 >=dev-libs/vala-common-0.36.0 ~amd64
-=dev-python/pygobject-3.26.3 ~amd64
+>=dev-python/pygobject-3.26.3 ~amd64
+>=dev-libs/libhandy-0.0.6-r1
 >=dev-util/gdbus-codegen-2.56.1-r1
 >=gnome-base/dconf-editor-3.26.0
 >=gnome-base/gdm-3.26.1
@@ -115,4 +117,5 @@ dev-python/pygobject
 =media-libs/gst-plugins-base-1.14.4-r1 ~amd64
 =media-plugins/gst-plugins-opus-1.14.4-r1 ~amd64
 =media-libs/graphene-1.8.2 ~amd64
-
+=app-text/enchant-2.2.3 ~amd64
+media-gfx/inkscape

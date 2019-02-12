@@ -11,8 +11,8 @@
 >=dev-lang/vala-0.36 ~amd64
 >=dev-libs/atk-2.26.1
 >=dev-libs/gjs-1.52.2 ~amd64
->=dev-libs/glib-2.59.0
->=dev-util/glib-utils-2.59.0 ~amd64
+>=dev-libs/glib-2.58.0
+>=dev-util/glib-utils-2.58.0 ~amd64
 >=dev-util/gdbus-codegen-2.56.1-r1
 >=dev-libs/gobject-introspection-1.56.1
 >=dev-libs/gobject-introspection-common-1.56.1
@@ -36,7 +36,7 @@
 >=gnome-base/gvfs-1.34
 gnome-base/gnome-keyring
 >=gnome-base/libgtop-2.38.0
->=gnome-base/librsvg-2.42.20
+=gnome-base/librsvg-2.44.10
 >=gnome-base/nautilus-3.26.1
 gnome-extra/nautilus-tracker-tags
 >=gnome-extra/evolution-data-server-3.30.2
@@ -120,3 +120,8 @@ dev-python/pygobject
 =media-libs/graphene-1.8.2 ~amd64
 =app-text/enchant-2.2.3 ~amd64
 media-gfx/inkscape
+=sys-apps/bubblewrap-0.3.1-r1 ~amd64
+gnome-extra/yelp
+gnome-extra/yelp-xsl
+gnome-base/libgnomekbd
+gnome-base/gnome

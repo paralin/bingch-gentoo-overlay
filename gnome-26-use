@@ -1,0 +1,10 @@
+gnome-base/gnome-extra-apps -games
+#gnome-base/gvfs afp archive bluray fuse mtp gphoto2 ios samba google 
+gnome-base/gnome-control-center networkmanager
+gnome-base/gdm plymouth
+net-libs/gnome-online-accounts vala
+#media-libs/gegl raw jpeg2k
+## required by gnome-boxes (argument)
+#app-emulation/qemu smartcard spice usbredir
+#app-emulation/spice smartcard
+#net-misc/spice-gtk smartcard

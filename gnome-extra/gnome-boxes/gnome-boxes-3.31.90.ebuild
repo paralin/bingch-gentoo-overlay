@@ -49,6 +49,7 @@ RDEPEND="
 	sys-fs/mtools
 	>=virtual/libgudev-165:=
     app-emulation/libgovirt
+	x11-libs/vte[vala]
 "
 #	!bindist? ( gnome-extra/gnome-boxes-nonfree )
 

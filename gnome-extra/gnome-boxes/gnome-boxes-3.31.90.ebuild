@@ -41,7 +41,7 @@ RDEPEND="
 	>=net-misc/spice-gtk-0.32[gtk3(+),smartcard,vala,usbredir]
 	virtual/libusb:1
 
-	>=app-misc/tracker-0.16:0=[iso]
+	>=app-misc/tracker-0.16:0
 
 	>=sys-apps/util-linux-2.20
 	>=net-libs/libsoup-2.38:2.4
@@ -49,6 +49,7 @@ RDEPEND="
 	sys-fs/mtools
 	>=virtual/libgudev-165:=
     app-emulation/libgovirt
+	x11-libs/vte[vala]
 "
 #	!bindist? ( gnome-extra/gnome-boxes-nonfree )
 

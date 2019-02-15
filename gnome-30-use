@@ -12,6 +12,7 @@ dev-libs/folks -tracker
 >=app-emulation/spice-0.14.0-r1 smartcard
 >=app-crypt/libsecret-0.18.6 vala
 >=net-libs/gtk-vnc-0.7.2 vala
+x11-libs/vte vala
 # required by gnome-extra/gnome-contacts-3.28.2-r1::bingch
 >=net-libs/gnome-online-accounts-3.28.0 vala
 >=media-libs/gsound-1.0.2-r1 vala

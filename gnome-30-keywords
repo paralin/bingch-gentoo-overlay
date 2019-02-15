@@ -10,10 +10,12 @@
 >=dev-lang/spidermonkey-52.4.0_pre20171003-r1:52
 >=dev-lang/vala-0.36 ~amd64
 >=dev-libs/atk-2.26.1
->=dev-libs/gjs-1.52.2 ~amd64
->=dev-libs/glib-2.58.0
->=dev-util/glib-utils-2.58.0 ~amd64
->=dev-util/gdbus-codegen-2.56.1-r1
+########
+# FIXME webkit need glib 2.58.3
+>=dev-libs/glib-2.58.3
+>=dev-util/glib-utils-2.58.3 ~amd64
+>=dev-util/gdbus-codegen-2.58.3
+#########
 >=dev-libs/gobject-introspection-1.56.1
 >=dev-libs/gobject-introspection-common-1.56.1
 >=dev-libs/libgweather-3.26.1
@@ -21,7 +23,6 @@
 >=dev-libs/vala-common-0.36.0 ~amd64
 >=dev-python/pygobject-3.26.3 ~amd64
 >=dev-libs/libhandy-0.0.6-r1
->=dev-util/gdbus-codegen-2.56.1-r1
 >=gnome-base/dconf-editor-3.26.0
 >=gnome-base/gdm-3.26.1
 >=gnome-base/gnome-core-apps-3.26
@@ -77,7 +78,7 @@ gnome-extra/nautilus-tracker-tags
 >=sys-apps/baobab-3.26.0
 >=sys-apps/gnome-disk-utility-3.26.1
 >=www-client/epiphany-3.26.1
->=net-libs/webkit-gtk-2.20
+>=net-libs/webkit-gtk-2.23.2-r1
 >=dev-libs/libdazzle-3.26.1
 >=x11-libs/gtk+-2.24.32:2
 >=x11-libs/gtk+-3.22.30:3
@@ -100,7 +101,13 @@ app-accessibility/orca
 app-i18n/ibus-sunpinyin
 =app-i18n/sunpinyin-3.0.0_rc1 ~amd64
 =app-i18n/sunpinyin-data-20140820 ~amd64
-=dev-lang/spidermonkey-60.1.0 ~amd64
+
+###############
+# FIXME firefox need gjs 1.50.4 
+>=dev-lang/spidermonkey-60.1.0 ~amd64
+>=dev-libs/gjs-1.50.4 ~amd64
+###############
+
 =dev-libs/ell-0.6-r1 ~amd64
 =net-wireless/bluez-5.50 ~amd64
 =app-text/enchant-2.2.1 ~amd64

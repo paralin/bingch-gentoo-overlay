@@ -5,7 +5,7 @@ EAPI=6
 VALA_USE_DEPEND="vapigen"
 VALA_MIN_API_VERSION="0.36"
 
-inherit gnome2 linux-info readme.gentoo-r1 vala
+inherit gnome-meson vala linux-info readme.gentoo-r1
 
 DESCRIPTION="Simple GNOME 3 application to access remote or virtual systems"
 HOMEPAGE="https://wiki.gnome.org/Apps/Boxes"
@@ -27,7 +27,7 @@ KEYWORDS="~amd64"
 #        directly with USE=spice
 RDEPEND="
 	>=app-arch/libarchive-3:=
-	>=dev-libs/glib-2.52:2
+	>=dev-libs/glib-2.38:2
 	>=dev-libs/gobject-introspection-0.9.6:=
 	>=dev-libs/libxml2-2.7.8:2
 	>=sys-libs/libosinfo-0.2.12
@@ -35,30 +35,29 @@ RDEPEND="
 	>=app-emulation/libvirt-0.9.3[libvirtd,qemu]
 	>=app-emulation/libvirt-glib-0.2.3
 	>=x11-libs/gtk+-3.19.8:3
-	>=net-libs/gtk-vnc-0.4.4[gtk3(+)]
-	app-crypt/libsecret
+	>=net-libs/gtk-vnc-0.4.4[gtk3(+),vala]
+	app-crypt/libsecret[vala]
 	app-emulation/spice[smartcard]
-	>=net-misc/spice-gtk-0.32[gtk3(+),smartcard,usbredir]
+	>=net-misc/spice-gtk-0.32[gtk3(+),smartcard,vala,usbredir]
 	virtual/libusb:1
 
-	>=app-misc/tracker-2:0=
+	>=app-misc/tracker-0.16:0=[iso]
 
-	>=net-libs/libsoup-2.44:2.4
+	>=sys-apps/util-linux-2.20
+	>=net-libs/libsoup-2.38:2.4
 
 	sys-fs/mtools
 	>=virtual/libgudev-165:=
+    app-emulation/libgovirt
 "
 #	!bindist? ( gnome-extra/gnome-boxes-nonfree )
-# libxml2+gdk-pixbuf required for glib-compile-resources
+
 DEPEND="${RDEPEND}
 	$(vala_depend)
 	app-text/yelp-tools
-	>=sys-devel/gettext-0.19.8
+	>=dev-util/intltool-0.40
+	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
-	x11-libs/gdk-pixbuf:2
-"
-RDEPEND="${RDEPEND}
-	>=app-misc/tracker-miners-2[iso]
 "
 
 DISABLE_AUTOFORMATTING="yes"
@@ -83,26 +82,26 @@ pkg_pretend() {
 src_prepare() {
 	# Do not change CFLAGS, wondering about VALA ones but appears to be
 	# needed as noted in configure comments below
-	sed 's/CFLAGS="$CFLAGS -O0 -ggdb3"//' -i configure{.ac,} || die
+	#sed 's/CFLAGS="$CFLAGS -O0 -ggdb3"//' -i configure{.ac,} || die
 
 	vala_src_prepare
-	gnome2_src_prepare
+	gnome-meson_src_prepare
 }
 
 src_configure() {
 	# debug needed for splitdebug proper behavior (cardoe), bug #????
-	gnome2_src_configure \
-		--enable-debug \
-		--disable-strict-cc \
-		--disable-ovirt
+	gnome-meson_src_configure 
+		-Denable-debug=yes \
+		-Ddisable-strict-cc=yes \
+		-Ddisable-ovirt=yes
 }
 
-src_install() {
-	gnome2_src_install
-	readme.gentoo_create_doc
-}
+#src_install() {
+#	gnome2_src_install
+#	readme.gentoo_create_doc
+#}
 
-pkg_postinst() {
-	gnome2_pkg_postinst
-	readme.gentoo_print_elog
-}
+#pkg_postinst() {
+#	gnome2_pkg_postinst
+#	readme.gentoo_print_elog
+#}

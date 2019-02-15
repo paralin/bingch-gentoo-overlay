@@ -1,5 +1,5 @@
-gnome-base/gnome -extras
-gnome-base/gvfs afp archive bluray fuse mtp gphoto2 ios samba google 
+gnome-base/gnome-extra-apps -games
+#gnome-base/gvfs afp archive bluray fuse mtp gphoto2 ios samba google 
 gnome-base/gnome-control-center bluetooth networkmanager
 gnome-base/gdm plymouth
 >=net-libs/gnome-online-accounts-3.26.2 vala

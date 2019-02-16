@@ -132,4 +132,11 @@ media-gfx/inkscape
 gnome-extra/yelp
 gnome-extra/yelp-xsl
 gnome-base/libgnomekbd
-gnome-base/gnome
+
+=gnome-base/gnome-3.26.2
+
+=gnome-extra/gnome-tweak-tool-3.26.4-r1 ~amd64
+=gnome-base/gnome-extra-apps-3.26.2 ~amd64
+=media-gfx/gnome-photos-3.26.4 ~amd64
+=app-dicts/gnome-dictionary-3.26.1 ~amd64
+

@@ -17,3 +17,4 @@ x11-libs/vte vala
 >=net-libs/gnome-online-accounts-3.28.0 vala
 >=media-libs/gsound-1.0.2-r1 vala
 >=dev-libs/libgweather-3.28.2-r1 vala
+media-libs/gegl raw jpeg2k

@@ -99,7 +99,7 @@ media-gfx/gnome-screenshot
 =app-crypt/gcr-3.28.0 ~amd64
 app-accessibility/orca
 
->=app-i18n/ibus-1.5.19
+=app-i18n/ibus-1.5.19
 app-i18n/ibus-sunpinyin
 =app-i18n/sunpinyin-3.0.0_rc1 ~amd64
 =app-i18n/sunpinyin-data-20140820 ~amd64

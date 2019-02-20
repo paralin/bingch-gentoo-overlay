@@ -55,7 +55,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	lcms? ( media-libs/lcms:2 )
 	spell? (
 		app-text/aspell
-		app-text/gtkspell:2
+		app-text/gtkspell
 	)
 	visio? (
 		app-text/libwpg:0.3

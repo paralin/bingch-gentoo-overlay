@@ -100,6 +100,7 @@ DEPEND="${COMMON_DEPEND}
 
 	dev-libs/libxml2:2
 	dev-libs/libxslt
+	sys-fs/udisks:2
 	>=dev-util/intltool-0.40.1
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig

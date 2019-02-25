@@ -108,7 +108,7 @@ app-i18n/ibus-sunpinyin
 # FIXME firefox need gjs 1.50.4 
 >=dev-lang/spidermonkey-60.1.0 ~amd64
 # FIXME gjs 1.55.91 break gnome-shell 20/Feb/19
-=dev-libs/gjs-1.50.4 ~amd64
+>=dev-libs/gjs-1.50.4 ~amd64
 ###############
 
 =dev-libs/ell-0.6-r1 ~amd64

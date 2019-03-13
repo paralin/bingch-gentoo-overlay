@@ -3,8 +3,9 @@ gnome-base/gnome-extra-apps -games
 gnome-base/gnome-control-center networkmanager
 gnome-base/gdm plymouth
 net-libs/gnome-online-accounts vala
-#media-libs/gegl raw jpeg2k
 ## required by gnome-boxes (argument)
-#app-emulation/qemu smartcard spice usbredir
-#app-emulation/spice smartcard
-#net-misc/spice-gtk smartcard
+>=app-emulation/qemu-3.1.0-r3 smartcard usbredir spice
+app-emulation/spice smartcard
+>=media-libs/gegl-0.3.15:0.3 jpeg2k raw
+>=app-crypt/libsecret-0.18.6-r1 vala
+>=net-misc/spice-gtk-0.35-r1 spice smartcard usbredir vala

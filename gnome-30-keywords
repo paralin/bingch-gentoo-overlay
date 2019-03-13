@@ -106,7 +106,7 @@ app-i18n/ibus-sunpinyin
 
 ###############
 # FIXME firefox need gjs 1.50.4 
->=dev-lang/spidermonkey-60.1.0 ~amd64
+=dev-lang/spidermonkey-60.1.0 ~amd64
 # FIXME gjs 1.55.91 break gnome-shell 20/Feb/19
 >=dev-libs/gjs-1.50.4 ~amd64
 ###############
@@ -134,11 +134,18 @@ gnome-extra/yelp
 gnome-extra/yelp-xsl
 gnome-base/libgnomekbd
 
-=gnome-base/gnome-3.26.2
+>=gnome-base/gnome-3.28.2
 
 >=gnome-extra/gnome-tweak-tool-3.26.4-r1 ~amd64
 >=gnome-base/gnome-extra-apps-3.26.2 ~amd64
 >=media-gfx/gnome-photos-3.26.4 ~amd64
 >=app-dicts/gnome-dictionary-3.26.1 ~amd64
 media-plugins/grilo-plugins
-=media-sound/gnome-music-3.26.2
+>=gnome-extra/gnome-user-share-3.28.0 ~amd64
+>=media-gfx/shotwell-0.28.4 ~amd64
+>=media-sound/gnome-music-3.28.2.1 ~amd64
+>=media-libs/babl-0.1.60 ~amd64
+>=media-libs/gegl-0.3.34 ~amd64
+
+x11-libs/gdk-pixbuf
+dev-libs/libxmlb

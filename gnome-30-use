@@ -1,3 +1,6 @@
+gnome-base/gnome -cups
+gnome-base/gnome-core-apps -cups
+gnome-base/gnome-core-libs -cups
 gnome-base/gnome-extra-apps -games
 #gnome-base/gvfs afp archive bluray fuse mtp gphoto2 ios samba google 
 gnome-base/gnome-control-center bluetooth networkmanager

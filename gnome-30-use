@@ -9,10 +9,6 @@ gnome-base/gdm plymouth
 dev-libs/folks -tracker
 >=media-libs/gd-2.2.5 fontconfig
 >=x11-libs/gtksourceview-3.24.7 vala
-# required by gnome-extra/gnome-boxes (argument)
->=net-misc/spice-gtk-0.34-r2 smartcard vala
->=app-emulation/qemu-2.11.1-r2 smartcard
->=app-emulation/spice-0.14.0-r1 smartcard
 >=app-crypt/libsecret-0.18.6 vala
 >=net-libs/gtk-vnc-0.7.2 vala
 x11-libs/vte vala
@@ -23,3 +19,13 @@ x11-libs/vte vala
 >=dev-libs/libgweather-3.28.2-r1 vala
 media-libs/gegl raw jpeg2k
 app-misc/tracker-miners cue
+
+
+# required by gnome-extra/gnome-boxes (argument)
+# spice 
+app-emulation/qemu spice smartcard usbredir
+app-emulation/libvirt virt-network
+net-misc/spice-gtk usbredir smartcard vala
+>=app-emulation/spice-0.14.0-r1 smartcard
+app-emulation/libvirt-glib python
+net-libs/gtk-vnc python

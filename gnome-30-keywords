@@ -151,3 +151,5 @@ x11-libs/gdk-pixbuf
 dev-libs/libxmlb
 sci-geosciences/geocode-glib
 app-crypt/seahorse
+=gnome-extra/gucharmap-11.0.3 ~amd64
+=app-i18n/unicode-data-11.0.0 ~amd64

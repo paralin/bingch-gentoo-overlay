@@ -44,7 +44,7 @@ gnome-base/gnome-keyring
 gnome-extra/nautilus-tracker-tags
 >=gnome-extra/evolution-data-server-3.30.2
 >=gnome-extra/evolution-ews-3.30.2
-=gnome-extra/gnome-boxes-3.30.2
+>=gnome-extra/gnome-boxes-3.30.2
 >=app-emulation/libgovirt-0.3.4
 >=gnome-extra/gnome-calculator-3.26.1
 >=gnome-extra/gnome-calendar-3.26.1
@@ -153,3 +153,5 @@ sci-geosciences/geocode-glib
 app-crypt/seahorse
 =gnome-extra/gucharmap-11.0.3 ~amd64
 =app-i18n/unicode-data-11.0.0 ~amd64
+x11-themes/gtk-engines-adwaita
+sys-libs/libosinfo

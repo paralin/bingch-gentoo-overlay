@@ -31,7 +31,7 @@ media-gfx/graphviz -python_targets_python2_7
 dev-java/java-config -python_targets_python2_7
 app-portage/layman -python_targets_python2_7
 app-portage/gentoolkit -python_targets_python2_7
-#app-admin/ansible -python_targets_python2_7
+app-admin/ansible -python_targets_python2_7
 dev-util/scons -python_targets_python2_7
 dev-python/libvirt-python -python_targets_python2_7
 #dev-python/pillow -python_targets_python2_7

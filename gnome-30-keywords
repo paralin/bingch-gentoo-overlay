@@ -155,3 +155,5 @@ app-crypt/seahorse
 =app-i18n/unicode-data-11.0.0 ~amd64
 x11-themes/gtk-engines-adwaita
 sys-libs/libosinfo
+sys-fs/fuse-common
+sys-fs/fuse

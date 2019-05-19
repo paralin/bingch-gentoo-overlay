@@ -1,17 +1,3 @@
-#app-text/asciidoc python_single_target_python2_7
-#dev-util/rpmdevtools python_targets_python2_7
-#app-i18n/ibus-sunpinyin python_targets_python2_7
-#sys-libs/tdb python_targets_python2_7
-#media-gfx/uniconvertor python_targets_python2_7
-#dev-util/itstool python_targets_python2_7
-#net-fs/samba python_targets_python2_7
-#net-libs/libproxy python_targets_python2_7
-#dev-vcs/git python_targets_python2_7
-#net-libs/nodejs python_targets_python2_7
-#gnome-base/gconf python_targets_python2_7
-#dev-java/javatoolkit python_targets_python2_7
-#app-text/asciidoc python_targets_python2_7
-
 dev-util/boost-build -python_targets_python2_7
 dev-libs/boost -python_targets_python2_7
 sys-libs/cracklib -python_targets_python2_7
@@ -34,9 +20,7 @@ app-portage/gentoolkit -python_targets_python2_7
 app-admin/ansible -python_targets_python2_7
 dev-util/scons -python_targets_python2_7
 dev-python/libvirt-python -python_targets_python2_7
-#dev-python/pillow -python_targets_python2_7
-#dev-python/olefile -python_targets_python2_7
-#media-gfx/uniconvertor -python_targets_python2_7
 virtual/python-cffi -python_targets_python2_7
 dev-python/pycryptodome -python_targets_python2_7
 >=dev-util/scons-3.0.4 python_targets_python2_7
+sys-apps/portage -python_targets_python2_7

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2-live meson
+inherit git-r3 meson
 
 DESCRIPTION="Manage your online calendars with simple and modern interface"
 HOMEPAGE="https://wiki.gnome.org/Apps/Calendar"
@@ -11,7 +11,7 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
-
+EGIT_REPO_URI=https://gitlab.gnome.org/GNOME/gnome-calendar.git
 RDEPEND="
 	>=dev-libs/glib-2.58.0:2
 	>=dev-libs/libical-1.0.1

@@ -42,8 +42,9 @@ gnome-base/gnome-keyring
 =gnome-base/librsvg-2.44.10
 >=gnome-base/nautilus-3.26.1
 gnome-extra/nautilus-tracker-tags
->=gnome-extra/evolution-data-server-3.30.2
->=gnome-extra/evolution-ews-3.30.2
+>=mail-client/evolution-3.32.2
+>=gnome-extra/evolution-data-server-3.32.2
+>=gnome-extra/evolution-ews-3.32.2
 >=gnome-extra/gnome-boxes-3.30.2
 >=app-emulation/libgovirt-0.3.4
 >=gnome-extra/gnome-calculator-3.26.1
@@ -63,7 +64,6 @@ gnome-extra/nautilus-tracker-tags
 >=gnome-extra/gnome-user-docs-3.26.1
 >=gnome-extra/gnome-weather-3.26.0
 >=gnome-extra/zenity-3.26.1
->=mail-client/evolution-3.30.2
 #>=media-libs/fontconfig-2.13.0-r4 ~amd64
 >=media-video/cheese-3.26.0
 >=media-video/totem-3.26.0

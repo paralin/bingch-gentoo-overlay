@@ -13,7 +13,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/Folks"
 EGIT_REPO_URI=https://gitlab.gnome.org/GNOME/folks.git
 LICENSE="LGPL-2.1+"
 SLOT="0/25" # subslot = libfolks soname version
-KEYWORDS="~alpha amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-linux"
+KEYWORDS=""
 
 # TODO: --enable-profiling
 # Vala isn't really optional, https://bugzilla.gnome.org/show_bug.cgi?id=701099

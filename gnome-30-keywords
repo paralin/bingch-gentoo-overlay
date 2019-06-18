@@ -42,9 +42,9 @@ gnome-base/gnome-keyring
 =gnome-base/librsvg-2.44.10
 >=gnome-base/nautilus-3.26.1
 gnome-extra/nautilus-tracker-tags
->=mail-client/evolution-3.32.2
->=gnome-extra/evolution-data-server-3.32.2
->=gnome-extra/evolution-ews-3.32.2
+#>=mail-client/evolution-3.32.2
+#>=gnome-extra/evolution-data-server-3.32.2
+#>=gnome-extra/evolution-ews-3.32.2
 >=gnome-extra/gnome-boxes-3.30.2
 >=app-emulation/libgovirt-0.3.4
 >=gnome-extra/gnome-calculator-3.26.1
@@ -113,7 +113,7 @@ app-i18n/ibus-sunpinyin
 
 =dev-libs/ell-0.6-r1 ~amd64
 =net-wireless/bluez-5.50 ~amd64
-=app-text/enchant-2.2.1 ~amd64
+#=app-text/enchant-2.2.1 ~amd64
 >=dev-util/meson-0.47.1
 dev-libs/libgdata
 >=dev-python/pycairo-1.17.0 ~amd64
@@ -127,8 +127,7 @@ dev-libs/appstream-glib
 =media-libs/gst-plugins-base-1.14.4-r1 ~amd64
 =media-plugins/gst-plugins-opus-1.14.4-r1 ~amd64
 =media-libs/graphene-1.8.2 ~amd64
-=app-text/enchant-2.2.3 ~amd64
-media-gfx/inkscape
+#=app-text/enchant-2.2.3 ~amd64
 =sys-apps/bubblewrap-0.3.1-r1 ~amd64
 gnome-extra/yelp
 gnome-extra/yelp-xsl

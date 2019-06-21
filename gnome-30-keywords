@@ -42,9 +42,9 @@ gnome-base/gnome-keyring
 =gnome-base/librsvg-2.44.10
 >=gnome-base/nautilus-3.26.1
 gnome-extra/nautilus-tracker-tags
-#>=mail-client/evolution-3.32.2
-#>=gnome-extra/evolution-data-server-3.32.2
-#>=gnome-extra/evolution-ews-3.32.2
+>=mail-client/evolution-3.32.2
+>=gnome-extra/evolution-data-server-3.32.2
+>=gnome-extra/evolution-ews-3.32.2
 >=gnome-extra/gnome-boxes-3.30.2
 >=app-emulation/libgovirt-0.3.4
 >=gnome-extra/gnome-calculator-3.26.1

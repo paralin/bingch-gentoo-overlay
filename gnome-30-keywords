@@ -156,3 +156,4 @@ x11-themes/gtk-engines-adwaita
 sys-libs/libosinfo
 sys-fs/fuse-common
 sys-fs/fuse
+media-libs/gexiv2

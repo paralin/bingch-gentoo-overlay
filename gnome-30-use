@@ -30,3 +30,4 @@ net-misc/spice-gtk usbredir smartcard vala
 >=app-emulation/spice-0.14.0-r1 smartcard
 app-emulation/libvirt-glib python
 net-libs/gtk-vnc python
+>=media-libs/libchamplain-0.12.19-r1 vala

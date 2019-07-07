@@ -2,3 +2,4 @@
 =app-text/gspell-1.8.1-r1
 app-text/gtkspell
 sys-fs/fuse:3
+dev-libs/libgdata

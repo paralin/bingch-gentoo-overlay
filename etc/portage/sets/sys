@@ -27,3 +27,4 @@ sys-apps/ethtool
 sys-apps/lsb-release
 sys-block/open-iscsi
 sys-fs/ntfs3g
+sys-fs/sysfsutils

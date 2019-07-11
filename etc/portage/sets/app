@@ -19,7 +19,6 @@ app-text/dos2unix
 app-text/master-pdf-editor
 app-text/tree
 app-vim/rust-vim
-app-laptop/tlp
 app-benchmarks/sysbench
 app-misc/ttyload
 app-text/xournal

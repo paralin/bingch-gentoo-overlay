@@ -28,3 +28,6 @@ sys-apps/lsb-release
 sys-block/open-iscsi
 sys-fs/ntfs3g
 sys-fs/sysfsutils
+sys-apps/i2c-tools
+sys-apps/msr-tools
+sys-power/throttled

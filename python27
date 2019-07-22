@@ -24,3 +24,7 @@ virtual/python-cffi -python_targets_python2_7
 dev-python/pycryptodome -python_targets_python2_7
 >=dev-util/scons-3.0.4 python_targets_python2_7
 sys-apps/portage -python_targets_python2_7
+>=dev-python/setuptools_scm-3.2.0 python_targets_python2_7
+media-video/mpv -python_targets_python2_7
+dev-python/docutils -python_targets_python2_7
+dev-db/postgresql -python_targets_python2_7

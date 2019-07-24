@@ -28,6 +28,7 @@ gnome-base/gnome-extra-apps -games
 >=app-emulation/qemu-4.0.0-r3 spice usbredir smartcard
 >=net-dns/dnsmasq-2.80 script
 app-emulation/libvirt virt-network
+>=net-libs/libsoup-2.67.3 vala
 
 # spice 
 #app-emulation/qemu spice smartcard usbredir

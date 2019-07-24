@@ -65,7 +65,6 @@ gnome-extra/nautilus-tracker-tags
 >=media-video/cheese-3.26.0
 >=media-video/totem-3.26.0
 >=media-gfx/eog-3.26
-=media-video/pipewire-0.2.5 ~amd64
 >=net-irc/polari-3.26.0
 >=net-libs/gnome-online-accounts-3.26.0
 >=net-libs/libsoup-2.58
@@ -127,3 +126,5 @@ sys-fs/fuse-common
 sys-fs/fuse
 media-libs/gexiv2
 dev-libs/libgdata
+media-video/pipewire
+media-libs/harfbuzz

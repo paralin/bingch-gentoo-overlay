@@ -37,3 +37,4 @@ app-emulation/libvirt virt-network
 #app-emulation/libvirt-glib python
 #net-libs/gtk-vnc python
 #>=media-libs/libchamplain-0.12.19-r1 vala
+media-gfx/inkscape -spell

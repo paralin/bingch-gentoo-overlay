@@ -18,3 +18,4 @@ app-text/dos2unix
 app-text/tree
 app-benchmarks/sysbench
 app-misc/ttyload
+app-editors/vim

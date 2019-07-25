@@ -1,27 +1,4 @@
-#gnome-base/gnome -cups
-#gnome-base/gnome-core-apps -cups
-#gnome-base/gnome-core-libs -cups
 gnome-base/gnome-extra-apps -games
-##gnome-base/gvfs afp archive bluray fuse mtp gphoto2 ios samba google 
-#gnome-base/gnome-control-center bluetooth networkmanager
-#gnome-base/gdm plymouth
-#gnome-extra/evolution-data-server oauth
-#>=net-libs/gnome-online-accounts-3.26.2 vala
-#dev-libs/folks -tracker
-#>=media-libs/gd-2.2.5 fontconfig
-#>=x11-libs/gtksourceview-3.24.7 vala
-#>=app-crypt/libsecret-0.18.6 vala
-#>=net-libs/gtk-vnc-0.7.2 vala
-#x11-libs/vte vala
-#>=net-libs/libsoup-2.66.0 vala
-## required by gnome-extra/gnome-contacts-3.28.2-r1::bingch
-#>=net-libs/gnome-online-accounts-3.28.0 vala
-#>=media-libs/gsound-1.0.2-r1 vala
-#>=dev-libs/libgweather-3.28.2-r1 vala
-#media-libs/gegl raw jpeg2k
-#app-misc/tracker-miners cue
-#
-#
 # required by gnome-extra/gnome-boxes (argument)
 >=net-misc/spice-gtk-0.35 vala usbredir smartcard
 >=app-emulation/spice-0.14.0-r2 smartcard
@@ -31,11 +8,6 @@ app-emulation/libvirt virt-network
 >=net-libs/libsoup-2.67.3 vala
 
 # spice 
-#app-emulation/qemu spice smartcard usbredir
-#net-misc/spice-gtk usbredir smartcard 
-#>=app-emulation/spice-0.14.0-r1 smartcard
-#app-emulation/libvirt-glib python
-#net-libs/gtk-vnc python
-#>=media-libs/libchamplain-0.12.19-r1 vala
 media-gfx/inkscape -spell
 >=net-libs/gnome-online-accounts-3.32.0 vala
+>=media-libs/gd-2.2.5-r2 fontconfig

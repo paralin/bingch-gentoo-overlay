@@ -9,7 +9,7 @@ HOMEPAGE="https://wiki.gnome.org/Apps/Calendar"
 
 LICENSE="GPL-2+"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE=""
 EGIT_REPO_URI=https://gitlab.gnome.org/GNOME/gnome-calendar.git
 RDEPEND="

@@ -31,3 +31,4 @@ sys-fs/sysfsutils
 sys-apps/i2c-tools
 sys-apps/msr-tools
 sys-power/throttled
+sys-boot/plymouth

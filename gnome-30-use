@@ -11,3 +11,4 @@ app-emulation/libvirt virt-network
 media-gfx/inkscape -spell
 >=net-libs/gnome-online-accounts-3.32.0 vala
 >=media-libs/gd-2.2.5-r2 fontconfig
+gnome-base/gdm plymouth

@@ -4,3 +4,5 @@ app-text/gtkspell
 sys-fs/fuse:3
 dev-libs/libgdata
 media-video/pipewire
+dev-libs/vala-common
+dev-lang/vala:0.46

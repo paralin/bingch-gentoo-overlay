@@ -6,3 +6,7 @@ net-analyzer/traceroute
 net-analyzer/mtr
 net-print/brother-hl3045cn-bin
 net-analyzer/iftop
+net-analyzer/nmap
+net-vpn/networkmanager-openconnect
+net-im/slack-bin
+net-voip/yate

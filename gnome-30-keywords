@@ -131,3 +131,4 @@ media-libs/harfbuzz
 =x11-libs/libva-intel-driver-2.3.0 ~amd64
 x11-libs/libva
 sys-boot/plymouth **
+net-vpn/openconnect

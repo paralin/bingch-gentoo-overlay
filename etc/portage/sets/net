@@ -9,4 +9,4 @@ net-analyzer/iftop
 net-analyzer/nmap
 net-vpn/networkmanager-openconnect
 net-im/slack-bin
-net-voip/yate
+net-im/empathy/empathy

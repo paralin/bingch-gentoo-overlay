@@ -132,3 +132,4 @@ media-libs/harfbuzz
 x11-libs/libva
 sys-boot/plymouth **
 net-vpn/openconnect
+=gui-libs/libhandy-0.0.9

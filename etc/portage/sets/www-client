@@ -1,5 +1,5 @@
 www-client/epiphany
 www-client/firefox
-#www-client/google-chrome
-#www-client/chromium
+www-client/google-chrome
+www-client/chromium
 www-client/links

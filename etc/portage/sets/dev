@@ -13,3 +13,5 @@ virtual/cargo
 virtual/linux-sources
 dev-util/indent
 dev-libs/libnfc
+dev-python/configargparse
+dev-python/keyring

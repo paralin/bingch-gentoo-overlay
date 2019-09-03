@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit gnome.org gnome2-utils meson vala xdg
 
@@ -11,7 +11,7 @@ HOMEPAGE="https://wiki.gnome.org/Design/Apps/Contacts"
 LICENSE="GPL-2+"
 SLOT="0"
 IUSE="telepathy v4l"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc x86"
 
 VALA_DEPEND="
 	$(vala_depend)
@@ -21,11 +21,11 @@ VALA_DEPEND="
 	gnome-extra/evolution-data-server[vala]
 	net-libs/telepathy-glib[vala]
 "
-# Configure is wrong; it needs cheese-3.5.91, not 3.3.91
 RDEPEND="
 	>=gnome-extra/evolution-data-server-3.13.90:=[gnome-online-accounts]
 	>=dev-libs/folks-0.11.4:=[eds,telepathy?]
 	>=dev-libs/glib-2.44:2
+	>=gui-libs/libhandy-0.0.9
 	>=dev-libs/libgee-0.10:0.8
 	>=gnome-base/gnome-desktop-3.0:3=
 	net-libs/gnome-online-accounts:=

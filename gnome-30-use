@@ -13,3 +13,4 @@ media-gfx/inkscape -spell
 >=media-libs/gd-2.2.5-r2 fontconfig
 gnome-base/gdm plymouth
 net-vpn/openconnect stoken
+gui-libs/libhandy vala

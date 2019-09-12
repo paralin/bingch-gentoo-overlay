@@ -139,3 +139,4 @@ net-vpn/openconnect
 net-libs/wpebackend-fdo
 net-libs/libwpe
 dev-libs/libwacom
+gnome-base/librsvg

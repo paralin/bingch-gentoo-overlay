@@ -5,18 +5,17 @@ EAPI=6
 PYTHON_COMPAT=( python{3_5,3_6} )
 PYTHON_REQ_USE="threads"
 
-inherit gnome.org gnome2-utils meson vala xdg python-single-r1
+inherit gnome.org gnome2-utils meson xdg python-single-r1
 
 DESCRIPTION="Media player for GNOME"
 HOMEPAGE="https://wiki.gnome.org/Apps/Videos"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
-IUSE="cdr gtk-doc +introspection lirc nautilus +python test vala"
+IUSE="cdr gtk-doc +introspection lirc nautilus +python test"
 # see bug #359379
 REQUIRED_USE="
 	python? ( introspection ${PYTHON_REQUIRED_USE} )
-	vala? ( introspection )
 "
 
 KEYWORDS="~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~x86 ~x86-fbsd"
@@ -67,15 +66,13 @@ DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.19.8
 	virtual/pkgconfig
 	x11-base/xorg-proto
-	vala? ( $(vala_depend) )
 "
 # perl for pod2man
 # docbook-xml-dtd is needed for user doc
 # Prevent dev-python/pylint dep, bug #482538
 
 PATCHES=(
-	#"${FILESDIR}"/${PV}-vala-errormsg.patch
-	#"${FILESDIR}"/${PV}-control-plugins.patch # Do not force all plugins
+#	"${FILESDIR}"/${PV}-control-plugins.patch # Do not force all plugins
 	#"${FILESDIR}"/3.26-gst-inspect-sandbox.patch # Allow disabling calls to gst-inspect (sandbox issue)
 )
 
@@ -84,33 +81,28 @@ pkg_setup() {
 }
 
 src_prepare() {
-	use vala && vala_src_prepare
 	xdg_src_prepare
 }
 
 src_configure() {
-	# Disabled: sample-python, sample-vala, zeitgeist-dp
+	# Disabled: sample-python, zeitgeist-dp
 	# brasero-disc-recorder and gromit require gtk+[X], but totem itself does
 	# for now still too, so no point in optionality based on that yet.
 	local plugins="apple-trailers,autoload-subtitles"
-	plugins+=",im-status,gromit,media-player-keys,ontop"
+	plugins+=",im-status,media-player-keys"
 	plugins+=",properties,recent,screensaver,screenshot"
-	plugins+=",skipto,variable-rate,vimeo"
+	plugins+=",skipto,variable-rate,vimeo,rotation"
 	use cdr && plugins+=",brasero-disc-recorder"
 	use lirc && plugins+=",lirc"
 	use nautilus && plugins+=",save-file"
 	use python && plugins+=",dbusservice,pythonconsole,opensubtitles"
-	use vala && plugins+=",rotation"
 
 	local emesonargs=(
 		-Denable-easy-codec-installation=yes
 		-Denable-python=$(usex python yes no)
-		-Denable-vala=$(usex vala yes no)
 		-Dwith-plugins=auto
-		-Denable-nautilus=$(usex nautilus yes no)
 		$(meson_use gtk-doc enable-gtk-doc)
 		-Denable-introspection=$(usex introspection yes no)
-		-Dgst-inspect=false
 	)
 	meson_src_configure
 }

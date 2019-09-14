@@ -19,7 +19,7 @@ RDEPEND="
 	dev-libs/libical:0=
 	>=dev-libs/libmspack-0.4
 	dev-libs/libxml2:2
-	>=gnome-extra/evolution-data-server-${PV}-r1:0=
+	>=gnome-extra/evolution-data-server-${PV}:0=
 	>=mail-client/evolution-${PV}:2.0
 	>=net-libs/libsoup-2.58:2.4
 	>=x11-libs/gtk+-3.10:3

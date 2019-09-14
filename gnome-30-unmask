@@ -6,3 +6,4 @@ dev-libs/libgdata
 media-video/pipewire
 dev-libs/vala-common
 dev-lang/vala:0.46
+media-video/totem

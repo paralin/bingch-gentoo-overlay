@@ -140,3 +140,5 @@ net-libs/wpebackend-fdo
 net-libs/libwpe
 dev-libs/libwacom
 gnome-base/librsvg
+gnome-base/dconf
+gnome-base/dconf-editor

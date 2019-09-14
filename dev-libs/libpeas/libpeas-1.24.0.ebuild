@@ -5,7 +5,7 @@ EAPI=6
 GNOME2_LA_PUNT="yes"
 PYTHON_COMPAT=( python{3_5,3_6,3_7} )
 
-inherit autotools eutils gnome2 multilib meson python-single-r1 virtualx
+inherit eutils gnome2 multilib meson python-single-r1 virtualx
 
 DESCRIPTION="A GObject plugins library"
 HOMEPAGE="https://developer.gnome.org/libpeas/stable/"
@@ -45,33 +45,33 @@ pkg_setup() {
 	use python && python-single-r1_pkg_setup
 }
 
-src_prepare() {
+#src_prepare() {
 	# Gentoo uses unversioned lua - lua.pc instad of lua5.1.pc, /usr/bin/lua instead of /usr/bin/lua5.1
 	#eapply "${FILESDIR}"/${PN}-1.14.0-lua.pc.patch
-	eautoreconf
-	gnome2_src_prepare
-}
+	#eautoreconf
+	#gnome2_src_prepare
+#}
 
-src_configure() {
-	# Wtf, --disable-gcov, --enable-gcov=no, --enable-gcov, all enable gcov
-	# What do we do about gdb, valgrind, gcov, etc?
-	local myconf=(
-		$(use_enable glade glade-catalog)
-		$(use_enable gtk)
-		--disable-static
-
-		# py2 not supported anymore
-		--disable-python2
-		$(use_enable python python3)
-
-		# lua
-		$(use_enable lua lua5.1)
-		$(use_enable $(usex luajit lua luajit) luajit)
-	)
-
-	gnome2_src_configure "${myconf[@]}"
-}
-
+#src_configure() {
+#	# Wtf, --disable-gcov, --enable-gcov=no, --enable-gcov, all enable gcov
+#	# What do we do about gdb, valgrind, gcov, etc?
+#	local myconf=(
+#		$(use_enable glade glade-catalog)
+#		$(use_enable gtk)
+#		--disable-static
+#
+#		# py2 not supported anymore
+#		--disable-python2
+#		$(use_enable python python3)
+#
+#		# lua
+#		$(use_enable lua lua5.1)
+#		$(use_enable $(usex luajit lua luajit) luajit)
+#	)
+#
+#	#gnome2_src_configure "${myconf[@]}"
+#}
+#
 src_test() {
 	# This looks fixed since 1.18.0:
 	#

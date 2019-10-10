@@ -17,7 +17,7 @@ REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}
 	test? ( cairo )
 "
-KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~mips ppc ppc64 s390 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="alpha amd64 arm arm64 ~hppa ~ia64 ~mips ppc ppc64 s390 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 
 # virtual/pkgconfig needed at runtime, bug #505408
 RDEPEND="
@@ -53,17 +53,20 @@ pkg_setup() {
 #	fi
 #
 #	# To prevent crosscompiling problems, bug #414105
-##	gnome2_src_configure \
-##		--disable-static \
-##		CC="$(tc-getCC)" \
-##		YACC="$(type -p yacc)" \
-##		$(use_with cairo) \
-##		$(use_enable doctool)
+#	gnome2_src_configure \
+#		--disable-static \
+#		CC="$(tc-getCC)" \
+#		YACC="$(type -p yacc)" \
+#		$(use_with cairo) \
+#		$(use_enable doctool)
 #}
+meson_src_install() {
+    debug-print-function ${FUNCNAME} "$@"
 
-#src_install() {
+    DESTDIR="${D}" eninja -C "${BUILD_DIR}" install "$@"
+    einstalldocs
 	# Prevent collision with gobject-introspection-common
-#	rm -v "${ED}"usr/share/aclocal/introspection.m4 \
-#		"${ED}"usr/share/gobject-introspection-1.0/Makefile.introspection || die
-#	#rmdir "${ED}"usr/share/aclocal || die
-#}
+	rm -v "${ED}"usr/share/aclocal/introspection.m4 \
+		"${ED}"usr/share/gobject-introspection-1.0/Makefile.introspection || die
+	rmdir "${ED}"usr/share/aclocal || die
+}

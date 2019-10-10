@@ -6,7 +6,7 @@ app-crypt/efitools
 app-emulation/docker
 app-emulation/virt-manager
 #app-forensics/unhide
-app-i18n/ibus-sunpinyin
+#app-i18n/ibus-sunpinyin
 app-misc/screen
 app-office/libreoffice
 app-office/dia
@@ -19,3 +19,4 @@ app-text/tree
 app-benchmarks/sysbench
 app-misc/ttyload
 app-editors/vim
+app-i18n/ibus-libpinyin

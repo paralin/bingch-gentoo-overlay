@@ -1,0 +1,130 @@
+diff --git a/src/backends/native/meta-kms-crtc.c b/src/backends/native/meta-kms-crtc.c
+index 3610df903b8d1d986cfcffebddd4ff1afc083f0a..da99a58cd2ecbb7fd253743b787500197c3a99a0 100644
+--- a/src/backends/native/meta-kms-crtc.c
++++ b/src/backends/native/meta-kms-crtc.c
+@@ -143,14 +143,26 @@ meta_kms_crtc_update_state (MetaKmsCrtc *crtc)
+   drmModeFreeCrtc (drm_crtc);
+ }
+ 
++static void
++clear_gamma_state (MetaKmsCrtc *crtc)
++{
++  crtc->current_state.gamma.size = 0;
++  g_clear_pointer (&crtc->current_state.gamma.red, g_free);
++  g_clear_pointer (&crtc->current_state.gamma.green, g_free);
++  g_clear_pointer (&crtc->current_state.gamma.blue, g_free);
++}
++
+ void
+ meta_kms_crtc_predict_state (MetaKmsCrtc   *crtc,
+                              MetaKmsUpdate *update)
+ {
++  gboolean is_gamma_valid;
+   GList *mode_sets;
+   GList *crtc_gammas;
+   GList *l;
+ 
++  is_gamma_valid = TRUE;
++
+   mode_sets = meta_kms_update_get_mode_sets (update);
+   for (l = mode_sets; l; l = l->next)
+     {
+@@ -178,6 +190,8 @@ meta_kms_crtc_predict_state (MetaKmsCrtc   *crtc,
+           crtc->current_state.drm_mode = (drmModeModeInfo) { 0 };
+         }
+ 
++      is_gamma_valid = FALSE;
++
+       break;
+     }
+ 
+@@ -196,8 +210,36 @@ meta_kms_crtc_predict_state (MetaKmsCrtc   *crtc,
+         g_memdup (gamma->green, gamma->size * sizeof (uint16_t));
+       crtc->current_state.gamma.blue =
+         g_memdup (gamma->blue, gamma->size * sizeof (uint16_t));
++
++      is_gamma_valid = TRUE;
+       break;
+     }
++
++  if (!is_gamma_valid)
++    {
++      if (crtc->current_state.is_drm_mode_valid)
++        {
++          MetaKmsImplDevice *impl_device;
++          drmModeCrtc *drm_crtc;
++
++          impl_device = meta_kms_device_get_impl_device (crtc->device);
++          drm_crtc = drmModeGetCrtc (meta_kms_impl_device_get_fd (impl_device),
++                                     crtc->id);
++          if (drm_crtc)
++            {
++              read_gamma_state (crtc, impl_device, drm_crtc);
++              drmModeFreeCrtc (drm_crtc);
++            }
++          else
++            {
++              clear_gamma_state (crtc);
++            }
++        }
++      else
++        {
++          clear_gamma_state (crtc);
++        }
++    }
+ }
+ 
+ MetaKmsCrtc *
+@@ -220,9 +262,7 @@ meta_kms_crtc_finalize (GObject *object)
+ {
+   MetaKmsCrtc *crtc = META_KMS_CRTC (object);
+ 
+-  g_clear_pointer (&crtc->current_state.gamma.red, g_free);
+-  g_clear_pointer (&crtc->current_state.gamma.green, g_free);
+-  g_clear_pointer (&crtc->current_state.gamma.blue, g_free);
++  clear_gamma_state (crtc);
+ 
+   G_OBJECT_CLASS (meta_kms_crtc_parent_class)->finalize (object);
+ }
+diff --git a/src/backends/native/meta-kms-update-private.h b/src/backends/native/meta-kms-update-private.h
+index 88e2590afa79b5401d4a61e9fb61abccc19326c3..df7737c9baaafa9a81fbf1d94be1ba4edbb17650 100644
+--- a/src/backends/native/meta-kms-update-private.h
++++ b/src/backends/native/meta-kms-update-private.h
+@@ -110,6 +110,4 @@ GList * meta_kms_update_get_connector_properties (MetaKmsUpdate *update);
+ 
+ GList * meta_kms_update_get_crtc_gammas (MetaKmsUpdate *update);
+ 
+-gboolean meta_kms_update_has_mode_set (MetaKmsUpdate *update);
+-
+ #endif /* META_KMS_UPDATE_PRIVATE_H */
+diff --git a/src/backends/native/meta-kms-update.c b/src/backends/native/meta-kms-update.c
+index 2a4a05c3e7157a2276323e84e2baef3a0738c56b..c946aa7a28b1d99e4881e5f59edfc8a079ddf455 100644
+--- a/src/backends/native/meta-kms-update.c
++++ b/src/backends/native/meta-kms-update.c
+@@ -282,12 +282,6 @@ meta_kms_update_get_crtc_gammas (MetaKmsUpdate *update)
+   return update->crtc_gammas;
+ }
+ 
+-gboolean
+-meta_kms_update_has_mode_set (MetaKmsUpdate *update)
+-{
+-  return !!update->mode_sets;
+-}
+-
+ void
+ meta_kms_update_seal (MetaKmsUpdate *update)
+ {
+diff --git a/src/backends/native/meta-kms.c b/src/backends/native/meta-kms.c
+index 9485bb4e8799682d383022949ee4f99235cdf727..804a1adda33e28e85021516013215de5f929e37b 100644
+--- a/src/backends/native/meta-kms.c
++++ b/src/backends/native/meta-kms.c
+@@ -211,8 +211,7 @@ meta_kms_update_process_in_impl (MetaKmsImpl  *impl,
+ 
+   ret = meta_kms_impl_process_update (impl, update, error);
+ 
+-  if (meta_kms_update_has_mode_set (update))
+-    meta_kms_predict_states_in_impl (meta_kms_impl_get_kms (impl), update);
++  meta_kms_predict_states_in_impl (meta_kms_impl_get_kms (impl), update);
+ 
+   return ret;
+ }

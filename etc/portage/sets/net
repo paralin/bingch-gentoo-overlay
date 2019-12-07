@@ -9,6 +9,6 @@ net-analyzer/iftop
 net-analyzer/nmap
 net-vpn/networkmanager-openconnect
 net-im/slack-bin
-net-im/empathy
 net-vpn/wireguard
 net-misc/youtube-dl
+net-irc/hexchat

@@ -90,11 +90,6 @@ media-sound/gnome-sound-recorder
 media-gfx/gnome-screenshot
 =app-crypt/gcr-3.28.0 ~amd64
 
->=app-i18n/ibus-1.5.19
-app-i18n/ibus-sunpinyin
-=app-i18n/sunpinyin-3.0.0_rc1 ~amd64
-=app-i18n/sunpinyin-data-20140820 ~amd64
-
 >=dev-libs/gjs-1.50.4 ~amd64
 
 dev-libs/libgdata
@@ -141,3 +136,13 @@ dev-libs/libwacom
 gnome-base/librsvg
 gnome-base/dconf
 gnome-base/dconf-editor
+=sys-power/upower-0.99.11 ~amd64
+=media-libs/fontconfig-2.13.1-r2 ~amd64
+=x11-libs/libnotify-0.7.8 ~amd64
+=media-gfx/gnome-font-viewer-3.32.0 ~amd64
+media-libs/libplacebo
+media-libs/cogl
+dev-libs/folks
+
+=media-plugins/grilo-plugins-0.3.9
+=media-libs/grilo-0.3.9

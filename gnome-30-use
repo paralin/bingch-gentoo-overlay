@@ -6,6 +6,7 @@ gnome-base/gnome-extra-apps -games
 >=net-dns/dnsmasq-2.80 script
 app-emulation/libvirt virt-network
 >=net-libs/libsoup-2.67.3 vala
+>=dev-libs/libical-3.0.6 vala
 
 # spice 
 media-gfx/inkscape -spell
@@ -14,3 +15,6 @@ media-gfx/inkscape -spell
 gnome-base/gdm plymouth
 net-vpn/openconnect stoken
 gui-libs/libhandy vala
+
+net-libs/glib-networking -libproxy
+net-libs/libproxy -python

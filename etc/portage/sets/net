@@ -12,3 +12,4 @@ net-im/slack-bin
 net-vpn/wireguard
 net-misc/youtube-dl
 net-irc/hexchat
+net-analyzer/wireshark

@@ -1,4 +1,7 @@
+gnome-base/gdm plymouth
 gnome-base/gnome-extra-apps -games
+gui-libs/libhandy vala
+>=net-libs/gnome-online-accounts-3.32.0 vala
 # required by gnome-extra/gnome-boxes (argument)
 >=net-misc/spice-gtk-0.35 vala usbredir smartcard
 >=app-emulation/spice-0.14.0-r2 smartcard
@@ -8,13 +11,10 @@ app-emulation/libvirt virt-network
 >=net-libs/libsoup-2.67.3 vala
 >=dev-libs/libical-3.0.6 vala
 
-# spice 
-media-gfx/inkscape -spell
->=net-libs/gnome-online-accounts-3.32.0 vala
 >=media-libs/gd-2.2.5-r2 fontconfig
-gnome-base/gdm plymouth
+
 net-vpn/openconnect stoken
-gui-libs/libhandy vala
 
 net-libs/glib-networking -libproxy
 net-libs/libproxy -python
+media-gfx/inkscape -spell

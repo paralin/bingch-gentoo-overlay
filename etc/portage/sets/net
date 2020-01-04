@@ -9,7 +9,7 @@ net-analyzer/iftop
 net-analyzer/nmap
 net-vpn/networkmanager-openconnect
 net-im/slack-bin
-net-vpn/wireguard
 net-misc/youtube-dl
 net-irc/hexchat
 net-analyzer/wireshark
+net-vpn/networkmanager-wireguard

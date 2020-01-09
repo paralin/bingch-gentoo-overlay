@@ -63,7 +63,7 @@ gnome-extra/nautilus-tracker-tags
 >=gnome-extra/gnome-weather-3.26.0
 >=gnome-extra/zenity-3.26.1
 >=media-video/cheese-3.26.0
->=media-video/totem-3.26.0
+#>=media-video/totem-3.26.0
 >=media-gfx/eog-3.26
 >=net-irc/polari-3.26.0
 >=net-libs/gnome-online-accounts-3.26.0
@@ -147,3 +147,4 @@ dev-libs/folks
 =media-plugins/grilo-plugins-0.3.9
 =media-libs/grilo-0.3.9
 app-text/gtkspell
+dev-libs/libinput

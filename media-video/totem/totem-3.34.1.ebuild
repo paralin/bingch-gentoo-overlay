@@ -70,8 +70,8 @@ BDEPEND="
 # Prevent dev-python/pylint dep, bug #482538
 
 PATCHES=(
-	"${FILESDIR}"/${PV}-control-plugins.patch # Do not force all plugins
-	"${FILESDIR}"/3.26-gst-inspect-sandbox.patch # Allow disabling calls to gst-inspect (sandbox issue)
+#	"${FILESDIR}"/${PV}-control-plugins.patch # Do not force all plugins
+#	"${FILESDIR}"/3.26-gst-inspect-sandbox.patch # Allow disabling calls to gst-inspect (sandbox issue)
 )
 
 pkg_setup() {

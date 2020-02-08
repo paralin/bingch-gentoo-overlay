@@ -1,7 +1,7 @@
 #dev-embedded/mfgtool
 dev-libs/libzip
 dev-lang/php
-dev-libs/weston
+#dev-libs/weston
 dev-python/jmespath
 dev-python/pip
 dev-python/python-augeas
@@ -9,7 +9,6 @@ dev-python/websockify
 dev-util/cscope
 dev-util/valgrind
 dev-vcs/subversion
-virtual/cargo
 virtual/linux-sources
 dev-util/indent
 dev-libs/libnfc

@@ -1,8 +1,8 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=( python3_{5,6,7,8} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 PYTHON_REQ_USE="threads(+)"
 
 inherit gnome.org gnome2-utils meson virtualx xdg python-single-r1
@@ -19,7 +19,7 @@ REQUIRED_USE="
 "
 RESTRICT="!test? ( test )"
 
-KEYWORDS="~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~x86"
+KEYWORDS="amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 x86"
 
 # FIXME:
 # Runtime dependency on gnome-session-2.91
@@ -45,7 +45,10 @@ DEPEND="
 	lirc? ( app-misc/lirc )
 	python? (
 		${PYTHON_DEPS}
-		>=dev-python/pygobject-2.90.3:3[${PYTHON_USEDEP}] )
+		$(python_gen_cond_dep '
+			>=dev-python/pygobject-2.90.3:3[${PYTHON_MULTI_USEDEP}]
+		')
+	)
 "
 RDEPEND="${DEPEND}
 	media-plugins/grilo-plugins:0.3
@@ -53,8 +56,11 @@ RDEPEND="${DEPEND}
 	media-plugins/gst-plugins-taglib:1.0
 	x11-themes/adwaita-icon-theme
 	python? (
-		>=dev-libs/libpeas-1.1.0[python,${PYTHON_USEDEP}]
-		dev-python/dbus-python[${PYTHON_USEDEP}] )
+		>=dev-libs/libpeas-1.1.0[python,${PYTHON_SINGLE_USEDEP}]
+		$(python_gen_cond_dep '
+			dev-python/dbus-python[${PYTHON_MULTI_USEDEP}]
+		')
+	)
 "
 BDEPEND="
 	dev-lang/perl
@@ -69,25 +75,21 @@ BDEPEND="
 # perl for pod2man
 # Prevent dev-python/pylint dep, bug #482538
 
-PATCHES=(
-#	"${FILESDIR}"/${PV}-control-plugins.patch # Do not force all plugins
-#	"${FILESDIR}"/3.26-gst-inspect-sandbox.patch # Allow disabling calls to gst-inspect (sandbox issue)
-)
-
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
 }
 
 src_configure() {
 	# Disabled: samplepython
-	local plugins="apple-trailers,autoload-subtitles"
-	plugins+=",im-status,media-player-keys,properties"
-	plugins+=",recent,rotation,save-file,screensaver,screenshot"
-	plugins+=",skipto,variable-rate,vimeo"
-	use cdr && plugins+=",brasero-disc-recorder"
-	use lirc && plugins+=",lirc"
-	use python && plugins+=",dbusservice,pythonconsole,opensubtitles"
+	#local plugins="apple-trailers,autoload-subtitles"
+	#plugins+=",im-status,media-player-keys,properties"
+	#plugins+=",recent,rotation,save-file,screensaver,screenshot"
+	#plugins+=",skipto,variable-rate,vimeo"
+	#use cdr && plugins+=",brasero-disc-recorder"
+	#use lirc && plugins+=",lirc"
+	#use python && plugins+=",dbusservice,pythonconsole,opensubtitles"
 
+	local plugins="auto"
 	local emesonargs=(
 		-Denable-easy-codec-installation=yes
 		-Denable-python=$(usex python yes no)

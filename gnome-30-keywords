@@ -149,3 +149,4 @@ app-text/gspell
 dev-util/gtk-doc
 dev-util/gtk-doc-am
 dev-python/pyatspi
+net-libs/glib-networking

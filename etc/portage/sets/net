@@ -13,3 +13,5 @@ net-misc/youtube-dl
 net-irc/hexchat
 net-analyzer/wireshark
 net-vpn/networkmanager-wireguard
+net-wireless/wireless-tools
+net-dns/bind-tools

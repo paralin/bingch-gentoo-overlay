@@ -14,3 +14,4 @@ dev-util/indent
 dev-libs/libnfc
 dev-python/configargparse
 dev-python/keyring
+dev-util/meld

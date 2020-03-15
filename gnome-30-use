@@ -15,6 +15,7 @@ app-emulation/libvirt virt-network
 
 net-vpn/openconnect stoken
 
-net-libs/glib-networking -libproxy
-net-libs/libproxy -python
-media-gfx/inkscape -spell
+#net-libs/glib-networking -libproxy
+#net-libs/libproxy -python
+#media-gfx/inkscape -spell
+x11-libs/vte vala

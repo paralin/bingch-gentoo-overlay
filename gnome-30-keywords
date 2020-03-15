@@ -153,3 +153,15 @@ net-libs/glib-networking
 media-gfx/gnome-font-viewer
 dev-util/sysprof-capture
 dev-util/sysprof
+dev-libs/libical
+dev-libs/libpeas
+media-libs/clutter
+media-libs/clutter-gst
+app-crypt/libsecret
+net-libs/webkit-gtk
+dev-libs/wayland
+gui-libs/tepl
+gnome-extra/sushi
+media-libs/grilo
+dev-lang/spidermonkey
+dev-libs/libgee

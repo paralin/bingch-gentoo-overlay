@@ -163,5 +163,6 @@ dev-libs/wayland
 gui-libs/tepl
 gnome-extra/sushi
 media-libs/grilo
-dev-lang/spidermonkey
+dev-lang/spidermonkey:68
 dev-libs/libgee
+app-arch/gcab

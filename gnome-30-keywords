@@ -166,3 +166,5 @@ media-libs/grilo
 dev-lang/spidermonkey:68
 dev-libs/libgee
 app-arch/gcab
+media-plugins/grilo-plugins
+media-video/totem

@@ -8,6 +8,7 @@ net-print/brother-hl3045cn-bin
 net-analyzer/iftop
 net-analyzer/nmap
 net-vpn/networkmanager-openconnect
+# move net-im/slack-bin net-im/slack
 net-im/slack
 net-misc/youtube-dl
 net-irc/hexchat
@@ -16,4 +17,3 @@ net-vpn/networkmanager-wireguard
 net-wireless/wireless-tools
 net-dns/bind-tools
 net-im/zoom
-net-ftp/ftp

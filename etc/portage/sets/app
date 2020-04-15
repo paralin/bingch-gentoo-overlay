@@ -5,7 +5,7 @@ app-misc/screen
 app-office/dia
 app-benchmarks/sysbench
 app-emulation/virt-manager
-app-i18n/ibus-libpinyin
+#app-i18n/ibus-libpinyin
 app-shells/bash-completion
 app-crypt/efitools
 app-emulation/docker

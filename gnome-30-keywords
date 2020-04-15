@@ -170,3 +170,5 @@ app-arch/gcab
 media-plugins/grilo-plugins
 media-video/totem
 media-libs/graphene
+app-i18n/ibus
+app-i18n/ibus-libpinyin

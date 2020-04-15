@@ -22,18 +22,18 @@ KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86"
 #  * gstreamer support is currently automagic
 DEPEND="
 	>=dev-libs/libcroco-0.6.8:0.6
-	>=gnome-extra/evolution-data-server-3.33.1:=
+	>=gnome-extra/evolution-data-server-3.36
 	>=app-crypt/gcr-3.7.5[introspection]
 	>=dev-libs/glib-2.57.2:2
 	>=dev-libs/gobject-introspection-1.49.1:=
-	>=dev-libs/gjs-1.57.3
+	>=dev-libs/gjs-1.63.5
 	>=x11-libs/gtk+-3.15.0:3[introspection]
-	>=x11-wm/mutter-3.34.0:0/5[introspection]
+	>=x11-wm/mutter-3.36.0:0/5[introspection]
 	>=sys-auth/polkit-0.100[introspection]
-	>=gnome-base/gsettings-desktop-schemas-3.33.1
+	>=gnome-base/gsettings-desktop-schemas-3.36
 	>=x11-libs/startup-notification-0.11
 	>=app-i18n/ibus-1.5.2
-	>=gnome-base/gnome-desktop-3.32:3=[introspection]
+	>=gnome-base/gnome-desktop-3.36:3=[introspection]
 	bluetooth? ( >=net-wireless/gnome-bluetooth-3.9[introspection] )
 	>=media-libs/gstreamer-0.11.92:1.0
 	media-libs/gst-plugins-base:1.0
@@ -87,8 +87,8 @@ RDEPEND="${DEPEND}
 	x11-libs/pango[introspection]
 	gnome-base/librsvg:2[introspection]
 
-	>=gnome-base/gnome-session-2.91.91
-	>=gnome-base/gnome-settings-daemon-3.8.3
+	>=gnome-base/gnome-session-3.36
+	>=gnome-base/gnome-settings-daemon-3.36
 
 	x11-misc/xdg-utils
 
@@ -106,7 +106,7 @@ RDEPEND="${DEPEND}
 # avoid circular dependency, see bug #546134
 PDEPEND="
 	>=gnome-base/gdm-3.5[introspection]
-	>=gnome-base/gnome-control-center-3.26[bluetooth(+)?,networkmanager(+)?]
+	>=gnome-base/gnome-control-center-3.36[bluetooth(+)?,networkmanager(+)?]
 	browser-extension? ( gnome-extra/chrome-gnome-shell )
 "
 BDEPEND="
@@ -125,9 +125,9 @@ PATCHES=(
 	# Try to fix crashes related to custom stylesheet; triggered often by package installs (probably desktop database update)
 	# https://gitlab.gnome.org/GNOME/gnome-shell/issues/1265
 	# https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/536
-	"${FILESDIR}"/3.34.4-custom_stylesheet_crash.patch
+	#"${FILESDIR}"/3.34.4-custom_stylesheet_crash.patch
 	# Fix automagic gnome-bluetooth dep, bug #398145
-	"${FILESDIR}"/3.34-optional-bluetooth.patch
+	#"${FILESDIR}"/3.34-optional-bluetooth.patch
 	# Change favorites defaults, bug #479918
 	#"${FILESDIR}"/3.28.3-defaults.patch
 )

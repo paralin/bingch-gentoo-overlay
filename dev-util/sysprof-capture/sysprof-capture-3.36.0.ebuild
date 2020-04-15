@@ -25,9 +25,6 @@ BDEPEND="
 
 src_prepare() {
 	default
-	# In 3.34.1 -Dlibsysprof=false still installs various data files related with it;
-	# some of these seem fixed by 3.36
-	#sed -i -e '/subdir.*data/d' meson.build || die
 }
 
 src_configure() {
@@ -44,7 +41,4 @@ src_configure() {
 
 src_install() {
 	meson_src_install
-	# In 3.36 these shouldn't be needed with with_sysprofd=none
-	#rm "${ED}"/usr/share/dbus-1/interfaces/org.gnome.Sysprof2.xml || die
-	#rm "${ED}"/usr/share/dbus-1/interfaces/org.gnome.Sysprof3.Service.xml || die
 }

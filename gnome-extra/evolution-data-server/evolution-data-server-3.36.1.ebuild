@@ -1,8 +1,8 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_6 )
 VALA_USE_DEPEND="vapigen"
 
 inherit cmake-utils db-use flag-o-matic gnome2 python-any-r1 systemd vala virtualx
@@ -12,23 +12,23 @@ HOMEPAGE="https://wiki.gnome.org/Apps/Evolution"
 
 # Note: explicitly "|| ( LGPL-2 LGPL-3 )", not "LGPL-2+".
 LICENSE="|| ( LGPL-2 LGPL-3 ) BSD Sleepycat"
-SLOT="0/62-24" # subslot = libcamel-1.2/libedataserver-1.2 soname version
+SLOT="0/62-24-20" # subslot = libcamel-1.2/libedataserver-1.2/libebook-1.2.so soname version
 
-IUSE="berkdb +gnome-online-accounts +gtk gtk-doc +introspection ipv6 ldap +kerberos oauth vala +weather"
+IUSE="berkdb +gnome-online-accounts +gtk gtk-doc +introspection ipv6 ldap kerberos oauth vala +weather"
 REQUIRED_USE="vala? ( introspection )"
 
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~x86-solaris"
 
 # gdata-0.17.7 soft required for new gdata_feed_get_next_page_token API to handle more than 100 google tasks
 # berkdb needed only for migrating old addressbook data from <3.13 versions, bug #519512
-# >=libical-3.0.2 present at build-time ensures less memory usage by calendar backend
+# libical-glib currently (2020-02-29) oddly behind USE=introspection; but introspection also needed if USE=introspection for eds
 gdata_depend=">=dev-libs/libgdata-0.17.7:="
 RDEPEND="
 	>=app-crypt/gcr-3.4
 	>=app-crypt/libsecret-0.5[crypt]
 	>=dev-db/sqlite-3.7.17:=
 	>=dev-libs/glib-2.46:2
-	>=dev-libs/libical-3.0.7:=[introspection,glib,vala?]
+	>=dev-libs/libical-3.0.5:=[introspection(-)]
 	>=dev-libs/libxml2-2
 	>=dev-libs/nspr-4.4:=
 	>=dev-libs/nss-3.9:=
@@ -67,7 +67,10 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35.5
 	>=sys-devel/gettext-0.18.3
 	virtual/pkgconfig
-	vala? ( $(vala_depend) )
+	vala? ( $(vala_depend)
+		net-libs/libsoup:2.4[vala]
+		dev-libs/libical[vala(-)]
+	)
 "
 
 # Some tests fail due to missing locales.
@@ -79,6 +82,7 @@ pkg_setup() {
 	python-any-r1_pkg_setup
 }
 
+# global scope PATCHES or DOCS array mustn't be used due to double default_src_prepare call
 src_prepare() {
 	use vala && vala_src_prepare
 	cmake-utils_src_prepare

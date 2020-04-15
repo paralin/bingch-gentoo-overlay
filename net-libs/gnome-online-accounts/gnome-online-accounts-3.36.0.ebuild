@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -12,7 +12,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/GnomeOnlineAccounts"
 
 LICENSE="LGPL-2+"
 SLOT="0/1"
-KEYWORDS="~alpha amd64 ~arm arm64 ~ia64 ~ppc ~ppc64 ~sparc x86"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ppc ~ppc64 ~sparc ~x86"
 
 IUSE="debug gnome +introspection kerberos +vala"
 REQUIRED_USE="vala? ( introspection )"
@@ -38,7 +38,6 @@ RDEPEND="
 		app-crypt/gcr:0=[gtk]
 		app-crypt/mit-krb5 )
 "
-#	telepathy? ( net-libs/telepathy-glib )
 # goa-daemon can launch gnome-control-center
 PDEPEND="gnome? ( >=gnome-base/gnome-control-center-3.2[gnome-online-accounts(+)] )"
 
@@ -77,6 +76,7 @@ src_configure() {
 		--enable-windows-live \
 		$(usex debug --enable-debug=yes ' ') \
 		$(use_enable kerberos) \
+		$(use_enable kerberos fedora) \
 		$(use_enable introspection) \
 		$(use_enable vala)
 }

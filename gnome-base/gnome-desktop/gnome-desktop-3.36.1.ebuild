@@ -1,57 +1,77 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-inherit gnome2 virtualx meson
+EAPI=7
+inherit gnome.org gnome2-utils meson virtualx xdg
 
-DESCRIPTION="Libraries for the gnome desktop that are not part of the UI"
-HOMEPAGE="https://git.gnome.org/browse/gnome-desktop"
+DESCRIPTION="Library with common API for various GNOME modules"
+HOMEPAGE="https://gitlab.gnome.org/GNOME/gnome-desktop/"
 
-LICENSE="GPL-2+ FDL-1.1+ LGPL-2+"
-SLOT="3/12" # subslot = libgnome-desktop-3 soname version
-IUSE="debug +introspection udev"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~x86-solaris"
+LICENSE="GPL-2+ LGPL-2+ FDL-1.1+"
+SLOT="3/18" # subslot = libgnome-desktop-3 soname version
+IUSE="debug gtk-doc +introspection seccomp systemd udev"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~x86-solaris"
 
 # cairo[X] needed for gnome-bg
 COMMON_DEPEND="
-	app-text/iso-codes
-	>=dev-libs/glib-2.63.2:2[dbus]
 	>=x11-libs/gdk-pixbuf-2.36.5:2[introspection?]
-	>=x11-libs/gtk+-3.24.0:3[X,introspection?]
-	x11-libs/cairo:=[X]
-	x11-libs/libX11
+	>=x11-libs/gtk+-3.3.6:3[X,introspection?]
+	>=dev-libs/glib-2.53.0:2
+	>=gnome-base/gsettings-desktop-schemas-3.27.0[introspection?]
 	x11-misc/xkeyboard-config
-	>=gnome-base/gsettings-desktop-schemas-3.34.0
-	introspection? ( >=dev-libs/gobject-introspection-1.63.1:= )
+	app-text/iso-codes
+	x11-libs/libX11
+	systemd? ( sys-apps/systemd:= )
 	udev? (
 		sys-apps/hwids
 		virtual/libudev:= )
-"
-RDEPEND="${COMMON_DEPEND}
-	!<gnome-base/gnome-desktop-2.32.1-r1:2[doc]
+	seccomp? ( sys-libs/libseccomp )
+
+	x11-libs/cairo:=[X]
+	introspection? ( >=dev-libs/gobject-introspection-1.54:= )
 "
 DEPEND="${COMMON_DEPEND}
+	media-libs/fontconfig
+"
+RDEPEND="${COMMON_DEPEND}
+	seccomp? ( sys-apps/bubblewrap )
+"
+BDEPEND="
 	app-text/docbook-xml-dtd:4.1.2
-	>=dev-util/gtk-doc-am-1.14
-	>=dev-util/intltool-0.40.6
+	dev-util/gdbus-codegen
+	gtk-doc? ( >=dev-util/gtk-doc-1.14 )
 	dev-util/itstool
-	sys-devel/gettext
+	>=sys-devel/gettext-0.19.8
 	x11-base/xorg-proto
 	virtual/pkgconfig
 "
+# Includes X11/Xatom.h in libgnome-desktop/gnome-bg.c which comes from xorg-proto
 
-meson_use_enable() {
-	usex "$1" "-D${2-$1}=enabled" "-D${2-$1}=disabled"
+PATCHES=(
+	"${FILESDIR}"/3.32.2-optional-introspection.patch # add introspection meson option
+)
+
+src_prepare() {
+	# Don't build manual test programs that will never get run
+	sed -i -e "/'test-.*'/d" libgnome-desktop/meson.build || die
+	xdg_src_prepare
 }
 
-#TODO: make systemd optional
 src_configure() {
 	local emesonargs=(
 		-Dgnome_distributor=Gentoo
-		-Dsystemd=enabled
+		-Ddate_in_gnome_version=true
+		-Ddesktop_docs=true
 		$(meson_use debug debug_tools)
-		$(meson_use_enable udev)
+		$(meson_use introspection)
+		$(meson_feature udev)
+		$(meson_feature systemd)
+		$(meson_use gtk-doc gtk_doc)
+		-Dinstalled_tests=false
 	)
-
 	meson_src_configure
+}
+
+src_test() {
+	virtx meson_src_test
 }

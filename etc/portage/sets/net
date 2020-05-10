@@ -17,3 +17,4 @@ net-wireless/wireless-tools
 net-dns/bind-tools
 #net-im/zoom
 net-ftp/ftp
+net-misc/whois

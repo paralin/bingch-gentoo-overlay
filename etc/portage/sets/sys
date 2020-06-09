@@ -33,3 +33,5 @@ sys-apps/msr-tools
 sys-power/throttled
 sys-boot/plymouth
 sys-power/cpupower
+sys-power/iasl
+sys-block/zram-init

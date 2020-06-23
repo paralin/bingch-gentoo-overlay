@@ -35,3 +35,5 @@ sys-boot/plymouth
 sys-power/cpupower
 sys-power/iasl
 sys-block/zram-init
+sys-apps/iucode_tool
+sys-firmware/intel-microcode

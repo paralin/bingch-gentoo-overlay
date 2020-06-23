@@ -8,3 +8,4 @@ media-sound/shntool
 #media-video/mpv
 x11-libs/libva-intel-media-driver
 media-video/vlc
+media-gfx/krita

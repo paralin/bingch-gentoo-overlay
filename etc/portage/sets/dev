@@ -15,3 +15,4 @@ dev-libs/libnfc
 dev-python/configargparse
 dev-python/keyring
 dev-util/meld
+dev-python/pyusb

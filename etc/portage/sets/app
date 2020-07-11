@@ -16,3 +16,4 @@ app-admin/pwgen
 app-text/dos2unix
 app-misc/ttyload
 app-i18n/ibus-libpinyin
+app-arch/innoextract

@@ -17,7 +17,7 @@ SRC_URI="https://gitlab.freedesktop.org/libfprint/fprintd/-/archive/${PV}/${P}.t
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
-IUSE="doc pam -daemon"
+IUSE="doc pam daemon"
 
 RDEPEND="
 	dev-libs/dbus-glib
@@ -55,9 +55,12 @@ local emesonargs=(
 
 src_install() {
 	meson_src_install
-	rm -rf ${D}/usr/share/dbus-1/system.d/net.reactivated.Fprint.conf
-	rm -rf ${D}/usr/share/dbus-1/system-services/net.reactivated.Fprint.service
-	rm -rf ${D}/lib/systemd
+
+	if ! use daemon; then 
+		rm -rf ${D}/usr/share/dbus-1/system.d/net.reactivated.Fprint.conf
+		rm -rf ${D}/usr/share/dbus-1/system-services/net.reactivated.Fprint.service
+		rm -rf ${D}/lib/systemd
+	fi
 }
 
 pkg_postinst() {

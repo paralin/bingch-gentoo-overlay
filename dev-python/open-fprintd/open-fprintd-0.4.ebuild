@@ -23,7 +23,9 @@ IUSE=""
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-RDEPEND="${PYTHON_DEPS}"
+RDEPEND="${PYTHON_DEPS}
+	sys-auth/fprintd[-daemon]
+"
 DEPEND="${RDEPEND}"
 BDEPEND="
 	virtual/pkgconfig

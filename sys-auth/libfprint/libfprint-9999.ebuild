@@ -9,9 +9,10 @@ DESCRIPTION="library to add support for consumer fingerprint readers"
 HOMEPAGE="https://cgit.freedesktop.org/libfprint/libfprint/ https://github.com/freedesktop/libfprint https://gitlab.freedesktop.org/libfprint/libfprint"
 if [[ ${PV} == 9999 ]]; then
     inherit git-r3
-#    EGIT_REPO_URI="https://github.com/3v1n0/libfprint"
-    EGIT_REPO_URI="https://gitlab.freedesktop.org/uunicorn/libfprint.git"
-	EGIT_BRANCH="device/virtual-dbus"
+    EGIT_REPO_URI="https://github.com/3v1n0/libfprint"
+	EGIT_BRANCH="vfs0090"
+    #EGIT_REPO_URI="https://gitlab.freedesktop.org/uunicorn/libfprint.git"
+	#EGIT_BRANCH="device/virtual-dbus"
 else
 	SRC_URI="https://gitlab.freedesktop.org/libfprint/libfprint/-/archive/v${PV}/${PN}-v${PV}.tar.gz -> ${P}.tar.gz"
     KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"

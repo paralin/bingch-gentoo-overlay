@@ -1,0 +1,13 @@
+diff --git a/debian/python3-validity.service b/debian/python3-validity.service
+index 299c599..92a7a3e 100644
+--- a/debian/python3-validity.service
++++ b/debian/python3-validity.service
+@@ -3,6 +3,6 @@ Description=python-validity driver dbus service
+ 
+ [Service]
+ Type=simple
+-ExecStart=/usr/lib/python-validity/dbus-service --debug
+-Restart=no
++ExecStart=/usr/lib/python-validity/dbus-service
++Restart=always
+ 

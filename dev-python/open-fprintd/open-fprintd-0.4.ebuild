@@ -24,7 +24,7 @@ IUSE=""
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="${PYTHON_DEPS}
-	sys-auth/fprintd[-daemon]
+	>=sys-auth/fprintd-1.90.1[-daemon]
 "
 DEPEND="${RDEPEND}"
 BDEPEND="

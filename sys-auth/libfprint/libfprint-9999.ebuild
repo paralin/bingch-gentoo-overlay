@@ -24,7 +24,6 @@ fi
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-#KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE="examples"
 
 RDEPEND="dev-libs/glib:2
@@ -41,7 +40,7 @@ DEPEND="${RDEPEND}
 
 BDEPEND="virtual/pkgconfig"
 
-PATCHES=( ${FILESDIR}/${PN}-0.8.2-fix-implicit-declaration.patch )
+#PATCHES=( ${FILESDIR}/${PN}-0.8.2-fix-implicit-declaration.patch )
 
 #S="${WORKDIR}/${PN}-v${PV}"
 

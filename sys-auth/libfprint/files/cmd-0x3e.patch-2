@@ -1,0 +1,40 @@
+diff --git a/vfs0090.h b/vfs0090.h
+index f3c2072..0d07dd8 100644
+--- a/vfs0090.h
++++ b/vfs0090.h
+@@ -321,7 +321,7 @@ static const unsigned char INIT_SEQUENCE_RSP5[] = {
+   0x00, 0x80, 0x00, 0x00, 0x06, 0x06, 0x03, 0x00,
+   0x00, 0x80, 0x04, 0x00, 0x00, 0x80, 0x00, 0x00,
+   0x04, 0x03, 0x05, 0x00, 0x00, 0x00, 0x05, 0x00,
+-  0x00, 0x00, 0x03, 0x00
++  0x00, 0x00, 0x08, 0x00
+ };
+ 
+ static const unsigned char INIT_SEQUENCE_MSG6[] = {
+@@ -346,7 +346,7 @@ static const VfsDataExchange INIT_SEQUENCES[] = {
+     .msg = INIT_SEQUENCE_MSG3,
+     .msg_length = G_N_ELEMENTS (INIT_SEQUENCE_MSG3),
+     .rsp = NULL,
+-    .rsp_length = 84,
++    .rsp_length = 108,
+   },
+   {
+     .msg = INIT_SEQUENCE_MSG4,
+@@ -712,7 +712,7 @@ static const VfsDataExchange ACTIVATE_SEQUENCES[] = {
+   {
+     .msg = ACTIVATE_SEQUENCE_MSG2,
+     .msg_length = G_N_ELEMENTS (ACTIVATE_SEQUENCE_MSG2),
+-    .rsp = (unsigned char[]){ 0x00, 0x00, 0x02, 0x00, 0x00, 0x00 },
++    .rsp = (unsigned char[]){ 0x00, 0x00, 0x03, 0x00, 0x00, 0x00 },
+     .rsp_length = 6,
+   },
+   {
+@@ -740,7 +740,7 @@ static const VfsDataExchange ACTIVATE_SEQUENCES[] = {
+     .msg = ACTIVATE_SEQUENCE_MSG67,
+     .msg_length = G_N_ELEMENTS (ACTIVATE_SEQUENCE_MSG67),
+     .rsp = NULL,
+-    .rsp_length = 84,
++    .rsp_length = 108,
+   },
+   {
+     .msg = ACTIVATE_SEQUENCE_MSG67,

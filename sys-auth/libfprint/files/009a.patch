@@ -1,0 +1,22 @@
+diff --git a/60-libfprint-2-tod-vfs0090.rules b/60-libfprint-2-tod-vfs0090.rules
+index a3f3661..0f6e10a 100644
+--- a/libfprint/drivers/vfs0090/60-libfprint-2-tod-vfs0090.rules
++++ b/libfprint/drivers/vfs0090/60-libfprint-2-tod-vfs0090.rules
+@@ -1,2 +1,2 @@
+-SUBSYSTEM=="usb", ATTRS{idVendor}=="138a", ATTRS{idProduct}=="0090", ATTRS{dev}=="*", TEST=="power/control", ATTR{power/control}="auto", MODE="0660", GROUP="plugdev"
+-SUBSYSTEM=="usb", ATTRS{idVendor}=="138a", ATTRS{idProduct}=="0090", ENV{LIBFPRINT_DRIVER}="vfs0090"
++SUBSYSTEM=="usb", ATTRS{idVendor}=="06cb", ATTRS{idProduct}=="009a", ATTRS{dev}=="*", TEST=="power/control", ATTR{power/control}="auto", MODE="0660", GROUP="plugdev"
++SUBSYSTEM=="usb", ATTRS{idVendor}=="06cb", ATTRS{idProduct}=="009a", ENV{LIBFPRINT_DRIVER}="vfs0090"
+diff --git a/vfs0090.c b/vfs0090.c
+index 8034faf..5053a16 100644
+--- a/libfprint/drivers/vfs0090/vfs0090.c
++++ b/libfprint/drivers/vfs0090/vfs0090.c
+@@ -3107,7 +3107,7 @@ dev_cancel (FpDevice *dev)
+ /* Usb id table of device */
+ static const FpIdEntry id_table[] = {
+   { .vid = 0x138a, .pid = 0x0090, .driver_data = FPI_DEVICE_ACTION_CAPTURE },
+-  { .vid = 0x138a, .pid = 0x0097, .driver_data = FPI_DEVICE_ACTION_NONE },
++  { .vid = 0x06cb, .pid = 0x009a, .driver_data = FPI_DEVICE_ACTION_NONE },
+   { .vid = 0,  .pid = 0, .driver_data = 0 },
+ };
+ 

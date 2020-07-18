@@ -16,6 +16,8 @@ if [[ ${PV} == 9999 ]]; then
 	#EGIT_BRANCH="device/virtual-dbus"
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/3v1n0/libfprint.git"
     EGIT_BRANCH="tod"
+	#EGIT_REPO_URI="https://github.com/3v1n0/libfprint.git"
+    #EGIT_BRANCH="vfs0090"
 else
 	SRC_URI="https://gitlab.freedesktop.org/libfprint/libfprint/-/archive/v${PV}/${PN}-v${PV}.tar.gz -> ${P}.tar.gz"
     KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
@@ -40,7 +42,10 @@ DEPEND="${RDEPEND}
 
 BDEPEND="virtual/pkgconfig"
 
-#PATCHES=( ${FILESDIR}/${PN}-0.8.2-fix-implicit-declaration.patch )
+#PATCHES=( ${FILESDIR}/${PN}-0.8.2-fix-implicit-declaration.patch
+#			${FILESDIR}/009a.patch
+#			${FILESDIR}/cmd-0x3e.patch
+#)
 
 #S="${WORKDIR}/${PN}-v${PV}"
 
@@ -48,7 +53,7 @@ src_configure() {
 		local emesonargs=(
 			-Ddoc=false
 			-Dgtk-examples=$(usex examples true false)
-			-Ddrivers=all
+			-Ddrivers=default
 			-Dudev_rules=true
 			-Dudev_rules_dir=$(get_udevdir)/rules.d
 			--libdir=/usr/$(get_libdir)

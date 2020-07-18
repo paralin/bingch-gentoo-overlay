@@ -1,19 +1,12 @@
-diff --git a/libfprint/drivers/vfs0090 b/libfprint/drivers/vfs0090
---- a/libfprint/drivers/vfs0090
-+++ b/libfprint/drivers/vfs0090
-@@ -1 +1 @@
--Subproject commit 1d9ef6d3a1fe24716d54d23a0cd0ab985cb49f5c
-+Subproject commit 1d9ef6d3a1fe24716d54d23a0cd0ab985cb49f5c-dirty
 diff --git a/libfprint/fprint-list-udev-rules.c b/libfprint/fprint-list-udev-rules.c
-index 9634d2b..07cfdf6 100644
+index 5f17b6b..907b57d 100644
 --- a/libfprint/fprint-list-udev-rules.c
 +++ b/libfprint/fprint-list-udev-rules.c
-@@ -28,7 +28,7 @@ static const FpIdEntry whitelist_id_table[] = {
-   /* Unsupported (for now) Validity Sensors finger print readers */
+@@ -30,6 +30,7 @@ static const FpIdEntry whitelist_id_table[] = {
    { .vid = 0x138a, .pid = 0x0091 },
    { .vid = 0x138a, .pid = 0x0094 },
--  { .vid = 0x138a, .pid = 0x0097 },   /* Found on e.g. Lenovo T470s */
-+  { .vid = 0x06cb, .pid = 0x009a },   /* Found on e.g. Lenovo T470s */
+   { .vid = 0x138a, .pid = 0x0097 },   /* Found on e.g. Lenovo T470s */
++  { .vid = 0x06cb, .pid = 0x009a },   /* Found on e.g. Lenovo X1 Gen6 */
    { .vid = 0 },
  };
  

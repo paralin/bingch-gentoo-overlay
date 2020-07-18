@@ -38,3 +38,4 @@ sys-block/zram-init
 sys-apps/iucode_tool
 sys-firmware/intel-microcode
 #sys-auth/fprintd
+sys-auth/fprintd

@@ -24,6 +24,7 @@ RDEPEND="
 	dev-libs/glib:2
 	daemon? ( sys-auth/libfprint dev-python/dbusmock )
 	sys-auth/polkit
+	sys-auth/pam_wrapper
 	pam? ( sys-libs/pam )
 "
 DEPEND="${RDEPEND}

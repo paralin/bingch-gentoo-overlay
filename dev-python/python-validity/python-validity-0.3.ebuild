@@ -17,11 +17,17 @@ SRC_URI="http://ppa.launchpad.net/uunicorn/open-fprintd/ubuntu/pool/main/p/pytho
 LICENSE="LGPL-2.1+"
 SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
-IUSE=""
+IUSE="open-fprintd"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-RDEPEND="${PYTHON_DEPS}"
+RDEPEND="${PYTHON_DEPS}
+	open-fprintd? ( >=dev-python/open-fprintd-0.4 )
+	>=dev-python/cryptography-2.8-r1
+	>=dev-python/pyusb-1.0.2
+	sys-apps/dbus
+	app-arch/innoextract
+"
 DEPEND="${RDEPEND}"
 BDEPEND="
 	virtual/pkgconfig

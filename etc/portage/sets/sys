@@ -39,3 +39,4 @@ sys-apps/iucode_tool
 sys-firmware/intel-microcode
 #sys-auth/fprintd
 sys-auth/fprintd
+sys-auth/libfprint

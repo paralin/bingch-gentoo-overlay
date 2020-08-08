@@ -22,6 +22,3 @@ IUSE=""
 DEPEND=">=sys-auth/libfprint-9999"
 RDEPEND="${DEPEND}"
 BDEPEND=""
-
-PATCHES=( ${FILESDIR}/009a.patch 
-		)

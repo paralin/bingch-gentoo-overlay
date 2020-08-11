@@ -19,6 +19,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND=">=sys-auth/libfprint-9999"
+DEPEND="
+	dev-python/python-validity
+	>=sys-auth/libfprint-9999
+"
 RDEPEND="${DEPEND}"
 BDEPEND=""

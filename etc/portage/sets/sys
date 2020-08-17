@@ -37,6 +37,6 @@ sys-power/iasl
 sys-block/zram-init
 sys-apps/iucode_tool
 sys-firmware/intel-microcode
-#sys-auth/fprintd
+sys-auth/fprintd
 #sys-auth/libfprint
-#sys-auth/libfprint-tod-vfs0090-driver
+sys-auth/libfprint-tod-vfs0090-driver

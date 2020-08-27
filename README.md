@@ -1,6 +1,10 @@
 gentoo-overlay
 ==============
 
+## Adding local repo using eselect (need app-eselect/eselect-repository installed)
+
+sudo eselect repository add bingch git https://gitlab.com/bingch/gentoo-overlay.git
+
 ## Adding the overlay using layman
 
 First create a local overlay list:

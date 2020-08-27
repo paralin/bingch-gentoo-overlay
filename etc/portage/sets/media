@@ -5,7 +5,7 @@ media-sound/easytag
 media-sound/jack-audio-connection-kit
 media-sound/rhythmbox
 media-sound/shntool
-#media-video/mpv
+media-video/mpv
 x11-libs/libva-intel-media-driver
 media-video/vlc
 media-gfx/krita

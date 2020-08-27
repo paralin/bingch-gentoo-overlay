@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE repositories SYSTEM "/dtd/repositories.dtd">
+<repositories xmlns="" version="1.0">
+  <repo quality="experimental" status="unofficial">
+    <name><![CDATA[bingch]]></name>
+    <description lang="en"><![CDATA[bingch local ebuilds]]></description>
+    <homepage>https://gitlab.com/bingch/gentoo-overlay</homepage>
+    <owner type="person">
+       <email>bingquick@hotmail.com</email>
+       <name><![CDATA[Bing Chen]]></name>
+    </owner>
+    <source type="git">https://gitlab.com/bingch/gentoo-overlay.git</source>
+    <feed>https://gitlab.com/feeds/bingch/commits/gentoo-overlay/master</feed>
+  </repo>
+</repositories>

@@ -1,0 +1,109 @@
+diff --git a/SegmentedFontData.cpp b/SegmentedFontData.cpp
+index efb20a8..99b3e86 100644
+--- a/Source/WebCore/platform/graphics/SegmentedFontData.cpp
++++ b/Source/WebCore/platform/graphics/SegmentedFontData.cpp
+@@ -61,7 +61,7 @@ bool SegmentedFontData::containsCharacters(const UChar* characters, int length)
+ {
+     UChar32 c;
+     for (int i = 0; i < length; ) {
+-        U16_NEXT(characters, i, length, c)
++        U16_NEXT(characters, i, length, c);
+         if (!containsCharacter(c))
+             return false;
+     }
+diff --git a/Source/JavaScriptCore/API/JSStringRef.cpp b/Source/JavaScriptCore/API/JSStringRef.cpp
+index 25b84c7..a735806 100644
+--- a/Source/JavaScriptCore/API/JSStringRef.cpp
++++ b/Source/JavaScriptCore/API/JSStringRef.cpp
+@@ -37,7 +37,7 @@ using namespace WTF::Unicode;
+ JSStringRef JSStringCreateWithCharacters(const JSChar* chars, size_t numChars)
+ {
+     initializeThreading();
+-    return OpaqueJSString::create(chars, numChars).leakRef();
++    return OpaqueJSString::create((const UChar*)(UChar*)chars, numChars).leakRef();
+ }
+ 
+ JSStringRef JSStringCreateWithUTF8CString(const char* string)
+@@ -62,7 +62,7 @@ JSStringRef JSStringCreateWithUTF8CString(const char* string)
+ JSStringRef JSStringCreateWithCharactersNoCopy(const JSChar* chars, size_t numChars)
+ {
+     initializeThreading();
+-    return OpaqueJSString::create(StringImpl::createWithoutCopying(chars, numChars)).leakRef();
++    return OpaqueJSString::create(StringImpl::createWithoutCopying((const UChar*)(UChar*)chars, numChars)).leakRef();
+ }
+ 
+ JSStringRef JSStringRetain(JSStringRef string)
+@@ -83,7 +83,7 @@ size_t JSStringGetLength(JSStringRef string)
+ 
+ const JSChar* JSStringGetCharactersPtr(JSStringRef string)
+ {
+-    return string->characters();
++    return (JSChar*)string->characters();
+ }
+ 
+ size_t JSStringGetMaximumUTF8CStringSize(JSStringRef string)
+diff --git a/Source/WebCore/dom/Document.cpp b/Source/WebCore/dom/Document.cpp
+index 1e677dc..49fc03f 100644
+--- a/Source/WebCore/dom/Document.cpp
++++ b/Source/WebCore/dom/Document.cpp
+@@ -3912,12 +3912,12 @@ static bool isValidNameNonASCII(const UChar* characters, unsigned length)
+     unsigned i = 0;
+ 
+     UChar32 c;
+-    U16_NEXT(characters, i, length, c)
++    U16_NEXT(characters, i, length, c);
+     if (!isValidNameStart(c))
+         return false;
+ 
+     while (i < length) {
+-        U16_NEXT(characters, i, length, c)
++        U16_NEXT(characters, i, length, c);
+         if (!isValidNamePart(c))
+             return false;
+     }
+@@ -3980,7 +3980,7 @@ bool Document::parseQualifiedName(const String& qualifiedName, String& prefix, S
+     const UChar* s = qualifiedName.deprecatedCharacters();
+     for (unsigned i = 0; i < length;) {
+         UChar32 c;
+-        U16_NEXT(s, i, length, c)
++        U16_NEXT(s, i, length, c);
+         if (c == ':') {
+             if (sawColon) {
+                 ec = NAMESPACE_ERR;
+#diff --git a/Sources/WebCore/MathMLNames.cpp b/Sources/WebCore/MathMLNames.cpp
+#index 3423720..5fa5753 100644
+#--- a/Sources/WebCore/MathMLNames.cpp
+#+++ b/Sources/WebCore/MathMLNames.cpp
+#@@ -639,8 +639,9 @@ static StringImpl::StaticASCIILiteral mglyphData = {
+#     6,
+#     mglyphString8,
+#     0,
+#-    StringImpl::StaticASCIISCIILiteral::s_initialFlags | (1894901 << StringImpl::StaticASCIILiteral::s_hashShift)
+#+    StringImpl::StaticASCIILiteral::s_initialFlags | (1894901 << StringImpl::StaticASCIILiteral::s_hashShift)
+# };
+#+/*
+# static StringImpl::StaticASCIILiteral widthData = {
+#     StringImpl::StaticASCIILiteral::s_initialRefCount,
+#     5,
+#@@ -655,7 +656,7 @@ static StringImpl::StaticASCIILiteral mencloseData = {
+#     0,
+#     StringImpl::StaticASCIILiteral::s_initialFlags | (5022529 << StringImpl::StaticASCIILiteral::s_hashShift)
+# };
+#-
+#+*/
+# // Tags
+# DEFINE_GLOBAL(QualifiedName, annotationTag)
+# DEFINE_GLOBAL(QualifiedName, annotation_xmlTag)
+#@@ -988,10 +989,10 @@ void init()
+#         { (void*)&alttextAttr, *reinterpret_cast<StringImpl*>(&alttextData) },
+#         { (void*)&backgroundAttr, *reinterpret_cast<StringImpl*>(&backgroundData) },
+#         { (void*)&closeAttr, *reinterpret_cast<StringImpl*>(&closeData) },
+#-        { (void*)&colorAttr, *reinterpret_cast<StringImpl*>(&colorData) },
+#+        //{ (void*)&colorAttr, *reinterpret_cast<StringImpl*>(&colorData) },
+#         { (void*)&columnspanAttr, *reinterpret_cast<StringImpl*>(&columnspanData) },
+#         { (void*)&definitionURLAttr, *reinterpret_cast<StringImpl*>(&definitionURLData) },
+#-        { (void*)&denomalignAttr, *reinterpret_cast<StringImpl*>(&denomalignData) },
+#+        //{ (void*)&denomalignAttr, *reinterpret_cast<StringImpl*>(&denomalignData) },
+#         { (void*)&depthAttr, *reinterpret_cast<StringImpl*>(&depthData) },
+#         { (void*)&dirAttr, *reinterpret_cast<StringImpl*>(&dirData) },
+#         { (void*)&encodingAttr, *reinterpret_cast<StringImpl*>(&encodingData) },

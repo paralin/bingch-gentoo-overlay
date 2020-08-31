@@ -1,0 +1,12 @@
+diff -Naru webkitgtk-2.16.6.orig/Source/WebCore/platform/text/enchant/TextCheckerEnchant.cpp webkitgtk-2.16.6/Source/WebCore/platform/text/enchant/TextCheckerEnchant.cpp
+--- webkitgtk-2.16.6.orig/Source/WebCore/platform/text/enchant/TextCheckerEnchant.cpp	2017-10-19 07:52:28.840012109 +0200
++++ webkitgtk-2.16.6/Source/WebCore/platform/text/enchant/TextCheckerEnchant.cpp	2017-10-19 07:52:52.210012428 +0200
+@@ -129,7 +129,7 @@
+         for (i = 0; i < numberOfSuggestions; i++)
+             guesses.append(String::fromUTF8(suggestions[i]));
+ 
+-        enchant_dict_free_suggestions(dictionary, suggestions);
++        enchant_dict_free_string_list(dictionary, suggestions);
+     }
+ 
+     return guesses;

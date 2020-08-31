@@ -1,0 +1,7 @@
+# required by tizen emulator 
+media-libs/libpng-compat:1.2
+# ssl 1.0.0 for tizen sdb
+dev-libs/openssl-compat:1.0.0
+# apichecker/APIChecker require ncurses 5
+sys-libs/ncurses-compat
+sys-libs/readline-compat

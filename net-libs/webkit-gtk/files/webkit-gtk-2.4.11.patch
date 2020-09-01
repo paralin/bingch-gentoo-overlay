@@ -107,3 +107,14 @@ index 1e677dc..49fc03f 100644
 #         { (void*)&depthAttr, *reinterpret_cast<StringImpl*>(&depthData) },
 #         { (void*)&dirAttr, *reinterpret_cast<StringImpl*>(&dirData) },
 #         { (void*)&encodingAttr, *reinterpret_cast<StringImpl*>(&encodingData) },
+diff --git a/Source/WebCore/css/makegrammar.pl b/Source/WebCore/css/makegrammar.pl
+index 4e0452e..089e3ba 100644
+--- a/Source/WebCore/css/makegrammar.pl
++++ b/Source/WebCore/css/makegrammar.pl
+@@ -91,5 +91,5 @@ print HEADER "#endif\n";
+ close HEADER;
+ 
+ unlink("$fileBase.cpp.h");
+-unlink("$fileBase.hpp");
++#unlink("$fileBase.hpp");
+ 

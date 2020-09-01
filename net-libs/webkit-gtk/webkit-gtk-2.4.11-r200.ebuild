@@ -3,7 +3,7 @@
 
 EAPI="6"
 PYTHON_COMPAT=( python2_7 )
-#USE_RUBY="ruby20 ruby21 ruby22 ruby23"
+USE_RUBY="ruby24 ruby25 ruby26 ruby27"
 
 inherit autotools check-reqs flag-o-matic gnome2 pax-utils python-any-r1 ruby-single toolchain-funcs versionator virtualx
 
@@ -65,10 +65,10 @@ RDEPEND="
 
 # paxctl needed for bug #407085
 # Need real bison, not yacc
-#	${RUBY_DEPS}
 
 DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
+	${RUBY_DEPS}
 	>=dev-lang/perl-5.10
 	>=dev-libs/atk-2.8.0
 	>=dev-util/gtk-doc-am-1.10
@@ -196,14 +196,12 @@ src_configure() {
 
 	local ruby_interpreter=""
 
-	if has_version "virtual/rubygems[ruby_targets_ruby23]"; then
-		ruby_interpreter="RUBY=$(type -P ruby23)"
-	elif has_version "virtual/rubygems[ruby_targets_ruby22]"; then
-		ruby_interpreter="RUBY=$(type -P ruby22)"
-	elif has_version "virtual/rubygems[ruby_targets_ruby21]"; then
-		ruby_interpreter="RUBY=$(type -P ruby21)"
+	if has_version "virtual/rubygems[ruby_targets_ruby27]"; then
+		ruby_interpreter="RUBY=$(type -P ruby27)"
+	elif has_version "virtual/rubygems[ruby_targets_ruby26]"; then
+		ruby_interpreter="RUBY=$(type -P ruby26)"
 	else
-		ruby_interpreter="RUBY=$(type -P ruby20)"
+		ruby_interpreter="RUBY=$(type -P ruby25)"
 	fi
 
 	# TODO: Check Web Audio support

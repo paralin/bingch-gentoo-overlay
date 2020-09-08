@@ -1,0 +1,3 @@
+[submodule "sys-kernel/pine64-sources"]
+	path = sys-kernel/pine64-sources
+	url = https://github.com/richardanaya/pine64-kernel-gentoo.git

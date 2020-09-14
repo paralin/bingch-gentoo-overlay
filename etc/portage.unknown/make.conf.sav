@@ -1,0 +1,31 @@
+# These settings were set by the catalyst build script that automatically
+# built this stage.
+# Please consult /usr/share/portage/config/make.conf.example for a more
+# detailed example.
+# Please consult https://wiki.gentoo.org/wiki/Changing_the_CHOST_variable before changing.
+# dev-python seems need to be compiled natively
+CHOST="aarch64-sunxi-linux-gnu"
+
+ACCEPT_KEYWORDS="${ARCH} ~${ARCH}"
+
+USE="${ARCH} wayland -pam -python_targets_python2_7"
+
+CFLAGS="-O2 -pipe -fomit-frame-pointer"
+CXXFLAGS="${CFLAGS}"
+
+FEATURES="-collision-protect sandbox buildpkg noman noinfo nodoc -pid-sandbox -network-sandbox"
+
+# NOTE: This stage was built with the bindist Use flag enabled
+PORTAGE_TMPDIR="/tmp/"
+PORTDIR="/var/db/repos/gentoo/"
+DISTDIR="/usr/src/portage/distfiles/"
+PKGDIR="/usr/src/portage/aarch64-packages/"
+
+#PKG_CONFIG_PATH="${ROOT}usr/lib/pkgconfig/"
+LC_MESSAGES=C
+
+#PORTDIR_OVERLAY="/usr/portage/local/"
+#CURL_SSL=gnutls
+VIDEO_CARDS="mali"
+#MAKEOPTS="-j1"
+EMERGE_DEFAULT_OPTS="$EMERGE_DEFAULT_OPTS --exclude app-emulation/qemu"

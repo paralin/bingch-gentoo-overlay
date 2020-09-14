@@ -1,0 +1,4 @@
+mail-client/mailx
+virtual/cron
+virtual/httpd-php
+www-servers/apache

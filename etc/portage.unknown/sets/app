@@ -1,0 +1,15 @@
+app-portage/cfg-update
+app-admin/sysstat
+#app-admin/ansible
+app-misc/screen
+#app-office/dia
+#app-emulation/virt-manager
+app-shells/bash-completion
+#app-office/libreoffice
+app-admin/sudo
+app-text/tree
+app-admin/pwgen
+app-emulation/qemu
+#app-misc/ttyload
+#app-i18n/ibus-libpinyin
+#app-arch/innoextract

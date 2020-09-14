@@ -1,0 +1,5 @@
+dev-db/mariadb
+dev-db/postgresql
+dev-db/sqldeveloper
+#dev-db/oracle-instantclient
+dev-db/percona-toolkit

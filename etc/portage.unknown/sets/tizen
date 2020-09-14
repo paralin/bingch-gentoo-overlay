@@ -1,0 +1,17 @@
+# required by tizen emulator 
+#=media-libs/libpng-compat-1.2.59
+media-libs/libpng-compat:1.2
+net-misc/bridge-utils
+net-vpn/openvpn
+# ssl 1.0.0 for tizen sdb
+dev-libs/openssl-compat
+# apichecker/APIChecker require ncurses 5
+sys-libs/ncurses-compat
+# readline 6 is required
+sys-libs/readline-compat
+# efl is required for platform
+#dev-libs/efl
+app-arch/rpm
+dev-libs/pkcs11-helper
+# cert manager need webkit-gtk 2
+net-libs/webkit-gtk:2

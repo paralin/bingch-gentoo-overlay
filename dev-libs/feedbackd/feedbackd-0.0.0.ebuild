@@ -5,10 +5,9 @@ EAPI=6
 #GNOME2_LA_PUNT="yes"
 VALA_USE_DEPEND="vapigen"
 
-
 inherit vala meson
 
-KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~sparc ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
 IUSE="+introspection +vala"
 REQUIRED_USE="vala? ( introspection )"
@@ -22,9 +21,8 @@ DESCRIPTION="A daemon to provide haptic feedback on events"
 HOMEPAGE="https://source.puri.sm/Librem5/feedbackd"
 if [[ ${PV} == 9999 ]]; then
 	inherit vala meson git-r3
-    EGIT_REPO_URI="https://source.puri.sm/Librem5/feedbackd.git"
-	SRC_URI=''
-	KEYWORDS=""
+	EGIT_REPO_URI="https://source.puri.sm/Librem5/feedbackd.git"
+	SRC_URI=""
 else
 	EGIT_REPO_URI=""
 	SRC_URI="https://source.puri.sm/Librem5/feedbackd/-/archive/${MY_PV}/${MY_P}.tar.gz"
@@ -49,6 +47,4 @@ BDEPEND="
 src_prepare() {
 	eapply_user
 	use vala && vala_src_prepare
-#	gnome2_src_prepare
 }
-

@@ -13,12 +13,10 @@ KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~sparc ~x86"
 IUSE="+introspection +vala"
 REQUIRED_USE="vala? ( introspection )"
 
-KEYWORDS="~amd64 ~x86 ~aarch64"
+KEYWORDS="~amd64 ~x86 ~arm ~arm64"
 EGIT_REPO_URI="https://source.puri.sm/Librem5/phosh.git"
 if [[ ${PV} != 9999 ]]; then
 	EGIT_REPO_BRANCH="tags/v${PV}"
-else
-	KEYWORDS=""
 fi
 #EGIT_SUBMODULES=("https://gitlab.gnome.org/GNOME/libgnome-volume-control.git")
 
@@ -30,7 +28,7 @@ SLOT="0"
 IUSE="+vala +introspection"
 
 DEPEND="
-		dev-lib/feedbackd
+		dev-libs/feedbackd
 		gui-libs/libhandy
 		vala? ( $(vala_depend) )
 		x11-wm/phoc

@@ -22,7 +22,7 @@ HOMEPAGE="https://source.puri.sm/Librem5/phoc"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~aarch64"
+KEYWORDS="~amd64 ~x86 ~arm ~arm64"
 IUSE="+vala +introspection"
 REQUIRED_USE="vala? ( introspection )"
 

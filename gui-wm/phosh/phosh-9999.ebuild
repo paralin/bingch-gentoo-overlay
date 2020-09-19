@@ -33,6 +33,9 @@ DEPEND="
 		dev-libs/feedbackd
 		gui-libs/libhandy
 		vala? ( $(vala_depend) )
+		>=net-misc/modemmanager-1.12.0
+		net-misc/networkmanager
+		gnome-base/gnome-session
 		x11-wm/phoc
 		"
 RDEPEND="${DEPEND}"

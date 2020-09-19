@@ -31,7 +31,7 @@ IUSE="+vala +introspection"
 
 DEPEND="
 		dev-libs/feedbackd
-		gui-libs/libhandy
+		>=gui-libs/libhandy-1.0.0
 		vala? ( $(vala_depend) )
 		>=net-misc/modemmanager-1.12.0
 		net-misc/networkmanager

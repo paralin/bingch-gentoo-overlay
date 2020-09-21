@@ -6,7 +6,7 @@ EAPI=7
 #GNOME2_LA_PUNT="yes"
 VALA_USE_DEPEND="vapigen"
 
-inherit vala meson git-r3
+inherit vala meson git-r3 gnome2-utils xdg
 
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~sparc ~x86"
 
@@ -52,3 +52,12 @@ src_prepare() {
 #   gnome2_src_prepare
 }
 
+pkg_postinst() {
+	xdg_pkg_postinst
+	gnome2_schemas_update
+}
+
+pkg_postrm() {
+	xdg_pkg_postrm
+	gnome2_schemas_update
+}

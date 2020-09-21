@@ -35,7 +35,7 @@ DEPEND="
 RDEPEND="${DEPEND}"
 BDEPEND="
 		dev-util/ctags
-		x11-base/xorg-server[xvfb]
+		x11-base/xorg-server
 		dev-libs/gobject-introspection
 		dev-util/meson
 		dev-util/pkgconfig

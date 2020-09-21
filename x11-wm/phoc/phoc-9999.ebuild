@@ -6,12 +6,12 @@ EAPI=7
 VALA_USE_DEPEND="vapigen"
 
 if [[ ${PV} == 9999 ]]; then
-    inherit vala meson gnome.org gnome2-utils git-r3
+    inherit vala meson gnome.org gnome2-utils git-r3 xdg
     EGIT_REPO_URI="https://source.puri.sm/Librem5/phoc.git"
     SRC_URI=''
 	KEYWORDS=""
 else
-	inherit vala meson gnome.org gnome2-utils
+	inherit vala meson gnome.org gnome2-utils xdg
 	MY_P="${PN}-v${PV}"
     EGIT_REPO_URI=""
     SRC_URI="https://source.puri.sm/Librem5/${PN}/-/archive/v${PV}/${MY_P}.tar.gz"
@@ -53,3 +53,14 @@ src_configure() {
 	)
 	meson_src_configure
 }
+
+pkg_postinst() {
+	xdg_pkg_postinst
+	gnome2_schemas_update
+}
+
+pkg_postrm() {
+	xdg_pkg_postrm
+	gnome2_schemas_update
+}
+

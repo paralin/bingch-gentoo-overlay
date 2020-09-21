@@ -36,7 +36,9 @@ DEPEND="
 		>=net-misc/modemmanager-1.12.0
 		net-misc/networkmanager
 		gnome-base/gnome-session
+		x11-themes/gnome-backgrounds
 		x11-wm/phoc
+		sys-apps/systemd[cryptsetup,homed]
 		"
 RDEPEND="${DEPEND}"
 BDEPEND="

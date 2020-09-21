@@ -6,11 +6,11 @@ EAPI=7
 VALA_USE_DEPEND="vapigen"
 
 if [[ ${PV} == 9999 ]]; then
-    inherit vala meson git-r3
+    inherit vala meson gnome.org gnome2-utils git-r3
     EGIT_REPO_URI="https://source.puri.sm/Librem5/phoc.git"
     SRC_URI=''
 else
-	inherit vala meson
+	inherit vala meson gnome.org gnome2-utils
 	MY_P="${PN}-v${PV}"
     EGIT_REPO_URI=""
     SRC_URI="https://source.puri.sm/Librem5/${PN}/-/archive/v${PV}/${MY_P}.tar.gz"
@@ -27,13 +27,15 @@ IUSE="+vala +introspection"
 REQUIRED_USE="vala? ( introspection )"
 
 DEPEND="
-	x11-wm/mutter
+	dev-libs/glib
 	gui-libs/wlroots
 	gui-libs/libhandy
 	vala? ( $(vala_depend) )
 "
 RDEPEND="${DEPEND}"
 BDEPEND="
+		dev-util/ctags
+		x11-base/xorg-server[xvfb]
 		dev-libs/gobject-introspection
 		dev-util/meson
 		dev-util/pkgconfig
@@ -41,6 +43,12 @@ BDEPEND="
 src_prepare() {
 	eapply_user
 	use vala && vala_src_prepare
-#	gnome2_src_prepare
 }
 
+src_configure() {
+	local emesonargs=(
+		-Dembed-wlroots=disabled
+		-Ddefault_library=shared
+	)
+	meson_src_configure
+}

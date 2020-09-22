@@ -6,7 +6,7 @@ EAPI=7
 #GNOME2_LA_PUNT="yes"
 VALA_USE_DEPEND="vapigen"
 
-inherit pam vala meson git-r3 gnome2-utils systemd xdg
+inherit pam vala meson git-r3 gnome2-utils systemd readme.gentoo-r1 xdg
 
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~sparc ~x86"
 
@@ -56,11 +56,17 @@ src_install() {
 	meson_src_install
 	dopamd "${FILESDIR}"/pamd-include/phosh
 	systemd_newunit "${S}"/debian/phosh.service 'phosh.service'
+
+	DOC_CONTENTS="To amend the existing password policy please see the man 5 passwdqc.conf
+				page and then edit the /etc/security/passwdqc.conf file to change enforce=none
+				to allow use digit only password as phosh only support passcode for now"
+	readme.gentoo_create_doc
 }
 
 pkg_postinst() {
 	xdg_pkg_postinst
 	gnome2_schemas_update
+	readme.gentoo_print_elog
 }
 
 pkg_postrm() {

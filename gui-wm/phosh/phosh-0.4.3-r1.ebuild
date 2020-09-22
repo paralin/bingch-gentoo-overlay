@@ -6,7 +6,7 @@ EAPI=7
 #GNOME2_LA_PUNT="yes"
 VALA_USE_DEPEND="vapigen"
 
-inherit vala meson git-r3 gnome2-utils xdg
+inherit vala meson git-r3 gnome2-utils systemd xdg
 
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~sparc ~x86"
 
@@ -49,7 +49,12 @@ BDEPEND="
 src_prepare() {
 	eapply_user
 	use vala && vala_src_prepare
-#   gnome2_src_prepare
+}
+
+src_install() {
+	default
+	meson_src_install
+	systemd_newunit "${S}"/debian/phosh.service 'phosh.service'
 }
 
 pkg_postinst() {

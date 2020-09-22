@@ -9,7 +9,7 @@ DESCRIPTION="WYS audio manage for Pinephone"
 HOMEPAGE="https://source.puri.sm/Librem5/wys"
 SRC_URI="https://source.puri.sm/Librem5/${PN}/-/archive/v${PV}/${PN}-v${PV}.tar.bz2"
 
-LICENSE="GPL"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86 ~arm ~arm64"
 IUSE=""
@@ -18,7 +18,7 @@ DEPEND="net-misc/modemmanager
 		media-sound/pulseaudio
 "
 RDEPEND="${DEPEND}"
-BDEPEND="sys-util/meson"
+BDEPEND="dev-util/meson"
 
 S="${WORKDIR}/${PN}-v${PV}"
 

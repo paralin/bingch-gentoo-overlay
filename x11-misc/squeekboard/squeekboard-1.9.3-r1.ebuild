@@ -29,3 +29,8 @@ BDEPEND="
 	dev-util/gtk-doc
 "
 S="${WORKDIR}/${PN}-v${PV}"
+
+src_install() {
+	meson_src_install
+	dopamd "${S}/tools/squeekboard-restyled" /usr/bin
+}

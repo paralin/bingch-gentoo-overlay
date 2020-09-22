@@ -32,5 +32,5 @@ S="${WORKDIR}/${PN}-v${PV}"
 
 src_install() {
 	meson_src_install
-	dopamd "${S}/tools/squeekboard-restyled" /usr/bin
+	doins "${S}/tools/squeekboard-restyled" /usr/bin
 }

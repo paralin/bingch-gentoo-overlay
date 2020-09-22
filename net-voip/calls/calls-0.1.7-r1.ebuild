@@ -4,7 +4,7 @@
 EAPI=7
 VALA_USE_DEPEND="vapigen"
 
-inherit vala meson
+inherit vala meson gnome2-utils
 
 DESCRIPTION="Phone dialer and call handler"
 HOMEPAGE="https://source.puri.sm/Librem5/calls"
@@ -38,3 +38,12 @@ src_prepare() {
 	use vala && vala_src_prepare
 #   gnome2_src_prepare
 }
+
+pkg_postinst() {
+	gnome2_schemas_update
+}
+
+pkg_postrm() {
+	gnome2_schemas_update
+}
+

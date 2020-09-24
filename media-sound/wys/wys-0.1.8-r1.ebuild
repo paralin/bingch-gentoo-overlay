@@ -22,6 +22,8 @@ BDEPEND="dev-util/meson"
 
 S="${WORKDIR}/${PN}-v${PV}"
 
+PATCHES=("${FILESDIR}/0001-Simplify-daemon-to-only-switch-card-profiles.patch")
+
 src_install() {
 	default
 	meson_src_install

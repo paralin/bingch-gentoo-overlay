@@ -48,7 +48,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILEDIR}/auto-rotate.patch"
+	"${FILESDIR}/auto-rotate.patch"
 )
 
 src_prepare() {

@@ -1,11 +1,11 @@
 # Copyright 2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 #GNOME2_LA_PUNT="yes"
 VALA_USE_DEPEND="vapigen"
 
-inherit vala meson
+inherit vala meson udev
 
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 
@@ -20,7 +20,7 @@ fi
 DESCRIPTION="A daemon to provide haptic feedback on events"
 HOMEPAGE="https://source.puri.sm/Librem5/feedbackd"
 if [[ ${PV} == 9999 ]]; then
-	inherit vala meson git-r3
+	inherit vala meson udev git-r3
 	EGIT_REPO_URI="https://source.puri.sm/Librem5/feedbackd.git"
 	SRC_URI=""
 else
@@ -45,6 +45,13 @@ BDEPEND="
 		dev-util/pkgconfig
 "
 src_prepare() {
+	default
 	eapply_user
 	use vala && vala_src_prepare
+}
+
+src_install() {
+	default
+	meson_src_install
+	udev_newrules ${S}/debian/feedbackd.udev 90-feedbackd.rules
 }

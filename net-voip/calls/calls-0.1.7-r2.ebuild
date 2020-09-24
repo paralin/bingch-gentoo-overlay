@@ -31,9 +31,16 @@ BDEPEND="
 		dev-libs/gobject-introspection
 "
 
+PATCHES=(
+	"${FILESDIR}/0001-call-display-use-PinePhone-s-device-for-ugly-hacks.patch"
+	"${FILESDIR}/inhibit-suspend-during-call.patch"
+	"${FILESDIR}/add-call-back-button.patch"
+)
+
 S="${WORKDIR}/${PN}-v${PV}"
 
 src_prepare() {
+	default
 	eapply_user
 	use vala && vala_src_prepare
 #   gnome2_src_prepare

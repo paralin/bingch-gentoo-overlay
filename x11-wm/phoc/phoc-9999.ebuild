@@ -19,6 +19,11 @@ else
 	KEYWORDS="~amd64 ~x86 ~arm ~arm64"
 fi
 
+PATCHES=(
+	"${FILESDIR}/0001-seat-Don-t-notify-on-key-release.patch"
+	"${FILESDIR}/0002-seat-inhibit-touch-events-when-in-power-save-mode-or.patch"
+)
+
 DESCRIPTION="Wlroots based Phone compositor"
 HOMEPAGE="https://source.puri.sm/Librem5/phoc"
 
@@ -41,7 +46,9 @@ BDEPEND="
 		dev-util/meson
 		dev-util/pkgconfig
 "
+
 src_prepare() {
+	default
 	eapply_user
 	use vala && vala_src_prepare
 }

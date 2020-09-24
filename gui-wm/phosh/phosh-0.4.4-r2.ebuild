@@ -46,7 +46,13 @@ BDEPEND="
 		dev-util/meson
 		dev-libs/gobject-introspection
 "
+
+PATCHES=(
+	"${FILEDIR}/auto-rotate.patch"
+)
+
 src_prepare() {
+	default
 	eapply_user
 	use vala && vala_src_prepare
 }

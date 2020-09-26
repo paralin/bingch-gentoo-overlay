@@ -17,7 +17,10 @@ IUSE=""
 DEPEND="media-libs/alsa-ucm-pinephone
 		net-dialup/eg25
 		gnome-extra/iio-sensor-proxy
+		media-sound/wys
+		x11-misc/squeekboard
 "
+
 RDEPEND="${DEPEND}"
 BDEPEND=""
 

@@ -21,6 +21,7 @@ DEPEND="media-libs/alsa-ucm-pinephone
 		sys-firmware/anx7688-firmware
 		x11-misc/squeekboard
 		app-mobilephone/usb-tethering
+		app-mobilephone/flashlight
 "
 
 RDEPEND="${DEPEND}"

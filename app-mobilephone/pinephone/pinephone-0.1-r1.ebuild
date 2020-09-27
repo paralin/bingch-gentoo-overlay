@@ -18,7 +18,9 @@ DEPEND="media-libs/alsa-ucm-pinephone
 		net-dialup/eg25
 		gnome-extra/iio-sensor-proxy
 		media-sound/wys
+		sys-firmware/anx7688-firmware
 		x11-misc/squeekboard
+		app-mobilephone/usb-tethering
 "
 
 RDEPEND="${DEPEND}"

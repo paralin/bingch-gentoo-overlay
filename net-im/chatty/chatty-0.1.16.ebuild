@@ -9,7 +9,7 @@ DESCRIPTION="Messaging client"
 HOMEPAGE="https://source.puri.sm/Librem5/chatty"
 SRC_URI="https://source.puri.sm/Librem5/chatty/-/archive/v${PV}/${PN}-v${PV}.tar.gz"
 
-LICENSE="GPL"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86 ~arm64 ~arm"
 IUSE=""

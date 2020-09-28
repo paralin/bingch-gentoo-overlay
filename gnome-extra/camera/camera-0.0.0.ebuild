@@ -4,7 +4,7 @@
 EAPI=7
 VALA_USE_DEPEND="vapigen"
 
-inherit meson git-r3 gnome2-utils vala
+inherit meson git-r3 gnome2-utils vala xdg
 
 DESCRIPTION="Take photos and videos on your computer or smartphone"
 HOMEPAGE="https://gitlab.gnome.org/jwestman/camera"
@@ -33,10 +33,12 @@ src_prepare() {
 }
 
 pkg_postinst() {
+	xdg_pkg_postinst
 	gnome2_schemas_update
 }
 
 pkg_postrm() {
+	xdg_pkg_postrm
 	gnome2_schemas_update
 }
 

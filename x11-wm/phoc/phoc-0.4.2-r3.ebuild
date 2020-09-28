@@ -63,7 +63,7 @@ src_configure() {
 src_install() {
 	meson_src_install
 	insinto /etc/dconf/profile/user
-	doins 01-phoc-scaling
+	doins ${FILESDIR}/01-phoc-scaling
 }
 
 pkg_postinst() {

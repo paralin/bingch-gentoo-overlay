@@ -2,7 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-#GNOME2_LA_PUNT="yes"
 VALA_USE_DEPEND="vapigen"
 
 if [[ ${PV} == 9999 ]]; then
@@ -59,6 +58,12 @@ src_configure() {
 		-Ddefault_library=shared
 	)
 	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+	insinto /etc/dconf/profile/user
+	doins 01-phoc-scaling
 }
 
 pkg_postinst() {

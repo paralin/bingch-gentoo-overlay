@@ -53,5 +53,7 @@ src_prepare() {
 src_install() {
 	default
 	meson_src_install
+	insinto /usr/share/feedbackd/themes
+	doins danctnix.json
 	udev_newrules ${S}/debian/feedbackd.udev 90-feedbackd.rules
 }

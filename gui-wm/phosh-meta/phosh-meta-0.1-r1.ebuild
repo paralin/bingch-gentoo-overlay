@@ -17,6 +17,7 @@ DEPEND="gnome-base/dconf
 		gnome-base/gnome-keyring
 		x11-wm/phoc
 		gui-wm/phosh
+		app-admin/phosh-renice
 		dev-libs/feedbackd
 		net-voip/calls
 		net-im/chatty

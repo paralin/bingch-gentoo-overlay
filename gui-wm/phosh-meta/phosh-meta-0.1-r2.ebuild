@@ -31,6 +31,8 @@ DEPEND="gnome-base/gnome-core-libs
 		x11-themes/sound-theme-librem5
 		media-sound/wys
 		mail-client/geary
+		app-text/evince
+		app-editors/gedit
 "
 
 RDEPEND="${DEPEND}"

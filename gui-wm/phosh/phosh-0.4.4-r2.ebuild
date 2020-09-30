@@ -13,7 +13,6 @@ KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~sparc ~x86"
 IUSE="+introspection +vala"
 REQUIRED_USE="vala? ( introspection )"
 
-KEYWORDS="~amd64 ~x86 ~arm ~arm64"
 EGIT_REPO_URI="https://source.puri.sm/Librem5/phosh.git"
 if [[ ${PV} != 9999 ]]; then
 	EGIT_REPO_BRANCH="tags/v${PV}"

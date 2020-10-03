@@ -33,6 +33,7 @@ DEPEND="gnome-base/gnome-core-libs
 		mail-client/geary
 		app-text/evince
 		app-editors/gedit
+		sys-power/gtherm
 "
 
 RDEPEND="${DEPEND}"

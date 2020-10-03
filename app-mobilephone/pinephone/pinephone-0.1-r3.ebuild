@@ -19,6 +19,7 @@ DEPEND="media-libs/alsa-ucm-pinephone
 		gnome-extra/iio-sensor-proxy
 		media-sound/wys
 		sys-firmware/anx7688-firmware
+		sys-firmware/rtl8723bt-firmware
 		x11-misc/squeekboard
 		app-mobilephone/usb-tethering
 		app-mobilephone/flashlight

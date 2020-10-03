@@ -90,6 +90,9 @@ S="${WORKDIR}/${MOZ_PN}"
 src_unpack() {
 	unpack ${A}
 	mv ${WORKDIR}/usr/lib/firefox ${S}
+	cd ${S}
+	rm -f firefox-bin
+	ln -s firefox firefox-bin
 
 	# Unpack language packs
 	mozlinguas_src_unpack
@@ -211,6 +214,7 @@ src_install() {
 	doins "${T}"/10${PN}
 
 	# Plugins dir, still used for flash
+	insinto /opt/nsbrowser/plugins
 	share_plugins_dir
 
 	# Required in order to use plugins and even run firefox on hardened.

@@ -60,12 +60,6 @@ src_configure() {
 	meson_src_configure
 }
 
-src_install() {
-	meson_src_install
-	insinto /etc/dconf/profile/user
-	doins ${FILESDIR}/01-phoc-scaling
-}
-
 pkg_postinst() {
 	xdg_pkg_postinst
 	gnome2_schemas_update
@@ -75,4 +69,3 @@ pkg_postrm() {
 	xdg_pkg_postrm
 	gnome2_schemas_update
 }
-

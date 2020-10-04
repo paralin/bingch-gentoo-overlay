@@ -15,7 +15,6 @@ KEYWORDS="~arm64"
 IUSE=""
 
 DEPEND="media-libs/alsa-ucm-pinephone
-		net-dialup/eg25
 		gnome-extra/iio-sensor-proxy
 		media-sound/wys
 		sys-firmware/anx7688-firmware
@@ -23,6 +22,7 @@ DEPEND="media-libs/alsa-ucm-pinephone
 		x11-misc/squeekboard
 		app-mobilephone/usb-tethering
 		app-mobilephone/flashlight
+		app-mobilephone/pinephone-modem-scripts
 "
 
 RDEPEND="${DEPEND}"

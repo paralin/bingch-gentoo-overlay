@@ -19,7 +19,6 @@ RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_install() {
-	dosbin modem-scripts/*
+	dosbin ${FILESDIR}/*.sh
 	systemd_dounit ${S}/debian/*.service
-
 }

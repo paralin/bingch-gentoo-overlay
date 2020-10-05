@@ -12,8 +12,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86 ~arm64 ~arm"
 IUSE=""
 
-DEPEND="gnome-base/gnome-core-libs
-		x11-wm/phoc
+DEPEND="x11-wm/phoc
 		gui-wm/phosh
 		app-admin/phosh-renice
 		dev-libs/feedbackd
@@ -27,6 +26,9 @@ DEPEND="gnome-base/gnome-core-libs
 		gnome-extra/gnome-contacts
 		gnome-extra/iio-sensor-proxy
 		gnome-extra/camera
+		gnome-extra/gnome-calculator
+		gnome-extra/gnome-calendar
+
 		x11-terms/gnome-terminal
 		x11-themes/sound-theme-librem5
 		media-sound/wys
@@ -40,3 +42,16 @@ RDEPEND="${DEPEND}"
 BDEPEND=""
 
 S="${WORKDIR}"
+
+pkg_postinst() {
+	[ -e /usr/share/applications-bak ] || mkdir /usr/share/applications-bak
+	for i in vim org.gnupg.pinentry-qt org.gnome.Extensions mupdf \
+	gnome-printers-panel gnome-wifi-pannel pidgin wpa_gui cups \
+	Gentoo-system-config-printer
+	do
+		if [ -e /usr/share/applications/$i.desktop ]; then
+			mv /usr/share/applications/$i.desktop /usr/share/applications-bak
+		fi
+	done
+}
+

@@ -28,6 +28,9 @@ DEPEND="x11-wm/phoc
 		gnome-extra/camera
 		gnome-extra/gnome-calculator
 		gnome-extra/gnome-calendar
+		www-client/epiphany
+		www-client/firefox-bin-aarch64
+		app-mobilephone/mobile-config-firefox
 
 		x11-terms/gnome-terminal
 		x11-themes/sound-theme-librem5

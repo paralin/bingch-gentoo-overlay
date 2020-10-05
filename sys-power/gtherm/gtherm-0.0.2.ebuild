@@ -33,3 +33,7 @@ src_install() {
 	meson_src_install
 	systemd_newuserunit "${S}"/debian/gthd.user.service "gthd.service"
 }
+
+pkg_postinst() {
+	systemd_enable_service --global gthd
+}

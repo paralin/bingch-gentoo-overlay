@@ -15,3 +15,10 @@ IUSE=""
 DEPEND=""
 RDEPEND="${DEPEND}"
 BDEPEND=""
+
+pkg_postinst() {
+	elog "You will need to copy /etc/mobile-config-firefox/userChrome.css file to"
+	elog "your firefox profile's chrome folder ~/.mozilla/firefox/XXXX/chrome/ "
+	elog "to enable firefox mobile layout, you might need to create the chrome "
+	elog "folder if it's not there"
+}

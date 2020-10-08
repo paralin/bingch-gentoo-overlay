@@ -25,7 +25,7 @@ DEPEND="x11-wm/phoc
 		gnome-base/nautilus
 		gnome-extra/gnome-contacts
 		gnome-extra/iio-sensor-proxy
-		gnome-extra/camera
+		media-video/megapixels
 		gnome-extra/gnome-calculator
 		gnome-extra/gnome-calendar
 		www-client/epiphany

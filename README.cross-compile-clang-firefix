@@ -1,0 +1,12 @@
+until now gentoo cross setup still need some tweaks for cross compiling clang/firefox, so I put up the work around here:
+
+1. cross compile llvm is fine using cross emerge wrapper, which is pre-requiste of clang and it's installed in target root
+
+2. when cross compiling clang, it complains /usr/bin/clang-tblgen not found, as reported in https://bugs.gentoo.org/show_bug.cgi?id=731264. So you need to un tar the llvm source and compile it like:
+  tar xf /path/to/llvmorg-11.0.0.tar.gz
+  mkdir build && cd build
+  cmake ../llvm -DLLVM_ENABLE_PROJECTS='clang;compiler-rt;lld;clang-tools-extra' -GNinja
+  ninja clang-tblgen
+  mv bin/clang-tblgen /usr/bin
+
+3. Then you will hit another blocks when start cross compiling clang, as somehow the configure script try to use llvm-config and llvm-tblgen inside the target root instead of those in the host, so you also need to apply the workaround as suggested in above bug, make symlink of these two files in the target to the host one

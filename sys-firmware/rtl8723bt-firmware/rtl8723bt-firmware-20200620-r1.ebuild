@@ -24,4 +24,6 @@ src_install() {
 	default
 	mkdir -p ${D}/lib/firmware/
 	cp -pr ${S}/rtl_bt ${D}/lib/firmware/
+	cd ${D}/lib/firmware/rtl_bt
+	ln -s rtl8723cs_xx_fw.bin rtl8723cs_xx_config.bin
 }

@@ -20,7 +20,7 @@ fi
 export EPREFIX SYSROOT PORTAGE_CONFIGROOT
 
 if [ -z "${CHOST}" ] || [ ! -d "${SYSROOT}" ] ; then
-	echo "cross-ebuild: CHOST is not set properly"
+	echo "cross-emerge: CHOST is not set properly"
 	exit 1
 fi
 
@@ -37,11 +37,11 @@ eval $(env $(printf -- '-u %s ' ${clean_vars}) \
 : ${BUILD_LDFLAGS=${_E_LDFLAGS}}
 export CBUILD BUILD_CFLAGS BUILD_CXXFLAGS BUILD_CPPFLAGS BUILD_LDFLAGS
 
-# for rust
-export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-unknown-linux-gnu-gcc
-export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS="-C link-arg=-Wl,-rpath-link,/usr/lib/gcc/aarch64-unknown-linux-gnu/10.2.0"
-export ECARGO_EXTRA_ARGS="--target=$CHOST"
+# nodejs fix
+CC_host="gcc"
+CXX_host="g++"
+export CC_host CXX_host
 
-#: ${CROSS_CMD:=emerge --root-deps=rdeps}
+
 : ${CROSS_CMD:=ebuild}
 exec ${CROSS_CMD} "$@"

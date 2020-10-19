@@ -20,6 +20,7 @@ DEPEND="media-libs/alsa-ucm-pinephone
 		sys-firmware/anx7688-firmware
 		sys-firmware/rtl8723bt-firmware
 		sys-firmware/ov5640-firmware
+		media-tv/v4l-utils
 		x11-misc/squeekboard
 		app-mobilephone/usb-tethering
 		app-mobilephone/flashlight

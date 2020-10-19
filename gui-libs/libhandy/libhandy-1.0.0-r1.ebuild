@@ -3,12 +3,13 @@
 
 EAPI=7
 
-inherit meson xdg vala virtualx
+inherit git-r3 meson xdg vala virtualx
 
 DESCRIPTION="Library with GTK widgets for mobile phones"
 HOMEPAGE="https://gitlab.gnome.org/GNOME/libhandy"
-SRC_URI="https://gitlab.gnome.org/GNOME/${PN}/-/archive/${PV}/${P}.tar.gz"
-#https://gitlab.gnome.org/GNOME/libhandy/-/archive/1.0.0/libhandy-1.0.0.tar.gz
+#SRC_URI="https://gitlab.gnome.org/GNOME/${PN}/-/archive/${PV}/${P}.tar.gz"
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/libhandy.git"
+EGIT_COMMIT="94313c206258860b2428712e7ece1d02c5177857"
 #S="${WORKDIR}/${MY_P}"
 
 LICENSE="LGPL-2.1+"
@@ -38,10 +39,12 @@ BDEPEND="
 "
 
 PATCHES=(
-#	"${FILESDIR}"/${PV}-glade3.36-compat{1,2}.patch
+	"${FILESDIR}"/623.patch
+	"${FILESDIR}"/swipe-tracker-Special-case-dragging-from-buttons.patch
 )
 
 src_prepare() {
+	eapplyuser
 	use vala && vala_src_prepare
 	xdg_src_prepare
 }

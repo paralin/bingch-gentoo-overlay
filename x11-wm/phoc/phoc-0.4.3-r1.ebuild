@@ -21,6 +21,7 @@ fi
 PATCHES=(
 	"${FILESDIR}/0001-seat-Don-t-notify-on-key-release.patch"
 	"${FILESDIR}/0002-seat-inhibit-touch-events-when-in-power-save-mode-or.patch"
+	"${FILESDIR}/cde70286d67a8dc5a4a900e3c71cdcae068faafc.patch"
 )
 
 DESCRIPTION="Wlroots based Phone compositor"

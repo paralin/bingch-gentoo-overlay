@@ -16,6 +16,11 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
+src_install() {
+	default
+	mv ${D}/usr/lib ${D}/usr/lib64
+}
+
 pkg_postinst() {
 	elog "You will need to copy /etc/mobile-config-firefox/userChrome.css file to"
 	elog "your firefox profile's chrome folder ~/.mozilla/firefox/XXXX/chrome/ "

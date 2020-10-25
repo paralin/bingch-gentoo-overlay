@@ -21,6 +21,7 @@ PV_SERIES=$(ver_cut 1-2)
 
 # In 2.2.0 util-linux should only be necessary if glib is older than 2.52 at compile-time
 # But build still needs it - https://gitlab.gnome.org/GNOME/tracker/issues/131
+# FIXME: need ln -s /usr/share/asciidoc to /etc/asciidoc to compile
 RDEPEND="
 	>=dev-libs/glib-2.46:2
 	>=sys-apps/dbus-1.3.2

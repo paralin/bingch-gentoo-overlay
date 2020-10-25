@@ -8,7 +8,7 @@ inherit gnome.org gnome2-utils python-any-r1 meson udev virtualx xdg
 
 DESCRIPTION="Gnome Settings Daemon"
 HOMEPAGE="https://gitlab.gnome.org/GNOME/gnome-settings-daemon"
-#SRC_URI+=" https://dev.gentoo.org/~leio/distfiles/${P}-patchset.tar.xz"
+#SRC_URI+=" https://dev.gentoo.org/~leio/distfiles/${PN}-3.36.1-patchset.tar.xz"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
@@ -79,12 +79,13 @@ BDEPEND="
 	virtual/pkgconfig
 "
 
-#PATCHES=(
+PATCHES=(
 	# Updates from master branch after 3.36.1 (gnome-3-36 wasn't branched yet)
 	# Allow disabling udev and networkmanager on Linux
 	# Make colord and wacom optional
-#	"${WORKDIR}"/patches/
-#)
+	#"${WORKDIR}"/patches/
+	"${FILESDIR}"/make-wacom-optional.patch
+)
 
 python_check_deps() {
 	if use test; then

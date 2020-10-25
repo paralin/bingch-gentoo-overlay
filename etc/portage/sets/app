@@ -1,0 +1,15 @@
+app-admin/sysstat
+app-editors/vim
+#app-admin/ansible
+app-misc/screen
+#app-office/dia
+#app-shells/bash-completion
+#app-office/libreoffice
+app-admin/sudo
+app-text/tree
+app-admin/pwgen
+#app-i18n/ibus-libpinyin
+#mail-client/geary
+app-mobilephone/pinephone
+net-analyzer/iftop
+gui-wm/phosh-meta

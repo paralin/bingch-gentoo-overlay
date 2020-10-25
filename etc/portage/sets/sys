@@ -1,0 +1,13 @@
+sys-apps/lm-sensors
+sys-apps/lsb-release
+sys-apps/usbutils
+sys-devel/gdb
+sys-fs/dosfstools
+sys-fs/f2fs-tools
+sys-fs/fuse-exfat
+sys-fs/squashfs-tools
+sys-kernel/dracut
+sys-process/lsof
+sys-block/zram-init
+sys-libs/libunwind
+#sys-boot/plymouth

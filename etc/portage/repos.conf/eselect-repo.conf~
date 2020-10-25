@@ -1,0 +1,10 @@
+# created by eselect-repo
+[gentoo]
+location = /var/db/repos/gentoo
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/gentoo.git
+
+[bingch]
+location = /var/db/repos/bingch
+sync-type = git
+sync-uri = https://gitlab.com/bingch/gentoo-overlay.git

@@ -1,0 +1,6 @@
+dev-libs/feedbackd
+gui-wm/phosh 
+x11-wm/phoc 
+net-voip/calls 
+mail-client/geary **
+sci-geosciences/gnome-maps **

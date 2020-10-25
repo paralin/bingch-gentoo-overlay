@@ -1,3 +1,0 @@
-ARCH="arm64"
-KERNEL="-linux linux"
-ELIBC="glibc"

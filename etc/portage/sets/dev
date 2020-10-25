@@ -1,0 +1,4 @@
+dev-util/meson
+dev-util/ninja
+dev-util/cmake
+dev-vcs/git

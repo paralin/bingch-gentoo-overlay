@@ -1,0 +1,8 @@
+# required by linux-firmware (argument)
+=sys-kernel/linux-firmware-20200817 linux-fw-redistributable no-source-code
+# required by app-mobilephone/pinephone-0.1-r2::bingch
+# required by app-mobilephone/pinephone (argument)
+>=sys-firmware/anx7688-firmware-20200620 anx7688
+# required by app-mobilephone/pinephone-0.1-r2::bingch
+# required by app-mobilephone/pinephone (argument)
+>=app-mobilephone/usb-tethering-0.1 custom

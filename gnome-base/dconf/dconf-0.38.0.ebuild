@@ -23,6 +23,7 @@ BDEPEND="
 	app-text/docbook-xsl-stylesheets
 	dev-libs/libxslt
 	dev-util/gdbus-codegen
+	app-shells/bash-completion
 	gtk-doc? ( >=dev-util/gtk-doc-1.15 )
 	>=sys-devel/gettext-0.19.8
 	virtual/pkgconfig

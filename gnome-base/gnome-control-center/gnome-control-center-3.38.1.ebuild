@@ -12,7 +12,7 @@ HOMEPAGE="https://git.gnome.org/browse/gnome-control-center/"
 
 LICENSE="GPL-2+"
 SLOT="2"
-IUSE="+bluetooth +cups debug elogind flickr +gnome-online-accounts +ibus input_devices_wacom kerberos networkmanager systemd test v4l wayland"
+IUSE="+bluetooth +cups debug elogind +flickr +gnome-online-accounts +ibus +input_devices_wacom kerberos networkmanager systemd test v4l wayland"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="
 	flickr? ( gnome-online-accounts )

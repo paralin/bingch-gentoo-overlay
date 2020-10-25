@@ -11,7 +11,7 @@ LICENSE="MIT || ( MPL-1.1 LGPL-2+ GPL-2+ )"
 SLOT="0"
 IUSE="+cairo elibc_glibc examples test"
 
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 RDEPEND="
 	>=dev-libs/glib-2.58.0

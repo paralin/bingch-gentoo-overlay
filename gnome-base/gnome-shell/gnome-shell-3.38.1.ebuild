@@ -25,8 +25,8 @@ DEPEND="
 	>=gnome-extra/evolution-data-server-3.33.1:=
 	>=app-crypt/gcr-3.7.5[introspection]
 	>=dev-libs/glib-2.57.2:2
-	>=dev-libs/gobject-introspection-1.49.1:=
-	>=dev-libs/gjs-1.63.2
+	>=dev-libs/gobject-introspection-1.65.1:=
+	>=dev-libs/gjs-1.65.2
 	>=x11-libs/gtk+-3.15.0:3[introspection]
 	>=x11-wm/mutter-3.36.0:0/6[introspection]
 	>=sys-auth/polkit-0.100[introspection]

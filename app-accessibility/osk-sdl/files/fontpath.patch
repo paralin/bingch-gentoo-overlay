@@ -1,0 +1,13 @@
+diff --git a/osk.conf b/osk.conf
+index e74f6cb..98d108e 100644
+--- a/osk.conf
++++ b/osk.conf
+@@ -5,7 +5,7 @@ wallpaper = #000000
+ 
+ keyboard-background = #333333;
+ keyboard-map = us
+-keyboard-font = /usr/share/fonts/ttf-dejavu/DejaVuSans.ttf
++keyboard-font = /usr/share/fonts/dejavu/DejaVuSans.ttf
+ 
+ key-radius = 0
+ inputbox-radius = 0

@@ -9,7 +9,7 @@ DESCRIPTION="System-wide Linux Profiler"
 HOMEPAGE="http://sysprof.com/"
 
 LICENSE="GPL-3+ GPL-2+"
-API_VERSION="3"
+API_VERSION="4"
 SLOT="0/${API_VERSION}"
 KEYWORDS="~amd64 ~x86 ~arm ~arm64"
 IUSE="gtk +unwind"

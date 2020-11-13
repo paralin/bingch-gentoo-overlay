@@ -101,7 +101,7 @@ index 9501432..532b064 100644
 --- a/src/server.h
 +++ b/src/server.h
 @@ -37,6 +37,7 @@ struct _PhocServer {
-   struct roots_input *input;
+   PhocInput *input;
    PhocServerDebugFlags debug_flags;
    gboolean inited;
 +  gboolean active;
@@ -110,4 +110,3 @@ index 9501432..532b064 100644
    gchar *session;
 -- 
 2.26.2
-

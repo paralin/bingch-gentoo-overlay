@@ -1,0 +1,53 @@
+From 8c53437bc9bc46444e740ad19ae49f7172877460 Mon Sep 17 00:00:00 2001
+From: Arnaud Ferraris <arnaud.ferraris@collabora.com>
+Date: Fri, 23 Oct 2020 09:29:01 +0200
+Subject: [PATCH] output: make sure rotations are always clockwise
+
+eec6a66afa220d63e3bff2a5fd8583c766a8617b made sure rotation was going
+clockwise when using `phosh_rotate_display()` or the configuration file.
+
+This commit applies the same change when using the output management
+protocol.
+---
+ src/output.c   | 4 ++++
+ src/settings.c | 2 --
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/output.c b/src/output.c
+index c0b9fb8..f1ec99a 100644
+--- a/src/output.c
++++ b/src/output.c
+@@ -537,6 +537,8 @@ void handle_output_manager_apply(struct wl_listener *listener, void *data) {
+ 		}
+ 		wlr_output_layout_add(desktop->layout, wlr_output,
+ 			config_head->state.x, config_head->state.y);
++		/* Make sure we rotate clockwise */
++		phoc_utils_fix_transform(&config_head->state.transform);
+ 		wlr_output_set_transform(wlr_output, config_head->state.transform);
+ 		wlr_output_set_scale(wlr_output, config_head->state.scale);
+ 		ok &= wlr_output_commit(wlr_output);
+@@ -721,6 +723,8 @@ void handle_new_output(struct wl_listener *listener, void *data) {
+ 			}
+ 
+ 			wlr_output_set_scale(wlr_output, output_config->scale);
++			/* Make sure we rotate clockwise */
++			phoc_utils_fix_transform(&output_config->transform);
+ 			wlr_output_set_transform(wlr_output, output_config->transform);
+ 			wlr_output_layout_add(desktop->layout, wlr_output, output_config->x,
+ 				output_config->y);
+diff --git a/src/settings.c b/src/settings.c
+index fdc9ccd..6081d16 100644
+--- a/src/settings.c
++++ b/src/settings.c
+@@ -204,8 +204,6 @@ static int config_ini_handler(void *user, const char *section, const char *name,
+ 			} else {
+ 				wlr_log(WLR_ERROR, "got unknown transform value: %s", value);
+ 			}
+-			/* Make sure we rotate clockwise */
+-			phoc_utils_fix_transform(&oc->transform);
+ 		} else if (strcmp(name, "mode") == 0) {
+ 			char *end;
+ 			oc->mode.width = strtol(value, &end, 10);
+-- 
+2.28.0
+

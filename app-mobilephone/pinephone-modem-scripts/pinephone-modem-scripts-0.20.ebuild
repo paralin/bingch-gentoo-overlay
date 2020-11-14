@@ -20,6 +20,6 @@ BDEPEND=""
 
 src_install() {
 	udev_dorules ${S}/*.rules 
-	dobin ${S}/*.sh
+	dosbin ${S}/*.sh
 	systemd_dounit ${S}/*.service
 }

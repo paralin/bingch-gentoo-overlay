@@ -7,7 +7,7 @@ inherit gnome2-utils meson systemd
 
 DESCRIPTION="WYS audio manage for Pinephone"
 HOMEPAGE="https://source.puri.sm/Librem5/wys"
-SRC_URI="https://source.puri.sm/Librem5/${PN}/-/archive/v${PV}/${PN}-v${PV}.tar.bz2"
+SRC_URI="https://source.puri.sm/Librem5/${PN}/-/archive/v${PV}/${PN}-v${PV}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -22,10 +22,19 @@ BDEPEND="dev-util/meson"
 
 S="${WORKDIR}/${PN}-v${PV}"
 
-PATCHES=("${FILESDIR}/0001-Simplify-daemon-to-only-switch-card-profiles.patch")
+PATCHES=("${FILESDIR}/0002-Simplify-daemon-to-only-switch-card-profiles.patch")
+
+src_prepare() {
+	default
+	sed -i -e "s|0.1.7|${PV}|g" meson.build
+}
 
 src_install() {
 	default
 	meson_src_install
 	systemd_newuserunit "${S}"/debian/wys.user-service 'wys.service'
+}
+
+pkg_postinst() {
+	systemd_enable_service --global wys
 }

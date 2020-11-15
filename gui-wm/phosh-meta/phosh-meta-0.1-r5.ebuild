@@ -12,10 +12,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86 ~arm64 ~arm"
 IUSE=""
 
-DEPEND="x11-wm/phoc
+DEPEND="
 		gui-wm/phosh
 		app-admin/phosh-renice
-		dev-libs/feedbackd
 		net-voip/calls
 		net-im/chatty
 		x11-misc/squeekboard
@@ -24,17 +23,15 @@ DEPEND="x11-wm/phoc
 		gnome-base/gnome-control-center
 		gnome-base/nautilus
 		gnome-extra/gnome-contacts
-		gnome-extra/iio-sensor-proxy
 		media-video/megapixels
 		gnome-extra/gnome-calculator
 		gnome-extra/gnome-calendar
 		www-client/epiphany
-		www-client/firefox-bin-aarch64
 		app-mobilephone/mobile-config-firefox
-
+		app-mobilephone/flashlight
+		x11-misc/squeekboard
 		x11-terms/gnome-terminal
 		x11-themes/sound-theme-librem5
-		media-sound/wys
 		mail-client/geary
 		app-text/evince
 		app-editors/gedit

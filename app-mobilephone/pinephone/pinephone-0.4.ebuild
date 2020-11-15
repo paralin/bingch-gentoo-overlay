@@ -17,13 +17,12 @@ IUSE=""
 DEPEND="media-libs/alsa-ucm-pinephone
 		gnome-extra/iio-sensor-proxy
 		media-sound/wys
+		x11-themes/sound-theme-librem5
 		sys-firmware/anx7688-firmware
 		sys-firmware/rtl8723bt-firmware
 		sys-firmware/ov5640-firmware
 		media-tv/v4l-utils
-		x11-misc/squeekboard
 		app-mobilephone/usb-tethering
-		app-mobilephone/flashlight
 		app-mobilephone/pinephone-modem-scripts
 		app-mobilephone/pinephone-softsleep
 "

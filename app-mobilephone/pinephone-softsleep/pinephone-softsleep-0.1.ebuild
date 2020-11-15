@@ -9,7 +9,7 @@ DESCRIPTION="Test package for 'soft sleep' on PinePhone"
 HOMEPAGE="https://gitlab.com/mobian1/devices/pinephone-softsleep.git"
 EGIT_REPO_URI="https://gitlab.com/mobian1/devices/pinephone-softsleep.git"
 
-LICENSE="GPL"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~arm64"
 IUSE=""

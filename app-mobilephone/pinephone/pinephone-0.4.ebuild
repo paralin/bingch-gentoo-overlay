@@ -25,6 +25,7 @@ DEPEND="media-libs/alsa-ucm-pinephone
 		app-mobilephone/usb-tethering
 		app-mobilephone/flashlight
 		app-mobilephone/pinephone-modem-scripts
+		app-mobilephone/pinephone-softsleep
 "
 
 RDEPEND="${DEPEND}"
@@ -36,10 +37,6 @@ src_install() {
 	udev_dorules "${FILESDIR}/10-proximity.rules"
 	udev_dorules "${FILESDIR}/20-pinephone-led.rules"
 
-	exeinto  "$(systemd_get_utildir)/system-sleep"
-	doexe "${FILESDIR}/pinephone-suspend-hook.sh"
-
 	dobin ${FILESDIR}/pinephone-camera-setup.sh
-
 	systemd_dounit ${FILESDIR}/pinephone-camera-setup.service
 }

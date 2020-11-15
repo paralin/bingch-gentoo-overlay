@@ -16,6 +16,7 @@ IUSE=""
 DEPEND="media-libs/tiff
 		x11-libs/gtk+:3
 		media-gfx/dcraw
+		media-libs/hdr-plus
 "
 RDEPEND="${DEPEND}"
 BDEPEND=""

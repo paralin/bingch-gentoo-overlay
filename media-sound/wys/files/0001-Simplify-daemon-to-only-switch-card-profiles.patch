@@ -1,6 +1,48 @@
-diff --git a/machine-check/blacklist b/machine-check/blacklist
-deleted file mode 100644
-index 06d4980..0000000
+From f66610d26395de15e3928cf4284573ca9cfabf26 Mon Sep 17 00:00:00 2001
+From: Arnaud Ferraris <arnaud.ferraris@collabora.com>
+Date: Fri, 6 Mar 2020 02:01:52 +0100
+Subject: [PATCH] Simplify daemon to only switch card profiles
+
+As a PoC for the PinePhone, we want to only switch card profiles:
+- when a call starts, use the "Voice Call" profile: audio is output on
+the earpiece, and the internal microphone is unmuted
+- when a call is terminated, switch back to the default "HiFi" profile,
+using the main speaker
+
+This should fully cover the most basic use-case. Headset will not work,
+and there is also no support for a "silent mode", but this is enough to
+demonstrate voice calls for the PinePhone.
+---
+ machine-check/blacklist                       |    1 -
+ machine-conf/Purism Librem 5 devkit/codec     |    1 -
+ machine-conf/Purism Librem 5 devkit/modem     |    1 -
+ machine-conf/Purism Librem 5/codec            |    1 -
+ machine-conf/Purism Librem 5/modem            |    1 -
+ meson.build                                   |   16 -
+ src/main.c                                    |  363 ++---
+ src/meson.build                               |   10 -
+ src/wys-audio.c                               | 1259 -----------------
+ src/wys-audio.h                               |   47 -
+ src/wys-direction.c                           |   40 -
+ src/wys-direction.h                           |   42 -
+ src/wys-modem.c                               |  138 +-
+ .../libmachine-check/mchk-machine-check.c     |  328 -----
+ .../libmachine-check/mchk-machine-check.h     |   38 -
+ subprojects/libmachine-check/meson.build      |   81 --
+ 18 files changed, 146 insertions(+), 2228 deletions(-)
+ delete mode 100644 machine-check/blacklist
+ delete mode 100644 machine-conf/Purism Librem 5 devkit/codec
+ delete mode 100644 machine-conf/Purism Librem 5 devkit/modem
+ delete mode 100644 machine-conf/Purism Librem 5/codec
+ delete mode 100644 machine-conf/Purism Librem 5/modem
+ delete mode 100644 src/wys-audio.c
+ delete mode 100644 src/wys-audio.h
+ delete mode 100644 src/wys-direction.c
+ delete mode 100644 src/wys-direction.h
+ delete mode 100644 subprojects/libmachine-check/mchk-machine-check.c
+ delete mode 100644 subprojects/libmachine-check/mchk-machine-check.h
+ delete mode 100644 subprojects/libmachine-check/meson.build
+
 --- a/machine-check/blacklist
 +++ /dev/null
 @@ -1 +0,0 @@
@@ -65,7 +107,7 @@ index 5938cec..7516208 100644
 -  strip_directory : true
 -)
 diff --git a/src/main.c b/src/main.c
-index 587a5f3..b0e8d2d 100644
+index 587a5f3..4631a33 100644
 --- a/src/main.c
 +++ b/src/main.c
 @@ -23,10 +23,8 @@
@@ -362,7 +404,7 @@ index 587a5f3..b0e8d2d 100644
  static void
  terminate (int signal)
  {
-@@ -429,223 +451,18 @@ setup_signals ()
+@@ -429,221 +451,18 @@ setup_signals ()
  #undef try_setup
  }
  
@@ -525,9 +567,7 @@ index 587a5f3..b0e8d2d 100644
 -        }
 -    }
 -
--  g_warning ("No %s specified with a machine configuration file"
--             ", environment variable or command line option"
--             "; refusing to run", key);
+-  g_warning ("No %s specified, refusing to run", key);
 -  exit (EXIT_SUCCESS);
 -}
 -
@@ -583,7 +623,7 @@ index 587a5f3..b0e8d2d 100644
    setup_signals ();
  
 -  run (codec, modem);
-+  run();
++  run ();
  
    return 0;
  }
@@ -2802,3 +2842,5 @@ index eb83c36..0000000
 -  link_with: libmachine_check,
 -  include_directories: libmachine_check_inc,
 -)
+-- 
+2.26.2

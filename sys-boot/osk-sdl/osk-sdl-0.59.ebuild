@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://gitlab.com/postmarketOS/osk-sdl.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~arm ~arm64"
+KEYWORDS="~arm64"
 
 if [[ ${PV} != 9999 ]]; then
         EGIT_REPO_BRANCH="tags/v${PV}"
@@ -22,6 +22,9 @@ DEPEND="sys-fs/cryptsetup
 		media-libs/libsdl2
 		media-libs/sdl2-ttf
 		media-fonts/dejavu
+		sys-kernel/dracut
+		app-portage/gentoolkit
+
 "
 RDEPEND="${DEPEND}"
 BDEPEND=""
@@ -32,7 +35,10 @@ src_prepare() {
 }
 
 src_install() {
-	dosbin bin/osk-sdl
+	dobin bin/osk-sdl
 	insinto /etc
 	doins osk.conf
+	insinto /usr/lib/dracut/modules.d/91osk-sdl
+	doins ${FILESDIR}/module-setup.sh
+	doins ${FILESDIR}/scripts/local-top/osk-sdl
 }

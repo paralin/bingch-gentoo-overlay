@@ -40,5 +40,5 @@ src_install() {
 	doins osk.conf
 	insinto /usr/lib/dracut/modules.d/91osk-sdl
 	doins ${FILESDIR}/module-setup.sh
-	doins ${FILESDIR}/osk-sdl
+	doins ${FILESDIR}/osk-sdl.sh
 }

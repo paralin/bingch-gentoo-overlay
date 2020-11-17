@@ -19,7 +19,7 @@ else
 fi
 
 DEPEND="sys-fs/cryptsetup
-		media-libs/libsdl2
+		media-libs/libsdl2[kms,tslib]
 		media-libs/sdl2-ttf
 		media-fonts/dejavu
 		sys-kernel/dracut

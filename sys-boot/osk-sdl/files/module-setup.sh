@@ -4,7 +4,7 @@
 check() {
     local _rootdev
     # if cryptsetup is not installed, then we cannot support encrypted devices.
-    require_any_binary $systemdutildir/systemd-cryptsetup cryptsetup || return 1
+    #require_an_binary $systemdutildir/systemd-cryptsetup cryptsetup || return 1
     require_binaries osk-sdl || return 1
 
     [[ $hostonly ]] || [[ $mount_needs ]] && {
@@ -86,17 +86,17 @@ install() {
         mark_hostonly /etc/crypttab
     fi
 
-    inst_simple "/etc/osk.conf" "/etc/osk.conf"
-    #inst_simple "/etc/crypttab" "/etc/crypttab"
-    inst_simple "/usr/share/glvnd/egl_vendor.d/50_mesa.json" "/usr/share/glvnd/egl_vendor.d/50_mesa.json"
+    inst "/etc/osk.conf"
+    inst "/usr/share/glvnd/egl_vendor.d/50_mesa.json"
+    inst "/usr/share/fonts/dejavu/DejaVuSans.ttf"
     inst_multiple osk-sdl
 
     # mesa and cogl lib
-    equery f mesa cogl | grep ".so$" | while read -r so; do
-      inst_libdir_file $(basename ${so})*
+    equery f mesa cogl tslib | grep ".so$" | while read -r so; do
+      inst ${so}
     done
 
-    inst_hook cmdline 60 "$moddir/osk-sdl.sh"
+    inst_hook pre-mount 30 "$moddir/osk-sdl.sh"
 
-    dracut_need_initqueue
+    #dracut_need_initqueue
 }

@@ -26,6 +26,7 @@ DEPEND="media-libs/alsa-ucm-pinephone
 		app-mobilephone/usb-tethering
 		app-mobilephone/pinephone-modem-scripts
 		app-mobilephone/pinephone-softsleep
+		sys-boot/osk-sdl
 "
 
 RDEPEND="${DEPEND}"

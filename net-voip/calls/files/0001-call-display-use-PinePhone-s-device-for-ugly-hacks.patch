@@ -1,7 +1,7 @@
 From 6630fea2096118cf0566cfa9a7e07d2b977ffc86 Mon Sep 17 00:00:00 2001
 From: Arnaud Ferraris <arnaud.ferraris@collabora.com>
 Date: Thu, 5 Mar 2020 15:06:44 +0100
-Subject: [PATCH 1/4] call-display: use PinePhone's device for ugly hacks
+Subject: [PATCH 1/1] call-display: use PinePhone's device for ugly hacks
 
 ---
  src/calls-call-display.c | 18 +++++-------------

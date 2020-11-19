@@ -41,8 +41,9 @@ src_install() {
 	insinto /etc/dracut.conf.d/
 	doins ${FILESDIR}/osk-sdl-pp.conf
 	insinto /usr/lib/dracut/modules.d/50osk-sdl
-	doins ${FILESDIR}/module-setup.sh
-	doins ${FILESDIR}/osk-sdl.sh
 	doins ${FILESDIR}/osk-sdl-pp.path
 	doins ${FILESDIR}/osk-sdl-pp.service
+	exeinto /usr/lib/dracut/modules.d/50osk-sdl
+	doexe ${FILESDIR}/module-setup.sh
+	doexe ${FILESDIR}/osk-sdl-pp.path
 }

@@ -32,7 +32,6 @@ DEPEND="
 		x11-misc/squeekboard
 		x11-terms/gnome-terminal
 		x11-themes/sound-theme-librem5
-		mail-client/geary
 		app-text/evince
 		app-editors/gedit
 		sys-power/gtherm

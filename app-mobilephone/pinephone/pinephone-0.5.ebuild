@@ -16,7 +16,8 @@ IUSE=""
 
 DEPEND="media-libs/alsa-ucm-pinephone
 		gnome-extra/iio-sensor-proxy
-		media-sound/wys
+		!media-sound/wys
+		media-sound/callaudiod
 		x11-themes/sound-theme-librem5
 		sys-firmware/anx7688-firmware
 		sys-firmware/rtl8723bt-firmware

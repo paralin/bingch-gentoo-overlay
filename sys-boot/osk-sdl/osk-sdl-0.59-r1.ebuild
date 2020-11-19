@@ -45,5 +45,5 @@ src_install() {
 	doins ${FILESDIR}/osk-sdl-pp.service
 	exeinto /usr/lib/dracut/modules.d/50osk-sdl
 	doexe ${FILESDIR}/module-setup.sh
-	doexe ${FILESDIR}/osk-sdl-pp.path
+	doexe ${FILESDIR}/osk-sdl.sh
 }

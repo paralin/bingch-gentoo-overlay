@@ -14,7 +14,6 @@ IUSE=""
 
 DEPEND="
 		gui-wm/phosh
-		app-admin/phosh-renice
 		net-voip/calls
 		net-im/chatty
 		x11-misc/squeekboard

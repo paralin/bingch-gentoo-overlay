@@ -1,84 +1,123 @@
-#!/bin/bash
-# no need if we're have modem-power driver
-[ -e /sys/class/modem-power/modem-power/device/powered ] && exit
+#!/bin/sh
 
-MODEM_ID=""
+log() {
+	echo "$@" | logger -t "postmarketOS:modem-setup"
+}
 
-if grep -q 1.1 /proc/device-tree/model; then
-	REVISION="BH"
+# Current modem routing
+#
+#  1 - Digital PCM
+#  1 - I2S slave
+#  0 - Primary mode (short sync)
+#  1 - 256kHz clock (256kHz / 16bit = 16k samples/s)
+#  0 - 16bit linear format
+#  0 - 8k sample/s
+#  1 - 1 slot
+#  1 - map to first slot (the only slot)
+#
+QDAI_CONFIG="1,1,0,1,0,0,1,1"
+QCFG_RISIGNALTYPE_CONFIG="physical"
+QMBNCFG_CONFIG="1"
+QCFG_IMS_CONFIG="1"
+
+if [ -z "$1" ]
+then
+	DEV="/dev/EG25.AT"
+else
+	DEV="$1"
 fi
 
-get_modem_id()
-{
-    MODEM_LIST="`mmcli -L | grep QUECTEL`"
-    if [ "$MODEM_LIST" ]; then
-        # mmcli output is "   /org/freedesktop/ModemManager1/Modem/MODEM_ID ..."
-        # MODEM_PATH will store the D-Bus object path, from which we'll extract
-        # MODEM_ID
-        MODEM_PATH="`echo "$MODEM_LIST" | sed 's%[^/]*\(/[^ ]*\).*%\1%'`"
-        MODEM_ID=`basename "$MODEM_PATH"`
-    fi
-}
+# When running this script from udev the modem might not be fully initialized
+# yet, so give it some time to initialize
+#
+# We'll try to query for the firmware version for 15 seconds after which we'll
+# consider the initialization failed
 
-configure_modem()
-{
-    COMMAND=$1
-    VALUE=$2
-    STATE=""
+log "Waiting for the modem to initialize"
+INITIALIZED=false
+for second in $(seq 1 15)
+do
+        if echo "AT+QDAI?" | atinout - $DEV - | grep -q OK
+        then
+                INITIALIZED=true
+                break
+        fi
 
-    if [ "$COMMAND" = "QCFG" -o "$COMMAND" = "QURCCFG" ]; then
-        SUBCMD=`echo $VALUE | cut -d ',' -f 1`
-        STATE=`mmcli -m $MODEM_ID --command="AT+$COMMAND=$SUBCMD" | sed "s%response: '+$COMMAND: \(.*\)'%\1%"`
-    else
-        STATE=`mmcli -m $MODEM_ID --command="AT+$COMMAND?" | sed "s%response: '+$COMMAND: \(.*\)'%\1%"`
-    fi
+        log "Waited for $second seconds..."
 
-    if [[ $STATE != $VALUE* ]]; then
-        mmcli -m $MODEM_ID --command="AT+$COMMAND=$VALUE" > /dev/null 2>&1
-    fi
-}
-
-# Wait for the modem to be available
-while [ ! "$MODEM_ID" ]; do
-    sleep 1
-    get_modem_id
+        sleep 1
 done
 
-# Check the current DAI configuration, and change it if necessary
-configure_modem "QDAI" "1,0,0,2,0,1,1,1"
+if $INITIALIZED
+then
+        log "Modem initialized"
+else
+        log "Modem failed to initialize"
+        exit 1
+fi
 
-# Check the current Ring Indicator configuration, and change it if necessary
-configure_modem "QCFG" '"risignaltype","physical"'
+# Read current config
+QDAI_ACTUAL_CONFIG=$(echo "AT+QDAI?" | atinout - $DEV -)
+QCFG_RISIGNALTYPE_ACTUAL_CONFIG=$(echo 'AT+QCFG="risignaltype"' | atinout - $DEV -)
+QMBNCFG_ACTUAL_CONFIG=$(echo 'AT+QMBNCFG="AutoSel"' | atinout - $DEV -)
+QCFG_IMS_ACTUAL_CONFIG=$(echo 'AT+QCFG="ims"' | atinout - $DEV -)
+
+if echo $QDAI_ACTUAL_CONFIG | grep -q $QDAI_CONFIG && \
+	echo $QCFG_RISIGNALTYPE_ACTUAL_CONFIG | grep -q $QCFG_RISIGNALTYPE_CONFIG && \
+	echo $QMBNCFG_ACTUAL_CONFIG | grep -q $QMBNCFG_CONFIG && \
+	echo $QCFG_IMS_ACTUAL_CONFIG | grep -q $QCFG_IMS_CONFIG
+then
+	log "Modem already configured"
+	exit 0
+fi
+
+# Modem not configured, we need to send it the digital interface configuration,
+# then reboot it
+
+# Configure audio
+RET=$(echo "AT+QDAI=$QDAI_CONFIG" | atinout - $DEV -)
+
+if ! echo $RET | grep -q OK
+then
+	log "Failed to configure audio: $RET"
+	exit 1
+fi
+
+# Configure ring device
+RET=$(echo "AT+QCFG=\"risignaltype\",\"$QCFG_RISIGNALTYPE_CONFIG\"" | atinout - $DEV -)
+
+if ! echo $RET | grep -q OK
+then
+	log "Failed to configure modem ring wakeup: $RET"
+	exit 1
+fi
+
+# Configure VoLTE auto selecting profile
+RET=$(echo "AT+QMBNCFG=\"AutoSel\",$QMBNCFG_CONFIG" | atinout - $DEV -)
+
+if ! echo $RET | grep -q OK
+then
+	log "Failed to enable VoLTE profile auto selecting: $RET"
+	exit 1
+fi
 
 # Enable VoLTE
-configure_modem "QCFG" '"ims",1'
+RET=$(echo "AT+QCFG=\"ims\",$QCFG_IMS_CONFIG" | atinout - $DEV -)
 
-if [ "$REVISION" = "BH" ]; then
-    # BH revision doesn't have the AP_READY signal connected, so we delay URC
-    # reporting as much as possible
-    configure_modem "QCFG" '"urc/ri/ring","pulse",2000,1000,5000,"off",1'
-    configure_modem "QCFG" '"urc/ri/smsincoming","pulse",2000'
-    configure_modem "QCFG" '"urc/ri/other","pulse",2000'
-    configure_modem "QCFG" '"urc/delay",1'
-else
-    # We need to enable AP_READY (active low) on CE phones
-    configure_modem "QCFG" '"apready",1,0,500'
+if ! echo $RET | grep -q OK
+then
+	log "Failed to enable VoLTE: $RET"
+	exit 1
 fi
 
-# Make sure URCs are always output on the USB interface, not the UART
-configure_modem "QURCCFG" '"urcport","usbat"'
+# Reset module
+# 1 Set the mode to full functionality (vs 4: no RF, and 1: min functionality)
+# 1 Reset the modem before changing mode (only available with 1 above)
+#
+RET=$(echo "AT+CFUN=1,1" | atinout - $DEV -)
 
-# Enable GPS
-# TODO: move all of this to a dedicated user service/daemon and switch GPS
-# according to user preferences (org.gnome.system.location enabled)
-configure_modem "QGPS" "1"
-
-# Location can't be setup while the SIM is locked, loop until we get there
-# (yes, that's nasty)
-while ! mmcli -m $MODEM_ID --location-enable-gps-raw --location-enable-gps-nmea; do
-    sleep 5
-done
-
-# /dev/ttyS2 is a UART through which we can issue AT commands, configure it
-# properly for future use
-stty -F /dev/ttyS2 115200
+if ! echo $RET | grep -q OK
+then
+	log "Failed to reset the module: $RET"
+	exit 1
+fi

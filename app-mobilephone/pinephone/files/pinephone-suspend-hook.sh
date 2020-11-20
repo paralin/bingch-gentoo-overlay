@@ -1,42 +1,56 @@
 #!/bin/bash
+# PinePhone suspend / wakeup modem
+# /usr/lib/systemd/system-sleep/pinephone-modem-suspend.sh
 
-# Copyright 2020 - Dreemurrs Embedded Labs / DanctNIX Community
-#
-# This suspend hook is intended as a workaround for Bluetooth suspend oops:
-# https://gitlab.com/pine64-org/linux/-/issues/24
+# DTR is:     
+# - PL6/GPIO358 on BH (1.1)
+# - PB2/GPIO34 on CE (1.2)
 
-# Uncomment this (or add to profile.d) if you want to suspend properly on Braveheart (disabled due to dmesg spam)
-#IT_NEVER_CAME_BACK_ON=1
+# AP_READY is:                  
+# - PL2/GPIO354 on BH (1.1)
+# - PH7/GPIO231 on CE (1.2)
 
-# Set it to non-empty once it finds the magic string
-grep -rq IT_NEVER_CAME_BACK_ON /etc/profile.d && IT_NEVER_CAME_BACK_ON=1
+LOGFILE=/var/log/pp-suspend.log
+
+if grep -q 1.1 /proc/device-tree/model
+then 
+     DTR=358
+     AP_READY=354
+else
+     DTR=34
+     AP_READY=231
+fi
+
+if [ ! -f ${LOGFILE} ]; then
+     touch ${LOGFILE}
+fi
 
 prepare_suspend() {
-	echo "Preparing to suspend..."
-
 	# Enable URC caching
-	echo "AT+QCFG=\"urc/cache\",1" | atinout - /dev/EG25.AT -
-
-	# Enable Sleep Mode
-	echo "AT+QSCLK=1" | atinout - /dev/EG25.AT -
-
-	# Braveheart users need this if they want to suspend properly
-	[ -n "$IT_NEVER_CAME_BACK_ON" ] && echo "1c19000.usb" > /sys/bus/platform/drivers/musb-sunxi/unbind
+	echo -ne 'AT+QCFG="urc/cache",1\r' > /dev/ttyS2
+	
+	# Put modem in power saving mode
+	# Note: GPIO231 is WAKEUP_IN on BH and AP_READY on CE
+	#  - BH: WAKEUP_IN must be high to enable power saving mode
+	#  - CE: AP_READY (active low) must be high to indicate host sleep
+	# In both cases DTR (GPIO358) must be high to enable power saving mode
+    	NOW=`date`
+    	echo "$NOW Entering suspend" >> ${LOGFILE}
+    	echo 1 > /sys/class/gpio/gpio${AP_READY}/value
+    	echo 1 > /sys/class/gpio/gpio${DTR}/value
+	echo -ne 'AT+QSCLK=1\r' > /dev/ttyS2
 }
 
 resume_all() {
-	echo "Resuming the device..."
-	hwclock -s
-	sleep 1
-
-	# Disable Sleep Mode
-	echo "AT+QSCLK=0" | atinout - /dev/EG25.AT -
-
+	# Wake up modem
+	echo -ne 'AT+QSCLK=0\r' > /dev/ttyS2
+    	echo 0 > /sys/class/gpio/gpio${AP_READY}/value
+    	echo 0 > /sys/class/gpio/gpio${DTR}/value
+    	NOW=`date`
+    	echo "$NOW Exiting suspend" >> ${LOGFILE}
+	
 	# Disable URC caching
-	echo "AT+QCFG=\"urc/cache\",0" | atinout - /dev/EG25.AT -
-
-	# Braveheart users need this if they want to suspend properly
-	[ -n "$IT_NEVER_CAME_BACK_ON" ] && echo "1c19000.usb" > /sys/bus/platform/drivers/musb-sunxi/bind
+	echo -ne 'AT+QCFG="urc/cache",0\r' > /dev/ttyS2
 }
 
 case $1 in

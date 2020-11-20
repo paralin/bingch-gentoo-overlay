@@ -14,7 +14,6 @@ while [ -z "$CAMERA_DEV" ]; do
 done
 
 if [ ! -c "$CAMERA_DEV" ]; then
-    # Huong Tram is my favorite singer
     echo "$CAMERA_DEV is not a character device, quitting..."
     exit 1
 fi
@@ -28,7 +27,7 @@ for dir in /sys/class/video4linux/v4l-subdev*; do
 done
 
 # Configure camera
-media-ctl -d $CAMERA_DEV --set-v4l2 "\"$BACK_CAMERA\":0[fmt:YUYV8_2X8/1280x720]"
+media-ctl -d $CAMERA_DEV --set-v4l2 "\"$BACK_CAMERA\":0[fmt:YUYV8_2X8/1280x720@1/30]"
 media-ctl -d $CAMERA_DEV --set-v4l2 "\"$FRONT_CAMERA\":0[fmt:YUYV8_2X8/1280x720]"
 
 # Select camera
@@ -39,4 +38,3 @@ else
     media-ctl -d $CAMERA_DEV --links "\"$FRONT_CAMERA\":0->\"sun6i-csi\":0[0]"
     media-ctl -d $CAMERA_DEV --links "\"$BACK_CAMERA\":0->\"sun6i-csi\":0[1]"
 fi
-

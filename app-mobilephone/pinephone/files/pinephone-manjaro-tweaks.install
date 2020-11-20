@@ -1,0 +1,9 @@
+post_install() {
+    # Automatically start USB gadget on boot
+    systemctl enable phosh-renice.service
+}
+
+post_remove() {
+    # Disable start USB gadget on boot
+    systemctl disable phosh-renice.service
+}

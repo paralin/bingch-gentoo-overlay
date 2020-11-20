@@ -16,5 +16,12 @@ IUSE=""
 
 DEPEND=">=x11-libs/libva-2.8.0
 	>=x11-libs/libpciaccess-0.13.1-r1:=
+	x11-libs/libdrm
 "
 RDEPEND="${DEPEND}"
+
+#PATCHES="
+#	${FILESDIR}/28.diff
+#	${FILESDIR}/29.diff
+#	${FILESDIR}/30.diff
+#"

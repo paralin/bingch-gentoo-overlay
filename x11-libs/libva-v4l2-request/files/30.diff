@@ -1,0 +1,13 @@
+diff --git a/src/surface.h b/src/surface.h
+index 41007f8..a9be915 100644
+--- a/src/surface.h
++++ b/src/surface.h
+@@ -40,7 +40,7 @@
+ struct object_surface {
+ 	struct object_base base;
+ 
+-	VAStatus status;
++	VASurfaceStatus status;
+ 	int width;
+ 	int height;
+ 

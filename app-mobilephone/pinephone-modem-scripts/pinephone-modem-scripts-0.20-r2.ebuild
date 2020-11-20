@@ -22,4 +22,9 @@ src_install() {
 	udev_dorules ${S}/*.rules 
 	dosbin ${S}/*.sh
 	systemd_dounit ${S}/*.service
+	systemd_dounit ${FILESDIR}/*.path
+}
+
+pkg_postinst() {
+	systemd_enable_service pinephone-modem-scripts.pinephone-modem.path
 }

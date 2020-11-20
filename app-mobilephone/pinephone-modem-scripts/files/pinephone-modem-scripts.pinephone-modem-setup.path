@@ -1,0 +1,8 @@
+[Unit]
+Description=Pinephone modem path
+
+[Path]
+PathExists=/dev/EG25.AT
+
+[Install]
+WantedBy=multi-user.target

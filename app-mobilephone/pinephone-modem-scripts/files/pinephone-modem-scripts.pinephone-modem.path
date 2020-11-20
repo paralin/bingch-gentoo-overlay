@@ -1,0 +1,9 @@
+[Unit]
+Description=Pinephone modem path
+
+[Path]
+PathExists=/dev/dummy
+PathExists=/sys/class/modem-power/modem-power/device/powered
+
+[Install]
+WantedBy=multi-user.target

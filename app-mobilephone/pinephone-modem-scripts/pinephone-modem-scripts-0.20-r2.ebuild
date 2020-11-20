@@ -26,5 +26,5 @@ src_install() {
 }
 
 pkg_postinst() {
-	systemd_enable_service pinephone-modem-scripts.pinephone-modem.path
+	systemctl enable pinephone-modem-scripts.pinephone-modem.path
 }

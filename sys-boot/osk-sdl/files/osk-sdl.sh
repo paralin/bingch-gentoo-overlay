@@ -35,9 +35,8 @@ setup_directfb_tslib() {
 
 start_onscreen_keyboard() {
 	setup_directfb_tslib
-	sleep 1 # wait for dev settle
-	/usr/bin/osk-sdl -n root -d "$partition" -c /etc/osk.conf -v > /run/osk-sdl.log 2>&1
-	cat /run/osk-sdl.log
+	#sleep 1 # wait for dev settle
+	/usr/bin/osk-sdl -n root -d "$partition" -c /etc/osk.conf 
 	unset DFBARGS
 	unset TSLIB_TSDEVICE
 }

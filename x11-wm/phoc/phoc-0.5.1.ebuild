@@ -3,24 +3,20 @@
 
 EAPI=7
 
-if [[ ${PV} == 9999 ]]; then
-    inherit vala meson gnome.org gnome2-utils git-r3 xdg
-    EGIT_REPO_URI="https://source.puri.sm/Librem5/phoc.git"
-    SRC_URI=''
-	KEYWORDS=""
+inherit vala meson gnome2-utils git-r3 xdg
+EGIT_REPO_URI="https://source.puri.sm/Librem5/phoc.git"
+
+KEYWORDS="~x86 ~amd64 ~arm ~arm64"
+if [[ ${PV} != 9999 ]]; then
+    EGIT_REPO_BRANCH="tags/v${PV}"
 else
-	inherit vala meson gnome.org gnome2-utils xdg
-	MY_P="${PN}-v${PV}"
-    EGIT_REPO_URI=""
-    SRC_URI="https://source.puri.sm/Librem5/${PN}/-/archive/v${PV}/${MY_P}.tar.gz"
-    S=${WORKDIR}/${MY_P}
-	KEYWORDS="~amd64 ~x86 ~arm ~arm64"
+    KEYWORDS=""
 fi
 
 PATCHES=(
 	"${FILESDIR}/0001-seat-Don-t-notify-on-key-release.patch"
 	"${FILESDIR}/0002-seat-inhibit-touch-events-when-in-power-save-mode-or.patch"
-	"${FILESDIR}/0003-output-make-sure-rotations-are-always-clockwise.patch"
+	#"${FILESDIR}/0003-output-make-sure-rotations-are-always-clockwise.patch"
 )
 
 DESCRIPTION="Wlroots based Phone compositor"

@@ -16,42 +16,42 @@ diff --git a/src/desktop.c b/src/desktop.c
 index 8fbb98e..40b2492 100644
 --- a/src/desktop.c
 +++ b/src/desktop.c
-@@ -624,6 +624,7 @@ phoc_desktop_new (struct roots_config *config)
+@@ -703,6 +703,7 @@ phoc_desktop_new (struct roots_config *c
  void
  phoc_desktop_toggle_output_blank (PhocDesktop *self)
  {
 +  PhocServer *server = phoc_server_get_default ();
-   struct roots_output *output;
+   PhocOutput *output;
  
    wl_list_for_each(output, &self->outputs, link) {
-@@ -631,6 +632,7 @@ phoc_desktop_toggle_output_blank (PhocDesktop *self)
+@@ -710,6 +711,7 @@ phoc_desktop_toggle_output_blank (PhocDe
  
      wlr_output_enable (output->wlr_output, enable);
      wlr_output_commit (output->wlr_output);
 +    server->active = enable;
      if (enable)
-       output_damage_whole(output);
+       phoc_output_damage_whole(output);
    }
 diff --git a/src/output.c b/src/output.c
 index c03889f..045cbc0 100644
 --- a/src/output.c
 +++ b/src/output.c
-@@ -560,6 +560,7 @@ void handle_output_manager_test(struct wl_listener *listener, void *data) {
+@@ -928,6 +928,7 @@ handle_output_manager_test (struct wl_li
  void
- phoc_output_handle_output_power_manager_set_mode(struct wl_listener *listener, void *data)
+ phoc_output_handle_output_power_manager_set_mode (struct wl_listener *listener, void *data)
  {
 +  PhocServer *server = phoc_server_get_default ();
    struct wlr_output_power_v1_set_mode_event *event = data;
-   struct roots_output *self;
+   PhocOutput *self;
    bool enable = true;
-@@ -584,6 +585,8 @@ phoc_output_handle_output_power_manager_set_mode(struct wl_listener *listener, v
+@@ -951,6 +952,8 @@ phoc_output_handle_output_power_manager_
    if (enable == self->wlr_output->enabled)
      return;
  
 +  server->active = enable;
 +
-   wlr_output_enable(self->wlr_output, enable);
-   if (!wlr_output_commit(self->wlr_output)) {
+   wlr_output_enable (self->wlr_output, enable);
+   if (!wlr_output_commit (self->wlr_output)) {
      g_warning ("Failed to commit power mode change to %d for %p", enable, self);
 diff --git a/src/seat.c b/src/seat.c
 index 679a3f5..2a4c007 100644

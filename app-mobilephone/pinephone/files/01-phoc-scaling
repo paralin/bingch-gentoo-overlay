@@ -1,9 +1,6 @@
 [sm/puri/phoc/application/midori]
 scale-to-fit=true
 
-[sm/puri/phoc/application/geary]
-scale-to-fit=true
-
 [sm/puri/phoc/application/eog]
 scale-to-fit=true
 

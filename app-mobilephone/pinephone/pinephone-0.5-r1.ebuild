@@ -61,8 +61,8 @@ src_install() {
 	insinto /etc/systemd/logind.conf.d
 	doins "${FILESDIR}/ignore-power-key.conf"
 
-	insinto /etc/dconf/profile/user
-	doins "${FILESDIR}/dconf-profile-manjaro"
+#	insinto /etc/dconf/profile/user
+#	doins "${FILESDIR}/dconf-profile-manjaro"
 
 	insinto /etc/dconf/db/manjaro.d
 	doins "${FILESDIR}/01-phoc-scaling"

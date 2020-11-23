@@ -22,6 +22,8 @@ SRC_URI="${KERNEL_URI} ${GENPATCHES_URI} ${ARCH_URI} ${MEGI_PATCH_URI}"
 
 PATCHES=(
 	${DISTDIR}/all.patch
+	${FILESDIR}/patch-5.9.8-9.patch
+	${FILESDIR}/patch-5.9.9-10.patch
     ${FILESDIR}/wifi-power-saving.patch
     ${FILESDIR}/panic-led.patch
     ${FILESDIR}/enable-hdmi-output-pinetab.patch
@@ -29,8 +31,8 @@ PATCHES=(
     ${FILESDIR}/enable-jack-detection-pinetab.patch
     ${FILESDIR}/pinetab-bluetooth.patch
     ${FILESDIR}/pinetab-accelerometer.patch
+    ${FILESDIR}/media-ov5640-dont-break-when-firmware-for-autofocus-isnt-loaded.patch
     ${FILESDIR}/camera-added-bggr-bayer-mode.patch
-	${FILESDIR}/media-ov5640-dont-break-when-firmware-for-autofocus-isnt-loaded.patch
     ${FILESDIR}/0001-revert-fbcon-remove-now-unusued-softback_lines-cursor-argument.patch
 	${FILESDIR}/0002-revert-fbcon-remove-soft-scrollback-code.patch
 )

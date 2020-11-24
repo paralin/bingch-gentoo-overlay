@@ -73,10 +73,10 @@ src_install() {
 #	exeinto /usr/lib/systemd/system-sleep/
 #	doexe "${FILESDIR}/pinephone-suspend-hook.sh"
 
-	exeinto /etc/profile.d
-	doexe "${FILESDIR}/manjaro-tweaks.sh"
+	exeinto /etc/pulse/daemon.conf.d
+	doexe "${FILESDIR}/90-pinephone.conf"
 
-	dobin "${FILESDIR}/pinephone-camera-setup.sh"
+#	dobin "${FILESDIR}/pinephone-camera-setup.sh"
 	newbin "${FILESDIR}/phosh_renice.sh" phosh_renice
 
 	systemd_dounit ${FILESDIR}/pinephone-camera-setup.service

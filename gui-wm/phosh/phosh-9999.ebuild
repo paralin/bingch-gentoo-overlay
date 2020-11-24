@@ -18,6 +18,7 @@ if [[ ${PV} != 9999 ]]; then
 	EGIT_REPO_BRANCH="tags/v${PV}"
 else
 	KEYWORDS=""
+	EGIT_COMMIT=09d07042e0b0b056d2c7335235843607bd38de35
 fi
 #EGIT_SUBMODULES=("https://gitlab.gnome.org/GNOME/libgnome-volume-control.git")
 

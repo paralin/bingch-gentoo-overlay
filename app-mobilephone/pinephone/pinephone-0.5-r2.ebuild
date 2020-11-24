@@ -46,6 +46,9 @@ src_install() {
 	insinto /etc/profile.d
 	doins "${FILESDIR}/manjaro-tweaks.sh"
 
+	insinto /usr/share/glib-2.0/schemas
+	doins "${FILESDIR}/90_manjaro.gschema.override"
+
 	insinto /usr/lib/firefox/
 	doins "${FILESDIR}/manjaro.cfg"
 
@@ -67,8 +70,8 @@ src_install() {
 	insinto /etc/dconf/db/manjaro.d
 	doins "${FILESDIR}/01-phoc-scaling"
 
-	exeinto /usr/lib/systemd/system-sleep/
-	doexe "${FILESDIR}/pinephone-suspend-hook.sh"
+#	exeinto /usr/lib/systemd/system-sleep/
+#	doexe "${FILESDIR}/pinephone-suspend-hook.sh"
 
 	exeinto /etc/profile.d
 	doexe "${FILESDIR}/manjaro-tweaks.sh"

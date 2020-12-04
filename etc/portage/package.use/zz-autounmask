@@ -12,3 +12,6 @@ media-tv/v4l-utils -bpf -qt5
 media-video/ffmpeg vaapi
 sci-geosciences/gpsd -X -qt5 python
 >=media-plugins/grilo-plugins-0.3.12 flickr
+>=sys-libs/zlib-1.2.11-r3 static-libs
+media-libs/libsdl2 kms tslib
+>=media-video/ffmpeg-4.3.1 opus

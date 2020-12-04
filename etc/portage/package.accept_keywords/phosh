@@ -1,6 +1,12 @@
-dev-libs/feedbackd
-gui-wm/phosh 
-x11-wm/phoc 
-net-voip/calls 
 mail-client/geary **
 sci-geosciences/gnome-maps **
+app-i18n/ibus-libpinyin **
+app-eselect/eselect-gnome-shell-extensions **
+gnome-extra/gnome-shell-extensions **
+gnome-base/gnome-menus **
+net-im/telegram-desktop **
+media-fonts/open-sans **
+media-libs/libtgvoip **
+media-libs/tg_owt **
+dev-cpp/range-v3 **
+dev-cpp/ms-gsl **

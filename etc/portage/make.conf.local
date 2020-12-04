@@ -16,7 +16,7 @@ USE="${ARCH} wayland -python_targets_python2_7 -tracker"
 CFLAGS="-O2 -pipe -fomit-frame-pointer"
 CXXFLAGS="${CFLAGS}"
 
-FEATURES="-sandbox -usersandbox buildpkg noman noinfo nodoc -pid-sandbox -network-sandbox"
+FEATURES="buildpkg noman noinfo nodoc -pid-sandbox -network-sandbox"
 #FEATURES="-collision-protect buildpkg noman noinfo nodoc ccache"
 #
 # Be sure we dont overwrite pkgs from another repo..

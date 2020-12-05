@@ -33,7 +33,7 @@ RDEPEND="
 	net-libs/gnome-online-accounts[introspection]
 	net-libs/libgfbgraph[introspection]
 	net-libs/libsoup:2.4[introspection]
-	net-libs/webkit-gtk:4[introspection]
+	net-libs/webkit-gtk:4
 "
 DEPEND="${RDEPEND}"
 BDEPEND="

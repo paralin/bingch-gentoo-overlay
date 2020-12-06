@@ -4,7 +4,7 @@
 EAPI="6"
 ETYPE="sources"
 K_WANT_GENPATCHES="base extras experimental"
-K_GENPATCHES_VER="8"
+K_GENPATCHES_VER="12"
 K_NODRYRUN="1"
 
 inherit kernel-2
@@ -22,8 +22,6 @@ SRC_URI="${KERNEL_URI} ${GENPATCHES_URI} ${ARCH_URI} ${MEGI_PATCH_URI}"
 
 PATCHES=(
 	${DISTDIR}/all.patch
-	${FILESDIR}/patch-5.9.8-9.patch
-	${FILESDIR}/patch-5.9.9-10.patch
     ${FILESDIR}/wifi-power-saving.patch
     ${FILESDIR}/panic-led.patch
     ${FILESDIR}/enable-hdmi-output-pinetab.patch
@@ -33,8 +31,11 @@ PATCHES=(
     ${FILESDIR}/pinetab-accelerometer.patch
     ${FILESDIR}/media-ov5640-dont-break-when-firmware-for-autofocus-isnt-loaded.patch
     ${FILESDIR}/camera-added-bggr-bayer-mode.patch
-    ${FILESDIR}/0001-revert-fbcon-remove-now-unusued-softback_lines-cursor-argument.patch
-	${FILESDIR}/0002-revert-fbcon-remove-soft-scrollback-code.patch
+    ${FILESDIR}/drm-lima-add-LIMA_BO_FLAG_FORCE_VA.patch
+    ${FILESDIR}/0002-Bluetooth-Fix-LL-PRivacy-BLE-device-fails-to-connect.patch
+    ${FILESDIR}/0003-Bluetooth-Fix-attempting-to-set-RPA-timeout-when-unsupported.patch
+    #${FILESDIR}/0001-revert-fbcon-remove-now-unusued-softback_lines-cursor-argument.patch
+	#${FILESDIR}/0002-revert-fbcon-remove-soft-scrollback-code.patch
 )
 
 src_prepare() {

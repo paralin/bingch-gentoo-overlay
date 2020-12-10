@@ -16,7 +16,7 @@ USE="${ARCH} wayland -python_targets_python2_7 -tracker"
 CFLAGS="-O2 -pipe -fomit-frame-pointer"
 CXXFLAGS="${CFLAGS}"
 
-FEATURES="buildpkg noman noinfo nodoc -pid-sandbox -network-sandbox"
+FEATURES="buildpkg noman noinfo nodoc -usersandbox -sandbox -pid-sandbox -network-sandbox"
 
 #FEATURES="-pid-sandbox -network-sandbox"
 #

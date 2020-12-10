@@ -19,7 +19,7 @@ RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_install() {
-	udev_dorules ${S}/*.rules 
+	udev_dorules ${S}/*.rules
 	dosbin ${S}/*.sh
 	systemd_dounit ${S}/*.service
 	systemd_dounit ${FILESDIR}/*.path

@@ -49,7 +49,7 @@ PATCHES=(
 	${FILESDIR}/MR642.patch
 	${FILESDIR}/MR672.patch
 	${FILESDIR}/MR675.patch
-	#${FILESDIR}/flashlight-torch.patch
+	${FILESDIR}/flashlight-torch.patch
 )
 
 src_prepare() {

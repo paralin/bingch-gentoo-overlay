@@ -9,8 +9,8 @@ KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~sparc ~x86"
 
 EGIT_REPO_URI="https://source.puri.sm/Librem5/phosh.git"
 if [[ ${PV} != 9999 ]]; then
-	#EGIT_REPO_BRANCH="tags/v${PV}"
-	EGIT_COMMIT="8828176f6c98a4bde94c9f6daa46d0a87a3c8d20"
+	EGIT_REPO_BRANCH="tags/v${PV}"
+	#EGIT_COMMIT="34720663adadc6959dac293ee7371354be26cfa8"
 else
 	KEYWORDS=""
 fi
@@ -48,7 +48,6 @@ PATCHES=(
 	#${FILESDIR}/0004-lockscreen-manager-undo-transform-only-for-phones.patch
 	${FILESDIR}/MR642.patch
 	${FILESDIR}/MR672.patch
-	${FILESDIR}/MR675.patch
 	${FILESDIR}/flashlight-torch.patch
 )
 

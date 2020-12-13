@@ -46,8 +46,8 @@ PATCHES=(
 	#${FILESDIR}/0002-shell-honor-configured-rotation.patch
 	#${FILESDIR}/0003-shell-add-an-accessor-for-the-mode-manager.patch
 	#${FILESDIR}/0004-lockscreen-manager-undo-transform-only-for-phones.patch
-	${FILESDIR}/MR642.patch
-	${FILESDIR}/MR672.patch
+	#${FILESDIR}/MR642.patch
+	#${FILESDIR}/MR672.patch
 	${FILESDIR}/flashlight-torch.patch
 )
 

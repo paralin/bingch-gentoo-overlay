@@ -162,6 +162,7 @@ src_prepare() {
 	eapply "${FILESDIR}"/${PN}-2.4.9-gcc-6.patch
 	# patch for gcc 9
 	eapply "${FILESDIR}"/${PN}-2.4.11.patch
+	eapply "${FILESDIR}"/${PN}-2.4.11-use-lowercase-bool.patch
 
 	AT_M4DIR=Source/autotools eautoreconf
 

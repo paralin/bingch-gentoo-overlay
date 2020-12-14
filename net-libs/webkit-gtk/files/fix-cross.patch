@@ -1,0 +1,13 @@
+diff --git a/Source/cmake/BubblewrapSandboxChecks.cmake b/Source/cmake/BubblewrapSandboxChecks.cmake
+index 73cf4ff..e3b8ba5 100644
+--- a/Source/cmake/BubblewrapSandboxChecks.cmake
++++ b/Source/cmake/BubblewrapSandboxChecks.cmake
+@@ -14,7 +14,7 @@ if (ENABLE_BUBBLEWRAP_SANDBOX)
+         message(FATAL_ERROR "xdg-dbus-proxy not found and is needed for ENABLE_BUBBLEWRAP_SANDBOX")
+     endif ()
+ 
+-    if (NOT CMAKE_CROSSCOMPILING)
++    if (CMAKE_CROSSCOMPILING)
+         execute_process(
+             COMMAND "${BWRAP_EXECUTABLE}" --version
+             RESULT_VARIABLE BWRAP_RET

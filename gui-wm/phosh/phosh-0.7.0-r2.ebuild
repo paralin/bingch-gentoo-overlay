@@ -48,7 +48,7 @@ PATCHES=(
 	#${FILESDIR}/0004-lockscreen-manager-undo-transform-only-for-phones.patch
 	#${FILESDIR}/MR642.patch
 	#${FILESDIR}/MR672.patch
-	#${FILESDIR}/flashlight-torch.patch
+	${FILESDIR}/flashlight-torch.patch
 )
 
 src_prepare() {

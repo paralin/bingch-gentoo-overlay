@@ -43,10 +43,12 @@ RDEPEND="${RDEPEND}
 	policykit? ( acct-group/plugdev )"
 
 PATCHES=(
-	${FILESDIR}/0001-mm-broadband-modem-improve-voice-capabilities-detect.patch
 	${FILESDIR}/0001-build-Allow-elogind-for-suspend-resume-support.patch
-	#${FILESDIR}/0002-broadband-modem-Do-not-send-ATH-during-probing.patch
-	${FILESDIR}/0003-serial-parsers-do-not-fail-to-detect-a-valid-respons.patch
+	${FILESDIR}/0002-broadband-modem-Do-not-send-ATH-during-probing.patch 
+	${FILESDIR}/0001-serial-parsers-also-match-OK-responses-that-are-not-.patch
+	${FILESDIR}/0002-tests-added-parse-OK-response-test.patch
+	${FILESDIR}/0003-serial-parsers-also-match-ERROR-responses-that-are-n.patch
+	${FILESDIR}/0004-tests-added-parse-ERROR-response-test.patch 
 )
 
 S="${WORKDIR}/ModemManager-${PV}"
@@ -68,7 +70,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--disable-more-warnings
 		--disable-static
 		--with-dist-version=${PVR}
 		--with-udev-base-dir="$(get_udevdir)"

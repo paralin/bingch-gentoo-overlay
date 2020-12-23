@@ -73,3 +73,69 @@ index 7aaac48..2731652 100644
  }
  
  static int32_t uTextUTF16ContextAwareExtract(UText*, int64_t, int64_t, UChar*, int32_t, UErrorCode* errorCode)
+diff --git a/Source/WebCore/platform/text/icu/UTextProvider.h b/Source/WebCore/platform/text/icu/UTextProvider.h
+index 0f45f04..a77aa45 100644
+--- a/Source/WebCore/platform/text/icu/UTextProvider.h
++++ b/Source/WebCore/platform/text/icu/UTextProvider.h
+@@ -86,7 +86,7 @@ inline bool uTextAccessInChunkOrOutOfRange(UText* text, int64_t nativeIndex, int
+         }
+         if (nativeIndex >= nativeLength && text->chunkNativeLimit == nativeLength) {
+             text->chunkOffset = text->chunkLength;
+-            isAccessible = FALSE;
++            isAccessible = false;
+             return true;
+         }
+     } else {
+@@ -100,7 +100,7 @@ inline bool uTextAccessInChunkOrOutOfRange(UText* text, int64_t nativeIndex, int
+         }
+         if (nativeIndex <= 0 && !text->chunkNativeStart) {
+             text->chunkOffset = 0;
+-            isAccessible = FALSE;
++            isAccessible = false;
+             return true;
+         }
+     }
+diff --git a/Source/WebCore/platform/text/icu/UTextProviderLatin1.cpp b/Source/WebCore/platform/text/icu/UTextProviderLatin1.cpp
+index eb24eaa..48ba1eb 100644
+--- a/Source/WebCore/platform/text/icu/UTextProviderLatin1.cpp
++++ b/Source/WebCore/platform/text/icu/UTextProviderLatin1.cpp
+@@ -105,7 +105,7 @@ static UBool uTextLatin1Access(UText* uText, int64_t index, UBool forward)
+         if (index >= length && uText->chunkNativeLimit == length) {
+             // Off the end of the buffer, but we can't get it.
+             uText->chunkOffset = static_cast<int32_t>(index - uText->chunkNativeStart);
+-            return FALSE;
++            return false;
+         }
+     } else {
+         if (index <= uText->chunkNativeLimit && index > uText->chunkNativeStart) {
+@@ -116,7 +116,7 @@ static UBool uTextLatin1Access(UText* uText, int64_t index, UBool forward)
+         if (!index && !uText->chunkNativeStart) {
+             // Already at the beginning; can't go any farther.
+             uText->chunkOffset = 0;
+-            return FALSE;
++            return false;
+         }
+     }
+     
+@@ -336,7 +336,7 @@ static int64_t uTextLatin1ContextAwareNativeLength(UText* text)
+ static UBool uTextLatin1ContextAwareAccess(UText* text, int64_t nativeIndex, UBool forward)
+ {
+     if (!text->context)
+-        return FALSE;
++        return false;
+     int64_t nativeLength = uTextLatin1ContextAwareNativeLength(text);
+     UBool isAccessible;
+     if (uTextAccessInChunkOrOutOfRange(text, nativeIndex, nativeLength, forward, isAccessible))
+diff --git a/Source/WebCore/platform/text/icu/UTextProviderUTF16.cpp b/Source/WebCore/platform/text/icu/UTextProviderUTF16.cpp
+index 2731652..9ae0d36 100644
+--- a/Source/WebCore/platform/text/icu/UTextProviderUTF16.cpp
++++ b/Source/WebCore/platform/text/icu/UTextProviderUTF16.cpp
+@@ -125,7 +125,7 @@ static inline int64_t uTextUTF16ContextAwareNativeLength(UText* text)
+ static UBool uTextUTF16ContextAwareAccess(UText* text, int64_t nativeIndex, UBool forward)
+ {
+     if (!text->context)
+-        return FALSE;
++        return false;
+     int64_t nativeLength = uTextUTF16ContextAwareNativeLength(text);
+     UBool isAccessible;
+     if (uTextAccessInChunkOrOutOfRange(text, nativeIndex, nativeLength, forward, isAccessible))

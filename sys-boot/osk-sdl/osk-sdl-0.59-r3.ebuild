@@ -24,8 +24,9 @@ DEPEND="sys-fs/cryptsetup
 		media-fonts/dejavu
 		sys-kernel/dracut
 		app-portage/gentoolkit
-
+		app-text/scdoc
 "
+
 RDEPEND="${DEPEND}"
 BDEPEND=""
 

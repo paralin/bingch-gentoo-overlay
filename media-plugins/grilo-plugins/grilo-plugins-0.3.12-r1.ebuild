@@ -1,7 +1,6 @@
-# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI="7"
 
 inherit gnome.org meson xdg
 
@@ -10,8 +9,10 @@ HOMEPAGE="https://wiki.gnome.org/Projects/Grilo"
 
 LICENSE="LGPL-2.1+"
 SLOT="0.3"
-KEYWORDS="~alpha amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc x86"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+
 IUSE="daap chromaprint flickr freebox gnome-online-accounts lua test thetvdb tracker upnp-av +youtube"
+
 RESTRICT="!test? ( test )"
 
 # GOA is only optionally used by flickr and lua-factory plugins (checked at v0.3.8)
@@ -19,10 +20,10 @@ RESTRICT="!test? ( test )"
 # TODO: validate upnp-av dleyna deps
 RDEPEND="
 	>=dev-libs/glib-2.44:2
-	>=media-libs/grilo-0.3.8:${SLOT}=[network,playlist]
+	>=media-libs/grilo-0.3.10:${SLOT}=[network,playlist]
 	freebox? (
 		net-dns/avahi[dbus] )
-	>=dev-libs/gom-0.3.2-r1
+	>=dev-libs/gom-0.4
 	chromaprint? (
 		media-libs/gstreamer:1.0
 		media-libs/gst-plugins-base:1.0
@@ -38,7 +39,7 @@ RDEPEND="
 	dev-db/sqlite:3
 	>=dev-libs/totem-pl-parser-3.4.1
 	tracker? (
-		>=app-misc/tracker-2.3.0:= )
+		>=app-misc/tracker-3.0 )
 	upnp-av? (
 		net-libs/dleyna-connector-dbus
 		net-misc/dleyna-server )
@@ -52,6 +53,8 @@ RDEPEND="
 		>=dev-libs/libgdata-0.9.1:= )
 
 	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.17.91:= )
+
+	!media-plugins/grilo-plugins:0.2
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
@@ -63,9 +66,9 @@ BDEPEND="
 	lua? ( dev-util/gperf )
 "
 
-#PATCHES=(
-#	"${FILESDIR}"/0.3.8-meson-goa.patch # Support controlling g-o-a dep via 'goa' meson_options
-#)
+PATCHES=(
+	"${FILESDIR}"/${PN}-0.3.12-meson-goa.patch # Support controlling g-o-a dep via 'goa' meson_options
+)
 
 src_prepare() {
 	xdg_src_prepare
@@ -96,7 +99,7 @@ src_configure() {
 		-Denable-shoutcast=yes
 		-Denable-thetvdb=$(usex thetvdb yes no)
 		-Denable-tmdb=yes
-		-Denable-tracker=$(usex tracker yes no)
+		-Denable-tracker3=$(usex tracker yes no)
 		-Denable-vimeo=yes
 		-Denable-youtube=$(usex youtube yes no)
 		-Dgoa=$(usex gnome-online-accounts enabled disabled)

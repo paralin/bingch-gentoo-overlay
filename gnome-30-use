@@ -1,5 +1,6 @@
 gnome-base/gdm plymouth
 gnome-base/gnome-extra-apps -games -tracker
+app-cdr/brasero -tracker
 #>=net-libs/gnome-online-accounts-3.32.0 vala
 # required by gnome-extra/gnome-boxes (argument)
 >=net-misc/spice-gtk-0.35 vala usbredir smartcard
@@ -12,5 +13,3 @@ app-emulation/libvirt virt-network
 >=media-libs/gd-2.2.5-r2 fontconfig
 
 net-vpn/openconnect stoken
-app-cdr/brasero -tracker
-media-plugins/grilo-plugins -tracker

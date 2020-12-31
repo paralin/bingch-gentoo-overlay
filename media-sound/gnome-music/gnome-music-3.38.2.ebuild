@@ -21,6 +21,7 @@ DEPEND="${PYTHON_DEPS}
 	>=net-libs/gnome-online-accounts-3.35.90[introspection]
 	>=dev-libs/gobject-introspection-1.54:=
 	>=x11-libs/gtk+-3.24.7:3[introspection]
+	>=x11-libs/pango-1.44
 	>=dev-libs/libdazzle-3.28.0[introspection]
 	>=media-libs/libmediaart-1.9.1:2.0[introspection]
 	net-libs/libsoup:2.4[introspection]
@@ -43,7 +44,7 @@ RDEPEND="${DEPEND}
 	media-libs/gstreamer:1.0[introspection]
 	media-libs/gst-plugins-base:1.0[introspection]
 	media-plugins/gst-plugins-meta:1.0
-	>media-plugins/grilo-plugins-0.3.12
+	>media-plugins/grilo-plugins-0.3.12-r1[tracker]
 	x11-misc/xdg-user-dirs
 "
 BDEPEND="

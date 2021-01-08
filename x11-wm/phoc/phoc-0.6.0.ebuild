@@ -26,12 +26,13 @@ LICENSE="GPL-3"
 SLOT="0"
 IUSE="+introspection"
 
+	#<=gui-libs/wlroots-0.11.0:0/11
 DEPEND="
 	dev-libs/glib
 	dev-libs/gobject-introspection
 	dev-libs/libinput
 	gnome-base/gnome-desktop
-	<=gui-libs/wlroots-0.11.0:0/11
+	gui-libs/wlroots
 	x11-libs/xcb-util
 	x11-libs/xcb-util-wm
 	x11-wm/mutter

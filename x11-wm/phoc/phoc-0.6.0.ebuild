@@ -8,7 +8,8 @@ EGIT_REPO_URI="https://source.puri.sm/Librem5/phoc.git"
 
 KEYWORDS="~x86 ~amd64 ~arm ~arm64"
 if [[ ${PV} != 9999 ]]; then
-    EGIT_REPO_BRANCH="tags/v${PV}"
+    #EGIT_REPO_BRANCH="tags/v${PV}"
+	EGIT_COMMIT="bfd96f36872fa869ef8d2572a6d0dff91584e5ef"
 else
     KEYWORDS=""
 fi
@@ -32,7 +33,7 @@ DEPEND="
 	dev-libs/gobject-introspection
 	dev-libs/libinput
 	gnome-base/gnome-desktop
-	gui-libs/wlroots
+	!gui-libs/wlroots
 	x11-libs/xcb-util
 	x11-libs/xcb-util-wm
 	x11-wm/mutter
@@ -52,8 +53,8 @@ src_prepare() {
 
 src_configure() {
 	local emesonargs=(
-		-Dembed-wlroots=disabled
 		-Ddefault_library=shared
+		-Dtests=false
 	)
 	meson_src_configure
 }

@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-#For older libfprint requires autotools
-#EAPI=5
 
 inherit udev
 
@@ -11,16 +9,10 @@ DESCRIPTION="library to add support for consumer fingerprint readers"
 HOMEPAGE="https://cgit.freedesktop.org/libfprint/libfprint/ https://github.com/freedesktop/libfprint https://gitlab.freedesktop.org/libfprint/libfprint"
 if [[ ${PV} == 9999 ]]; then
     inherit git-r3 meson
-    #inherit git-r3 autotools-utils
 
-    #EGIT_REPO_URI="https://gitlab.freedesktop.org/uunicorn/libfprint.git"
-	#EGIT_BRANCH="device/virtual-dbus"
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/3v1n0/libfprint.git"
     EGIT_BRANCH="tod"
-	#EGIT_REPO_URI="https://github.com/3v1n0/libfprint.git"
-    #EGIT_BRANCH="vfs0090"
-	#EGIT_REPO_URI="https://github.com/hrenod/libfprint.git"
-	#EGIT_BRANCH="vfs0090"
+    KEYWORDS=""
 else
 	SRC_URI="https://gitlab.freedesktop.org/libfprint/libfprint/-/archive/v${PV}/${PN}-v${PV}.tar.gz -> ${P}.tar.gz"
     KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
@@ -28,8 +20,8 @@ else
 fi
 
 LICENSE="LGPL-2.1"
-SLOT="0"
-IUSE="examples"
+SLOT="2"
+IUSE="examples +introspection"
 
 RDEPEND="dev-libs/glib:2
 	dev-libs/nss
@@ -38,14 +30,16 @@ RDEPEND="dev-libs/glib:2
 	x11-libs/gtk+:3
 	x11-libs/pixman
 	x11-libs/libX11
-	x11-libs/libXv"
+	x11-libs/libXv
+	!>=${CATEGORY}/${PN}-1.90:0"
 
-DEPEND="${RDEPEND}
-	dev-util/gtk-doc"
+DEPEND="${RDEPEND}"
 
-BDEPEND="virtual/pkgconfig"
+BDEPEND="dev-util/gtk-doc
+	virtual/pkgconfig
+	introspection? ( dev-libs/gobject-introspection )"
 
-PATCHES=( #${FILESDIR}/${PN}-0.8.2-fix-implicit-declaration.patch
+PATCHES=( ${FILESDIR}/${PN}-0.8.2-fix-implicit-declaration.patch
 		#	${FILESDIR}/009a.patch
 )
 
@@ -59,13 +53,14 @@ PATCHES=( #${FILESDIR}/${PN}-0.8.2-fix-implicit-declaration.patch
 
 src_configure() {
 	local emesonargs=(
-		-Ddoc=false
-		-Dgtk-examples=$(usex examples true false)
-		-Ddrivers=default
-		-Dudev_rules=true
-		-Dudev_rules_dir=$(get_udevdir)/rules.d
-		--libdir=/usr/$(get_libdir)
-	)
+			-Ddoc=false
+			$(meson_use examples gtk-examples)
+			$(meson_use introspection)
+			-Ddrivers=all
+			-Dudev_rules=true
+			-Dudev_rules_dir=$(get_udevdir)/rules.d
+			--libdir=/usr/$(get_libdir)
+		)
 	meson_src_configure
 }
 

@@ -127,8 +127,30 @@ index 04e2558..8e2d82f 100644
    'rotateinfo.c',
    'rotateinfo.h',
    'screen-saver-manager.c',
+diff --git a/src/ui/settings-menu.ui b/src/ui/settings-menu.ui
+index 7e9df0e..9874af7 100644
+--- a/src/ui/settings-menu.ui
++++ b/src/ui/settings-menu.ui
+@@ -120,13 +120,13 @@
+                   </object>
+                 </child>
+                 <child>
+-                  <object class="PhoshQuickSetting" id="torch_quick_setting">
++                  <object class="PhoshQuickSetting">
+                     <property name="visible">True</property>
+-                    <property name="sensitive" bind-source="torchinfo" bind-property="present" bind-flags="sync-create"/>
+                     <property name="can_focus">False</property>
+-                    <signal name="clicked" handler="torch_setting_clicked_cb" object="PhoshSettings" swapped="yes"/>
++                    <signal name="clicked" handler="flashlight_setting_clicked_cb" object="PhoshSettings" swapped="yes"/>
++
+                     <child>
+-                      <object class="PhoshTorchInfo" id="torchinfo">
++                      <object class="PhoshFlashlightInfo" id="flashlightinfo">
+                         <property name="visible">True</property>
+                         <property name="can_focus">False</property>
+                         <property name="icon-size">GTK_ICON_SIZE_LARGE_TOOLBAR</property>
 diff --git a/src/settings.c b/src/settings.c
-index 62271b5..eb9314e 100644
+index cedc89f..be1efa4 100644
 --- a/src/settings.c
 +++ b/src/settings.c
 @@ -23,9 +23,11 @@
@@ -153,7 +175,7 @@ index 62271b5..eb9314e 100644
  } PhoshSettings;
  
  
-@@ -112,6 +117,26 @@ feedback_setting_clicked_cb (PhoshSettings *self)
+@@ -156,6 +161,26 @@ feedback_setting_clicked_cb (PhoshSettings *self)
    phosh_feedback_manager_toggle (manager);
  }
  
@@ -180,7 +202,7 @@ index 62271b5..eb9314e 100644
  static void
  wifi_setting_clicked_cb (PhoshSettings *self)
  {
-@@ -444,7 +469,6 @@ phosh_settings_finalize (GObject *object)
+@@ -488,7 +513,6 @@ phosh_settings_finalize (GObject *object)
  }
  
  
@@ -188,7 +210,7 @@ index 62271b5..eb9314e 100644
  static void
  phosh_settings_class_init (PhoshSettingsClass *klass)
  {
-@@ -465,6 +489,7 @@ phosh_settings_class_init (PhoshSettingsClass *klass)
+@@ -509,6 +533,7 @@ phosh_settings_class_init (PhoshSettingsClass *klass)
    g_type_ensure (PHOSH_TYPE_BT_INFO);
    g_type_ensure (PHOSH_TYPE_DOCKED_INFO);
    g_type_ensure (PHOSH_TYPE_FEEDBACK_INFO);
@@ -196,7 +218,7 @@ index 62271b5..eb9314e 100644
    g_type_ensure (PHOSH_TYPE_MEDIA_PLAYER);
    g_type_ensure (PHOSH_TYPE_QUICK_SETTING);
    g_type_ensure (PHOSH_TYPE_ROTATE_INFO);
-@@ -475,6 +500,7 @@ phosh_settings_class_init (PhoshSettingsClass *klass)
+@@ -519,6 +544,7 @@ phosh_settings_class_init (PhoshSettingsClass *klass)
    gtk_widget_class_bind_template_child (widget_class, PhoshSettings, quick_settings);
    gtk_widget_class_bind_template_child (widget_class, PhoshSettings, scale_brightness);
    gtk_widget_class_bind_template_child (widget_class, PhoshSettings, sw_notifications);
@@ -204,33 +226,11 @@ index 62271b5..eb9314e 100644
  
    gtk_widget_class_bind_template_callback (widget_class, battery_setting_clicked_cb);
    gtk_widget_class_bind_template_callback (widget_class, bt_setting_clicked_cb);
-@@ -483,6 +509,7 @@ phosh_settings_class_init (PhoshSettingsClass *klass)
-   gtk_widget_class_bind_template_callback (widget_class, feedback_setting_long_pressed_cb);
+@@ -528,6 +554,7 @@ phosh_settings_class_init (PhoshSettingsClass *klass)
    gtk_widget_class_bind_template_callback (widget_class, on_media_player_raised);
    gtk_widget_class_bind_template_callback (widget_class, rotation_setting_clicked_cb);
+   gtk_widget_class_bind_template_callback (widget_class, rotation_setting_long_pressed_cb);
 +  gtk_widget_class_bind_template_callback (widget_class, flashlight_setting_clicked_cb);
    gtk_widget_class_bind_template_callback (widget_class, torch_setting_clicked_cb);
    gtk_widget_class_bind_template_callback (widget_class, wifi_setting_clicked_cb);
    gtk_widget_class_bind_template_callback (widget_class, wwan_setting_clicked_cb);
-diff --git a/src/ui/settings-menu.ui b/src/ui/settings-menu.ui
-index 7e9df0e..9874af7 100644
---- a/src/ui/settings-menu.ui
-+++ b/src/ui/settings-menu.ui
-@@ -120,13 +120,13 @@
-                   </object>
-                 </child>
-                 <child>
--                  <object class="PhoshQuickSetting" id="torch_quick_setting">
-+                  <object class="PhoshQuickSetting">
-                     <property name="visible">True</property>
--                    <property name="sensitive" bind-source="torchinfo" bind-property="present" bind-flags="sync-create"/>
-                     <property name="can_focus">False</property>
--                    <signal name="clicked" handler="torch_setting_clicked_cb" object="PhoshSettings" swapped="yes"/>
-+                    <signal name="clicked" handler="flashlight_setting_clicked_cb" object="PhoshSettings" swapped="yes"/>
-+
-                     <child>
--                      <object class="PhoshTorchInfo" id="torchinfo">
-+                      <object class="PhoshFlashlightInfo" id="flashlightinfo">
-                         <property name="visible">True</property>
-                         <property name="can_focus">False</property>
-                         <property name="icon-size">GTK_ICON_SIZE_LARGE_TOOLBAR</property>

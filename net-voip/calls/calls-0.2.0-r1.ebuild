@@ -45,7 +45,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/188.patch"
-	#"${FILESDIR}/calll-display.patch"
 )
 
 #S="${WORKDIR}/${PN}-v${PV}"

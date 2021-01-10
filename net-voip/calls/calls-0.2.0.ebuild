@@ -32,19 +32,19 @@ DEPEND="
 		dev-libs/gom
 		dev-libs/libpeas
 		>=net-misc/modemmanager-1.12.0
-		vala? ( $(vala_depend) )
 		media-sound/callaudiod
 		gnome-extra/evolution-data-server
 		"
 RDEPEND="${DEPEND}"
 BDEPEND="
+		vala? ( $(vala_depend) )
 		dev-util/meson
 		dev-libs/gobject-introspection
 "
 
 PATCHES=(
 	"${FILESDIR}/188.patch"
-	"${FILESDIR}/calll-display.patch"
+	#"${FILESDIR}/calll-display.patch"
 )
 
 #S="${WORKDIR}/${PN}-v${PV}"
@@ -53,7 +53,6 @@ src_prepare() {
 	default
 	eapply_user
 	use vala && vala_src_prepare
-#   gnome2_src_prepare
 }
 
 pkg_postinst() {

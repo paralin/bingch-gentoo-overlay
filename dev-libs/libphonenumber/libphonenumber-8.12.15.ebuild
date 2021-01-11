@@ -29,7 +29,9 @@ DEPEND="dev-libs/icu
 "
 RDEPEND="${DEPEND}"
 
-BDEPEND="dev-cpp/gtest"
+BDEPEND="dev-cpp/gtest
+		virtual/jdk
+"
 
 RESTRICT+=" test" # bug 668872
 

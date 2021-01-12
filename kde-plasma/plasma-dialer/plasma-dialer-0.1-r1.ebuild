@@ -28,6 +28,7 @@ KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 IUSE=""
 
 DEPEND="kde-plasma/plasma-workspace
+		dev-qt/qtdeclarative[localstorage]
 		net-misc/ofono
 		kde-frameworks/kcontacts
 		kde-frameworks/kpeople

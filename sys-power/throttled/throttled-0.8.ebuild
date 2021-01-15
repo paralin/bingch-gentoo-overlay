@@ -3,9 +3,9 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_6 python3_7 python3_8 )
+PYTHON_COMPAT=( python3_{6..9} )
 
-inherit python-single-r1 linux-info systemd
+inherit python-r1 linux-info systemd
 
 DESCRIPTION="Fix Intel CPU Throttling on Linux"
 HOMEPAGE="https://github.com/erpalma/throttled"
@@ -20,8 +20,8 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="${PYTHON_DEPS}
 	$(python_gen_cond_dep '
-		dev-python/dbus-python[${PYTHON_MULTI_USEDEP}]
-		dev-python/pygobject[${PYTHON_MULTI_USEDEP}]
+		dev-python/dbus-python[${PYTHON_USEDEP}]
+		dev-python/pygobject[${PYTHON_USEDEP}]
 	')
 "
 DEPEND="${PYTHON_DEPS}"

@@ -27,7 +27,7 @@ DEPEND="dev-qt/maliit-framework
 		media-fonts/noto-emoji
 		dev-qt/qtmultimedia
 		app-text/hunspell
-		app-text/presage
+		app-text/presage[sqlite]
 		app-i18n/libchewing
 		app-i18n/libpinyin
 		app-i18n/anthy

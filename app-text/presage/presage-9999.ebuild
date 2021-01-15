@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://git.code.sf.net/p/presage/presage"
 LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~arm ~x86"
-IUSE="doc examples gtk sqlite test"
+IUSE="doc examples gtk +sqlite test"
 
 RDEPEND="
 	examples? ( sys-libs/ncurses )
@@ -40,8 +40,8 @@ src_configure() {
 		$(use_enable doc documentation) \
 		$(use_enable gtk gpresagemate) \
 		$(use_enable sqlite) \
+		$(use_enable examples curses) \
 		--disable-gprompter \
-		--disable-curses \
 		--disable-python \
 		--disable-python-binding
 }

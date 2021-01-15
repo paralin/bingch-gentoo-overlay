@@ -29,7 +29,7 @@ IUSE=""
 S=
 DEPEND="kde-plasma/plasma-workspace
 		net-misc/ofono
-		dev-qt/libqofono-qt5
+		dev-qt/libqofono
 		kde-frameworks/kpeople
 		net-libs/telepathy-qt
 		dev-libs/libphonenumber

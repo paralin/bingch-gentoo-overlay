@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit cmake git-r3
+inherit cmake-utils git-r3
 
 DESCRIPTION="Maliit keyboard"
 HOMEPAGE="https://github.com/maliit/keyboard"
@@ -20,7 +20,7 @@ fi
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
-IUSE=""
+IUSE="test"
 
 		#dev-qt/qtfeedback
 DEPEND="dev-qt/maliit-framework
@@ -43,10 +43,8 @@ BDEPEND="app-doc/doxygen
 
 src_configure() {
 	local mycmakeargs=(
-		-DBUILD_TESTING=OFF
-		-DKDE_INSTALL_USE_QT_SYS_PATHS=ON
-		-DCMAKE_BUILD_TYPE=Release
+		-Denable-tests=$(usex test ON OFF)
 	)
 
-	cmake_src_configure
+	cmake-utils_src_configure
 }

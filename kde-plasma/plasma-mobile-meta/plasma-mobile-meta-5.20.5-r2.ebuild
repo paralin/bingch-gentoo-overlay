@@ -22,6 +22,6 @@ DEPEND="media-fonts/noto
 		kde-plasma/plasma-nm[modemmanager,mobile,openconnect]
 		kde-plasma/plasma-pa
 		kde-plasma/xdg-desktop-portal-kde
-		dev-qt/maliit-keyboard
 "
 RDEPEND="${DEPEND}"
+#		dev-qt/maliit-keyboard

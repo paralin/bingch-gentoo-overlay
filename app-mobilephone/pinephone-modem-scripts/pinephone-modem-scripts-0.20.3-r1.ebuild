@@ -20,7 +20,11 @@ BDEPEND=""
 
 src_install() {
 	udev_dorules ${S}/*.rules
-	dosbin ${S}/*.sh
+	dobin ${S}/pinephone-modem-stop.sh
+	dobin ${S}/pinephone-modem-start.sh
+	dobin ${S}/pinephone-modem-setup.sh
+	exeinto /etc/gpsd/device-hook
+	doexe ${S}/gpsd_device-hook.sh
 	systemd_dounit ${S}/*.service
 	systemd_dounit ${FILESDIR}/*.path
 }

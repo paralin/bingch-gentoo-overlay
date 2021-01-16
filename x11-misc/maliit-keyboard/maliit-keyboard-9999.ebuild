@@ -23,7 +23,7 @@ KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 IUSE="test"
 
 		#dev-qt/qtfeedback
-DEPEND="dev-qt/maliit-framework
+DEPEND="x11-misc/maliit-framework
 		media-fonts/noto-emoji
 		dev-qt/qtmultimedia
 		app-text/hunspell

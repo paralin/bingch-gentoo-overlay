@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit cmake-utils git-r3
+inherit cmake-utils git-r3 gnome2-utils xdg
 
 DESCRIPTION="Maliit keyboard"
 HOMEPAGE="https://github.com/maliit/keyboard"
@@ -41,10 +41,23 @@ BDEPEND="app-doc/doxygen
 
 #PATCHES="${FILESDIR}/0001-Add-0001-Bring-back-LanguagePluginInterface.patch"
 
+src_prepare() {
+	cmake-utils_src_prepare
+}
 src_configure() {
 	local mycmakeargs=(
 		-Denable-tests=$(usex test ON OFF)
 	)
 
 	cmake-utils_src_configure
+}
+
+pkg_postinst() {
+	xdg_pkg_postinst
+	gnome2_schemas_update
+}
+
+pkg_postrm() {
+	xdg_pkg_postrm
+	gnome2_schemas_update
 }

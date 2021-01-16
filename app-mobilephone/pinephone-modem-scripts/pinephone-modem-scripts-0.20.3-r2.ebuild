@@ -35,5 +35,5 @@ pkg_postinst() {
 	# ln gpsdctl to /usr/bin
 	[ -f /usr/bin/gpsdctl ] || ln -s /usr/sbin/gpsdctl /usr/bin/gpsdctl
 	systemctl enable pinephone-modem-scripts.pinephone-modem.path
-	systemctl enable gpsd-pinephone.service
+	systemctl enable gpsd-pinephone.path
 }

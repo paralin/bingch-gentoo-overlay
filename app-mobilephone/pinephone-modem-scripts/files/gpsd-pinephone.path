@@ -1,0 +1,9 @@
+[Unit]
+Description=Pinephone modem path
+
+[Path]
+PathExists=/dev/dummy
+PathExists=/dev/EG25.NMEA
+
+[Install]
+WantedBy=multi-user.target

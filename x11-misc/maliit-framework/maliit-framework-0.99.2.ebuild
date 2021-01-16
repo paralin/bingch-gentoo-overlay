@@ -4,7 +4,7 @@
 
 EAPI=7
 
-inherit cmake-utils git-r3
+inherit cmake-utils gnome2-utils git-r3 xdg
 DESCRIPTION="A flexible and cross platform input method framework"
 
 HOMEPAGE="https://github.com/maliit/framework"
@@ -58,3 +58,12 @@ src_configure() {
 	cmake-utils_src_configure
 }
 
+pkg_postinst() {
+	xdg_pkg_postinst
+	gnome2_schemas_update
+}
+
+pkg_postrm() {
+	xdg_pkg_postrm
+	gnome2_schemas_update
+}

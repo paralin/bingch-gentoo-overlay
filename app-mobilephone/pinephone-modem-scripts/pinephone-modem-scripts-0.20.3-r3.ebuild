@@ -21,19 +21,24 @@ RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_install() {
-	udev_dorules ${S}/*.rules
+	udev_dorules ${FILESDIR}/*.rules
 	dosbin ${S}/pinephone-modem-stop.sh
 	dosbin ${S}/pinephone-modem-start.sh
 	dosbin ${S}/pinephone-modem-setup.sh
+	# fix udev path
+	dosym ../sbin/pinephone-modem-setup.sh /usr/bin/pinephone-modem-setup.sh
+	# fix gpsdctl path
+	dosym ../sbin/gpsdctl /usr/bin/gpsdctl
+
 	exeinto /etc/gpsd/device-hook
 	doexe ${S}/gpsd_device-hook.sh
-	systemd_dounit ${S}/*.service
+	systemd_dounit ${S}/.service
 	systemd_dounit ${FILESDIR}/*.path
 }
 
 pkg_postinst() {
 	# ln gpsdctl to /usr/bin
-	[ -f /usr/bin/gpsdctl ] || ln -s /usr/sbin/gpsdctl /usr/bin/gpsdctl
+	#[ -f /usr/bin/gpsdctl ] || ln -s /usr/sbin/gpsdctl /usr/bin/gpsdctl
 	systemctl enable pinephone-modem-scripts.pinephone-modem.path
 	systemctl enable gpsd-pinephone.path
 }

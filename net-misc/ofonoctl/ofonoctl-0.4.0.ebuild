@@ -20,10 +20,14 @@ KEYWORDS="~amd64 ~arm64 ~arm ~x86"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="${PYTHON_DEPS}
+		dev-python/tabulate
+		dev-python/pip
+		dev-python/dbus-python
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
 	virtual/pkgconfig
+	dev-python/setuptools
 "
 
 python_prepare_all() {

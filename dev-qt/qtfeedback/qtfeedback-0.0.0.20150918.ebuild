@@ -3,12 +3,18 @@
 
 EAPI=7
 
-inherit qmake-utils git-r3
+inherit qt5-build git-r3
 
 DESCRIPTION="Qt Tactile Feedback Add-on Module"
 HOMEPAGE="https://github.com/qtproject/qtfeedback"
 SRC_URI=""
 EGIT_REPO_URI="https://github.com/qtproject/qtfeedback.git"
+
+#QT5_BUILD_TYPE=release
+
+if [[ ${QT5_BUILD_TYPE} == release ]]; then
+    KEYWORDS="~amd64 ~arm64"
+fi
 
 if [[ ${PV} != 9999 ]]; then
         #EGIT_REPO_BRANCH="tags/v${PV}"
@@ -19,21 +25,21 @@ fi
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 IUSE=""
 
 DEPEND="dev-qt/qtdeclarative
 "
 RDEPEND="${DEPEND}"
 
+S=${WORKDIR}/${P}
+
 src_prepare() {
 	default
-}
-
-src_configure() {
-	eqmake5
+	qt5-build_src_prepare
 }
 
 src_install() {
-	emake install INSTALL_ROOT=${D}
+	qt5-build_src_install
+	# rm Qt5Feedback_.cmake since it causes maliit-keyboard configuration fails
+	find ${D} -name Qt5Feedback_.cmake -exec rm {} \;
 }

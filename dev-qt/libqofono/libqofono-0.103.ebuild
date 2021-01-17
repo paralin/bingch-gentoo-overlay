@@ -34,7 +34,6 @@ PATCHES="${FILESDIR}/0001-add-support-for-reset-contexts.patch
 
 src_prepare() {
 	default
-	echo 'SOLUTIONS_LIBRARY = yes' > config.pri
 }
 
 src_configure() {

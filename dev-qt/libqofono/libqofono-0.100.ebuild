@@ -11,8 +11,8 @@ SRC_URI=""
 EGIT_REPO_URI="https://git.merproject.org/mer-core/libqofono.git"
 
 if [[ ${PV} != 9999 ]]; then
-        EGIT_REPO_BRANCH="tags/v${PV}"
-        #EGIT_COMMIT="f9648e8f634e12161caac00e7d7e63a16c7ccdc4"
+        #EGIT_REPO_BRANCH="tags/v${PV}"
+        EGIT_COMMIT="4eec0c726844b8293eeab7312c96956a77d40e90"
 else
         KEYWORDS=""
 fi
@@ -34,7 +34,6 @@ PATCHES="${FILESDIR}/0001-add-support-for-reset-contexts.patch
 
 src_prepare() {
 	default
-	echo 'SOLUTIONS_LIBRARY = yes' > config.pri
 }
 
 src_configure() {

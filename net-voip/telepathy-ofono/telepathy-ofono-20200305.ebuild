@@ -18,7 +18,7 @@ RESTRICT="!test? ( test )"
 
 RDEPEND="
 	net-misc/ofono
-	dev-qt/libofono-qt
+	dev-qt/libofono
 	dev-qt/qtfeedback
 "
 BDEPEND="${RDEPEND}

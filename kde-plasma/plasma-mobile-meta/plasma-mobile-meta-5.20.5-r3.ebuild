@@ -13,9 +13,13 @@ KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 IUSE=""
 
 DEPEND="media-fonts/noto
+		net-libs/accounts-qml
+		kde-apps/kaccounts-integration
+		kde-apps/konsole
 		kde-plasma/plasma-phone-components
 		kde-plasma/plasma-nano
 		kde-plasma/plasma-mobile-settings
+		kde-plasma/systemsettings
 		kde-frameworks/kinit
 		kde-plasma/kscreen
 		kde-plasma/powerdevil

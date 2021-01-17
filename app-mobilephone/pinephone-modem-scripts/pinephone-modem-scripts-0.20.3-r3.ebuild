@@ -32,7 +32,7 @@ src_install() {
 
 	exeinto /etc/gpsd/device-hook
 	doexe ${S}/gpsd_device-hook.sh
-	systemd_dounit ${S}/.service
+	systemd_dounit ${S}/*.service
 	systemd_dounit ${FILESDIR}/*.path
 }
 

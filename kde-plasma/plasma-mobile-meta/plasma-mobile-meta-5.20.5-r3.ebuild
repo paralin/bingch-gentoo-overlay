@@ -14,6 +14,7 @@ IUSE=""
 
 DEPEND="media-fonts/noto
 		net-libs/accounts-qml
+		net-misc/ofonoctl
 		kde-apps/kaccounts-integration
 		kde-apps/konsole
 		kde-plasma/plasma-phone-components

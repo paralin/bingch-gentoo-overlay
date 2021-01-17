@@ -21,7 +21,7 @@ RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_install() {
-	udev_dorules ${FILESDIR}/*.rules
+	udev_dorules ${S}/*.rules
 	dosbin ${S}/pinephone-modem-stop.sh
 	dosbin ${S}/pinephone-modem-start.sh
 	dosbin ${S}/pinephone-modem-setup.sh

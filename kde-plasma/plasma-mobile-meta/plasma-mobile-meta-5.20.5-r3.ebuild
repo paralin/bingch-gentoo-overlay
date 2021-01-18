@@ -26,7 +26,11 @@ DEPEND="media-fonts/noto
 		kde-plasma/powerdevil
 		kde-plasma/plasma-nm[modemmanager,mobile,openconnect]
 		kde-plasma/plasma-pa
+		kde-misc/kdeconnect
+		media-libs/pulseaudio-qt
 		kde-plasma/xdg-desktop-portal-kde
+		kde-plasma/kwallet-pam
+		!media-sound/callaudiod
 "
 RDEPEND="${DEPEND}"
 #		dev-qt/maliit-keyboard

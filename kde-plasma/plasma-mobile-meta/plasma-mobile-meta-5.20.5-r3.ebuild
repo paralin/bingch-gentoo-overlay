@@ -20,7 +20,6 @@ DEPEND="media-fonts/noto
 		kde-plasma/plasma-phone-components
 		kde-plasma/plasma-nano
 		kde-plasma/plasma-mobile-settings
-		kde-plasma/systemsettings
 		kde-frameworks/kinit
 		kde-plasma/kscreen
 		kde-plasma/powerdevil
@@ -30,7 +29,10 @@ DEPEND="media-fonts/noto
 		media-libs/pulseaudio-qt
 		kde-plasma/xdg-desktop-portal-kde
 		kde-plasma/kwallet-pam
-		!media-sound/callaudiod
+		kde-plasma/plasma-settings
+		kde-plasma/plasma-phonebook
+		dev-qt/qtfeedback
+		dev-qt/maliit-keyboard
+		kde-plasma/spacebar
 "
 RDEPEND="${DEPEND}"
-#		dev-qt/maliit-keyboard

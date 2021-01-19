@@ -30,3 +30,12 @@ BDEPEND="${RDEPEND}
 
 PATCHES=(
 )
+
+src_configure() {
+	local mycmakeargs=(
+		-DOFONO_ON_RING=ON
+	)
+		cmake_src_configure
+}
+
+

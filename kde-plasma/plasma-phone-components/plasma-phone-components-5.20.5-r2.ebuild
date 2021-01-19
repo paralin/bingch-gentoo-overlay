@@ -27,7 +27,7 @@ KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 IUSE=""
 
 S=
-DEPEND="kde-plasma/plasma-workspace
+DEPEND="kde-plasma/plasma-workspace[appstream,telemetry]
 		net-misc/ofono
 		dev-qt/libqofono
 		kde-frameworks/kpeople

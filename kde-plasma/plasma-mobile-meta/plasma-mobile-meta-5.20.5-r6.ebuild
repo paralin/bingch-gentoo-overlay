@@ -37,5 +37,6 @@ DEPEND="media-fonts/noto
 		kde-plasma/discover
 		kde-plasma/xembed-sni-proxy
 		kde-plasma/kclock
+		dev-libs/appstream
 "
 RDEPEND="${DEPEND}"

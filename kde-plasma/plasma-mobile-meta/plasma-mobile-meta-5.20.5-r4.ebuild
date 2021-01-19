@@ -34,5 +34,6 @@ DEPEND="media-fonts/noto
 		dev-qt/qtfeedback
 		x11-misc/maliit-keyboard
 		kde-plasma/spacebar
+		kde-plasma/discover
 "
 RDEPEND="${DEPEND}"

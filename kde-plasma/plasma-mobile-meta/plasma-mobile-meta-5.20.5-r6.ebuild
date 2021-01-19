@@ -36,5 +36,6 @@ DEPEND="media-fonts/noto
 		kde-plasma/spacebar
 		kde-plasma/discover
 		kde-plasma/xembed-sni-proxy
+		kde-plasma/kclock
 "
 RDEPEND="${DEPEND}"

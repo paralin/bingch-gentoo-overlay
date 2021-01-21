@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~arm64 ~arm ~x86"
 
 if [[ ${PV} != 9999 ]]; then
         #EGIT_REPO_BRANCH="tags/v${PV}"
-		EGIT_COMMIT="5bdfb0e2232b2f127c49ebb79f835e23560838e7"
+		EGIT_COMMIT="d7cd299d9c2b69f1bfdeeef6d1b1041f2e085912"
 else
         KEYWORDS=""
 fi
@@ -27,12 +27,12 @@ REQUIRED_USE="vala? ( introspection )"
 
 DEPEND="
 		dev-libs/feedbackd
-		gui-libs/libhandy
+		>=gui-libs/libhandy-1.0.0
 		dev-libs/folks
 		dev-libs/gom
 		dev-libs/libpeas
 		>=net-misc/modemmanager-1.12.0
-		media-sound/callaudiod
+		>=media-sound/callaudiod-0.0.5
 		gnome-extra/evolution-data-server
 		"
 RDEPEND="${DEPEND}"
@@ -45,6 +45,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/188.patch"
+	"${FILESDIR}/230.patch"
 )
 
 #S="${WORKDIR}/${PN}-v${PV}"

@@ -18,6 +18,7 @@ DEPEND="gnome-extra/evolution-data-server
 		dev-libs/feedbackd
 		gui-libs/libhandy
 		x11-plugins/purple-mm-sms
+		dev-libs/libphonenumber
 		x11-libs/gtk+:3
 "
 RDEPEND="${DEPEND}"

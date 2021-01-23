@@ -34,6 +34,7 @@ DEPEND="
 		app-text/evince
 		app-editors/gedit
 		sys-power/gtherm
+		sys-auth/rtkit
 "
 
 RDEPEND="${DEPEND}"

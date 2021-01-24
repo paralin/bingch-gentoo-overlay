@@ -30,8 +30,8 @@ src_install() {
 	# fix gpsdctl path
 	dosym ../sbin/gpsdctl /usr/bin/gpsdctl
 
-	exeinto /etc/gpsd/device-hook
-	doexe ${S}/gpsd_device-hook.sh
+	exeinto /etc/gpsd/
+	newexe ${S}/gpsd_device-hook.sh device-hook
 	systemd_dounit ${S}/*.service
 	systemd_dounit ${FILESDIR}/*.path
 }

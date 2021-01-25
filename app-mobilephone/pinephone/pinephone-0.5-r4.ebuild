@@ -38,7 +38,7 @@ src_install() {
 	udev_dorules "${FILESDIR}/99-automount-sd.rules"
 
 	insinto /etc/gtk-3.0/
-	doins "${FILESDIR}/gtk3-settings.ini"
+	newins "${FILESDIR}/gtk3-settings.ini" "settings.ini"
 
 	insinto /etc/profile.d
 	doins "${FILESDIR}/manjaro-tweaks.sh"
@@ -46,10 +46,10 @@ src_install() {
 	insinto /usr/share/glib-2.0/schemas
 	doins "${FILESDIR}/90_manjaro.gschema.override"
 
-	insinto /usr/lib/firefox/
+	insinto /usr/lib64/firefox/
 	doins "${FILESDIR}/manjaro.cfg"
 
-	insinto /usr/lib/firefox/defaults/pref
+	insinto /usr/lib64/firefox/defaults/pref
 	doins "${FILESDIR}/autoconfig.js"
 
 	insinto /usr/share/feedbackd/themes
@@ -61,8 +61,8 @@ src_install() {
 	insinto /etc/systemd/logind.conf.d
 	doins "${FILESDIR}/ignore-power-key.conf"
 
-#	insinto /etc/dconf/profile/user
-#	doins "${FILESDIR}/dconf-profile-manjaro"
+	insinto /etc/dconf/profile/
+	newins "${FILESDIR}/dconf-profile-manjaro" "user"
 
 	insinto /etc/dconf/db/manjaro.d
 	doins "${FILESDIR}/01-phoc-scaling"

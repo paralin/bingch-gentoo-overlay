@@ -56,8 +56,7 @@ src_prepare() {
 src_install() {
 	default
 	meson_src_install
-	dopamd "${FILESDIR}"/pamd-include/phosh
-	#systemd_newunit "${S}"/debian/phosh.service 'phosh.service'
+	newpamd "${FILESDIR}"/pam_phosh 'phosh'
 	systemd_newunit "${FILESDIR}"/phosh.service 'phosh.service'
 	insinto /usr/share/applications/
 	doins "${FILESDIR}"/sm.puri.OSK0.desktop

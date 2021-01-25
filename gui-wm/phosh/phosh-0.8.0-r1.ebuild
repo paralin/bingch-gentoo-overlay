@@ -45,7 +45,7 @@ PATCHES=(
 	${FILESDIR}/0001-system-prompt-allow-blank-passwords.patch
 	${FILESDIR}/MR434.patch
 	${FILESDIR}/MR434-fix-rotation-on-a-PP.patch
-	${FILESDIR}/flashlight-torch.patch
+	#${FILESDIR}/flashlight-torch.patch
 )
 
 src_prepare() {

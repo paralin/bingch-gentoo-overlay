@@ -2,66 +2,64 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-#EAPI=6
-#GNOME2_LA_PUNT="yes"
-VALA_USE_DEPEND="vapigen"
 
 inherit pam vala meson git-r3 gnome2-utils systemd readme.gentoo-r1 xdg
 
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~sparc ~x86"
 
-IUSE="+introspection +vala"
-REQUIRED_USE="vala? ( introspection )"
-
 EGIT_REPO_URI="https://source.puri.sm/Librem5/phosh.git"
 if [[ ${PV} != 9999 ]]; then
-	EGIT_REPO_BRANCH="tags/v${PV}"
+	#EGIT_REPO_BRANCH="tags/v${PV}"
+	EGIT_COMMIT="8616d62239a20b3702bf86f38c59804f5ac1e44a"
 else
 	KEYWORDS=""
-	EGIT_COMMIT=09d07042e0b0b056d2c7335235843607bd38de35
 fi
-#EGIT_SUBMODULES=("https://gitlab.gnome.org/GNOME/libgnome-volume-control.git")
+EGIT_SUBMODULES=("subprojects/gvc")
 
 DESCRIPTION="A pure Wayland shell prototype for GNOME on mobile devices"
 HOMEPAGE="https://source.puri.sm/Librem5/phosh"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="+vala +introspection"
 
 DEPEND="
+		app-crypt/gcr
 		dev-libs/feedbackd
+		media-sound/pulseaudio
 		>=gui-libs/libhandy-1.0.0
-		vala? ( $(vala_depend) )
-		>=net-misc/modemmanager-1.12.0
 		net-misc/networkmanager
+		gnome-base/gnome-desktop
 		gnome-base/gnome-session
 		x11-themes/gnome-backgrounds
 		x11-wm/phoc
-		sys-apps/systemd[cryptsetup,homed]
+		sys-apps/systemd
+		sys-power/upower
 		"
 RDEPEND="${DEPEND}"
 BDEPEND="
 		dev-util/ctags
 		dev-util/meson
-		dev-libs/gobject-introspection
 "
 
 PATCHES=(
-	"${FILESDIR}/auto-rotate.patch"
+	${FILESDIR}/0001-system-prompt-allow-blank-passwords.patch
+	${FILESDIR}/MR434.patch
+	${FILESDIR}/MR434-fix-rotation-on-a-PP.patch
+	#${FILESDIR}/flashlight-torch.patch
 )
 
 src_prepare() {
 	default
 	eapply_user
-	use vala && vala_src_prepare
 }
 
 src_install() {
 	default
 	meson_src_install
-	dopamd "${FILESDIR}"/pamd-include/phosh
-	systemd_newunit "${S}"/debian/phosh.service 'phosh.service'
+	newpamd "${FILESDIR}"/pam_phosh 'phosh'
+	systemd_newunit "${FILESDIR}"/phosh.service 'phosh.service'
+	insinto /usr/share/applications/
+	doins "${FILESDIR}"/sm.puri.OSK0.desktop
 
 	DOC_CONTENTS="To amend the existing password policy please see the man 5 passwdqc.conf
 				page and then edit the /etc/security/passwdqc.conf file to change enforce=none

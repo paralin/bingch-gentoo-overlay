@@ -12,22 +12,22 @@ index 60747b7..9e2a88d 100644
    'rotateinfo.h',
    'screen-saver-manager.c',
 diff --git a/src/settings.c b/src/settings.c
-index cedc89f..be1efa4 100644
+index 2ef7200..b93c139 100644
 --- a/src/settings.c
 +++ b/src/settings.c
-@@ -23,9 +23,11 @@
- #include "rotateinfo.h"
- #include "feedbackinfo.h"
+@@ -18,9 +18,11 @@
+ #include "settings/gvc-channel-bar.h"
+ #include "wwan/phosh-wwan-mm.h"
  #include "feedback-manager.h"
 +#include "flashlightinfo.h"
  #include "notifications/notify-manager.h"
  #include "notifications/notification-frame.h"
- #include "media-player.h"
+ #include "rotateinfo.h"
 +#include <stdbool.h>
  
  #include <pulse/pulseaudio.h>
  #include "gvc-mixer-control.h"
-@@ -69,6 +71,9 @@ typedef struct _PhoshSettings
+@@ -64,6 +66,9 @@ typedef struct _PhoshSettings
    GtkWidget *list_notifications;
    GtkWidget *sw_notifications;
    LfbEvent  *notify_event;
@@ -37,7 +37,7 @@ index cedc89f..be1efa4 100644
  } PhoshSettings;
  
  
-@@ -156,6 +161,26 @@ feedback_setting_clicked_cb (PhoshSettings *self)
+@@ -151,6 +156,26 @@ feedback_setting_clicked_cb (PhoshSettings *self)
    phosh_feedback_manager_toggle (manager);
  }
  
@@ -64,7 +64,7 @@ index cedc89f..be1efa4 100644
  static void
  wifi_setting_clicked_cb (PhoshSettings *self)
  {
-@@ -488,7 +513,6 @@ phosh_settings_finalize (GObject *object)
+@@ -483,7 +508,6 @@ phosh_settings_finalize (GObject *object)
  }
  
  
@@ -72,15 +72,7 @@ index cedc89f..be1efa4 100644
  static void
  phosh_settings_class_init (PhoshSettingsClass *klass)
  {
-@@ -509,6 +533,7 @@ phosh_settings_class_init (PhoshSettingsClass *klass)
-   g_type_ensure (PHOSH_TYPE_BT_INFO);
-   g_type_ensure (PHOSH_TYPE_DOCKED_INFO);
-   g_type_ensure (PHOSH_TYPE_FEEDBACK_INFO);
-+  g_type_ensure (PHOSH_TYPE_FLASHLIGHT_INFO);  
-   g_type_ensure (PHOSH_TYPE_MEDIA_PLAYER);
-   g_type_ensure (PHOSH_TYPE_QUICK_SETTING);
-   g_type_ensure (PHOSH_TYPE_ROTATE_INFO);
-@@ -519,6 +544,7 @@ phosh_settings_class_init (PhoshSettingsClass *klass)
+@@ -506,6 +530,7 @@ phosh_settings_class_init (PhoshSettingsClass *klass)
    gtk_widget_class_bind_template_child (widget_class, PhoshSettings, quick_settings);
    gtk_widget_class_bind_template_child (widget_class, PhoshSettings, scale_brightness);
    gtk_widget_class_bind_template_child (widget_class, PhoshSettings, sw_notifications);
@@ -88,7 +80,7 @@ index cedc89f..be1efa4 100644
  
    gtk_widget_class_bind_template_callback (widget_class, battery_setting_clicked_cb);
    gtk_widget_class_bind_template_callback (widget_class, bt_setting_clicked_cb);
-@@ -528,6 +554,7 @@ phosh_settings_class_init (PhoshSettingsClass *klass)
+@@ -515,6 +540,7 @@ phosh_settings_class_init (PhoshSettingsClass *klass)
    gtk_widget_class_bind_template_callback (widget_class, on_media_player_raised);
    gtk_widget_class_bind_template_callback (widget_class, rotation_setting_clicked_cb);
    gtk_widget_class_bind_template_callback (widget_class, rotation_setting_long_pressed_cb);
@@ -97,7 +89,7 @@ index cedc89f..be1efa4 100644
    gtk_widget_class_bind_template_callback (widget_class, wifi_setting_clicked_cb);
    gtk_widget_class_bind_template_callback (widget_class, wwan_setting_clicked_cb);
 diff --git a/src/ui/settings-menu.ui b/src/ui/settings-menu.ui
-index 5c96cc4..f7ad8e6 100644
+index 6596c5f..26dce43 100644
 --- a/src/ui/settings-menu.ui
 +++ b/src/ui/settings-menu.ui
 @@ -121,13 +121,13 @@

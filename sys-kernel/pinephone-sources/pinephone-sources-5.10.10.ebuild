@@ -14,10 +14,10 @@ HOMEPAGE="https://www.kernel.org"
 
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sparc ~x86"
 MEGI_PATCH_URI="https://xff.cz/kernels/5.10/patches/all.patch"
-SRC_URI="${KERNEL_URI} ${MEGI_PATCH_URI} -> all-5.10.patch"
+SRC_URI="${KERNEL_URI} ${MEGI_PATCH_URI} -> all-${PV}.patch"
 
 PATCHES=(
-	${DISTDIR}/all-5.10.patch
+	${DISTDIR}/all-${PV}.patch
     ${FILESDIR}/panic-led.patch
     ${FILESDIR}/enable-hdmi-output-pinetab.patch
     ${FILESDIR}/improve-brightness.patch

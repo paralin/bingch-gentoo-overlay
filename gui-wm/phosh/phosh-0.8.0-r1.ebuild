@@ -10,7 +10,7 @@ KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~sparc ~x86"
 EGIT_REPO_URI="https://source.puri.sm/Librem5/phosh.git"
 if [[ ${PV} != 9999 ]]; then
 	#EGIT_REPO_BRANCH="tags/v${PV}"
-	EGIT_COMMIT="e56f79bd8c53136e527003e43813bff463a5325c"
+	EGIT_COMMIT="8616d62239a20b3702bf86f38c59804f5ac1e44a"
 else
 	KEYWORDS=""
 fi
@@ -45,7 +45,7 @@ PATCHES=(
 	${FILESDIR}/0001-system-prompt-allow-blank-passwords.patch
 	${FILESDIR}/MR434.patch
 	${FILESDIR}/MR434-fix-rotation-on-a-PP.patch
-	${FILESDIR}/flashlight-torch.patch
+	#${FILESDIR}/flashlight-torch.patch
 )
 
 src_prepare() {

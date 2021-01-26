@@ -40,8 +40,8 @@ DEPEND="
 	>=x11-libs/pango-1.30[introspection?]
 	>=dev-libs/fribidi-1.0.0
 	>=x11-libs/cairo-1.14[X]
-	>=gnome-base/gsettings-desktop-schemas-3.37.2[introspection?]
-	>=dev-libs/glib-2.61.1:2
+	>=gnome-base/gsettings-desktop-schemas-40[introspection?]
+	>=dev-libs/glib-2.67.2:2
 	gnome-base/gnome-settings-daemon
 	>=dev-libs/json-glib-0.12.0[introspection?]
 	gnome-base/gnome-desktop:3=
@@ -66,7 +66,10 @@ DEPEND="
 	sys-apps/dbus
 	media-libs/mesa[X(+),egl]
 	media-sound/jack2
-	sysprof? ( >=dev-util/sysprof-capture-3.38.0:4 )
+	sysprof? ( 
+		>=dev-util/sysprof-capture-3.38.0:4
+		>=dev-util/sysprof-3.38.0:0/4
+		)
 	wayland? (
 		>=dev-libs/wayland-protocols-1.19
 		>=dev-libs/wayland-1.18.0

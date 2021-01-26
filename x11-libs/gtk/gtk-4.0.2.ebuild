@@ -156,6 +156,6 @@ multilib_src_install_all() {
 	insinto /etc/gtk-4.0
 	doins "${FILESDIR}"/settings.ini
 	# Skip README.{in,commits,win32} that would get installed by default
-	DOCS=( AUTHORS ChangeLog NEWS README )
-	einstalldocs
+	#DOCS=( AUTHORS ChangeLog NEWS README )
+	#einstalldocs
 }

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-inherit gnome.org gnome2-utils meson xdg
+inherit gnome.org gnome2-utils meson xdg git-r3
 
 DESCRIPTION="A map application for GNOME"
 HOMEPAGE="https://wiki.gnome.org/Apps/Maps"
@@ -10,6 +10,16 @@ HOMEPAGE="https://wiki.gnome.org/Apps/Maps"
 LICENSE="GPL-2+ LGPL-2+ MIT CC-BY-3.0 CC-BY-SA-3.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+SRC_URI=""
+
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
+if [[ ${PV} != 9999 ]]; then
+    EGIT_REPO_BRANCH="tags/${PV}.alpha"
+    #EGIT_COMMIT="8616d62239a20b3702bf86f38c59804f5ac1e44a"
+else
+    KEYWORDS=""
+fi
+
 
 # Pure introspection dependencies found by grepping imports.gi in ${S}
 RDEPEND="

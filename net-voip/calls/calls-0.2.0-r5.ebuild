@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~arm64 ~arm ~x86"
 
 if [[ ${PV} != 9999 ]]; then
         #EGIT_REPO_BRANCH="tags/v${PV}"
-		EGIT_COMMIT="dc0242eda54123c90726056ff69a3f4cb199309a"
+		EGIT_COMMIT="1c8eb87e7f5b471dcde93c051a149b7abf3bcc55"
 else
         KEYWORDS=""
 fi
@@ -45,7 +45,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/188.patch"
-	"${FILESDIR}/230.patch"
 )
 
 #S="${WORKDIR}/${PN}-v${PV}"

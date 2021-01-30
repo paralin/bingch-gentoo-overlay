@@ -33,3 +33,8 @@ src_install() {
 	meson_src_install
 	systemd_dounit "${FILESDIR}"/eg25-manager.service
 }
+
+pkg_postinst() {
+	systemd_enable_service eg25-manager
+}
+

@@ -12,7 +12,7 @@ SRC_URI=""
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~arm64"
-IUSE=""
+IUSE="+eg25-manager"
 
 DEPEND="media-libs/alsa-ucm-pinephone
 		gnome-extra/iio-sensor-proxy
@@ -22,7 +22,10 @@ DEPEND="media-libs/alsa-ucm-pinephone
 		sys-firmware/ov5640-firmware
 		media-tv/v4l-utils
 		app-mobilephone/usb-tethering
-		app-mobilephone/pinephone-modem-scripts
+		eg25-manager? ( net-misc/eg25-manager
+			!app-mobilephone/pinephone-modem-scripts
+		)
+		!eg25-manager? ( app-mobilephone/pinephone-modem-scripts )
 		sys-boot/osk-sdl
 "
 

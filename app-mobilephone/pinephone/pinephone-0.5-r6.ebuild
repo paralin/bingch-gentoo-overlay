@@ -25,7 +25,9 @@ DEPEND="media-libs/alsa-ucm-pinephone
 		eg25-manager? ( net-misc/eg25-manager
 			!app-mobilephone/pinephone-modem-scripts
 		)
-		!eg25-manager? ( app-mobilephone/pinephone-modem-scripts )
+		!eg25-manager? ( app-mobilephone/pinephone-modem-scripts 
+			!net-misc/eg25-manager
+		)
 		sys-boot/osk-sdl
 "
 

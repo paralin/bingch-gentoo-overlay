@@ -23,9 +23,9 @@ DEPEND="media-libs/alsa-ucm-pinephone
 		media-tv/v4l-utils
 		app-mobilephone/usb-tethering
 		eg25-manager? ( net-misc/eg25-manager
-			!app-mobilephone/pinephone-modem-scripts
+			>=app-mobilephone/pinephone-modem-scripts-0.20.3-r5
 		)
-		!eg25-manager? ( app-mobilephone/pinephone-modem-scripts 
+		!eg25-manager? ( <=app-mobilephone/pinephone-modem-scripts-0.20.3-r4
 			!net-misc/eg25-manager
 		)
 		sys-boot/osk-sdl

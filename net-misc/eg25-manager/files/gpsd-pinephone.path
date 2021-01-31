@@ -1,0 +1,9 @@
+[Unit]
+Description=Pinephone modem path
+
+[Path]
+PathExists=/dev/dummy
+PathExists=/dev/ttyUSB1
+
+[Install]
+WantedBy=multi-user.target

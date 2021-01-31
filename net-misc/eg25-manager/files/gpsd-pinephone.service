@@ -1,0 +1,12 @@
+[Unit]
+Description=Enable EG25 GPS
+After=gpsd.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/sbin/gpsdctl add /dev/ttyUSB1
+ExecStop=/usr/sbin/gpsdctl remove /dev/ttyUSB1
+
+[Install]
+WantedBy=multi-user.target

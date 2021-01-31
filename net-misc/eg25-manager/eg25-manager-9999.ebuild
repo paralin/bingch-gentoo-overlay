@@ -32,8 +32,6 @@ RDEPEND="${DEPEND}"
 src_install() {
 	meson_src_install
 	systemd_dounit "${FILESDIR}"/eg25-manager.service
-	systemd_dounit "${FILESDIR}"/gpsd-pinephone.service
-	systemd_dounit "${FILESDIR}"/gpsd-pinephone.path
 }
 
 pkg_postinst() {

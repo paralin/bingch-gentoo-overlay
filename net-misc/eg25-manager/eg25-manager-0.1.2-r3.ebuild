@@ -35,6 +35,6 @@ src_install() {
 }
 
 pkg_postinst() {
-	systemd_enable_service --all eg25-manager
+	systemd_reenable --all eg25-manager
 }
 

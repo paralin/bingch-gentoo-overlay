@@ -35,5 +35,5 @@ src_install() {
 }
 
 pkg_postinst() {
-	systemd_enable_service --global gthd
+	systemd_reenable --global gthd
 }

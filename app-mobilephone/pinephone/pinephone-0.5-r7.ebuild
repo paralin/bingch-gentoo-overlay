@@ -75,6 +75,9 @@ src_install() {
 #	exeinto /usr/lib/systemd/system-sleep/
 #	doexe "${FILESDIR}/pinephone-suspend-hook.sh"
 
+	insinto /etc/pulse
+	doins "${FILESDIR}/pinephone.pa"
+
 	exeinto /etc/pulse/daemon.conf.d
 	doexe "${FILESDIR}/90-pinephone.conf"
 

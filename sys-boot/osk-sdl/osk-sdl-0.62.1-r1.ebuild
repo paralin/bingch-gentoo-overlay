@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://gitlab.com/postmarketOS/osk-sdl.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~arm64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="test"
 
 if [[ ${PV} != 9999 ]]; then
@@ -20,7 +20,7 @@ else
 fi
 
 DEPEND="sys-fs/cryptsetup
-		media-libs/libsdl2[kms]
+		media-libs/libsdl2[kms,haptic]
 		media-libs/sdl2-ttf
 		media-fonts/dejavu
 		sys-kernel/dracut

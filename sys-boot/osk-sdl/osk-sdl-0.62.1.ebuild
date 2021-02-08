@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit git-r3
+inherit git-r3 meson
 DESCRIPTION="Lightweight On-Screen-Keyboard based on SDL2"
 HOMEPAGE="https://gitlab.com/postmarketOS/osk-sdl.git"
 EGIT_REPO_URI="https://gitlab.com/postmarketOS/osk-sdl.git"
@@ -11,6 +11,7 @@ EGIT_REPO_URI="https://gitlab.com/postmarketOS/osk-sdl.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~arm64"
+IUSE="test"
 
 if [[ ${PV} != 9999 ]]; then
         EGIT_REPO_BRANCH="tags/v${PV}"
@@ -24,11 +25,12 @@ DEPEND="sys-fs/cryptsetup
 		media-fonts/dejavu
 		sys-kernel/dracut
 		app-portage/gentoolkit
-		app-text/scdoc
 "
 
 RDEPEND="${DEPEND}"
-BDEPEND=""
+BDEPEND="app-text/scdoc
+		test? ( x11-misc/xvfb-run )
+"
 
 src_prepare() {
 	default
@@ -36,7 +38,7 @@ src_prepare() {
 }
 
 src_install() {
-	dobin bin/osk-sdl
+	meson_src_install
 	insinto /etc
 	doins osk.conf
 	insinto /etc/dracut.conf.d/
@@ -47,4 +49,11 @@ src_install() {
 	exeinto /usr/lib/dracut/modules.d/50osk-sdl
 	doexe ${FILESDIR}/module-setup.sh
 	doexe ${FILESDIR}/osk-sdl.sh
+}
+
+pkg_postinst() {
+	einfo "For more info on how to test osk-sdl, and how to report problems, see:"
+	einfo "${HOMEPAGE}"
+	einfo "To use osk-sdl to unlock encrypted root at bootime, check osk-sdl-pp.conf in /etc/dracut.conf.d"
+	einfo "and add these boot option 'root=/dev/mapper/root cryptroot=/dev/path/to/encrypted_partition' "
 }

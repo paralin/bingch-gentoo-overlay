@@ -10,16 +10,18 @@ EGIT_REPO_URI="https://gitlab.com/postmarketOS/osk-sdl.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~arm64"
+KEYWORDS="~amd64 ~arm64"
+IUSE="test"
 
 if [[ ${PV} != 9999 ]]; then
-        EGIT_REPO_BRANCH="tags/v${PV}"
+        EGIT_COMMIT="tags/${PV}"
 else
         KEYWORDS=""
 fi
 
+# osk-sdl is not working well with gles2
 DEPEND="sys-fs/cryptsetup
-		media-libs/libsdl2[kms]
+		media-libs/libsdl2[kms,haptic,-gles2]
 		media-libs/sdl2-ttf
 		media-fonts/dejavu
 		sys-kernel/dracut
@@ -27,7 +29,9 @@ DEPEND="sys-fs/cryptsetup
 "
 
 RDEPEND="${DEPEND}"
-BDEPEND="app-text/scdoc"
+BDEPEND="app-text/scdoc
+		test? ( x11-misc/xvfb-run )
+"
 
 src_prepare() {
 	default
@@ -46,4 +50,11 @@ src_install() {
 	exeinto /usr/lib/dracut/modules.d/50osk-sdl
 	doexe ${FILESDIR}/module-setup.sh
 	doexe ${FILESDIR}/osk-sdl.sh
+}
+
+pkg_postinst() {
+	einfo "For more info on how to test osk-sdl, and how to report problems, see:"
+	einfo "${HOMEPAGE}"
+	einfo "To use osk-sdl to unlock encrypted root at bootime, check osk-sdl-pp.conf in /etc/dracut.conf.d"
+	einfo "and add these boot option 'root=/dev/mapper/root cryptroot=/dev/path/to/encrypted_partition' "
 }

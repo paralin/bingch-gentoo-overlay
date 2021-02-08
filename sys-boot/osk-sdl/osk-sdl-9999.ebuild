@@ -17,6 +17,7 @@ if [[ ${PV} != 9999 ]]; then
         EGIT_COMMIT="tags/${PV}"
 else
         KEYWORDS=""
+		inherit git-r3 meson
 fi
 
 DEPEND="sys-fs/cryptsetup
@@ -38,7 +39,7 @@ src_prepare() {
 }
 
 src_install() {
-	dobin bin/osk-sdl
+	meson_src_install
 	insinto /etc
 	doins osk.conf
 	insinto /etc/dracut.conf.d/

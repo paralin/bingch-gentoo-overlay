@@ -21,8 +21,8 @@ install() {
     inst_simple $moddir/osk-sdl-pp.service ${systemdsystemunitdir}/osk-sdl-pp.service
     inst_simple $moddir/osk-sdl-pp.path ${systemdsystemunitdir}/osk-sdl-pp.path
     systemctl -q --root "$initdir" add-wants sysinit.target osk-sdl-pp.path
-    # mesa cogl lib
-    equery f mesa cogl | grep ".so$" | while read -r so; do
+    # mesa cogl libglvnd
+    equery f mesa cogl libglvnd | grep ".so$" | while read -r so; do
       inst ${so}
     done
 

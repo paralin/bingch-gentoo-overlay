@@ -1,0 +1,210 @@
+From b3f4e0cd6a2d4dfcf1cf1a5ed0cb5525b20285b5 Mon Sep 17 00:00:00 2001
+From: Oliver Smith <ollieparanoid@postmarketos.org>
+Date: Mon, 8 Feb 2021 10:29:56 +0530
+Subject: [PATCH] WIP: add ofono-iface
+
+Start work on new ofono interface. So far, this detects ofono on dbus
+and complains if both mm and ofono are running.
+
+See the ofono issue in the eg25-manager repo for more information.
+---
+ src/manager.c     | 10 ++++++++
+ src/manager.h     |  8 ++++++
+ src/meson.build   |  1 +
+ src/mm-iface.c    |  7 ++++++
+ src/ofono-iface.c | 62 +++++++++++++++++++++++++++++++++++++++++++++++
+ src/ofono-iface.h | 12 +++++++++
+ 6 files changed, 100 insertions(+)
+ create mode 100644 src/ofono-iface.c
+ create mode 100644 src/ofono-iface.h
+
+diff --git a/src/manager.c b/src/manager.c
+index 6445e0f..2f3ebe5 100644
+--- a/src/manager.c
++++ b/src/manager.c
+@@ -8,6 +8,7 @@
+ #include "gpio.h"
+ #include "manager.h"
+ #include "mm-iface.h"
++#include "ofono-iface.h"
+ #include "suspend.h"
+ #include "udev.h"
+ 
+@@ -30,6 +31,7 @@ static gboolean quit_app(struct EG25Manager *manager)
+ 
+     at_destroy(manager);
+     mm_iface_destroy(manager);
++    ofono_iface_destroy(manager);
+     suspend_destroy(manager);
+     udev_destroy(manager);
+ 
+@@ -126,6 +128,13 @@ void modem_reset(struct EG25Manager *manager)
+     if (manager->reset_timer)
+         return;
+ 
++    /* If we are managing the modem through lets say ofono, we should not
++     * reset the modem based on the availability of USB ID
++     * TODO: Improve ofono plugin and add support for fetching USB ID
++     */
++    if (manager->modem_iface != MODEM_IFACE_MODEMMANAGER)
++        return;
++
+     if (manager->suspend_timer) {
+         g_source_remove(manager->suspend_timer);
+         manager->suspend_timer = 0;
+@@ -229,6 +238,7 @@ int main(int argc, char *argv[])
+     at_init(&manager);
+     gpio_init(&manager);
+     mm_iface_init(&manager);
++    ofono_iface_init(&manager);
+     suspend_init(&manager);
+     udev_init(&manager);
+ 
+diff --git a/src/manager.h b/src/manager.h
+index f6351be..4d83ea9 100644
+--- a/src/manager.h
++++ b/src/manager.h
+@@ -25,6 +25,12 @@ enum EG25State {
+     EG25_STATE_FINISHING
+ };
+ 
++enum ModemIface {
++    MODEM_IFACE_NONE = 0,
++    MODEM_IFACE_MODEMMANAGER,
++    MODEM_IFACE_OFONO
++};
++
+ struct EG25Manager {
+     GMainLoop *loop;
+     guint reset_timer;
+@@ -38,9 +44,11 @@ struct EG25Manager {
+     gchar *modem_usb_id;
+     gboolean braveheart;
+ 
++    enum ModemIface modem_iface;
+     guint mm_watch;
+     MMManager *mm_manager;
+     MMModem *mm_modem;
++    guint ofono_watch;
+ 
+     GDBusProxy *suspend_proxy;
+     int suspend_inhibit_fd;
+diff --git a/src/meson.build b/src/meson.build
+index 012773c..c83a051 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -11,6 +11,7 @@ executable (
+         'gpio.c', 'gpio.h',
+         'manager.c', 'manager.h',
+         'mm-iface.c', 'mm-iface.h',
++        'ofono-iface.c', 'ofono-iface.h',
+         'suspend.c', 'suspend.h',
+         'udev.c', 'udev.h',
+     ],
+diff --git a/src/mm-iface.c b/src/mm-iface.c
+index 3c5758c..7b1da99 100644
+--- a/src/mm-iface.c
++++ b/src/mm-iface.c
+@@ -163,6 +163,13 @@ static void mm_appeared_cb(GDBusConnection    *connection,
+ {
+     g_message("ModemManager appeared on D-Bus");
+ 
++    if (manager->modem_iface != MODEM_IFACE_NONE) {
++        g_critical("Modem interface already found!");
++        g_critical("Make sure to only run either of ModemManager or oFono.");
++        return;
++    }
++    manager->modem_iface = MODEM_IFACE_MODEMMANAGER;
++
+     mm_manager_new(connection, G_DBUS_OBJECT_MANAGER_CLIENT_FLAGS_NONE,
+                    NULL, (GAsyncReadyCallback)mm_manager_new_cb, manager);
+ }
+diff --git a/src/ofono-iface.c b/src/ofono-iface.c
+new file mode 100644
+index 0000000..d9051a3
+--- /dev/null
++++ b/src/ofono-iface.c
+@@ -0,0 +1,62 @@
++/*
++ * Copyright (C) 2020 Oliver Smith <ollieparanoid@postmarketos.org>
++ *
++ * SPDX-License-Identifier: GPL-3.0-or-later
++ */
++
++#include "ofono-iface.h"
++
++#include <string.h>
++
++// #include <ofono/dbus.h>
++#define OFONO_SERVICE "org.ofono"
++
++static void ofono_appeared_cb(GDBusConnection    *connection,
++                              const gchar        *name,
++                              const gchar        *name_owner,
++                              struct EG25Manager *manager)
++{
++    g_message("oFono appeared on D-Bus");
++
++    if (manager->modem_iface != MODEM_IFACE_NONE) {
++        g_critical("Modem interface already found!");
++        g_critical("Make sure to only run either of ModemManager or oFono.");
++        return;
++    }
++    manager->modem_iface = MODEM_IFACE_OFONO;
++
++    /* now connect to oFono! */
++}
++
++static void ofono_vanished_cb(GDBusConnection    *connection,
++                              const gchar        *name,
++                              struct EG25Manager *manager)
++{
++    g_message("oFono vanished from D-Bus");
++
++    if (manager->modem_iface == MODEM_IFACE_OFONO) {
++        manager->modem_iface = MODEM_IFACE_NONE;
++        ofono_iface_destroy(manager);
++    }
++}
++
++void ofono_iface_init(struct EG25Manager *manager)
++{
++    manager->ofono_watch = g_bus_watch_name(G_BUS_TYPE_SYSTEM, OFONO_SERVICE,
++                                            G_BUS_NAME_WATCHER_FLAGS_AUTO_START,
++                                            (GBusNameAppearedCallback)ofono_appeared_cb,
++                                            (GBusNameVanishedCallback)ofono_vanished_cb,
++                                            manager, NULL);
++}
++
++void ofono_iface_destroy(struct EG25Manager *manager)
++{
++    if (manager->modem_usb_id) {
++        g_free(manager->modem_usb_id);
++        manager->modem_usb_id = NULL;
++    }
++    if (manager->ofono_watch != 0) {
++        g_bus_unwatch_name(manager->ofono_watch);
++        manager->ofono_watch = 0;
++    }
++}
+diff --git a/src/ofono-iface.h b/src/ofono-iface.h
+new file mode 100644
+index 0000000..fd3766e
+--- /dev/null
++++ b/src/ofono-iface.h
+@@ -0,0 +1,12 @@
++/*
++ * Copyright (C) 2020 Oliver Smith <ollieparanoid@postmarketos.org>
++ *
++ * SPDX-License-Identifier: GPL-3.0-or-later
++ */
++
++#pragma once
++
++#include "manager.h"
++
++void ofono_iface_init(struct EG25Manager *data);
++void ofono_iface_destroy(struct EG25Manager *data);
+-- 
+GitLab
+

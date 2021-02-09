@@ -14,7 +14,7 @@ KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 EGIT_REPO_URI="${HOMEPAGE}.git"
 
 if [[ ${PV} != 9999 ]]; then
-	EGIT_REPO_BRANCH="tags/${PV}"
+	EGIT_COMMIT="tags/${PV}"
 else
 	KEYWORDS=""
 fi

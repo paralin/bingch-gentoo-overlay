@@ -17,7 +17,7 @@ if [[ ${QT5_BUILD_TYPE} == release ]]; then
 fi
 
 if [[ ${PV} != 9999 ]]; then
-        #EGIT_REPO_BRANCH="tags/v${PV}"
+        #EGIT_COMMIT="tags/v${PV}"
         EGIT_COMMIT="28ca62414901502189ea28ef2efd551386187619"
 else
         KEYWORDS=""

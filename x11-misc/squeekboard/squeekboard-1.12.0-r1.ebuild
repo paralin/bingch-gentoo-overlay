@@ -14,7 +14,7 @@ KEYWORDS="~amd64 ~arm64"
 
 EGIT_REPO_URI="https://source.puri.sm/Librem5/${PN}.git"
 if [[ ${PV} != 9999 ]]; then
-    #EGIT_REPO_BRANCH="tags/v${PV}"
+    #EGIT_COMMIT="tags/v${PV}"
     EGIT_COMMIT="e6c45a63fb373afc60363c5a929128ca85404085"
 else
     KEYWORDS=""

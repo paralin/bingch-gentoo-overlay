@@ -12,7 +12,7 @@ SRC_URI=""
 EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
 
 if [[ ${PV} != 9999 ]]; then
-        EGIT_REPO_BRANCH="tags/v${PV}"
+        EGIT_COMMIT="tags/v${PV}"
         #EGIT_COMMIT="f9648e8f634e12161caac00e7d7e63a16c7ccdc4"
 else
         KEYWORDS=""

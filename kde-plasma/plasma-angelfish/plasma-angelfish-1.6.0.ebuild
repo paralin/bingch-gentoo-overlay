@@ -16,7 +16,7 @@ SRC_URI=""
 EGIT_REPO_URI="https://invent.kde.org/kde/${PN}.git"
 
 if [[ ${PV} != 9999 ]]; then
-        #EGIT_REPO_BRANCH="tags/v${PV}"
+        #EGIT_COMMIT="tags/v${PV}"
         EGIT_COMMIT="6d493cf1a3d77459896f7ee31b0eb751b0449448"
 else
         KEYWORDS=""

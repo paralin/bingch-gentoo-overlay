@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 if [[ ${PV} != 9999 ]]; then
-    EGIT_REPO_BRANCH="tags/v${PV}"
+    EGIT_COMMIT="tags/v${PV}"
 else
     KEYWORDS=""
 fi

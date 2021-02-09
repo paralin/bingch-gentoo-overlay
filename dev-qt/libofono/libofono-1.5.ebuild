@@ -11,7 +11,7 @@ SRC_URI=""
 EGIT_REPO_URI="https://github.com/Kaffeine/libofono-qt.git"
 
 if [[ ${PV} != 9999 ]]; then
-        EGIT_REPO_BRANCH="tags/v${PV}"
+        EGIT_COMMIT="tags/v${PV}"
         #EGIT_COMMIT="8132b5ff5035c468807c291b4fa30d7e0a54cba4"
 else
         KEYWORDS=""

@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://gitlab.com/mobian1/${PN}.git"
 
 KEYWORDS="~amd64 ~x86 ~arm ~arm64"
 if [[ ${PV} != 9999 ]]; then
-        EGIT_REPO_BRANCH="tags/v${PV}"
+        EGIT_COMMIT="tags/v${PV}"
 else
         KEYWORDS=""
 fi

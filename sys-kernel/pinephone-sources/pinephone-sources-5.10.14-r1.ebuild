@@ -48,8 +48,12 @@ pkg_postinst() {
 	einfo "make Image Image.gz modules"
 	einfo "make DTC_FLAGS="-@" dtbs"
 	einfo "make install; make modules_intall; make dtbs_install"
-	einfo "if you use kernel config coming with this ebuild, don't forget to also copy dracut-pp.conf to /etc/dracut.conf.d/"
+	einfo "If you use kernel config coming with this ebuild, don't forget to also copy dracut-pp.conf to /etc/dracut.conf.d/"
 	einfo "to make sure proper kernel modules are loaded into initramfs"
+	einfo "if you want to cross compile pinephone kernel on amd64 host, follow the https://wiki.gentoo.org/wiki/Cross_build_environment"
+	einfo "to setup cross toolchain environment, then create a xmake wrapper like the following, and replace make with xmake in above commands"
+	einfo "#!/bin/sh"
+	einfo "exec make ARCH='arm64' CROSS_COMPILE='aarch64-unknown-linux-gnu-' INSTALL_MOD_PATH='${SYSROOT}' '$@'"
 }
 
 pkg_postrm() {

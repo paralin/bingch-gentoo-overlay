@@ -9,7 +9,7 @@ ETYPE="sources"
 inherit kernel-2
 detect_version
 
-DESCRIPTION="Full sources for the Linux kernel"
+DESCRIPTION="Full sources for the Linux kernel, with megi's patch for pinephone"
 HOMEPAGE="https://www.kernel.org"
 
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sparc ~x86"
@@ -48,6 +48,8 @@ pkg_postinst() {
 	einfo "make Image Image.gz modules"
 	einfo "make DTC_FLAGS="-@" dtbs"
 	einfo "make install; make modules_intall; make dtbs_install"
+	einfo "if you use kernel config coming with this ebuild, don't forget to also copy dracut-pp.conf to /etc/dracut.conf.d/"
+	einfo "to make sure proper kernel modules are loaded into initramfs"
 }
 
 pkg_postrm() {

@@ -28,6 +28,17 @@ BDEPEND=""
 
 S=${WORKDIR}/Portfolio-${PV}
 
+src_prepare() {
+	default
+	# shebang fixing craziness
+	sed -e s#\@PYTHON\@#/usr/bin/python#  -i src/dev.tchx84.Portfolio.in
+}
+
+src_install() {
+	meson_src_install
+	python_optimize "${ED}"/usr/lib/
+}
+
 pkg_postinst() {
 	xdg_pkg_postinst
 	gnome2_schemas_update

@@ -5,7 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{7,8,9} )
 
-inherit meson gnome2-utils python-single-r1
+inherit meson gnome2-utils python-single-r1 xdg
 
 DESCRIPTION="A minimalist file manager for those who want to use Linux mobile devices"
 HOMEPAGE="https://github.com/tchx84/Portfolio"
@@ -27,3 +27,14 @@ DEPEND="${RDEPEND}"
 BDEPEND=""
 
 S=${WORKDIR}/Portfolio-${PV}
+
+pkg_postinst() {
+	xdg_pkg_postinst
+	gnome2_schemas_update
+}
+
+pkg_postrm() {
+	xdg_pkg_postrm
+	gnome2_schemas_update
+}
+

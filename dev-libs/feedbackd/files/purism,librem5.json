@@ -75,12 +75,12 @@
         {
           "event-name" : "button-pressed",
           "type"       : "VibraRumble",
-          "duration"   : 80
+          "duration"   : 15
         },
         {
           "event-name" : "button-released",
           "type"       : "VibraRumble",
-          "duration"   : 40
+          "duration"   : 12
         },
         {
           "event-name" : "message-new-email",
@@ -92,19 +92,19 @@
         {
           "event-name" : "message-new-instant",
           "type"       : "VibraRumble",
-          "duration"   : 750
+          "duration"   : 150
         },
         {
           "event-name" : "message-new-sms",
           "type"       : "VibraRumble",
-          "duration"   : 1250,
+          "duration"   : 500,
           "count"      : 2,
-          "pause"      : 250
+          "pause"      : 100
         },
         {
           "event-name" : "message-sent-instant",
           "type"       : "VibraRumble",
-          "duration"   : 250
+          "duration"   : 150
         },
         {
           "event-name" : "phone-incoming-call",
@@ -114,7 +114,7 @@
         {
           "event-name" : "timeout-completed",
           "type"       : "VibraRumble",
-          "duration"   : 500
+          "duration"   : 100
         },
         {
           "event-name" : "theme-demo",
@@ -125,7 +125,7 @@
         {
           "event-name" : "window-close",
           "type"       : "VibraRumble",
-          "duration"   : 75
+          "duration"   : 25
         }
       ]
     },

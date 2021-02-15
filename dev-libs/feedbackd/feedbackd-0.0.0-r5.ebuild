@@ -13,7 +13,7 @@ IUSE="+introspection +vala"
 REQUIRED_USE="vala? ( introspection )"
 
 if [[ ${PV} == "0.0.0" ]]; then
-	MY_PV="v${PV}+git20201114"
+	MY_PV="v${PV}+git20210125"
 	MY_P="${PN}-${MY_PV}"
 fi
 
@@ -48,12 +48,13 @@ src_prepare() {
 	default
 	eapply_user
 	use vala && vala_src_prepare
+	sed -i 's/-G feedbackd/-G video/g' ${S}/debian/feedbackd.udev
 }
 
 src_install() {
 	default
 	meson_src_install
-	#insinto /usr/share/feedbackd/themes
-	#doins ${FILESDIR}/danctnix.json
+	insinto /usr/share/feedbackd/themes
+	doins ${FILESDIR}/*.json
 	udev_newrules ${S}/debian/feedbackd.udev 90-feedbackd.rules
 }

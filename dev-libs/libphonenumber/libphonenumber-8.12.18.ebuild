@@ -3,24 +3,21 @@
 
 EAPI=7
 
-inherit cmake git-r3
-
+inherit cmake
 
 DESCRIPTION="library for parsing, formatting, and validating international phone numbers"
-HOMEPAGE="https://github.com/googlei18n/libphonenumber"
-SRC_URI=""
-EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
+HOMEPAGE="https://github.com/google/libphonenumber"
+SRC_URI="https://github.com/google/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
-if [[ ${PV} != 9999 ]]; then
-        EGIT_COMMIT="tags/v${PV}"
-        #EGIT_COMMIT="f9648e8f634e12161caac00e7d7e63a16c7ccdc4"
-else
-        KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
+if [[ ${PV} = 9999 ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/google/${PN}.git"
+	KEYWORDS=""
 fi
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 IUSE=""
 
 DEPEND="dev-libs/icu

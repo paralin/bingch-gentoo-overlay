@@ -3,16 +3,24 @@
 
 EAPI=7
 
-inherit meson gnome2-utils xdg
+inherit meson gnome2-utils xdg git-r3
 
 DESCRIPTION="Messaging client"
 HOMEPAGE="https://source.puri.sm/Librem5/chatty"
-SRC_URI="https://source.puri.sm/Librem5/chatty/-/archive/v${PV}/${PN}-v${PV}.tar.gz"
+EGIT_REPO_URI="https://source.puri.sm/Librem5/${PN}.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~arm64 ~arm"
 IUSE=""
+KEYWORDS="~amd64 ~arm64 ~arm ~x86"
+
+if [[ ${PV} != 9999 ]]; then
+        #EGIT_COMMIT="tags/v${PV}"
+        EGIT_COMMIT="85b8df3b0c8dc292f052553119673a7d82dd7b0d"
+else
+        KEYWORDS=""
+fi
+
 
 DEPEND="gnome-extra/evolution-data-server
 		dev-libs/feedbackd
@@ -24,8 +32,6 @@ DEPEND="gnome-extra/evolution-data-server
 "
 RDEPEND="${DEPEND}"
 BDEPEND="${DEPEND}"
-
-S=${WORKDIR}/${PN}-v${PV}
 
 pkg_postinst() {
 	xdg_pkg_postinst

@@ -1,4 +1,4 @@
-From 6fad8948a7ba16c857b813ec532f32906055c695 Mon Sep 17 00:00:00 2001
+From b8d269cf2f5aed4ca0e0bcb9702b65897fda18bc Mon Sep 17 00:00:00 2001
 From: Dylan Van Assche <me@dylanvanassche.be>
 Date: Sat, 6 Feb 2021 07:52:32 +0100
 Subject: [PATCH] suspend: add boot timer
@@ -8,122 +8,141 @@ to be fully operational. If the modem is suspended before that,
 calls or texts may not be seen by the userspace.
 This mostly occurs when a full reboot or poweroff/poweron
 sequence of the phone is performed.
+
+:
 ---
- src/at.c      | 19 ++++++++++-
- src/manager.h |  2 ++
- src/suspend.c | 95 +++++++++++++++++++++++++++++++++++++++++++--------
- src/suspend.h |  1 +
- 4 files changed, 101 insertions(+), 16 deletions(-)
+ src/at.c      |   4 +-
+ src/manager.c |   5 +-
+ src/manager.h |   4 +-
+ src/suspend.c | 126 +++++++++++++++++++++++++++++++++++++++-----------
+ src/suspend.h |   2 +-
+ 5 files changed, 108 insertions(+), 33 deletions(-)
 
 diff --git a/src/at.c b/src/at.c
-index 39a857a..c8fa6f5 100644
+index 39a857a..661098a 100644
 --- a/src/at.c
 +++ b/src/at.c
-@@ -17,6 +17,7 @@
- #include <glib-unix.h>
- 
- #define MODEM_UART "/dev/ttyS2"
-+#define FULL_BOOT_DELAY 120
- 
- struct AtCommand {
-     char *cmd;
-@@ -26,6 +27,20 @@ struct AtCommand {
-     int retries;
- };
- 
-+/*
-+ * After the EG25 modem sends 'RDY', it takes up to 2 minutes before all
-+ * capabilities are operational. If the modem is suspended before that,
-+ * calls and texts may be not recognized properly.
-+ */
-+static gboolean modem_fully_booted(struct EG25Manager *manager)
-+{
-+    g_message("Modem is up for %d seconds and fully ready", FULL_BOOT_DELAY);
-+    manager->boot_timer = 0;
-+    boot_inhibit(manager, FALSE);
-+
-+    return FALSE;
-+}
-+
- static int configure_serial(const char *tty)
- {
-     struct termios ttycfg;
-@@ -202,8 +217,10 @@ static gboolean modem_response(gint fd,
+@@ -202,8 +202,10 @@ static gboolean modem_response(gint fd,
  
          g_message("Response: [%s]", response);
  
 -        if (strcmp(response, "RDY") == 0)
 +        if (strcmp(response, "RDY") == 0) {
-+            manager->boot_timer = g_timeout_add_seconds(FULL_BOOT_DELAY, G_SOURCE_FUNC(modem_fully_booted), manager);
++            suspend_inhibit(manager, TRUE, TRUE);
              manager->modem_state = EG25_STATE_STARTED;
 +        }
          else if (strstr(response, "ERROR"))
              retry_at_command(manager);
          else if (strstr(response, "OK"))
+diff --git a/src/manager.c b/src/manager.c
+index 6445e0f..912a095 100644
+--- a/src/manager.c
++++ b/src/manager.c
+@@ -178,7 +178,7 @@ void modem_suspend_post(struct EG25Manager *manager)
+ {
+     gpio_sequence_suspend(manager);
+     g_message("suspend sequence is over, drop inhibitor");
+-    suspend_inhibit(manager, FALSE);
++    suspend_inhibit(manager, FALSE, FALSE);
+ }
+ 
+ void modem_resume_pre(struct EG25Manager *manager)
+@@ -205,7 +205,8 @@ int main(int argc, char *argv[])
+ 
+     memset(&manager, 0, sizeof(manager));
+     manager.at_fd = -1;
+-    manager.suspend_inhibit_fd = -1;
++    manager.delay_inhibit_fd = -1;
++    manager.block_inhibit_fd = -1;
+ 
+     opt_context = g_option_context_new ("- Power management for the Quectel EG25 modem");
+     g_option_context_add_main_entries (opt_context, options, NULL);
 diff --git a/src/manager.h b/src/manager.h
-index f6351be..d00754d 100644
+index f6351be..21b3b67 100644
 --- a/src/manager.h
 +++ b/src/manager.h
-@@ -44,7 +44,9 @@ struct EG25Manager {
+@@ -43,8 +43,10 @@ struct EG25Manager {
+     MMModem *mm_modem;
  
      GDBusProxy *suspend_proxy;
-     int suspend_inhibit_fd;
-+    int boot_inhibit_fd;
+-    int suspend_inhibit_fd;
++    int delay_inhibit_fd;
++    int block_inhibit_fd;
      guint suspend_timer;
 +    guint boot_timer;
  
      GUdevClient *udev;
  
 diff --git a/src/suspend.c b/src/suspend.c
-index 4b1a026..93e0c84 100644
+index 4b1a026..622cf00 100644
 --- a/src/suspend.c
 +++ b/src/suspend.c
-@@ -26,10 +26,10 @@ static gboolean check_modem_resume(struct EG25Manager *manager)
+@@ -13,9 +13,10 @@
+ 
+ #include <gio/gunixfdlist.h>
+ 
+-#define SD_NAME      "org.freedesktop.login1"
+-#define SD_PATH      "/org/freedesktop/login1"
+-#define SD_INTERFACE "org.freedesktop.login1.Manager"
++#define SD_NAME         "org.freedesktop.login1"
++#define SD_PATH         "/org/freedesktop/login1"
++#define SD_INTERFACE    "org.freedesktop.login1.Manager"
++#define FULL_BOOT_DELAY 120
+ 
+ static gboolean check_modem_resume(struct EG25Manager *manager)
+ {
+@@ -26,18 +27,28 @@ static gboolean check_modem_resume(struct EG25Manager *manager)
      return FALSE;
  }
  
 -static gboolean drop_inhibitor(struct EG25Manager *manager)
-+static gboolean drop_inhibitor_suspend(struct EG25Manager *manager)
++static gboolean drop_inhibitor(struct EG25Manager *manager, gboolean block)
  {
-     if (manager->suspend_inhibit_fd >= 0) {
+-    if (manager->suspend_inhibit_fd >= 0) {
 -        g_message("dropping systemd sleep inhibitor");
-+        g_message("dropping systemd sleep suspend inhibitor");
-         close(manager->suspend_inhibit_fd);
-         manager->suspend_inhibit_fd = -1;
-         return TRUE;
-@@ -37,7 +37,18 @@ static gboolean drop_inhibitor(struct EG25Manager *manager)
+-        close(manager->suspend_inhibit_fd);
+-        manager->suspend_inhibit_fd = -1;
+-        return TRUE;
++    if (block) {
++        if (manager->block_inhibit_fd >= 0) {
++            g_message("dropping systemd sleep block inhibitor");
++            close(manager->block_inhibit_fd);
++            manager->block_inhibit_fd = -1;
++            return TRUE;
++        }
++    }
++    else {
++        if (manager->delay_inhibit_fd >= 0) {
++            g_message("dropping systemd sleep delay inhibitor");
++            close(manager->delay_inhibit_fd);
++            manager->delay_inhibit_fd = -1;
++            return TRUE;
++        }
+     }
      return FALSE;
  }
  
 -static void inhibit_done(GObject *source,
-+static gboolean drop_inhibitor_boot(struct EG25Manager *manager)
-+{
-+    if (manager->boot_inhibit_fd >= 0) {
-+        g_message("dropping systemd sleep boot inhibitor");
-+        close(manager->boot_inhibit_fd);
-+        manager->boot_inhibit_fd = -1;
-+        return TRUE;
-+    }
-+    return FALSE;
-+}
-+
-+static void inhibit_done_suspend(GObject *source,
++static void inhibit_done_delay(GObject *source,
                           GAsyncResult *result,
                           gpointer user_data)
  {
-@@ -56,25 +67,65 @@ static void inhibit_done(GObject *source,
+@@ -54,27 +65,81 @@ static void inhibit_done(GObject *source,
+         if (!fd_list || g_unix_fd_list_get_length(fd_list) != 1)
+             g_warning("didn't get a single fd back");
  
-         manager->suspend_inhibit_fd = g_unix_fd_list_get(fd_list, 0, NULL);
+-        manager->suspend_inhibit_fd = g_unix_fd_list_get(fd_list, 0, NULL);
++        manager->delay_inhibit_fd = g_unix_fd_list_get(fd_list, 0, NULL);
  
 -        g_message("inhibitor fd is %d", manager->suspend_inhibit_fd);
-+        g_message("inhibitor sleep fd is %d", manager->suspend_inhibit_fd);
++        g_message("inhibitor sleep fd is %d", manager->delay_inhibit_fd);
          g_object_unref(fd_list);
          g_variant_unref(res);
      }
  }
  
 -static void take_inhibitor(struct EG25Manager *manager)
-+static void inhibit_done_boot(GObject *source,
++static void inhibit_done_block(GObject *source,
 +                         GAsyncResult *result,
 +                         gpointer user_data)
 +{
@@ -140,91 +159,108 @@ index 4b1a026..93e0c84 100644
 +        if (!fd_list || g_unix_fd_list_get_length(fd_list) != 1)
 +            g_warning("didn't get a single fd back");
 +
-+        manager->boot_inhibit_fd = g_unix_fd_list_get(fd_list, 0, NULL);
++        manager->block_inhibit_fd = g_unix_fd_list_get(fd_list, 0, NULL);
 +
-+        g_message("inhibitor boot fd is %d", manager->boot_inhibit_fd);
++        g_message("inhibitor block fd is %d", manager->block_inhibit_fd);
 +        g_object_unref(fd_list);
 +        g_variant_unref(res);
 +    }
 +}
 +
-+static void take_inhibitor_suspend(struct EG25Manager *manager)
++/*
++ * After the EG25 modem sends 'RDY', it takes up to 2 minutes before all
++ * capabilities are operational. If the modem is suspended before that,
++ * calls and texts may be not recognized properly.
++ */
++static gboolean modem_fully_booted(struct EG25Manager *manager)
++{
++    g_message("Modem is up for %d seconds and fully ready", FULL_BOOT_DELAY);
++    manager->boot_timer = 0;
++    drop_inhibitor(manager, TRUE);
++
++    return FALSE;
++}
++
++static void take_inhibitor(struct EG25Manager *manager, gboolean block)
  {
      GVariant *variant_arg;
  
-     if(manager->suspend_inhibit_fd != -1)
+-    if(manager->suspend_inhibit_fd != -1)
 -        drop_inhibitor(manager);
-+        drop_inhibitor_suspend(manager);
++    if (block) {
++        if(manager->block_inhibit_fd != -1)
++            drop_inhibitor(manager, TRUE);
  
-     variant_arg = g_variant_new ("(ssss)", "sleep", "eg25manager",
-                                  "eg25manager needs to prepare modem for sleep", "delay");
+-    variant_arg = g_variant_new ("(ssss)", "sleep", "eg25manager",
+-                                 "eg25manager needs to prepare modem for sleep", "delay");
++        variant_arg = g_variant_new ("(ssss)", "sleep", "eg25manager",
++                                     "eg25manager needs to wait for modem to be fully booted", "block");
  
 -    g_message("taking systemd sleep inhibitor");
-+    g_message("taking systemd sleep suspend inhibitor");
-     g_dbus_proxy_call_with_unix_fd_list(manager->suspend_proxy, "Inhibit", variant_arg,
+-    g_dbus_proxy_call_with_unix_fd_list(manager->suspend_proxy, "Inhibit", variant_arg,
 -                                        0, G_MAXINT, NULL, NULL, inhibit_done, manager);
-+                                        0, G_MAXINT, NULL, NULL, inhibit_done_suspend, manager);
-+}
++        g_message("taking systemd sleep block inhibitor");
++        g_dbus_proxy_call_with_unix_fd_list(manager->suspend_proxy, "Inhibit", variant_arg,
++                                            0, G_MAXINT, NULL, NULL, inhibit_done_block, manager);
++        g_message("scheduling block inhibitor release");
++        manager->boot_timer = g_timeout_add_seconds(FULL_BOOT_DELAY, G_SOURCE_FUNC(modem_fully_booted), manager);
++    }
++    else {
++        if(manager->delay_inhibit_fd != -1)
++            drop_inhibitor(manager, FALSE);
 +
-+static void take_inhibitor_boot(struct EG25Manager *manager)
-+{
-+    GVariant *variant_arg;
++        variant_arg = g_variant_new ("(ssss)", "sleep", "eg25manager",
++                                     "eg25manager needs to prepare modem for sleep", "delay");
 +
-+    if(manager->boot_inhibit_fd != -1)
-+        drop_inhibitor_boot(manager);
-+
-+    variant_arg = g_variant_new ("(ssss)", "sleep", "eg25manager",
-+                                 "eg25manager needs to wait for modem to be fully booted", "block");
-+
-+    g_message("taking systemd sleep boot inhibitor");
-+    g_dbus_proxy_call_with_unix_fd_list(manager->suspend_proxy, "Inhibit", variant_arg,
-+                                        0, G_MAXINT, NULL, NULL, inhibit_done_boot, manager);
++        g_message("taking systemd sleep delay inhibitor");
++        g_dbus_proxy_call_with_unix_fd_list(manager->suspend_proxy, "Inhibit", variant_arg,
++                                            0, G_MAXINT, NULL, NULL, inhibit_done_delay, manager);
++    }
  }
  
  static void signal_cb(GDBusProxy *proxy,
-@@ -97,7 +148,7 @@ static void signal_cb(GDBusProxy *proxy,
+@@ -97,7 +162,7 @@ static void signal_cb(GDBusProxy *proxy,
          modem_suspend_pre(manager);
      } else {
          g_message("system is resuming");
 -        take_inhibitor(manager);
-+        take_inhibitor_suspend(manager);
++        take_inhibitor(manager, FALSE);
          modem_resume_pre(manager);
          if (manager->mm_modem) {
              /*
-@@ -126,10 +177,10 @@ static void name_owner_cb(GObject *object,
+@@ -126,10 +191,10 @@ static void name_owner_cb(GObject *object,
  
      owner = g_dbus_proxy_get_name_owner(proxy);
      if (owner) {
 -        take_inhibitor(manager);
-+        take_inhibitor_suspend(manager);
++        take_inhibitor(manager, FALSE);
          g_free(owner);
      } else {
 -        drop_inhibitor(manager);
-+        drop_inhibitor_suspend(manager);
++        drop_inhibitor(manager, FALSE);
      }
  }
  
-@@ -151,7 +202,8 @@ static void on_proxy_acquired(GObject *object,
+@@ -151,7 +216,7 @@ static void on_proxy_acquired(GObject *object,
  
      owner = g_dbus_proxy_get_name_owner(manager->suspend_proxy);
      if (owner) {
 -        take_inhibitor(manager);
-+        take_inhibitor_suspend(manager);
-+        take_inhibitor_boot(manager);
++        take_inhibitor(manager, FALSE);
          g_free(owner);
      }
  }
-@@ -167,11 +219,16 @@ void suspend_init(struct EG25Manager *manager)
+@@ -167,21 +232,26 @@ void suspend_init(struct EG25Manager *manager)
  
  void suspend_destroy(struct EG25Manager *manager)
  {
 -    drop_inhibitor(manager);
-+    drop_inhibitor_suspend(manager);
++    drop_inhibitor(manager, FALSE);
++    drop_inhibitor(manager, TRUE);
      if (manager->suspend_timer) {
          g_source_remove(manager->suspend_timer);
          manager->suspend_timer = 0;
      }
-+    drop_inhibitor_boot(manager);
 +    if (manager->boot_timer) {
 +        g_source_remove(manager->boot_timer);
 +        manager->boot_timer = 0;
@@ -232,33 +268,30 @@ index 4b1a026..93e0c84 100644
      if (manager->suspend_proxy) {
          g_object_unref(manager->suspend_proxy);
          manager->suspend_proxy = NULL;
-@@ -181,7 +238,15 @@ void suspend_destroy(struct EG25Manager *manager)
- void suspend_inhibit(struct EG25Manager *manager, gboolean inhibit)
+     }
+ }
+ 
+-void suspend_inhibit(struct EG25Manager *manager, gboolean inhibit)
++void suspend_inhibit(struct EG25Manager *manager, gboolean inhibit, gboolean block)
  {
      if (inhibit)
 -        take_inhibitor(manager);
-+        take_inhibitor_suspend(manager);
-+    else
-+        drop_inhibitor_suspend(manager);
-+}
-+
-+void boot_inhibit(struct EG25Manager *manager, gboolean inhibit)
-+{
-+    if (inhibit)
-+        take_inhibitor_boot(manager);
++        take_inhibitor(manager, block);
      else
 -        drop_inhibitor(manager);
-+        drop_inhibitor_boot(manager);
++        drop_inhibitor(manager, block);
  }
 diff --git a/src/suspend.h b/src/suspend.h
-index 39832aa..38e591c 100644
+index 39832aa..e82eeff 100644
 --- a/src/suspend.h
 +++ b/src/suspend.h
-@@ -12,3 +12,4 @@ void suspend_init (struct EG25Manager *data);
+@@ -11,4 +11,4 @@
+ void suspend_init (struct EG25Manager *data);
  void suspend_destroy (struct EG25Manager *data);
  
- void suspend_inhibit (struct EG25Manager *data, gboolean inhibit);
-+void boot_inhibit (struct EG25Manager *data, gboolean inhibit);
+-void suspend_inhibit (struct EG25Manager *data, gboolean inhibit);
++void suspend_inhibit (struct EG25Manager *data, gboolean inhibit, gboolean block);
 -- 
-2.30.1
+GitLab
+
 

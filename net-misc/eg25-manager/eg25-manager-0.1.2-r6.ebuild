@@ -9,12 +9,12 @@ DESCRIPTION="Daemon for managing the Quectel EG25 modem"
 HOMEPAGE="https://gitlab.com/mobian1/devices/eg25-manager"
 
 
-KEYWORDS="~amd64 ~arm ~arm64 ~x86"
+KEYWORDS="~arm64"
 
 EGIT_REPO_URI="${HOMEPAGE}.git"
 
 if [[ ${PV} != 9999 ]]; then
-	EGIT_COMMIT="tags/${PV}"
+	EGIT_COMMIT="3bb6e15de0e14c08135c82dd71d9774ad02ffc1b"
 else
 	KEYWORDS=""
 fi
@@ -28,6 +28,10 @@ DEPEND="
 		net-misc/modemmanager
 		"
 RDEPEND="${DEPEND}"
+
+PATCHES="${FILESDIR}/6.patch
+		${FILESDIR}/0001-suspend-add-boot-timer.patch
+"
 
 src_install() {
 	meson_src_install

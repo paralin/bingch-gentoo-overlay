@@ -27,6 +27,7 @@ DEPEND="gnome-extra/evolution-data-server
 		gui-libs/libhandy
 		x11-plugins/purple-mm-sms
 		dev-libs/olm
+		dev-libs/libphonenumber
 		x11-libs/gtk+:3
 		net-im/jabber-base
 "

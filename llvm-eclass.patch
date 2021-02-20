@@ -1,0 +1,13 @@
+diff --git a/eclass/llvm.eclass b/eclass/llvm.eclass
+index 761ffdbad5e..3116c6c60e5 100644
+--- a/eclass/llvm.eclass
++++ b/eclass/llvm.eclass
+@@ -198,7 +198,7 @@ llvm_pkg_setup() {
+ 	debug-print-function ${FUNCNAME} "${@}"
+ 
+ 	if [[ ${MERGE_TYPE} != binary ]]; then
+-		local llvm_path=$(get_llvm_prefix "${LLVM_MAX_SLOT}")/bin
++		local llvm_path=$(get_llvm_prefix $([[ $EAPI == 6 ]] || echo -b) "${LLVM_MAX_SLOT}")/bin
+ 		local IFS=:
+ 		local split_path=( ${PATH} )
+ 		local new_path=()

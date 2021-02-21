@@ -19,7 +19,6 @@ See the ofono issue in the eg25-manager repo for more information.
  create mode 100644 src/ofono-iface.h
 
 diff --git a/src/manager.c b/src/manager.c
-index 6445e0f..2f3ebe5 100644
 --- a/src/manager.c
 +++ b/src/manager.c
 @@ -8,6 +8,7 @@
@@ -30,7 +29,7 @@ index 6445e0f..2f3ebe5 100644
  #include "suspend.h"
  #include "udev.h"
  
-@@ -30,6 +31,7 @@ static gboolean quit_app(struct EG25Manager *manager)
+@@ -35,6 +36,7 @@ static gboolean quit_app(struct EG25Mana
  
      at_destroy(manager);
      mm_iface_destroy(manager);
@@ -38,7 +37,7 @@ index 6445e0f..2f3ebe5 100644
      suspend_destroy(manager);
      udev_destroy(manager);
  
-@@ -126,6 +128,13 @@ void modem_reset(struct EG25Manager *manager)
+@@ -131,6 +133,13 @@ void modem_reset(struct EG25Manager *man
      if (manager->reset_timer)
          return;
  
@@ -47,18 +46,18 @@ index 6445e0f..2f3ebe5 100644
 +     * TODO: Improve ofono plugin and add support for fetching USB ID
 +     */
 +    if (manager->modem_iface != MODEM_IFACE_MODEMMANAGER)
-+        return;
++        return;        
 +
-     if (manager->suspend_timer) {
-         g_source_remove(manager->suspend_timer);
-         manager->suspend_timer = 0;
-@@ -229,6 +238,7 @@ int main(int argc, char *argv[])
-     at_init(&manager);
-     gpio_init(&manager);
-     mm_iface_init(&manager);
+     if (manager->modem_recovery_timer) {
+         g_source_remove(manager->modem_recovery_timer);
+         manager->modem_recovery_timer = 0;
+@@ -305,6 +314,7 @@ int main(int argc, char *argv[])
+     at_init(&manager, toml_table_in(toml_config, "at"));
+     gpio_init(&manager, toml_table_in(toml_config, "gpio"));
+     mm_iface_init(&manager, toml_table_in(toml_config, "mm-iface"));
 +    ofono_iface_init(&manager);
-     suspend_init(&manager);
-     udev_init(&manager);
+     suspend_init(&manager, toml_table_in(toml_config, "suspend"));
+     udev_init(&manager, toml_table_in(toml_config, "udev"));
  
 diff --git a/src/manager.h b/src/manager.h
 index f6351be..4d83ea9 100644

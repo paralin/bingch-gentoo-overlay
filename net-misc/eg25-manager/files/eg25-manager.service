@@ -4,7 +4,7 @@ Before=ModemManager.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/eg25manager -g
+ExecStart=/usr/bin/eg25manager
 Restart=on-failure
 
 [Install]

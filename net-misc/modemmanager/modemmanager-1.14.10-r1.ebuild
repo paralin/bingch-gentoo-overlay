@@ -12,7 +12,7 @@ SRC_URI="https://www.freedesktop.org/software/ModemManager/ModemManager-${PV}.ta
 
 LICENSE="GPL-2+"
 SLOT="0/1" # subslot = dbus interface version, i.e. N in org.freedesktop.ModemManager${N}
-KEYWORDS="~amd64 ~arm ~arm64 ~x86"
+KEYWORDS="~arm64"
 
 IUSE="elogind +introspection mbim policykit +qmi systemd +udev vala"
 REQUIRED_USE="
@@ -45,7 +45,7 @@ PATCHES="
 	${FILESDIR}/0001-mm-broadband-modem-improve-voice-capabilities-detect.patch
 	${FILESDIR}/0002-serial-parsers-do-not-fail-to-detect-a-valid-respons.patch
 	${FILESDIR}/0003-context-add-test-no-suspend-resume-cli-parameter.patch
-	${FILESDIR}/0004-mm-broadband-modem-qmi-Add-ID_MM_QMI_MESSAGING_AT_FA.patch
+	${FILESDIR}/0004-broadband-modem-qmi_Enable_AT_URCs_and_QMI_indications.patch
 	${FILESDIR}/temp_modemmanager_rpmsg.patch
 "
 
@@ -99,8 +99,11 @@ src_install() {
 	if use policykit; then
 		insinto /usr/share/polkit-1/rules.d/
 		doins "${FILESDIR}"/01-org.freedesktop.ModemManager1.rules
+		insinto /usr/lib/udev/rules.d/
+		newins "${FILESDIR}"/rpmsg-udev.rules 80-modemmanager-mjr.rules 
 	fi
-
+	# Disable suspend/resume hooks for the EG25-G modem in the PinePhone
+	sed -i -e 's|bin/ModemManager|bin/ModemManager --test-no-suspend-resume|g' \         "${D}/lib/systemd/system/ModemManager.service"
 	readme.gentoo_create_doc
 }
 

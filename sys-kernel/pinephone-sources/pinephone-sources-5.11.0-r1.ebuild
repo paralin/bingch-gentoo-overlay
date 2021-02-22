@@ -26,7 +26,7 @@ PATCHES=(
     ${FILESDIR}/pinetab-accelerometer.patch
     ${FILESDIR}/camera-autofocus.patch
     ${FILESDIR}/media-ov5640-dont-break-when-firmware-for-autofocus-isnt-loaded.patch
-	${FILESDIR}/dts-pinephone-drop-modem-power-node-11.patch
+	${FILESDIR}/dts-pinephone-drop-modem-power-node.patch
 	${FILESDIR}/dts-headphone-jack-detection.patch
 	${FILESDIR}/0107-quirk-kernel-org-bug-210681-firmware_rome_error.patch
 	${FILESDIR}/0003-Bluetooth-btusb.patch

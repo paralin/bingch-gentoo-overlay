@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit git-r3
+inherit meson git-r3
 DESCRIPTION="Lightweight On-Screen-Keyboard based on SDL2"
 HOMEPAGE="https://gitlab.com/postmarketOS/osk-sdl.git"
 EGIT_REPO_URI="https://gitlab.com/postmarketOS/osk-sdl.git"
@@ -17,7 +17,6 @@ if [[ ${PV} != 9999 ]]; then
         EGIT_COMMIT="tags/${PV}"
 else
         KEYWORDS=""
-		inherit git-r3 meson
 fi
 
 DEPEND="sys-fs/cryptsetup

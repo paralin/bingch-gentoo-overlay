@@ -18,7 +18,7 @@ SRC_URI=""
 
 EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
 if [[ ${PV} != 9999 ]]; then
-    EGIT_COMMIT="tags/${PV}.alpha"
+    EGIT_COMMIT="tags/${PV}.beta"
     #EGIT_COMMIT="8616d62239a20b3702bf86f38c59804f5ac1e44a"
 else
     KEYWORDS=""
@@ -38,6 +38,7 @@ DEPEND="
 	x11-libs/libX11
 	dev-libs/libportal
 	>=dev-libs/libxml2-2.7.8:2
+	>=gui-libs/libhandy-1.1.90:1
 	introspection? ( >=dev-libs/gobject-introspection-1.54:= )
 "
 RDEPEND="${DEPEND}

@@ -41,7 +41,7 @@ DEPEND="
 	>=dev-libs/fribidi-1.0.0
 	>=x11-libs/cairo-1.14[X]
 	>=gnome-base/gsettings-desktop-schemas-40[introspection?]
-	>=dev-libs/glib-2.67.2:2
+	>=dev-libs/glib-2.67.3:2
 	gnome-base/gnome-settings-daemon
 	>=dev-libs/json-glib-0.12.0[introspection?]
 	gnome-base/gnome-desktop:3=

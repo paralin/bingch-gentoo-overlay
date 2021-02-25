@@ -51,6 +51,7 @@ DEPEND="
 	>=net-libs/libsoup-2.48:2.4
 	>=sys-libs/libunwind-1.1:0
 	>=dev-libs/libxml2-2.7.8:2
+	dev-libs/snowball-stemmer
 	>=net-mail/ytnef-1.9.3
 "
 RDEPEND="${DEPEND}

@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~arm64 ~arm ~x86"
 
 if [[ ${PV} != 9999 ]]; then
         #EGIT_COMMIT="tags/v${PV}"
-		EGIT_COMMIT="994853910dd78dccef563d560352dc01f23243eb"
+		EGIT_COMMIT="7a6b702a310bde164720971f0bcc88f88146e1c8"
 else
         KEYWORDS=""
 fi

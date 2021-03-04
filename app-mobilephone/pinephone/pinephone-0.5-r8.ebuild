@@ -40,7 +40,7 @@ src_install() {
 	udev_dorules "${FILESDIR}/10-proximity.rules"
 	udev_dorules "${FILESDIR}/20-pinephone-led.rules"
 	udev_dorules "${FILESDIR}/90-usb-gadget-managed.rules"
-	udev_dorules "${FILESDIR}/99-automount-sd.rules"
+	#udev_dorules "${FILESDIR}/99-automount-sd.rules"
 
 	insinto /etc/gtk-3.0/
 	newins "${FILESDIR}/gtk3-settings.ini" "settings.ini"

@@ -13,6 +13,7 @@ if [[ ${PV} != 9999 ]]; then
 	#EGIT_COMMIT="tags/v${PV}"
 	EGIT_BRANCH="backlight-proximity"
 	EGIT_COMMIT="fa16c3706b383d85098d6fdfe914c4ff84787ef5"
+	KEYWORDS=""
 else
 	KEYWORDS=""
 fi

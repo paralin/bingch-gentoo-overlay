@@ -46,7 +46,7 @@ BDEPEND="
 
 PATCHES=(
 	${FILESDIR}/0001-system-prompt-allow-blank-passwords.patch
-	${FILESDIR}/0002-only-lock-when-not-near.patch
+	${FILESDIR}/0002-fade-for-5s-first.patch
 	${FILESDIR}/MR434.patch
 	${FILESDIR}/MR434-fix-rotation-on-a-PP.patch
 )

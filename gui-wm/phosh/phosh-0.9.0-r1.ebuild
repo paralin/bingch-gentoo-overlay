@@ -7,9 +7,11 @@ inherit pam vala meson git-r3 gnome2-utils systemd readme.gentoo-r1 xdg
 
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~sparc ~x86"
 
-EGIT_REPO_URI="https://source.puri.sm/Librem5/phosh.git"
+EGIT_REPO_URI="https://source.puri.sm/philm/phosh.git"
+#EGIT_REPO_URI="https://source.puri.sm/Librem5/phosh.git"
 if [[ ${PV} != 9999 ]]; then
 	#EGIT_COMMIT="tags/v${PV}"
+	EGIT_BRANCH="backlight-proximity"
 	EGIT_COMMIT="fa16c3706b383d85098d6fdfe914c4ff84787ef5"
 else
 	KEYWORDS=""

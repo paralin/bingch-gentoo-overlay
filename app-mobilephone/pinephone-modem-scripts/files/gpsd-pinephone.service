@@ -1,0 +1,12 @@
+[Unit]
+Description=Enable EG25 GPS
+After=gpsd.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/gpsdctl add /dev/EG25.NMEA
+ExecStop=/usr/bin/gpsdctl remove /dev/EG25.NMEA
+
+[Install]
+WantedBy=multi-user.target

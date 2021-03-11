@@ -34,5 +34,5 @@ src_install() {
 	newexe  ${S}/gpsd_device-hook.sh device-hook
 	systemd_dounit ${S}/*.service
 	dobin ${S}/pinephone-modem-setup.sh
-	dobin ${S}/pinephone-modem-setup-ofono.sh
+	#dobin ${S}/pinephone-modem-setup-ofono.sh
 }

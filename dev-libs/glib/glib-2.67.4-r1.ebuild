@@ -74,6 +74,7 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.64.1-mark-gdbus-server-auth-test-flaky.patch
 	# fix wayland crash
 	"${FILESDIR}"/1958.patch
+	"${FILESDIR}"/fix-gmacros-extern-c++.patch
 )
 
 pkg_setup() {

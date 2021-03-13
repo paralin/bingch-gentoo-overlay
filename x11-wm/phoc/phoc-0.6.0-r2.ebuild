@@ -9,7 +9,7 @@ EGIT_REPO_URI="https://source.puri.sm/Librem5/phoc.git"
 KEYWORDS="~x86 ~amd64 ~arm ~arm64"
 if [[ ${PV} != 9999 ]]; then
     #EGIT_COMMIT="tags/v${PV}"
-	EGIT_COMMIT="dd2edcf6c39ef2c509a2322f3b6aa71471f55858"
+	EGIT_COMMIT="fcdd0e1481b6666283dc4c19579ff0c284f0b86d"
 else
     KEYWORDS=""
 fi

@@ -18,9 +18,8 @@ SRC_URI="${KERNEL_URI} ${MEGI_PATCH_URI} -> all-${PV}.patch"
 
 PATCHES=(
 	${DISTDIR}/all-${PV}.patch
-    ${FILESDIR}/panic-led.patch
     ${FILESDIR}/enable-hdmi-output-pinetab.patch
-    ${FILESDIR}/improve-brightness.patch
+    #${FILESDIR}/improve-brightness.patch
     ${FILESDIR}/enable-jack-detection-pinetab.patch
     ${FILESDIR}/pinetab-bluetooth.patch
     ${FILESDIR}/pinetab-accelerometer.patch
@@ -29,10 +28,14 @@ PATCHES=(
 	${FILESDIR}/media-ov5640-Implement-autofocus.patch
 	${FILESDIR}/0011-dts-pinetab-hardcode-mmc-numbers.patch
 	${FILESDIR}/0002-dts-add-pinetab-dev-old-display-panel.patch
-	${FILESDIR}/0001-arm64-dts-allwinner-pinephone-stop-LEDs-on-suspend.patch
+	#${FILESDIR}/0001-arm64-dts-allwinner-pinephone-stop-LEDs-on-suspend.patch
 	${FILESDIR}/0010-dts-pinephone-Add-pine64-pinephone-to-compat-list.patch
 	${FILESDIR}/0012-pinephone-fix-pogopin-i2c.patch
 	${FILESDIR}/0107-quirk-kernel-org-bug-210681-firmware_rome_error.patch
+	${FILESDIR}/0177-leds-gpio-make-max_brightness-configurable.patch
+	${FILESDIR}/0178-sun8i-codec-fix-headphone-jack-pin-name.patch
+	${FILESDIR}/0179-arm64-dts-allwinner-pinephone-improve-device-tree.patch
+    ${FILESDIR}/panic-led.patch
     #${FILESDIR}/camera-added-bggr-bayer-mode.patch
     #${FILESDIR}/0002-Bluetooth-Fix-LL-PRivacy-BLE-device-fails-to-connect.patch
     #${FILESDIR}/0003-Bluetooth-Fix-attempting-to-set-RPA-timeout-when-unsupported.patch

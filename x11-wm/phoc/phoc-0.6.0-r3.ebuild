@@ -17,7 +17,8 @@ fi
 PATCHES=(
 	"${FILESDIR}/0001-seat-Don-t-notify-on-key-release.patch"
 	"${FILESDIR}/0002-seat-inhibit-touch-events-when-in-power-save-mode-or.patch"
-	#"${FILESDIR}/0003-output-make-sure-rotations-are-always-clockwise.patch"
+	"${FILESDIR}/242.patch"
+	"${FILESDIR}/243.patch"
 )
 
 DESCRIPTION="Wlroots based Phone compositor"

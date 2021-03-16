@@ -1,0 +1,176 @@
+From 91d2d984fe529c71e1463f7e3bd3fb76fda44b2b Mon Sep 17 00:00:00 2001
+From: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Date: Sun, 14 Mar 2021 19:49:23 +0100
+Subject: [PATCH 1/4] seat: Update the cursor in roots_seat_end_compositor_grab
+
+Otherwise the old cursor stays there until the pointer gets moved.
+---
+ src/seat.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/seat.c b/src/seat.c
+index d03f6d4..dbf5dd5 100644
+--- a/src/seat.c
++++ b/src/seat.c
+@@ -1694,6 +1694,7 @@ void roots_seat_end_compositor_grab(struct roots_seat *seat) {
+ 	}
+ 
+ 	cursor->mode = ROOTS_CURSOR_PASSTHROUGH;
++	roots_cursor_update_focus(seat->cursor);
+ }
+ 
+ struct roots_seat *input_last_active_seat(PhocInput *input) {
+-- 
+2.26.2
+
+
+From 96b4436e7c2db7087f539e1dcc08ee04fb64cb1a Mon Sep 17 00:00:00 2001
+From: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Date: Mon, 15 Mar 2021 00:46:17 +0100
+Subject: [PATCH 2/4] roots_passthrough_cursor: Reset the cursor when there's
+ no surface under it
+
+---
+ src/cursor.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/cursor.c b/src/cursor.c
+index 8b770de..31ed31c 100644
+--- a/src/cursor.c
++++ b/src/cursor.c
+@@ -194,7 +194,7 @@ static void roots_passthrough_cursor(struct roots_cursor *cursor,
+ 		return;
+ 	}
+ 
+-	if (cursor->cursor_client != client) {
++	if (cursor->cursor_client != client || !client) {
+ 		roots_seat_maybe_set_cursor (seat, NULL);
+ 		cursor->cursor_client = client;
+ 	}
+-- 
+2.26.2
+
+
+From feb83493689fc7eadaee57289ea88206fa38b06b Mon Sep 17 00:00:00 2001
+From: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Date: Mon, 15 Mar 2021 00:47:17 +0100
+Subject: [PATCH 3/4] seat: Fix primary touch tracking
+
+---
+ src/cursor.c | 11 +++++++++++
+ src/seat.c   |  2 ++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/src/cursor.c b/src/cursor.c
+index 31ed31c..ecdcd48 100644
+--- a/src/cursor.c
++++ b/src/cursor.c
+@@ -485,6 +485,12 @@ void roots_cursor_handle_touch_down(struct roots_cursor *cursor,
+ 	wlr_cursor_absolute_to_layout_coords(cursor->cursor, event->device,
+ 		event->x, event->y, &lx, &ly);
+ 
++	if (seat->touch_id == -1 && cursor->mode == ROOTS_CURSOR_PASSTHROUGH) {
++		seat->touch_id = event->touch_id;
++		seat->touch_x = lx;
++		seat->touch_y = ly;
++	}
++
+ 	double sx, sy;
+ 	struct roots_view *view;
+ 	struct wlr_surface *surface = phoc_desktop_surface_at(
+@@ -532,6 +538,11 @@ void roots_cursor_handle_touch_up(struct roots_cursor *cursor,
+ 		struct wlr_event_touch_up *event) {
+ 	struct wlr_touch_point *point =
+ 		wlr_seat_touch_get_point(cursor->seat->seat, event->touch_id);
++
++	if (cursor->seat->touch_id == event->touch_id) {
++		cursor->seat->touch_id = -1;
++	}
++
+ 	if (!point) {
+ 		return;
+ 	}
+diff --git a/src/seat.c b/src/seat.c
+index dbf5dd5..0dbd06f 100644
+--- a/src/seat.c
++++ b/src/seat.c
+@@ -791,6 +791,8 @@ struct roots_seat *roots_seat_create(PhocInput *input, char *name) {
+ 
+ 	seat->input = input;
+ 
++	seat->touch_id = -1;
++
+ 	seat->seat = wlr_seat_create(server->wl_display, name);
+ 	if (!seat->seat) {
+ 		free(seat);
+-- 
+2.26.2
+
+
+From 83a4ec5bcc77f96426df0809ef00cc4b45b977e0 Mon Sep 17 00:00:00 2001
+From: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Date: Mon, 15 Mar 2021 00:48:29 +0100
+Subject: [PATCH 4/4] cursor: Add preliminary touch support for move and resize
+
+Move the cursor under the finger until touch points receive their own
+cursors.
+---
+ src/cursor.c | 10 ++++++++++
+ src/seat.c   |  6 ++++++
+ 2 files changed, 16 insertions(+)
+
+diff --git a/src/cursor.c b/src/cursor.c
+index ecdcd48..c393e2a 100644
+--- a/src/cursor.c
++++ b/src/cursor.c
+@@ -547,6 +547,11 @@ void roots_cursor_handle_touch_up(struct roots_cursor *cursor,
+ 		return;
+ 	}
+ 
++	if (cursor->mode != ROOTS_CURSOR_PASSTHROUGH) {
++		cursor->mode = ROOTS_CURSOR_PASSTHROUGH;
++		roots_cursor_update_focus(cursor);
++	}
++
+ 	wlr_seat_touch_notify_up(cursor->seat->seat, event->time_msec,
+ 		event->touch_id);
+ }
+@@ -633,6 +638,11 @@ void roots_cursor_handle_touch_motion(struct roots_cursor *cursor,
+ 	if (event->touch_id == cursor->seat->touch_id) {
+ 		cursor->seat->touch_x = lx;
+ 		cursor->seat->touch_y = ly;
++
++		if (cursor->mode != ROOTS_CURSOR_PASSTHROUGH) {
++			wlr_cursor_warp(cursor->cursor, NULL, lx, ly);
++			roots_cursor_update_position(cursor, event->time_msec);
++		}
+ 	}
+ }
+ 
+diff --git a/src/seat.c b/src/seat.c
+index 0dbd06f..461c123 100644
+--- a/src/seat.c
++++ b/src/seat.c
+@@ -1619,6 +1619,9 @@ void roots_seat_begin_move(struct roots_seat *seat, struct roots_view *view) {
+ 
+ 	struct roots_cursor *cursor = seat->cursor;
+ 	cursor->mode = ROOTS_CURSOR_MOVE;
++	if (seat->touch_id != -1) {
++		wlr_cursor_warp(cursor->cursor, NULL, seat->touch_x, seat->touch_y);
++	}
+ 	cursor->offs_x = cursor->cursor->x;
+ 	cursor->offs_y = cursor->cursor->y;
+ 	struct wlr_box geom;
+@@ -1649,6 +1652,9 @@ void roots_seat_begin_resize(struct roots_seat *seat, struct roots_view *view,
+ 
+ 	struct roots_cursor *cursor = seat->cursor;
+ 	cursor->mode = ROOTS_CURSOR_RESIZE;
++	if (seat->touch_id != -1) {
++		wlr_cursor_warp(cursor->cursor, NULL, seat->touch_x, seat->touch_y);
++	}
+ 	cursor->offs_x = cursor->cursor->x;
+ 	cursor->offs_y = cursor->cursor->y;
+ 	struct wlr_box geom;
+-- 
+2.26.2
+

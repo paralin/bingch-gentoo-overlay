@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit gnome.org gnome2-utils meson readme.gentoo-r1 virtualx xdg
+inherit gnome.org gnome2-utils meson readme.gentoo-r1 virtualx xdg git-r3
 
 DESCRIPTION="Default file manager for the GNOME desktop"
 HOMEPAGE="https://wiki.gnome.org/Apps/Nautilus"
@@ -12,7 +12,17 @@ LICENSE="GPL-3+ LGPL-2.1+"
 SLOT="0"
 IUSE="gnome +gstreamer gtk-doc +introspection +previewer selinux sendto"
 
-KEYWORDS="~alpha amd64 ~arm arm64 ~ia64 ~ppc ~ppc64 ~sparc x86 ~amd64-linux ~x86-linux"
+KEYWORDS="~amd64 ~arm64"
+
+SRC_URI=""
+
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
+if [[ ${PV} != 9999 ]]; then
+    EGIT_COMMIT="tags/${PV}.rc"
+    #EGIT_COMMIT="8616d62239a20b3702bf86f38c59804f5ac1e44a"
+else
+    KEYWORDS=""
+fi
 
 DEPEND="
 	>=dev-libs/glib-2.58.1:2
@@ -26,7 +36,9 @@ DEPEND="
 	selinux? ( >=sys-libs/libselinux-2.0 )
 	>=app-misc/tracker-3.0:=
 	x11-libs/libX11
+	dev-libs/libportal
 	>=dev-libs/libxml2-2.7.8:2
+	>=gui-libs/libhandy-1.1.90:1
 	introspection? ( >=dev-libs/gobject-introspection-1.54:= )
 "
 RDEPEND="${DEPEND}

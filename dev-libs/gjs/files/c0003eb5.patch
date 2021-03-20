@@ -1,0 +1,70 @@
+From c0003eb5ad4c4b0421d723da3d1ff11991f70fb5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Marco=20Trevisan=20=28Trevi=C3=B1o=29?= <mail@3v1n0.net>
+Date: Fri, 19 Mar 2021 16:46:42 +0100
+Subject: [PATCH] object: Ignore toggle notifications after disposition
+
+As per commit d37d6604 we are not removing a toggle reference on
+disposed objects, however it may happen that a disposed object (but not
+yet finalized) is still using the toggle references while we're releasing
+it, and in such case we must always remove the toggle ref, otherwise
+GObject (that doesn't remove toggle notifications on disposition) will
+notify us after that the wrapper has been finalized, causing a crash
+because at that point the GObject is still very well alive (and so
+its qdata) and so when we'll try to get the gjs private data from it,
+(namely the JS object wrapper instance) we'll end up accessing freed
+memory.
+
+So, on weak notify callback (that we get during disposition, when the
+object memory is still valid like its toggle notifications) remove the
+toggle reference that we set and consequently toggle down the JSObject
+wrapper, unrooting it so that the garbage collector can pick it (this may
+also make it a bit more reactive, without waiting for the last reference
+being removed if disposition happens as consequence of a run_dispose()
+call).
+
+We keep the m_uses_toggle_ref set though to avoid adding another one,
+but at this point we also have to check whether the object is also
+disposed before considering the toggle ref active, and per this in such
+case we've to only release (steal) the m_ptr when releasing the native
+object not to access to potentially finalized data.
+
+Fixes: #387
+---
+ gi/object.cpp | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/gi/object.cpp b/gi/object.cpp
+index 68410514..598e6bb0 100644
+--- a/gi/object.cpp
++++ b/gi/object.cpp
+@@ -1082,10 +1082,18 @@ static void wrapped_gobj_dispose_notify(
+                         where_the_object_was);
+ }
+ 
++static void wrapped_gobj_toggle_notify(void*, GObject* gobj,
++                                       gboolean is_last_ref);
++
+ void
+ ObjectInstance::gobj_dispose_notify(void)
+ {
+     m_gobj_disposed = true;
++
++    if (m_uses_toggle_ref) {
++        g_object_remove_toggle_ref(m_ptr, wrapped_gobj_toggle_notify, nullptr);
++        wrapped_gobj_toggle_notify(nullptr, m_ptr, TRUE);
++    }
+ }
+ 
+ void ObjectInstance::iterate_wrapped_gobjects(
+@@ -1297,7 +1305,7 @@ void
+ ObjectInstance::release_native_object(void)
+ {
+     discard_wrapper();
+-    if (m_gobj_disposed)
++    if (m_uses_toggle_ref && m_gobj_disposed)
+         m_ptr.release();
+     else if (m_uses_toggle_ref)
+         g_object_remove_toggle_ref(m_ptr.release(), wrapped_gobj_toggle_notify,
+-- 
+GitLab
+

@@ -81,6 +81,9 @@ COMMON_DEPEND="
 # fprintd is used via dbus by gdm-fingerprint-extension
 # gnome-session-3.6 needed to avoid freezing with orca
 RDEPEND="${COMMON_DEPEND}
+	acct-group/gdm
+	acct-user/gdm
+
 	>=gnome-base/gnome-session-3.6
 	>=gnome-base/gnome-shell-3.1.90
 	x11-apps/xhost

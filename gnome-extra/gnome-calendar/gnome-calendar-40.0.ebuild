@@ -1,25 +1,15 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-inherit gnome.org gnome2-utils meson virtualx xdg git-r3
+inherit gnome.org gnome2-utils meson virtualx xdg
 
 DESCRIPTION="Manage your online calendars with simple and modern interface"
 HOMEPAGE="https://wiki.gnome.org/Apps/Calendar"
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
-SRC_URI=""
-
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
-if [[ ${PV} != 9999 ]]; then
-    EGIT_COMMIT="tags/${PV}.beta"
-    #EGIT_COMMIT="8616d62239a20b3702bf86f38c59804f5ac1e44a"
-else
-    KEYWORDS=""
-fi
-
+KEYWORDS="amd64 ~arm64 ~x86"
 IUSE=""
 
 # >=libical-1.0.1 for https://bugzilla.gnome.org/show_bug.cgi?id=751244

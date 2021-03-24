@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-inherit gnome.org gnome2-utils meson xdg git-r3
+inherit gnome.org gnome2-utils meson xdg
 
 DESCRIPTION="Library with common API for various GNOME modules"
 HOMEPAGE="https://gitlab.gnome.org/GNOME/gnome-desktop/"
@@ -11,16 +11,6 @@ LICENSE="GPL-2+ LGPL-2+ FDL-1.1+"
 SLOT="3/19" # subslot = libgnome-desktop-3 soname version
 IUSE="debug gtk-doc +introspection seccomp systemd udev"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~x86-solaris"
-
-SRC_URI=""
-
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
-if [[ ${PV} != 9999 ]]; then
-    EGIT_COMMIT="tags/${PV}.rc"
-    #EGIT_COMMIT="8616d62239a20b3702bf86f38c59804f5ac1e44a"
-else
-    KEYWORDS=""
-fi
 
 COMMON_DEPEND="
 	>=x11-libs/gdk-pixbuf-2.36.5:2[introspection?]

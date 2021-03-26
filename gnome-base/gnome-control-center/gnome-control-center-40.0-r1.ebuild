@@ -28,7 +28,6 @@ KEYWORDS="~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~x86"
 DEPEND="
 	>=gui-libs/libhandy-1:1=
 	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.25.3:= )
-	>=media-sound/pulseaudio-2.0[glib]
 	>=sys-apps/accountsservice-0.6.39
 	>=x11-misc/colord-0.1.34:0=
 	>=x11-libs/gdk-pixbuf-2.23.0:2
@@ -124,6 +123,7 @@ PATCHES=(
 	# https://bugzilla.gnome.org/686840, 697478, 700145
 	# Fix some absolute paths to be appropriate for Gentoo
 	#"${WORKDIR}"/patches/
+	"${FILESDIR}"/fix-pipewire-libpulse-version.patch
 )
 
 python_check_deps() {

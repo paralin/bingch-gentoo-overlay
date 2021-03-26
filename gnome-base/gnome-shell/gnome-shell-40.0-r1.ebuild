@@ -53,7 +53,8 @@ DEPEND="
 	dev-libs/libxml2:2
 	x11-libs/libX11
 
-	>=media-sound/pulseaudio-2[glib]
+	|| ( >=media-sound/pulseaudio-2[glib]
+		media-sound/apulse[sdk] )
 	>=dev-libs/atk-2[introspection]
 	dev-libs/libical:=
 	>=x11-libs/libXfixes-5.0
@@ -126,7 +127,7 @@ PATCHES=(
 	# Fix automagic gnome-bluetooth dep, bug #398145
 	#"${FILESDIR}"/3.34-optional-bluetooth.patch
 	# Change favorites defaults, bug #479918
-	#"${FILESDIR}"/3.36-defaults.patch
+	"${FILESDIR}"/fix-pipewire-libpulse-version.patch
 )
 
 src_prepare() {

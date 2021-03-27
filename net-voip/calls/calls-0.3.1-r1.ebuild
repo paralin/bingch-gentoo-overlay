@@ -13,11 +13,11 @@ EGIT_REPO_URI="https://source.puri.sm/Librem5/${PN}.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~arm ~x86"
+KEYWORDS="~amd64 ~arm64"
 
 if [[ ${PV} != 9999 ]]; then
         #EGIT_COMMIT="tags/v${PV}"
-		EGIT_COMMIT="03d960ccaf888eee8d62872b4039a8945741824a"
+		EGIT_COMMIT="52424ee92799e5412a162a345f4feddc919dc924"
 else
         KEYWORDS=""
 fi

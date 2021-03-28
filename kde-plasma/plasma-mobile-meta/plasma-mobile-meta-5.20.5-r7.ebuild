@@ -26,7 +26,7 @@ DEPEND="media-fonts/noto
 		kde-plasma/plasma-nm[modemmanager,mobile,openconnect]
 		kde-plasma/plasma-pa
 		kde-misc/kdeconnect
-		#media-libs/pulseaudio-qt
+		media-libs/pulseaudio-qt
 		kde-plasma/xdg-desktop-portal-kde
 		kde-plasma/kwallet-pam
 		kde-plasma/plasma-settings

@@ -27,6 +27,7 @@ DEPEND="
 	>=dev-libs/gobject-introspection-1.49.1:=
 	>=dev-libs/gjs-1.65.1
 	>=x11-libs/gtk+-3.15.0:3[introspection]
+	x11-libs/gtk:4
 	>=x11-wm/mutter-3.38.0:0/7[introspection]
 	>=sys-auth/polkit-0.100[introspection]
 	>=gnome-base/gsettings-desktop-schemas-3.33.1

@@ -35,7 +35,7 @@ DEPEND="
 		gnome-base/dconf
 		media-libs/gsound
 		dev-libs/json-glib
-		virtual/libgudev
+		dev-libs/libgudev
 "
 RDEPEND="${DEPEND}"
 BDEPEND="

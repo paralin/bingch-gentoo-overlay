@@ -16,7 +16,7 @@ IUSE=""
 
 RDEPEND="dev-libs/glib:*
 	gnome-base/gnome-common
-	virtual/libgudev
+	dev-libs/libgudev
 	virtual/udev"
 
 DEPEND="${RDEPEND}

@@ -23,7 +23,7 @@ COMMON_DEPEND="
 	>=media-libs/lcms-2.6:2
 	>=sys-auth/polkit-0.104
 	virtual/udev
-	virtual/libgudev
+	dev-libs/libgudev
 	virtual/libudev
 	argyllcms? ( media-gfx/argyllcms )
 	scanner? (

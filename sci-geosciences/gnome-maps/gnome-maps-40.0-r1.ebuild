@@ -34,6 +34,7 @@ RDEPEND="
 	net-libs/libgfbgraph[introspection]
 	net-libs/libsoup:2.4[introspection]
 	net-libs/webkit-gtk:4
+	gui-libs/libhandy:1
 "
 DEPEND="${RDEPEND}"
 BDEPEND="

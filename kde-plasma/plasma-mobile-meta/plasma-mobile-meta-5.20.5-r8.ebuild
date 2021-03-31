@@ -37,6 +37,7 @@ DEPEND="media-fonts/noto
 		kde-plasma/discover
 		kde-plasma/xembed-sni-proxy
 		kde-plasma/kclock
+		kde-plasma/plasma-dialer
 
 		x11-misc/appmenu-gtk-module
 "

@@ -23,7 +23,7 @@ DEPEND="media-fonts/noto
 		kde-frameworks/kinit
 		kde-plasma/kscreen
 		kde-plasma/powerdevil
-		kde-plasma/plasma-nm[modemmanager,mobile,openconnect]
+		kde-plasma/plasma-nm[modemmanager,openconnect]
 		kde-plasma/plasma-pa
 		kde-misc/kdeconnect
 		media-libs/pulseaudio-qt

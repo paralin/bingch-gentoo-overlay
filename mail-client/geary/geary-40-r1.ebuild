@@ -45,7 +45,7 @@ DEPEND="
 	>=app-text/gspell-1.7:=
 	app-text/iso-codes
 	>=dev-libs/json-glib-1.0
-	>=gui-libs/libhandy-0.0.10:0.0=
+	>=gui-libs/libhandy-1.0.3:1
 	>=dev-libs/libpeas-1.24.0
 	>=app-crypt/libsecret-0.11
 	>=net-libs/libsoup-2.48:2.4
@@ -71,7 +71,6 @@ BDEPEND="
 	app-crypt/gcr:0[introspection,vala]
 	dev-libs/libgee:0.8[introspection]
 	app-text/gspell[vala]
-	gui-libs/libhandy:0.0[vala]
 	app-crypt/libsecret[introspection,vala]
 	net-libs/libsoup:2.4[introspection,vala]
 "

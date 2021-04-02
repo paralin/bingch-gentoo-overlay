@@ -37,5 +37,6 @@ DEPEND="kde-plasma/plasma-workspace
 		dev-qt/qtdeclarative[localstorage]
 		kde-frameworks/kwayland
 		kde-plasma/oxygen
+		net-im/telepathy-mission-control
 "
 RDEPEND="${DEPEND}"

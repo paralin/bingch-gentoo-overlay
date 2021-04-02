@@ -39,6 +39,8 @@ DEPEND="media-fonts/noto
 		kde-plasma/kclock
 		kde-plasma/plasma-dialer
 		kde-plasma/bluedevil
+		net-voip/telepathy-ofono 
+		net-libs/telepathy-glib
 
 		x11-misc/appmenu-gtk-module
 "

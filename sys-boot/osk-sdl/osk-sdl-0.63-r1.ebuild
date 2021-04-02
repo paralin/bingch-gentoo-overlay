@@ -25,6 +25,9 @@ DEPEND="sys-fs/cryptsetup
 		media-fonts/dejavu
 		sys-kernel/dracut
 		app-portage/gentoolkit
+		media-libs/cogl
+		media-libs/libglvnd
+		media-libs/mesa
 "
 
 RDEPEND="${DEPEND}"

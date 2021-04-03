@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~arm64"
 
 if [[ ${PV} != 9999 ]]; then
         #EGIT_COMMIT="tags/v${PV}"
-		EGIT_COMMIT="52424ee92799e5412a162a345f4feddc919dc924"
+		EGIT_COMMIT="d67e690f33d7421c69ac102012eac14ce3f3320c"
 else
         KEYWORDS=""
 fi
@@ -34,6 +34,7 @@ DEPEND="
 		>=net-misc/modemmanager-1.12.0
 		>=media-sound/callaudiod-0.0.5
 		gnome-extra/evolution-data-server
+		net-libs/sofia-sip
 		"
 RDEPEND="${DEPEND}"
 BDEPEND="

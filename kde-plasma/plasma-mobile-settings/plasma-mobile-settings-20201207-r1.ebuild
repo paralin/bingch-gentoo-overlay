@@ -40,7 +40,7 @@ src_install () {
 	doins plasmamobile.json
 	insinto /etc/skel/.config/gtk-3.0
 	doins settings.ini
-	insinto /usr/share/maliit/keyboard2/themes
-	doins Breeze.json
-	doins BreezeDark.json
+	#insinto /usr/share/maliit/keyboard2/themes
+	#doins Breeze.json
+	#doins BreezeDark.json
 }

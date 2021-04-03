@@ -10,8 +10,9 @@ HOMEPAGE="https://github.com/maliit/keyboard"
 SRC_URI=""
 EGIT_REPO_URI="https://github.com/maliit/keyboard.git"
 
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 if [[ ${PV} != 9999 ]]; then
-        EGIT_COMMIT="tags/v${PV}"
+        EGIT_COMMIT="tags/${PV}"
         #EGIT_COMMIT="f9648e8f634e12161caac00e7d7e63a16c7ccdc4"
 else
         KEYWORDS=""
@@ -19,7 +20,6 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 IUSE="test"
 
 		#dev-qt/qtfeedback

@@ -11,15 +11,14 @@ inherit ecm kde.org git-r3
 
 
 DESCRIPTION="A minimal Plasma shell package"
-HOMEPAGE="https://community.kde.org/kde/plasma-nano"
-SRC_URI=""
-EGIT_REPO_URI="https://invent.kde.org/kde/${PN}.git"
+HOMEPAGE="https://invent.kde.org/kde/plasma-nano"
+EGIT_REPO_URI="https://invent.kde.org/plasma/${PN}.git"
 
-if [[ ${PV} != 9999 ]]; then
-        EGIT_COMMIT="tags/v${PV}"
-        #EGIT_COMMIT="f9648e8f634e12161caac00e7d7e63a16c7ccdc4"
-else
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
+
+if [[ ${PV} = 9999 ]]; then
         KEYWORDS=""
+		SRC_URI=""
 fi
 
 LICENSE="GPL-3"

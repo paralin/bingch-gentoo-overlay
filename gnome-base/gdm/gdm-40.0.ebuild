@@ -2,26 +2,24 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-GNOME2_LA_PUNT="yes"
 GNOME2_EAUTORECONF="yes"
 
-inherit eutils desktop gnome.org pam readme.gentoo-r1 systemd udev user meson git-r3
+inherit eutils desktop gnome2 meson pam readme.gentoo-r1 systemd toolchain-funcs udev
 
 DESCRIPTION="GNOME Display Manager for managing graphical display servers and user logins"
 HOMEPAGE="https://wiki.gnome.org/Projects/GDM"
 
-SRC_URI="
+SRC_URI="${SRC_URI}
 	branding? ( https://www.mail-archive.com/tango-artists@lists.freedesktop.org/msg00043/tango-gentoo-v1.1.tar.gz )
 "
 
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
-if [[ ${PV} != 9999 ]]; then
-    EGIT_COMMIT="tags/${PV}.rc"
-    #EGIT_BRANCH="gnome-40"
-else
+KEYWORDS="~amd64 ~arm64"
+
+if [[ ${PV} = 9999 ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
     KEYWORDS=""
 fi
-
 
 LICENSE="
 	GPL-2+
@@ -33,8 +31,6 @@ SLOT="0"
 IUSE="accessibility audit bluetooth-sound branding elogind fprint +introspection ipv6 plymouth selinux smartcard systemd tcpd test wayland xinerama"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="^^ ( elogind systemd )"
-
-KEYWORDS="~amd64 ~arm64"
 
 # NOTE: x11-base/xorg-server dep is for X_SERVER_PATH etc, bug #295686
 # nspr used by smartcard extension
@@ -245,9 +241,9 @@ pkg_postinst() {
 
 	# bug #669146; gdm may crash if /var/lib/gdm subdirs are not owned by gdm:gdm
 	ret=0
-	ebegin "Fixing "${EROOT}"var/lib/gdm ownership"
-	chown --no-dereference gdm:gdm "${EROOT}var/lib/gdm" || ret=1
-	for d in "${EROOT}var/lib/gdm/"{.cache,.color,.config,.dbus,.local}; do
+	ebegin "Fixing "${EROOT}"/var/lib/gdm ownership"
+	chown --no-dereference gdm:gdm "${EROOT}/var/lib/gdm" || ret=1
+	for d in "${EROOT}/var/lib/gdm/"{.cache,.color,.config,.dbus,.local}; do
 		[[ ! -e "${d}" ]] || chown --no-dereference -R gdm:gdm "${d}" || ret=1
 	done
 	eend ${ret}

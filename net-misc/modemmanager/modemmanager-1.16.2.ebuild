@@ -43,10 +43,6 @@ BDEPEND="
 "
 PATCHES="
 	${FILESDIR}/0001-mm-broadband-modem-improve-voice-capabilities-detect.patch
-	${FILESDIR}/0002-serial-parsers-do-not-fail-to-detect-a-valid-respons.patch
-	${FILESDIR}/0003-context-add-test-no-suspend-resume-cli-parameter.patch
-	${FILESDIR}/0004-broadband-modem-qmi_Enable_AT_URCs_and_QMI_indications.patch
-	${FILESDIR}/temp_modemmanager_rpmsg.patch
 "
 
 S="${WORKDIR}/ModemManager-${PV}"
@@ -72,6 +68,7 @@ src_configure() {
 		--disable-static
 		--with-dist-version=${PVR}
 		--with-udev-base-dir="$(get_udevdir)"
+		--with-at-command-via-dbus
 		$(use_with udev)
 		$(use_enable introspection)
 		$(use_with mbim)
@@ -100,7 +97,6 @@ src_install() {
 		insinto /usr/share/polkit-1/rules.d/
 		doins "${FILESDIR}"/01-org.freedesktop.ModemManager1.rules
 		insinto /usr/lib/udev/rules.d/
-		newins "${FILESDIR}"/rpmsg-udev.rules 80-modemmanager-mjr.rules 
 	fi
 	# Disable suspend/resume hooks for the EG25-G modem in the PinePhone
 	sed -i -e 's|bin/ModemManager|bin/ModemManager --test-no-suspend-resume|g' \         "${D}/lib/systemd/system/ModemManager.service"

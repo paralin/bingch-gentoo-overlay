@@ -7,7 +7,7 @@ ECM_TEST="true"
 KFMIN=5.74.0
 PVCUT=$(ver_cut 1-3)
 QTMIN=5.15.1
-inherit ecm kde.org git-r3
+inherit ecm kde.org
 
 DESCRIPTION="Plasma Active"
 HOMEPAGE="https://community.kde.org/Plasma/Mobile"
@@ -16,15 +16,15 @@ EGIT_REPO_URI="https://invent.kde.org/kde/${PN}.git"
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 
 if [[ ${PV} = 9999 ]]; then
-        KEYWORDS=""
-		SRC_URI=""
+	inherit += git-r3
+    KEYWORDS=""
+	SRC_URI=""
 fi
 
 LICENSE="GPL-3"
 SLOT="5"
 IUSE=""
 
-S=
 DEPEND="kde-plasma/plasma-workspace[appstream,telemetry]
 		net-misc/ofono
 		dev-qt/libqofono

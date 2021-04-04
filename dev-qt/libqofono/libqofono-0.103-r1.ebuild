@@ -8,10 +8,10 @@ inherit qmake-utils git-r3
 DESCRIPTION="A library for accessing the ofono daemon, and a declarative plugin for it"
 HOMEPAGE="https://git.merproject.org/mer-core/libqofono"
 SRC_URI=""
-EGIT_REPO_URI="https://git.merproject.org/mer-core/libqofono.git"
+EGIT_REPO_URI="https://git.sailfishos.org/mer-core/libqofono.git"
 
 if [[ ${PV} != 9999 ]]; then
-        EGIT_COMMIT="tags/v${PV}"
+        EGIT_COMMIT="tags/${PV}"
         #EGIT_COMMIT="f9648e8f634e12161caac00e7d7e63a16c7ccdc4"
 else
         KEYWORDS=""

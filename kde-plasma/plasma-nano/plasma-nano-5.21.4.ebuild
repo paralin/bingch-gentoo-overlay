@@ -26,6 +26,6 @@ SLOT="5"
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 IUSE=""
 
-DEPEND="kde-plasma/plasma-workspace
+DEPEND=" =kde-plasma/plasma-workspace-${PV}
 "
 RDEPEND="${DEPEND}"

@@ -35,7 +35,10 @@ BDEPEND="
 	virtual/rust
 	dev-util/gtk-doc
 "
-PATCHES=( "${FILESDIR}/450.patch" )
+PATCHES=( 
+	"${FILESDIR}/448.patch"
+	"${FILESDIR}/450.patch"
+	)
 #S="${WORKDIR}/${PN}-v${PV}"
 
 #src_install() {

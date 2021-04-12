@@ -37,10 +37,10 @@ PATCHES=(
 src_install() {
 	meson_src_install
 	systemd_dounit "${FILESDIR}"/eg25-manager.service
-	insinto /etc/eg25-manager
-	newins "${FILESDIR}"/eg25-pinephone-1.0.toml pine64,pinephone-1.0.toml
-	newins "${FILESDIR}"/eg25-pinephone-1.1.toml pine64,pinephone-1.1.toml
-	newins "${FILESDIR}"/eg25-pinephone-1.2.toml pine64,pinephone-1.2.toml
+	#insinto /etc/eg25-manager
+	#newins "${FILESDIR}"/eg25-pinephone-1.0.toml pine64,pinephone-1.0.toml
+	#newins "${FILESDIR}"/eg25-pinephone-1.1.toml pine64,pinephone-1.1.toml
+	#newins "${FILESDIR}"/eg25-pinephone-1.2.toml pine64,pinephone-1.2.toml
 }
 
 pkg_postinst() {

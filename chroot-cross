@@ -1,0 +1,77 @@
+#!/bin/bash
+
+myroot="/usr/aarch64-unknown-linux-gnu"
+host_llvm_bin="/usr/lib/llvm/11/bin"
+local_llvm_bin="${myroot}/${host_llvm_bin}"
+
+if [ $# = 1 ] 
+then
+  myroot=/usr/$1
+fi
+
+# handle llvm link
+if [ -d ${local_llvm_bin} ]
+then
+  cd ${local_llvm_bin}
+  for i in llvm-config llvm-tblgen clang-11
+  do
+    if [ ! -e ${i}.local ]
+    then
+      mv ${i} ${i}.local
+      ln -sf ${host_llvm_bin}/${i} ${i}.host
+    fi
+    ln -sf ${i}.local ${i}
+  done
+fi
+## fix libz.so/libsystemd.so path
+#cd ${myroot}/usr/lib64
+#for i in libz.so libsystemd.so libbz2.so libc.so
+#do
+#  ln -sf ${i}.local ${i}
+#done
+
+
+cd ${myroot}/etc/portage || exit
+rm -f make.conf; ln -s make.conf.local make.conf
+cd ${myroot}/
+mount -t proc none proc
+mount -o bind /dev dev
+mount -o bind /var/db/repos var/db/repos
+mount -o bind /usr/src usr/src
+#mount -o bind /lib/modules lib/modules
+mount -o bind /sys sys
+cp /etc/resolv.conf etc/resolv.conf
+mount -o bind /tmp tmp
+mount -o bind /dev/pts dev/pts #only for X
+mount -o bind /dev/shm dev/shm #python2
+
+chroot . /bin/bash --login
+
+umount dev/shm
+umount dev/pts
+umount tmp
+umount sys
+#umount lib/modules
+umount usr/src
+umount var/db/repos
+umount dev
+umount proc
+
+cd ${myroot}/etc/portage
+rm -f make.conf; ln -s make.conf.chost make.conf
+
+if [ -d ${local_llvm_bin} ]
+then
+  cd ${local_llvm_bin}
+  for i in llvm-config llvm-tblgen clang-11
+  do
+    ln -sf ${i}.host ${i}
+  done
+fi
+
+## fix libz.so/libsystemd.so path
+#cd ${myroot}/usr/lib64
+#for i in libz.so libsystemd.so libbz2.so libc.so
+#do
+#  ln -sf ${i}.chost ${i}
+#done

@@ -9,4 +9,4 @@ until now gentoo cross setup still need some tweaks for cross compiling clang/fi
   ninja clang-tblgen
   mv bin/clang-tblgen /usr/bin
 
-3. Then you will hit another blocks when start cross compiling clang, as somehow the configure script try to use llvm-config and llvm-tblgen inside the target root instead of those in the host, so you also need to apply the workaround as suggested in above bug, make symlink of these two files in the target to the host one
+3. Then you will hit another blocks when start cross compiling clang, as somehow the configure script try to use llvm-config and llvm-tblgen and clang-11 inside the target root instead of those in the host, so you also need to apply the workaround as suggested in above bug, make symlink of these two files in the target to the host one

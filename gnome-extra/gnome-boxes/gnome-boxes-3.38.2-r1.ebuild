@@ -35,7 +35,7 @@ COMMON_DEPEND="
 	>=app-emulation/libvirt-glib-0.2.3
 	>=dev-libs/libxml2-2.7.8:2
 	>=net-misc/spice-gtk-0.32[gtk3(+),smartcard,usbredir]
-	app-misc/tracker:3/3.0
+	app-misc/tracker:3
 	net-libs/webkit-gtk:4
 	rdp? ( net-misc/freerdp:= )
 "

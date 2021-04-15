@@ -14,7 +14,7 @@ KEYWORDS="~arm64"
 EGIT_REPO_URI="${HOMEPAGE}.git"
 
 if [[ ${PV} != 9999 ]]; then
-	EGIT_COMMIT="ea19b0271cf587c992c315a76b995e42b91f7d74"
+	EGIT_COMMIT="73e16f76994b1d3c587796a35766cc668e30c0cd"
 else
 	KEYWORDS=""
 fi
@@ -30,17 +30,16 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 PATCHES=(
-	#	${FILESDIR}/11.patch
-	#	${FILESDIR}/12.patch
+		${FILESDIR}/17.patch
 )
 
 src_install() {
 	meson_src_install
 	systemd_dounit "${FILESDIR}"/eg25-manager.service
-	insinto /etc/eg25-manager
-	newins "${FILESDIR}"/eg25-pinephone-1.0.toml pine64,pinephone-1.0.toml
-	newins "${FILESDIR}"/eg25-pinephone-1.1.toml pine64,pinephone-1.1.toml
-	newins "${FILESDIR}"/eg25-pinephone-1.2.toml pine64,pinephone-1.2.toml
+	#insinto /etc/eg25-manager
+	#newins "${FILESDIR}"/eg25-pinephone-1.0.toml pine64,pinephone-1.0.toml
+	#newins "${FILESDIR}"/eg25-pinephone-1.1.toml pine64,pinephone-1.1.toml
+	#newins "${FILESDIR}"/eg25-pinephone-1.2.toml pine64,pinephone-1.2.toml
 }
 
 pkg_postinst() {

@@ -15,7 +15,7 @@ KEYWORDS="~amd64 ~arm64"
 EGIT_REPO_URI="https://source.puri.sm/Librem5/${PN}.git"
 if [[ ${PV} != 9999 ]]; then
     #EGIT_COMMIT="tags/v${PV}"
-    EGIT_COMMIT="bffd212e102bf71a94c599aac0359a8d30d19008"
+    EGIT_COMMIT="ea3da22f9b11e1fafc8165d8bf8933b219624587"
 else
     KEYWORDS=""
 fi
@@ -35,6 +35,10 @@ BDEPEND="
 	virtual/rust
 	dev-util/gtk-doc
 "
+PATCHES=( 
+#	"${FILESDIR}/448.patch"
+#	"${FILESDIR}/450.patch"
+	)
 #S="${WORKDIR}/${PN}-v${PV}"
 
 #src_install() {

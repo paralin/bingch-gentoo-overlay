@@ -13,3 +13,4 @@ app-emulation/libvirt virt-network
 >=media-libs/gd-2.2.5-r2 fontconfig
 
 net-vpn/openconnect stoken
+dev-libs/libgdata vala

@@ -22,7 +22,7 @@ else
 fi
 
 
-DEPEND="gnome-extra/evolution-data-server
+DEPEND="gnome-extra/evolution-data-server[phonenumber]
 		dev-libs/feedbackd
 		gui-libs/libhandy
 		x11-plugins/purple-mm-sms

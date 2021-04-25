@@ -10,7 +10,7 @@ KEYWORDS="~amd64 ~arm64"
 EGIT_REPO_URI="https://source.puri.sm/Librem5/phosh.git"
 if [[ ${PV} != 9999 ]]; then
 	#EGIT_COMMIT="tags/v${PV}"
-	EGIT_COMMIT="f067f17dd5f3999dc6d5fe42b49715f84ad6bbce"
+	EGIT_COMMIT="fe4d55386476562872ea6f07b4ae9729decd1662"
 else
 	KEYWORDS=""
 fi

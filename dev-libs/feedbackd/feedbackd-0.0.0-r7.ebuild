@@ -13,8 +13,9 @@ IUSE="+introspection +vala"
 REQUIRED_USE="vala? ( introspection )"
 
 if [[ ${PV} == "0.0.0" ]]; then
-	MY_PV="v${PV}+git20210125"
+	MY_PV="${PV}+git20210426"
 	MY_P="${PN}-${MY_PV}"
+	MY_COMMIT="678ae7a22dc2439dc6b575a5f15bb132ff63a7f0"
 fi
 
 DESCRIPTION="A daemon to provide haptic feedback on events"
@@ -25,8 +26,9 @@ if [[ ${PV} == 9999 ]]; then
 	SRC_URI=""
 else
 	EGIT_REPO_URI=""
-	SRC_URI="https://source.puri.sm/Librem5/feedbackd/-/archive/${MY_PV}/${MY_P}.tar.gz"
-	S=${WORKDIR}/${MY_P}
+	#SRC_URI="https://source.puri.sm/Librem5/feedbackd/-/archive/${MY_PV}/${MY_P}.tar.gz"
+	SRC_URI="https://source.puri.sm/Librem5/feedbackd/-/archive/${MY_COMMIT}/${MY_P}.tar.gz"
+	S=${WORKDIR}/${PN}-${MY_COMMIT}
 fi
 LICENSE="LGPL-3"
 SLOT="0"

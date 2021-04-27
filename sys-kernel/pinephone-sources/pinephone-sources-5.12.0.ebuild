@@ -43,8 +43,8 @@ PATCHES=(
 	${FILESDIR}/0107-quirk-kernel-org-bug-210681-firmware_rome_error.patch
 	${FILESDIR}/0177-leds-gpio-make-max_brightness-configurable.patch
 	${FILESDIR}/0178-sun8i-codec-fix-headphone-jack-pin-name.patch
-	${FILESDIR}/0179-arm64-dts-allwinner-pinephone-improve-device-tree.patch
-    ${FILESDIR}/panic-led.patch
+	${FILESDIR}/0179-arm64-dts-allwinner-pinephone-improve-device-tree-5.12.patch
+    ${FILESDIR}/panic-led-5.12.patch
     #${FILESDIR}/camera-added-bggr-bayer-mode.patch
     #${FILESDIR}/0002-Bluetooth-Fix-LL-PRivacy-BLE-device-fails-to-connect.patch
     #${FILESDIR}/0003-Bluetooth-Fix-attempting-to-set-RPA-timeout-when-unsupported.patch

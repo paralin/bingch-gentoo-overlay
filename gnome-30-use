@@ -14,3 +14,4 @@ app-emulation/libvirt virt-network
 
 net-vpn/openconnect stoken
 dev-libs/libgdata vala
+>=net-libs/gnutls-3.7.1 tools

@@ -1,0 +1,273 @@
+From 7b9f5ea85ea5841b739ad8086749122b73baffd3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Fri, 13 Nov 2020 12:07:22 +0100
+Subject: [PATCH 1/3] output: handle_output_manager_apply: Make both loops use
+ the same logic
+
+The enabled loop uses 'continue' in case the output is disabled. Use
+the same pattern in the disabled loop. This avoids one indentation
+level but more importantly makes this quicker to grasp.
+---
+ src/output.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/src/output.c b/src/output.c
+index 05ba79f..552281f 100644
+--- a/src/output.c
++++ b/src/output.c
+@@ -513,19 +513,21 @@ void handle_output_manager_apply(struct wl_listener *listener, void *data) {
+ 	// First disable outputs we need to disable
+ 	wl_list_for_each(config_head, &config->heads, link) {
+ 		struct wlr_output *wlr_output = config_head->state.output;
+-		if (!config_head->state.enabled) {
+-			wlr_output_enable(wlr_output, false);
+-			wlr_output_layout_remove(desktop->layout, wlr_output);
+-			ok &= wlr_output_commit(wlr_output);
+-		}
++		if (config_head->state.enabled)
++			continue;
++
++		wlr_output_enable(wlr_output, false);
++		wlr_output_layout_remove(desktop->layout, wlr_output);
++		ok &= wlr_output_commit(wlr_output);
+ 	}
+ 
+ 	// Then enable outputs that need to
+ 	wl_list_for_each(config_head, &config->heads, link) {
+ 		struct wlr_output *wlr_output = config_head->state.output;
+-		if (!config_head->state.enabled) {
++			
++		if (!config_head->state.enabled)
+ 			continue;
+-		}
++
+ 		wlr_output_enable(wlr_output, true);
+ 		if (config_head->state.mode != NULL) {
+ 			wlr_output_set_mode(wlr_output, config_head->state.mode);
+-- 
+2.26.2
+
+
+From e6a056c3cc075d2a1290ee9e58e6b0bf218eb75b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Fri, 13 Nov 2020 12:12:43 +0100
+Subject: [PATCH 2/3] Drop PHOC_HAS_WLR_OUTPUT_POWER_MANAGEMENT
+
+This is part of wlroots since 0.11.0
+---
+ config.h.in   | 1 -
+ meson.build   | 1 -
+ src/desktop.c | 4 ----
+ src/desktop.h | 4 ----
+ src/output.c  | 4 ----
+ src/output.h  | 2 --
+ 6 files changed, 16 deletions(-)
+
+diff --git a/config.h.in b/config.h.in
+index 88f2721..31650e1 100644
+--- a/config.h.in
++++ b/config.h.in
+@@ -7,4 +7,3 @@
+ 
+ #mesondefine PHOC_VERSION
+ #mesondefine PHOC_XWAYLAND
+-#mesondefine PHOC_HAS_WLR_OUTPUT_POWER_MANAGEMENT
+diff --git a/meson.build b/meson.build
+index 6d5ee4f..14a1baf 100644
+--- a/meson.build
++++ b/meson.build
+@@ -142,7 +142,6 @@ message('\n'.join(summary))
+ config_h = configuration_data()
+ config_h.set_quoted('PHOC_VERSION', meson.project_version())
+ config_h.set('PHOC_XWAYLAND', have_xwayland)
+-config_h.set('PHOC_HAS_WLR_OUTPUT_POWER_MANAGEMENT', wlroots_has_output_power_management)
+ 
+ configure_file(
+   input: 'config.h.in',
+diff --git a/src/desktop.c b/src/desktop.c
+index 15c54db..cc398d9 100644
+--- a/src/desktop.c
++++ b/src/desktop.c
+@@ -20,9 +20,7 @@
+ #include <wlr/types/wlr_input_inhibitor.h>
+ #include <wlr/types/wlr_layer_shell_v1.h>
+ #include <wlr/types/wlr_output_layout.h>
+-#ifdef PHOC_HAS_WLR_OUTPUT_POWER_MANAGEMENT
+ #include <wlr/types/wlr_output_power_management_v1.h>
+-#endif
+ #include <wlr/types/wlr_pointer_constraints_v1.h>
+ #include <wlr/types/wlr_server_decoration.h>
+ #include <wlr/types/wlr_tablet_v2.h>
+@@ -610,14 +608,12 @@ phoc_desktop_constructed (GObject *object)
+   wl_signal_add(&self->output_manager_v1->events.test,
+ 		&self->output_manager_test);
+ 
+-#ifdef PHOC_HAS_WLR_OUTPUT_POWER_MANAGEMENT
+   self->output_power_manager_v1 =
+     wlr_output_power_manager_v1_create(server->wl_display);
+   self->output_power_manager_set_mode.notify =
+     phoc_output_handle_output_power_manager_set_mode;
+   wl_signal_add(&self->output_power_manager_v1->events.set_mode,
+ 		&self->output_power_manager_set_mode);
+-#endif
+ 
+   wlr_data_control_manager_v1_create(server->wl_display);
+ 
+diff --git a/src/desktop.h b/src/desktop.h
+index b21b7e2..7975de9 100644
+--- a/src/desktop.h
++++ b/src/desktop.h
+@@ -86,9 +86,7 @@ struct _PhocDesktop {
+ 	struct wlr_relative_pointer_manager_v1 *relative_pointer_manager;
+ 	struct wlr_pointer_gestures_v1 *pointer_gestures;
+ 	struct wlr_output_manager_v1 *output_manager_v1;
+-#ifdef PHOC_HAS_WLR_OUTPUT_POWER_MANAGEMENT
+ 	struct wlr_output_power_manager_v1 *output_power_manager_v1;
+-#endif
+ 
+ 	struct wl_listener new_output;
+ 	struct wl_listener layout_change;
+@@ -102,9 +100,7 @@ struct _PhocDesktop {
+ 	struct wl_listener pointer_constraint;
+ 	struct wl_listener output_manager_apply;
+ 	struct wl_listener output_manager_test;
+-#ifdef PHOC_HAS_WLR_OUTPUT_POWER_MANAGEMENT
+ 	struct wl_listener output_power_manager_set_mode;
+-#endif
+ 
+ #ifdef PHOC_XWAYLAND
+ 	struct wlr_xwayland *xwayland;
+diff --git a/src/output.c b/src/output.c
+index 552281f..2f489b5 100644
+--- a/src/output.c
++++ b/src/output.c
+@@ -11,9 +11,7 @@
+ #include <wlr/config.h>
+ #include <wlr/types/wlr_compositor.h>
+ #include <wlr/types/wlr_output_layout.h>
+-#ifdef PHOC_HAS_WLR_OUTPUT_POWER_MANAGEMENT
+ #include <wlr/types/wlr_output_power_management_v1.h>
+-#endif
+ #include <wlr/types/wlr_xdg_shell.h>
+ #include <wlr/util/log.h>
+ #include <wlr/util/region.h>
+@@ -568,7 +566,6 @@ void handle_output_manager_test(struct wl_listener *listener, void *data) {
+ 	wlr_output_configuration_v1_destroy(config);
+ }
+ 
+-#ifdef PHOC_HAS_WLR_OUTPUT_POWER_MANAGEMENT
+ void
+ phoc_output_handle_output_power_manager_set_mode(struct wl_listener *listener, void *data)
+ {
+@@ -605,7 +602,6 @@ phoc_output_handle_output_power_manager_set_mode(struct wl_listener *listener, v
+   if (enable)
+     output_damage_whole (self);
+ }
+-#endif
+ 
+ static void output_destroy(struct roots_output *output) {
+ 	// TODO: cursor
+diff --git a/src/output.h b/src/output.h
+index 5eacde2..79632c9 100644
+--- a/src/output.h
++++ b/src/output.h
+@@ -66,9 +66,7 @@ void output_for_each_surface(struct roots_output *output,
+ void handle_new_output(struct wl_listener *listener, void *data);
+ void handle_output_manager_apply(struct wl_listener *listener, void *data);
+ void handle_output_manager_test(struct wl_listener *listener, void *data);
+-#ifdef PHOC_HAS_WLR_OUTPUT_POWER_MANAGEMENT
+ void phoc_output_handle_output_power_manager_set_mode(struct wl_listener *listener, void *data);
+-#endif
+ 
+ struct roots_view;
+ struct roots_drag_icon;
+-- 
+2.26.2
+
+
+From fe303c8389aa05e5921934139150129276d7b7f3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Fri, 13 Nov 2020 12:34:32 +0100
+Subject: [PATCH 3/3] output: Don't remove power saving output from the layout
+
+This allows us to keep windows in place and transforms during
+power save can be applied.
+
+When enabling outputs wlr_output_layout_add() handles aready
+existing ouputs gracefully.
+
+Closes: https://source.puri.sm/Librem5/phosh/-/issues/387
+---
+ src/output.c | 9 +++++++--
+ src/output.h | 3 +++
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/src/output.c b/src/output.c
+index 2f489b5..7a501c1 100644
+--- a/src/output.c
++++ b/src/output.c
+@@ -11,7 +11,6 @@
+ #include <wlr/config.h>
+ #include <wlr/types/wlr_compositor.h>
+ #include <wlr/types/wlr_output_layout.h>
+-#include <wlr/types/wlr_output_power_management_v1.h>
+ #include <wlr/types/wlr_xdg_shell.h>
+ #include <wlr/util/log.h>
+ #include <wlr/util/region.h>
+@@ -511,11 +510,15 @@ void handle_output_manager_apply(struct wl_listener *listener, void *data) {
+ 	// First disable outputs we need to disable
+ 	wl_list_for_each(config_head, &config->heads, link) {
+ 		struct wlr_output *wlr_output = config_head->state.output;
++		struct roots_output *output = wlr_output->data;
++
+ 		if (config_head->state.enabled)
+ 			continue;
+ 
+ 		wlr_output_enable(wlr_output, false);
+-		wlr_output_layout_remove(desktop->layout, wlr_output);
++		/* Don't remove the output from the layout if it's just power saving */
++		if (output->power_mode != ZWLR_OUTPUT_POWER_V1_MODE_OFF)
++		  wlr_output_layout_remove(desktop->layout, wlr_output);
+ 		ok &= wlr_output_commit(wlr_output);
+ 	}
+ 
+@@ -593,6 +596,7 @@ phoc_output_handle_output_power_manager_set_mode(struct wl_listener *listener, v
+   if (enable == self->wlr_output->enabled)
+     return;
+ 
++  self->power_mode = event->mode;
+   wlr_output_enable(self->wlr_output, enable);
+   if (!wlr_output_commit(self->wlr_output)) {
+     g_warning ("Failed to commit power mode change to %d for %p", enable, self);
+@@ -628,6 +632,7 @@ static void output_handle_destroy(struct wl_listener *listener, void *data) {
+ static void output_handle_enable(struct wl_listener *listener, void *data) {
+ 	struct roots_output *output = wl_container_of(listener, output, enable);
+ 	update_output_manager_config(output->desktop);
++	output->power_mode = ZWLR_OUTPUT_POWER_V1_MODE_ON;
+ }
+ 
+ static void output_damage_handle_frame(struct wl_listener *listener,
+diff --git a/src/output.h b/src/output.h
+index 79632c9..6015d46 100644
+--- a/src/output.h
++++ b/src/output.h
+@@ -8,6 +8,7 @@
+ #include <wayland-server-core.h>
+ #include <wlr/types/wlr_box.h>
+ #include <wlr/types/wlr_output_damage.h>
++#include <wlr/types/wlr_output_power_management_v1.h>
+ 
+ struct roots_output {
+ 	PhocDesktop *desktop;
+@@ -30,6 +31,8 @@ struct roots_output {
+ 	struct wl_listener transform;
+ 	struct wl_listener damage_frame;
+ 	struct wl_listener damage_destroy;
++
++	enum zwlr_output_power_v1_mode power_mode;
+ };
+ 
+ typedef void (*roots_surface_iterator_func_t)(struct roots_output *output,
+-- 
+2.26.2
+

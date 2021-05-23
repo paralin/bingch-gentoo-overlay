@@ -10,7 +10,7 @@ KEYWORDS="~amd64 ~arm64"
 EGIT_REPO_URI="https://source.puri.sm/Librem5/phosh.git"
 if [[ ${PV} != 9999 ]]; then
 	#EGIT_COMMIT="tags/v${PV}"
-	EGIT_COMMIT="9c46c02b76c2a6f0c7de9364cbb506a95549f049"
+	EGIT_COMMIT="b2e68d269bb58f53e3b3bb690abe3b803a6c9535"
 else
 	KEYWORDS=""
 fi
@@ -45,6 +45,9 @@ PATCHES=(
 	${FILESDIR}/0001-system-prompt-allow-blank-passwords.patch
 	${FILESDIR}/0002-fix-locale-issue.patch
 	${FILESDIR}/0003-fix-locale-issue-in-service-file.patch
+	${FILESDIR}/821.patch
+	${FILESDIR}/822.patch
+	${FILESDIR}/823.patch
 )
 
 src_prepare() {

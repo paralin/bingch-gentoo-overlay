@@ -109,10 +109,10 @@ diff --git a/src/at.c b/src/at.c
 index a34025f..4469d26 100644
 --- a/src/at.c
 +++ b/src/at.c
-@@ -223,8 +223,12 @@ static gboolean modem_response(gint fd,
-             g_message("GNSS assistance data expired!");
+@@ -221,8 +221,12 @@ static gboolean modem_response(gint fd,
+          */
+         else if (strstr(response, "QGPSURC: \"xtradataexpire\""))
              gnss_upload_assistance_data(manager);
-         }
 -        /* AT command failed, retry */
 -        else if (strstr(response, "ERROR"))
 +        /* AT command failed, retry

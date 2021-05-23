@@ -1,7 +1,420 @@
-From a6839df2135db1df451326c689b0aecbce28b6b2 Mon Sep 17 00:00:00 2001
+From e6d410275ccf193e1a6dd21bb2200443e41ca03b Mon Sep 17 00:00:00 2001
 From: Dylan Van Assche <me@dylanvanassche.be>
-Date: Sat, 17 Apr 2021 19:48:39 +0200
-Subject: [PATCH] gnss: add GNSS assistance support
+Date: Wed, 12 May 2021 16:41:48 +0200
+Subject: [PATCH 1/5] at: g_free doesn't require NULL checking
+
+From the docs: If mem is NULL it simply returns, so there is no need to check mem against NULL before calling this function.
+---
+ src/at.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
+
+diff --git a/src/at.c b/src/at.c
+index a34025f..c6a90d4 100644
+--- a/src/at.c
++++ b/src/at.c
+@@ -104,14 +104,10 @@ static void next_at_command(struct EG25Manager *manager)
+     if (!at_cmd)
+         return;
+ 
+-    if (at_cmd->cmd)
+-        g_free(at_cmd->cmd);
+-    if (at_cmd->subcmd)
+-        g_free(at_cmd->subcmd);
+-    if (at_cmd->value)
+-        g_free(at_cmd->value);
+-    if (at_cmd->expected)
+-        g_free(at_cmd->expected);
++    g_free(at_cmd->cmd);
++    g_free(at_cmd->subcmd);
++    g_free(at_cmd->value);
++    g_free(at_cmd->expected);
+     g_free(at_cmd);
+     manager->at_cmds = g_list_remove(manager->at_cmds, at_cmd);
+ 
+@@ -142,8 +138,7 @@ static void process_at_result(struct EG25Manager *manager, char *response)
+         return;
+ 
+     if (at_cmd->expected && !strstr(response, at_cmd->expected)) {
+-        if (at_cmd->value)
+-            g_free(at_cmd->value);
++        g_free(at_cmd->value);
+         at_cmd->value = at_cmd->expected;
+         at_cmd->expected = NULL;
+         g_message("Got a different result than expected, changing value...");
+-- 
+GitLab
+
+
+From 828176baf168334744596e33b214551d8164346d Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Wed, 12 May 2021 18:21:29 +0200
+Subject: [PATCH 2/5] at: make next_at_command, send_at_command,
+ process_at_result, and append_at_command public methods
+
+Allows other modules to send AT commands as well
+---
+ src/at.c | 47 ++++++++++++++++++++++++-----------------------
+ src/at.h | 22 ++++++++++++++++------
+ 2 files changed, 40 insertions(+), 29 deletions(-)
+
+diff --git a/src/at.c b/src/at.c
+index c6a90d4..b08cf4f 100644
+--- a/src/at.c
++++ b/src/at.c
+@@ -52,7 +52,7 @@ static int configure_serial(const char *tty)
+     return fd;
+ }
+ 
+-static gboolean send_at_command(struct EG25Manager *manager)
++gboolean at_send_command(struct EG25Manager *manager)
+ {
+     char command[256];
+     struct AtCommand *at_cmd = manager->at_cmds ? g_list_nth_data(manager->at_cmds, 0) : NULL;
+@@ -97,7 +97,7 @@ static gboolean send_at_command(struct EG25Manager *manager)
+     return FALSE;
+ }
+ 
+-static void next_at_command(struct EG25Manager *manager)
++void at_next_command(struct EG25Manager *manager)
+ {
+     struct AtCommand *at_cmd = manager->at_cmds ? g_list_nth_data(manager->at_cmds, 0) : NULL;
+ 
+@@ -111,7 +111,7 @@ static void next_at_command(struct EG25Manager *manager)
+     g_free(at_cmd);
+     manager->at_cmds = g_list_remove(manager->at_cmds, at_cmd);
+ 
+-    send_at_command(manager);
++    at_send_command(manager);
+ }
+ 
+ static void retry_at_command(struct EG25Manager *manager)
+@@ -124,13 +124,14 @@ static void retry_at_command(struct EG25Manager *manager)
+     at_cmd->retries++;
+     if (at_cmd->retries > 3) {
+         g_critical("Command %s retried %d times, aborting...", at_cmd->cmd, at_cmd->retries);
+-        next_at_command(manager);
++        at_next_command(manager);
+     } else {
+-        g_timeout_add(500, G_SOURCE_FUNC(send_at_command), manager);
++        g_timeout_add(500, G_SOURCE_FUNC(at_send_command), manager);
+     }
+ }
+ 
+-static void process_at_result(struct EG25Manager *manager, char *response)
++void at_process_result(struct EG25Manager *manager,
++                       const char         *response)
+ {
+     struct AtCommand *at_cmd = manager->at_cmds ? g_list_nth_data(manager->at_cmds, 0) : NULL;
+ 
+@@ -143,17 +144,17 @@ static void process_at_result(struct EG25Manager *manager, char *response)
+         at_cmd->expected = NULL;
+         g_message("Got a different result than expected, changing value...");
+         g_message("\t%s\n\t%s", at_cmd->expected, response);
+-        send_at_command(manager);
++        at_send_command(manager);
+     } else {
+-        next_at_command(manager);
++        at_next_command(manager);
+     }
+ }
+ 
+-static int append_at_command(struct EG25Manager *manager,
+-                             const char         *cmd,
+-                             const char         *subcmd,
+-                             const char         *value,
+-                             const char         *expected)
++int at_append_command(struct EG25Manager *manager,
++                      const char         *cmd,
++                      const char         *subcmd,
++                      const char         *value,
++                      const char         *expected)
+ {
+     struct AtCommand *at_cmd = calloc(1, sizeof(struct AtCommand));
+ 
+@@ -213,10 +214,10 @@ static gboolean modem_response(gint fd,
+         else if (strstr(response, "ERROR"))
+             retry_at_command(manager);
+         else if (strstr(response, "OK"))
+-            process_at_result(manager, response);
++            at_process_result(manager, response);
+         else
+             // Not a recognized response, try running next command, just in case
+-            next_at_command(manager);
++            at_next_command(manager);
+     }
+ 
+     return TRUE;
+@@ -321,34 +322,34 @@ void at_sequence_configure(struct EG25Manager *manager)
+ {
+     for (guint i = 0; i < configure_commands->len; i++) {
+         struct AtCommand *cmd = &g_array_index(configure_commands, struct AtCommand, i);
+-        append_at_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
++        at_append_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
+     }
+-    send_at_command(manager);
++    at_send_command(manager);
+ }
+ 
+ void at_sequence_suspend(struct EG25Manager *manager)
+ {
+     for (guint i = 0; i < suspend_commands->len; i++) {
+         struct AtCommand *cmd = &g_array_index(suspend_commands, struct AtCommand, i);
+-        append_at_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
++        at_append_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
+     }
+-    send_at_command(manager);
++    at_send_command(manager);
+ }
+ 
+ void at_sequence_resume(struct EG25Manager *manager)
+ {
+     for (guint i = 0; i < resume_commands->len; i++) {
+         struct AtCommand *cmd = &g_array_index(resume_commands, struct AtCommand, i);
+-        append_at_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
++        at_append_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
+     }
+-    send_at_command(manager);
++    at_send_command(manager);
+ }
+ 
+ void at_sequence_reset(struct EG25Manager *manager)
+ {
+     for (guint i = 0; i < reset_commands->len; i++) {
+         struct AtCommand *cmd = &g_array_index(reset_commands, struct AtCommand, i);
+-        append_at_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
++        at_append_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
+     }
+-    send_at_command(manager);
++    at_send_command(manager);
+ }
+diff --git a/src/at.h b/src/at.h
+index ba294a4..e0445af 100644
+--- a/src/at.h
++++ b/src/at.h
+@@ -8,10 +8,20 @@
+ 
+ #include "manager.h"
+ 
+-int at_init(struct EG25Manager *data, toml_table_t *config);
+-void at_destroy(struct EG25Manager *data);
++int at_init(struct EG25Manager *manager, toml_table_t *config);
++void at_destroy(struct EG25Manager *manager);
+ 
+-void at_sequence_configure(struct EG25Manager *data);
+-void at_sequence_suspend(struct EG25Manager *data);
+-void at_sequence_resume(struct EG25Manager *data);
+-void at_sequence_reset(struct EG25Manager *data);
++void at_process_result(struct EG25Manager *manager,
++                       const char         *response);
++void at_next_command(struct EG25Manager *manager);
++gboolean at_send_command(struct EG25Manager *manager);
++int at_append_command(struct EG25Manager *manager,
++                      const char         *cmd,
++                      const char         *subcmd,
++                      const char         *value,
++                      const char         *expected);
++
++void at_sequence_configure(struct EG25Manager *manager);
++void at_sequence_suspend(struct EG25Manager *manager);
++void at_sequence_resume(struct EG25Manager *manager);
++void at_sequence_reset(struct EG25Manager *manager);
+-- 
+GitLab
+
+
+From 59c701c38ddf0c861a35277615f91eb126538c6f Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Wed, 12 May 2021 18:25:40 +0200
+Subject: [PATCH 3/5] at: log expected result before setting it to NULL
+
+Otherwise the log contains NULL instead of the expected value, making it hard to debug
+---
+ src/at.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/at.c b/src/at.c
+index b08cf4f..ccc3a2c 100644
+--- a/src/at.c
++++ b/src/at.c
+@@ -141,9 +141,9 @@ void at_process_result(struct EG25Manager *manager,
+     if (at_cmd->expected && !strstr(response, at_cmd->expected)) {
+         g_free(at_cmd->value);
+         at_cmd->value = at_cmd->expected;
+-        at_cmd->expected = NULL;
+         g_message("Got a different result than expected, changing value...");
+-        g_message("\t%s\n\t%s", at_cmd->expected, response);
++        g_message("Expected: [%s]\nResponse: [%s]", at_cmd->expected, response);
++        at_cmd->expected = NULL;
+         at_send_command(manager);
+     } else {
+         at_next_command(manager);
+-- 
+GitLab
+
+
+From e691f830f9f2ccad9916bd1e1720b42ce6a57269 Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Wed, 12 May 2021 18:34:03 +0200
+Subject: [PATCH 4/5] at: allow custom callbacks for AT command response
+ processing
+
+---
+ src/at.c      | 32 +++++++++++++++++---------------
+ src/at.h      | 14 +++++++++++++-
+ src/manager.h |  1 +
+ 3 files changed, 31 insertions(+), 16 deletions(-)
+
+diff --git a/src/at.c b/src/at.c
+index ccc3a2c..1f3ad8c 100644
+--- a/src/at.c
++++ b/src/at.c
+@@ -16,14 +16,6 @@
+ 
+ #include <glib-unix.h>
+ 
+-struct AtCommand {
+-    char *cmd;
+-    char *subcmd;
+-    char *value;
+-    char *expected;
+-    int retries;
+-};
+-
+ static GArray *configure_commands = NULL;
+ static GArray *suspend_commands = NULL;
+ static GArray *resume_commands = NULL;
+@@ -69,6 +61,7 @@ gboolean at_send_command(struct EG25Manager *manager)
+             len = sprintf(command, "AT+%s=\"%s\"\r\n", at_cmd->cmd, at_cmd->subcmd);
+         else if (at_cmd->subcmd && at_cmd->value)
+             len = sprintf(command, "AT+%s=\"%s\",%s\r\n", at_cmd->cmd, at_cmd->subcmd, at_cmd->value);
++        manager->at_callback = at_cmd->callback;
+ 
+         ret = write(manager->at_fd, command, len);
+         if (ret < len)
+@@ -154,7 +147,10 @@ int at_append_command(struct EG25Manager *manager,
+                       const char         *cmd,
+                       const char         *subcmd,
+                       const char         *value,
+-                      const char         *expected)
++                      const char         *expected,
++                      void              (*callback)
++                                        (struct EG25Manager *manager,
++                                         const char *response))
+ {
+     struct AtCommand *at_cmd = calloc(1, sizeof(struct AtCommand));
+ 
+@@ -168,6 +164,8 @@ int at_append_command(struct EG25Manager *manager,
+         at_cmd->value = g_strdup(value);
+     if (expected)
+         at_cmd->expected = g_strdup(expected);
++    if (callback)
++        at_cmd->callback = callback;
+ 
+     manager->at_cmds = g_list_append(manager->at_cmds, at_cmd);
+ 
+@@ -213,8 +211,12 @@ static gboolean modem_response(gint fd,
+         }
+         else if (strstr(response, "ERROR"))
+             retry_at_command(manager);
+-        else if (strstr(response, "OK"))
+-            at_process_result(manager, response);
++        else if (strstr(response, "OK")) {
++            if (manager->at_callback != NULL)
++                manager->at_callback(manager, response);
++            else
++                g_warning("AT command succesfull but no callback registered");
++        }
+         else
+             // Not a recognized response, try running next command, just in case
+             at_next_command(manager);
+@@ -322,7 +324,7 @@ void at_sequence_configure(struct EG25Manager *manager)
+ {
+     for (guint i = 0; i < configure_commands->len; i++) {
+         struct AtCommand *cmd = &g_array_index(configure_commands, struct AtCommand, i);
+-        at_append_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
++        at_append_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected, at_process_result);
+     }
+     at_send_command(manager);
+ }
+@@ -331,7 +333,7 @@ void at_sequence_suspend(struct EG25Manager *manager)
+ {
+     for (guint i = 0; i < suspend_commands->len; i++) {
+         struct AtCommand *cmd = &g_array_index(suspend_commands, struct AtCommand, i);
+-        at_append_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
++        at_append_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected, at_process_result);
+     }
+     at_send_command(manager);
+ }
+@@ -340,7 +342,7 @@ void at_sequence_resume(struct EG25Manager *manager)
+ {
+     for (guint i = 0; i < resume_commands->len; i++) {
+         struct AtCommand *cmd = &g_array_index(resume_commands, struct AtCommand, i);
+-        at_append_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
++        at_append_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected, at_process_result);
+     }
+     at_send_command(manager);
+ }
+@@ -349,7 +351,7 @@ void at_sequence_reset(struct EG25Manager *manager)
+ {
+     for (guint i = 0; i < reset_commands->len; i++) {
+         struct AtCommand *cmd = &g_array_index(reset_commands, struct AtCommand, i);
+-        at_append_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
++        at_append_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected, at_process_result);
+     }
+     at_send_command(manager);
+ }
+diff --git a/src/at.h b/src/at.h
+index e0445af..0364e2c 100644
+--- a/src/at.h
++++ b/src/at.h
+@@ -8,6 +8,15 @@
+ 
+ #include "manager.h"
+ 
++typedef struct AtCommand {
++    char *cmd;
++    char *subcmd;
++    char *value;
++    char *expected;
++    void (*callback)(struct EG25Manager *manager, const char *response);
++    int retries;
++} AtCommand;
++
+ int at_init(struct EG25Manager *manager, toml_table_t *config);
+ void at_destroy(struct EG25Manager *manager);
+ 
+@@ -19,7 +28,10 @@ int at_append_command(struct EG25Manager *manager,
+                       const char         *cmd,
+                       const char         *subcmd,
+                       const char         *value,
+-                      const char         *expected);
++                      const char         *expected,
++                      void              (*callback)
++                                        (struct EG25Manager *manager,
++                                         const char *response));
+ 
+ void at_sequence_configure(struct EG25Manager *manager);
+ void at_sequence_suspend(struct EG25Manager *manager);
+diff --git a/src/manager.h b/src/manager.h
+index 30028e6..3cc0118 100644
+--- a/src/manager.h
++++ b/src/manager.h
+@@ -47,6 +47,7 @@ struct EG25Manager {
+     int at_fd;
+     guint at_source;
+     GList *at_cmds;
++    void (*at_callback)(struct EG25Manager *manager, const char *response);
+ 
+     enum EG25State modem_state;
+     gchar *modem_usb_id;
+-- 
+GitLab
+
+
+From e3f23cfe1aa43407990a95481554e0d554b9933c Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Wed, 12 May 2021 19:37:21 +0200
+Subject: [PATCH 5/5] gnss: add GNSS assistance support
 
 Automatically fetch the GNSS assistance data from the Web
 to heavily reduce the time to acquire a GNSS lock by uploading
@@ -16,15 +429,14 @@ and power consumption.
  data/pine64,pinephone-1.1.toml |  26 +-
  data/pine64,pinephone-1.2.toml |  26 +-
  meson.build                    |   1 +
- src/at.c                       | 103 ++++---
- src/at.h                       |  32 ++-
- src/gnss.c                     | 487 +++++++++++++++++++++++++++++++++
+ src/at.c                       |  22 +-
+ src/gnss.c                     | 478 +++++++++++++++++++++++++++++++++
  src/gnss.h                     |  16 ++
  src/manager.c                  |   2 +
  src/manager.h                  |  34 +++
  src/meson.build                |   1 +
- src/mm-iface.c                 |   4 +-
- 12 files changed, 699 insertions(+), 59 deletions(-)
+ src/mm-iface.c                 |   5 +-
+ 11 files changed, 625 insertions(+), 12 deletions(-)
  create mode 100644 src/gnss.c
  create mode 100644 src/gnss.h
 
@@ -164,7 +576,7 @@ index d57d2cb..2852778 100644
  ]
  
 diff --git a/src/at.c b/src/at.c
-index a34025f..36635fd 100644
+index 1f3ad8c..49cf213 100644
 --- a/src/at.c
 +++ b/src/at.c
 @@ -6,6 +6,7 @@
@@ -175,130 +587,7 @@ index a34025f..36635fd 100644
  
  #include <fcntl.h>
  #include <stdio.h>
-@@ -16,14 +17,6 @@
- 
- #include <glib-unix.h>
- 
--struct AtCommand {
--    char *cmd;
--    char *subcmd;
--    char *value;
--    char *expected;
--    int retries;
--};
--
- static GArray *configure_commands = NULL;
- static GArray *suspend_commands = NULL;
- static GArray *resume_commands = NULL;
-@@ -52,7 +45,7 @@ static int configure_serial(const char *tty)
-     return fd;
- }
- 
--static gboolean send_at_command(struct EG25Manager *manager)
-+gboolean at_send_at_command(struct EG25Manager *manager)
- {
-     char command[256];
-     struct AtCommand *at_cmd = manager->at_cmds ? g_list_nth_data(manager->at_cmds, 0) : NULL;
-@@ -69,6 +62,7 @@ static gboolean send_at_command(struct EG25Manager *manager)
-             len = sprintf(command, "AT+%s=\"%s\"\r\n", at_cmd->cmd, at_cmd->subcmd);
-         else if (at_cmd->subcmd && at_cmd->value)
-             len = sprintf(command, "AT+%s=\"%s\",%s\r\n", at_cmd->cmd, at_cmd->subcmd, at_cmd->value);
-+        manager->at_callback = at_cmd->callback;
- 
-         ret = write(manager->at_fd, command, len);
-         if (ret < len)
-@@ -97,25 +91,21 @@ static gboolean send_at_command(struct EG25Manager *manager)
-     return FALSE;
- }
- 
--static void next_at_command(struct EG25Manager *manager)
-+void at_next_at_command(struct EG25Manager *manager)
- {
-     struct AtCommand *at_cmd = manager->at_cmds ? g_list_nth_data(manager->at_cmds, 0) : NULL;
- 
-     if (!at_cmd)
-         return;
- 
--    if (at_cmd->cmd)
--        g_free(at_cmd->cmd);
--    if (at_cmd->subcmd)
--        g_free(at_cmd->subcmd);
--    if (at_cmd->value)
--        g_free(at_cmd->value);
--    if (at_cmd->expected)
--        g_free(at_cmd->expected);
-+    g_free(at_cmd->cmd);
-+    g_free(at_cmd->subcmd);
-+    g_free(at_cmd->value);
-+    g_free(at_cmd->expected);
-     g_free(at_cmd);
-     manager->at_cmds = g_list_remove(manager->at_cmds, at_cmd);
- 
--    send_at_command(manager);
-+    at_send_at_command(manager);
- }
- 
- static void retry_at_command(struct EG25Manager *manager)
-@@ -128,13 +118,13 @@ static void retry_at_command(struct EG25Manager *manager)
-     at_cmd->retries++;
-     if (at_cmd->retries > 3) {
-         g_critical("Command %s retried %d times, aborting...", at_cmd->cmd, at_cmd->retries);
--        next_at_command(manager);
-+        at_next_at_command(manager);
-     } else {
--        g_timeout_add(500, G_SOURCE_FUNC(send_at_command), manager);
-+        g_timeout_add(500, G_SOURCE_FUNC(at_send_at_command), manager);
-     }
- }
- 
--static void process_at_result(struct EG25Manager *manager, char *response)
-+void at_process_at_result(struct EG25Manager *manager, const char *response)
- {
-     struct AtCommand *at_cmd = manager->at_cmds ? g_list_nth_data(manager->at_cmds, 0) : NULL;
- 
-@@ -145,20 +135,23 @@ static void process_at_result(struct EG25Manager *manager, char *response)
-         if (at_cmd->value)
-             g_free(at_cmd->value);
-         at_cmd->value = at_cmd->expected;
--        at_cmd->expected = NULL;
-         g_message("Got a different result than expected, changing value...");
--        g_message("\t%s\n\t%s", at_cmd->expected, response);
--        send_at_command(manager);
-+        g_message("Expected: [%s]\n Response: [%s]", at_cmd->expected, response);
-+        at_cmd->expected = NULL;
-+        at_send_at_command(manager);
-     } else {
--        next_at_command(manager);
-+        at_next_at_command(manager);
-     }
- }
- 
--static int append_at_command(struct EG25Manager *manager,
--                             const char         *cmd,
--                             const char         *subcmd,
--                             const char         *value,
--                             const char         *expected)
-+int at_append_at_command(struct EG25Manager *manager,
-+                         const char         *cmd,
-+                         const char         *subcmd,
-+                         const char         *value,
-+                         const char         *expected,
-+                         void              (*callback)
-+                                           (struct EG25Manager *manager,
-+                                            const char *response))
- {
-     struct AtCommand *at_cmd = calloc(1, sizeof(struct AtCommand));
- 
-@@ -172,6 +165,8 @@ static int append_at_command(struct EG25Manager *manager,
-         at_cmd->value = g_strdup(value);
-     if (expected)
-         at_cmd->expected = g_strdup(expected);
-+    if (callback)
-+        at_cmd->callback = callback;
- 
-     manager->at_cmds = g_list_append(manager->at_cmds, at_cmd);
- 
-@@ -211,17 +206,39 @@ static gboolean modem_response(gint fd,
+@@ -205,20 +206,37 @@ static gboolean modem_response(gint fd,
  
          g_message("Response: [%s]", response);
  
@@ -313,125 +602,37 @@ index a34025f..36635fd 100644
 +        /*
 +         * Search for 'QGPSURC: "xtradataexpire"' in response to detect
 +         * if GNSS assistance data must be re-uploaded.
-+         * If that's the case, start upload.
++         * If that's the case, check if no AT commands are being processed
++         * to avoid deadlocks and start upload.
 +         */
-+        else if (strstr(response, "+QGPSURC: \"xtradataexpire\"")) {
-+            g_message("GNSS assistance data expired!");
++        else if (strstr(response, "QGPSURC: \"xtradataexpire\"") && manager->at_cmds == NULL)
 +            gnss_upload_assistance_data(manager);
-+        }
 +        /* AT command failed, retry */
          else if (strstr(response, "ERROR"))
              retry_at_command(manager);
--        else if (strstr(response, "OK"))
--            process_at_result(manager, response);
+-        else if (strstr(response, "OK")) {
 +        /*
 +         * Successfull AT responses contain 'OK', except for AT+QFUPL which also
 +         * returns 'CONNECT' when the modem is ready to receive data over serial
 +         */
 +        else if (strstr(response, "OK") || strstr(response, "CONNECT")) {
-+            if (manager->at_callback != NULL)
-+                manager->at_callback(manager, response);
-+            else
-+                g_warning("AT command succesfull but no callback registered");
-+        }
+             if (manager->at_callback != NULL)
+                 manager->at_callback(manager, response);
+             else
+                 g_warning("AT command succesfull but no callback registered");
+         }
 +        /* Not a recognized response, try running next command, just in case */
          else
 -            // Not a recognized response, try running next command, just in case
--            next_at_command(manager);
-+            at_next_at_command(manager);
+             at_next_command(manager);
      }
  
-     return TRUE;
-@@ -326,34 +343,34 @@ void at_sequence_configure(struct EG25Manager *manager)
- {
-     for (guint i = 0; i < configure_commands->len; i++) {
-         struct AtCommand *cmd = &g_array_index(configure_commands, struct AtCommand, i);
--        append_at_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
-+        at_append_at_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected, at_process_at_result);
-     }
--    send_at_command(manager);
-+    at_send_at_command(manager);
- }
- 
- void at_sequence_suspend(struct EG25Manager *manager)
- {
-     for (guint i = 0; i < suspend_commands->len; i++) {
-         struct AtCommand *cmd = &g_array_index(suspend_commands, struct AtCommand, i);
--        append_at_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
-+        at_append_at_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected, at_process_at_result);
-     }
--    send_at_command(manager);
-+    at_send_at_command(manager);
- }
- 
- void at_sequence_resume(struct EG25Manager *manager)
- {
-     for (guint i = 0; i < resume_commands->len; i++) {
-         struct AtCommand *cmd = &g_array_index(resume_commands, struct AtCommand, i);
--        append_at_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
-+        at_append_at_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected, at_process_at_result);
-     }
--    send_at_command(manager);
-+    at_send_at_command(manager);
- }
- 
- void at_sequence_reset(struct EG25Manager *manager)
- {
-     for (guint i = 0; i < reset_commands->len; i++) {
-         struct AtCommand *cmd = &g_array_index(reset_commands, struct AtCommand, i);
--        append_at_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected);
-+        at_append_at_command(manager, cmd->cmd, cmd->subcmd, cmd->value, cmd->expected, at_process_at_result);
-     }
--    send_at_command(manager);
-+    at_send_at_command(manager);
- }
-diff --git a/src/at.h b/src/at.h
-index ba294a4..cbf5f6b 100644
---- a/src/at.h
-+++ b/src/at.h
-@@ -8,10 +8,30 @@
- 
- #include "manager.h"
- 
--int at_init(struct EG25Manager *data, toml_table_t *config);
--void at_destroy(struct EG25Manager *data);
-+struct AtCommand {
-+    char *cmd;
-+    char *subcmd;
-+    char *value;
-+    char *expected;
-+    void (*callback)(struct EG25Manager *manager, const char *response);
-+    int retries;
-+};
- 
--void at_sequence_configure(struct EG25Manager *data);
--void at_sequence_suspend(struct EG25Manager *data);
--void at_sequence_resume(struct EG25Manager *data);
--void at_sequence_reset(struct EG25Manager *data);
-+int at_init(struct EG25Manager *manager, toml_table_t *config);
-+void at_destroy(struct EG25Manager *manager);
-+
-+int at_append_at_command(struct EG25Manager *manager,
-+                         const char *cmd,
-+                         const char* subcmd,
-+                         const char *value,
-+                         const char *expected,
-+                         void (*callback)(struct EG25Manager *manager,
-+                                          const char *response));
-+gboolean at_send_at_command(struct EG25Manager *manager);
-+void at_next_at_command(struct EG25Manager *manager);
-+void at_process_at_result(struct EG25Manager *manager, const char *response);
-+
-+void at_sequence_configure(struct EG25Manager *manager);
-+void at_sequence_suspend(struct EG25Manager *manager);
-+void at_sequence_resume(struct EG25Manager *manager);
-+void at_sequence_reset(struct EG25Manager *manager);
 diff --git a/src/gnss.c b/src/gnss.c
 new file mode 100644
-index 0000000..503b54b
+index 0000000..15814e9
 --- /dev/null
 +++ b/src/gnss.c
-@@ -0,0 +1,487 @@
+@@ -0,0 +1,478 @@
 +/*
 + * Copyright (C) 2021 Dylan Van Assche <me@dylanvanassche.be>
 + *
@@ -444,7 +645,7 @@ index 0000000..503b54b
 +
 +#define BUFFER_SIZE 256
 +#define UPLOAD_DELAY 100000
-+#define SCHEDULE_IN_SECS 30
++#define RESCHEDULE_IN_SECS 30
 +
 +static void gnss_step(struct EG25Manager *manager);
 +
@@ -469,7 +670,7 @@ index 0000000..503b54b
 +    toml_datum_t enabled;
 +    toml_datum_t url;
 +    toml_datum_t file;
-+    GError *error = NULL;
++    g_autoptr (GError) error = NULL;
 +
 +    /*
 +     * GNSS assistance is an optional feature, you can disable it
@@ -500,14 +701,12 @@ index 0000000..503b54b
 +
 +    /* Create temporary file to store assistance data */
 +    manager->gnss_assistance_fd = g_file_open_tmp(NULL, NULL, &error);
-+    if (error != NULL) {
++    if (error != NULL)
 +        g_error ("Unable to create temporary file: %s", error->message);
-+        g_error_free(error);
-+    }
 +
 +    /* Initialize state and schedule upload */
 +    manager->gnss_assistance_step = EG25_GNSS_STEP_LAST;
-+    g_timeout_add_seconds(SCHEDULE_IN_SECS,
++    g_timeout_add_seconds(RESCHEDULE_IN_SECS,
 +                          G_SOURCE_FUNC(gnss_upload_assistance_data), manager);
 +}
 +
@@ -523,7 +722,7 @@ index 0000000..503b54b
 +{
 +    MMModemLocationSource sources;
 +    gboolean signals_location;
-+    GError *error = NULL;
++    g_autoptr (GError) error = NULL;
 +
 +    sources = mm_modem_location_get_enabled(manager->mm_location);
 +    signals_location = mm_modem_location_signals_location(manager->mm_location);
@@ -554,7 +753,6 @@ index 0000000..503b54b
 +    if (error != NULL) {
 +        g_warning("Unable to disable GNSS engine through ModemManager: %s",
 +                  error->message);
-+        g_error_free(error);
 +    }
 +}
 +#endif
@@ -563,7 +761,7 @@ index 0000000..503b54b
 +                               const char *response)
 +{
 +    /* Clear QGPSEND AT command and process next */
-+    at_next_at_command(manager);
++    at_next_command(manager);
 +
 +    /* Go to the next step */
 +    manager->gnss_assistance_step++;
@@ -587,11 +785,11 @@ index 0000000..503b54b
 +        at_cmd->value = NULL;
 +        at_cmd->cmd = g_strdup("QGPSEND");
 +        at_cmd->callback = disable_at_gnss_cb;
-+        at_send_at_command(manager);
++        at_send_command(manager);
 +    }
 +    /* QGPS is already disabled, move on to next step */
 +    else {
-+        at_next_at_command(manager);
++        at_next_command(manager);
 +        manager->gnss_sources &= ~EG25_GNSS_SOURCE_QGPS;
 +        manager->gnss_assistance_step++;
 +        gnss_step(manager);
@@ -601,8 +799,8 @@ index 0000000..503b54b
 +static void state_at_gnss(struct EG25Manager *manager)
 +{
 +    /* Asynchronously send AT command to query status of GNSS engine */
-+    at_append_at_command(manager, "QGPS?", NULL, NULL, NULL, state_at_gnss_cb);
-+    at_send_at_command(manager);
++    at_append_command(manager, "QGPS?", NULL, NULL, NULL, state_at_gnss_cb);
++    at_send_command(manager);
 +}
 +
 +/******************************************************************************/
@@ -637,9 +835,9 @@ index 0000000..503b54b
 +
 +        /* Restart upload on HTTP error status code */
 +        g_message ("Rescheduling upload because of failure in %ds",
-+                   SCHEDULE_IN_SECS);
++                   RESCHEDULE_IN_SECS);
 +        manager->gnss_assistance_step = EG25_GNSS_STEP_LAST;
-+        g_timeout_add_seconds(SCHEDULE_IN_SECS,
++        g_timeout_add_seconds(RESCHEDULE_IN_SECS,
 +                              G_SOURCE_FUNC(gnss_upload_assistance_data),
 +                              manager);
 +        return;
@@ -657,9 +855,9 @@ index 0000000..503b54b
 +         * mostly because of no network connection.
 +         */
 +        g_message ("Rescheduling upload because of failure in %ds",
-+                   SCHEDULE_IN_SECS);
++                   RESCHEDULE_IN_SECS);
 +        manager->gnss_assistance_step = EG25_GNSS_STEP_LAST;
-+        g_timeout_add_seconds(SCHEDULE_IN_SECS,
++        g_timeout_add_seconds(RESCHEDULE_IN_SECS,
 +                              G_SOURCE_FUNC(gnss_upload_assistance_data),
 +                              manager);
 +        return;
@@ -676,8 +874,8 @@ index 0000000..503b54b
 +
 +/******************************************************************************/
 +
-+static void init_assistance_data_upload_cb2(struct EG25Manager *manager,
-+                                            const char *response)
++static void init_assistance_data_upload_step2(struct EG25Manager *manager,
++                                              const char *response)
 +{
 +    /* Search for 'CONNECT' in response to start upload */
 +    if (strstr(response, "CONNECT")) {
@@ -687,14 +885,14 @@ index 0000000..503b54b
 +    }
 +}
 +
-+static void init_assistance_data_upload_cb1(struct EG25Manager *manager,
-+                                            const char *response)
++static void init_assistance_data_upload_step1(struct EG25Manager *manager,
++                                              const char *response)
 +{
 +    gchar value[BUFFER_SIZE];
 +    long int size;
 +
 +    /* Process AT response */
-+    at_process_at_result(manager, response);
++    at_process_result(manager, response);
 +
 +    /* Get file size in bytes */
 +    size = (long int)lseek(manager->gnss_assistance_fd, 0, SEEK_END);
@@ -704,9 +902,9 @@ index 0000000..503b54b
 +    g_snprintf(value, BUFFER_SIZE, "\"RAM:%s\",%ld\r\n",
 +               manager->gnss_assistance_file, size);
 +    g_message("Initiate GNSS assistance data upload: %s", value);
-+    at_append_at_command(manager, "QFUPL", NULL, value, NULL,
-+                      init_assistance_data_upload_cb2);
-+    at_send_at_command(manager);
++    at_append_command(manager, "QFUPL", NULL, value, NULL,
++                      init_assistance_data_upload_step2);
++    at_send_command(manager);
 +}
 +
 +static void init_assistance_data_upload(struct EG25Manager *manager)
@@ -715,9 +913,9 @@ index 0000000..503b54b
 +     * Delete all previous GNSS assistance data files in RAM
 +     * and start uploading the latest one to RAM.
 +     */
-+    at_append_at_command(manager, "QFDEL", NULL, "\"RAM:*\"\r\n",
-+                         NULL, init_assistance_data_upload_cb1);
-+    at_send_at_command(manager);
++    at_append_command(manager, "QFDEL", NULL, "\"RAM:*\"\r\n",
++                         NULL, init_assistance_data_upload_step1);
++    at_send_command(manager);
 +}
 +
 +static void upload_assistance_data(struct EG25Manager *manager)
@@ -729,11 +927,6 @@ index 0000000..503b54b
 +    /* Copy downloaded XTRA assistance data to the modem over serial */
 +    while((len = read(manager->gnss_assistance_fd, buffer, 2*BUFFER_SIZE)) > 0)
 +    {
-+        if (len < 0) {
-+            success = FALSE;
-+            g_error("Reading GNSS assistance data failed: %d", len);
-+            break;
-+        }
 +        len = write(manager->at_fd, buffer, len);
 +        if (len < 0) {
 +            success = FALSE;
@@ -745,7 +938,7 @@ index 0000000..503b54b
 +    }
 +
 +    /* Clear QFUPL AT command and process next */
-+    at_next_at_command(manager);
++    at_next_command(manager);
 +
 +    /* Go to the next step if successful */
 +    if (success) {
@@ -755,9 +948,9 @@ index 0000000..503b54b
 +    /* Restart upload */
 +    else {
 +        g_message ("Rescheduling upload because of failure in %ds",
-+                   SCHEDULE_IN_SECS);
++                   RESCHEDULE_IN_SECS);
 +        manager->gnss_assistance_step = EG25_GNSS_STEP_LAST;
-+        g_timeout_add_seconds(SCHEDULE_IN_SECS,
++        g_timeout_add_seconds(RESCHEDULE_IN_SECS,
 +                              G_SOURCE_FUNC(gnss_upload_assistance_data),
 +                              manager);
 +    }
@@ -767,7 +960,7 @@ index 0000000..503b54b
 +                                             const char *response)
 +{
 +    /* Process response */
-+    at_process_at_result(manager, response);
++    at_process_result(manager, response);
 +    g_message("GNSS assistance data upload finished");
 +
 +    /* Go to the next step */
@@ -785,16 +978,16 @@ index 0000000..503b54b
 +    datetime = g_date_time_new_now_utc();
 +    timestring = g_date_time_format(datetime, "0,\"%Y/%m/%d,%H:%M:%S\"\r\n");
 +    g_message("Setting GNSS assistance UTC clock to: %s", timestring);
-+    at_append_at_command(manager, "QGPSXTRATIME", NULL, timestring, NULL,
-+                         at_process_at_result);
++    at_append_command(manager, "QGPSXTRATIME", NULL, timestring, NULL,
++                         at_process_result);
 +
 +    /* Configure GNSS engine to use uploaded GNSS assistance data */
 +    g_snprintf(value, BUFFER_SIZE, "\"RAM:%s\"\r\n",
 +               manager->gnss_assistance_file);
 +    g_message("Setting GNSS assistance file to: %s", value);
-+    at_append_at_command(manager, "QGPSXTRADATA", NULL, value, NULL,
++    at_append_command(manager, "QGPSXTRADATA", NULL, value, NULL,
 +                         finish_assistance_data_upload_cb);
-+    at_send_at_command(manager);
++    at_send_command(manager);
 +}
 +
 +/******************************************************************************/
@@ -804,7 +997,7 @@ index 0000000..503b54b
 +{
 +    MMModemLocationSource sources;
 +    gboolean signal_location;
-+    GError *error = NULL;
++    g_autoptr (GError) error = NULL;
 +
 +    if (manager->gnss_sources & EG25_GNSS_SOURCE_UNMANAGED)
 +        sources |= MM_MODEM_LOCATION_SOURCE_GPS_UNMANAGED;
@@ -817,11 +1010,9 @@ index 0000000..503b54b
 +    signal_location = mm_modem_location_signals_location(manager->mm_location);
 +    mm_modem_location_setup_sync(manager->mm_location, sources,
 +                                 signal_location, NULL, &error);
-+    if (error != NULL) {
++    if (error != NULL)
 +        g_warning("Unable to enable GNSS engine through ModemManager: %s",
 +                  error->message);
-+        g_error_free(error);
-+    }
 +}
 +#endif
 +
@@ -834,9 +1025,9 @@ index 0000000..503b54b
 +static void enable_at_gnss(struct EG25Manager *manager)
 +{
 +    if (manager->gnss_sources & EG25_GNSS_SOURCE_QGPS) {
-+        at_append_at_command(manager, "QGPS", NULL, "1", NULL,
++        at_append_command(manager, "QGPS", NULL, "1", NULL,
 +                             enable_at_gnss_cb);
-+        at_send_at_command(manager);
++        at_send_command(manager);
 +        return;
 +    }
 +    manager->gnss_assistance_step++;
@@ -919,6 +1110,7 @@ index 0000000..503b54b
 +        break;
 +    }
 +}
++
 diff --git a/src/gnss.h b/src/gnss.h
 new file mode 100644
 index 0000000..931ab8b
@@ -962,10 +1154,10 @@ index c0b8a43..d13a2a0 100644
      g_idle_add(G_SOURCE_FUNC(modem_start), &manager);
  
 diff --git a/src/manager.h b/src/manager.h
-index 30028e6..41957d6 100644
+index 3cc0118..3e097b3 100644
 --- a/src/manager.h
 +++ b/src/manager.h
-@@ -16,6 +16,31 @@
+@@ -16,6 +16,32 @@
  
  #include "toml.h"
  
@@ -994,15 +1186,11 @@ index 30028e6..41957d6 100644
 +    EG25_GNSS_SOURCE_QGPS = 1 << 3,
 +} EG25GNSSSource;
 +
++
  enum EG25State {
      EG25_STATE_INIT = 0,
      EG25_STATE_POWERED, // Power-on sequence has been executed, but the modem isn't on yet
-@@ -47,15 +72,24 @@ struct EG25Manager {
-     int at_fd;
-     guint at_source;
-     GList *at_cmds;
-+    void (*at_callback)(struct EG25Manager *manager, const char *response);
- 
+@@ -52,11 +78,19 @@ struct EG25Manager {
      enum EG25State modem_state;
      gchar *modem_usb_id;
  
@@ -1035,10 +1223,10 @@ index f9eb27f..d1127dc 100644
  
  if mmglib_dep.found()
 diff --git a/src/mm-iface.c b/src/mm-iface.c
-index 0409236..9293b8a 100644
+index 0409236..2bbdfe5 100644
 --- a/src/mm-iface.c
 +++ b/src/mm-iface.c
-@@ -32,7 +32,9 @@ static void add_modem(struct EG25Manager *manager, GDBusObject *object)
+@@ -32,7 +32,10 @@ static void add_modem(struct EG25Manager *manager, GDBusObject *object)
  
      g_assert(MM_IS_OBJECT (object));
      manager->mm_modem = mm_object_get_modem(MM_OBJECT(object));
@@ -1046,6 +1234,7 @@ index 0409236..9293b8a 100644
 +    manager->mm_location = mm_object_get_modem_location(MM_OBJECT(object));
 +    g_assert_nonnull(manager->mm_modem);
 +    g_assert_nonnull(manager->mm_location);
++
  
      if (manager->modem_state == EG25_STATE_RESUMING) {
          if (manager->modem_recovery_timer) {

@@ -1,0 +1,42 @@
+diff --git a/src/calls-call-display.c b/src/calls-call-display.c
+index c8c3335..b046079 100644
+--- a/src/calls-call-display.c
++++ b/src/calls-call-display.c
+@@ -34,6 +34,8 @@
+ 
+ #include <libcallaudio.h>
+ 
++#include <stdlib.h>
++
+ struct _CallsCallDisplay
+ {
+   GtkOverlay parent_instance;
+@@ -103,15 +105,22 @@ static void
+ mute_toggled_cb (GtkToggleButton  *togglebutton,
+                  CallsCallDisplay *self)
+ {
+-  gboolean want_mute, ret;
+-  g_autoptr (GError) error = NULL;
++  gboolean want_mute;
++  gint ret;
+ 
+   want_mute = gtk_toggle_button_get_active (togglebutton);
+-  ret = call_audio_mute_mic (want_mute, &error);
+-  if (!ret && error)
++  
++  if ( want_mute )
++    {
++      ret = system("mmcli -m 0 --command=AT+CMUT=1");
++    }
++    else {
++      ret = system("mmcli -m 0 --command=AT+CMUT=0");
++    }
++      
++  if (ret == -1)
+     {
+-      g_warning ("Failed to %smute microphone: %s", want_mute ? "" : "un",
+-                                                    error->message);
++      g_warning ("Failed to %smute microphone", want_mute ? "" : "un");
+     }
+ }
+ 

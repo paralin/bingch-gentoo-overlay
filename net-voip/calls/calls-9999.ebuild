@@ -13,11 +13,11 @@ EGIT_REPO_URI="https://source.puri.sm/Librem5/${PN}.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~arm ~x86"
+KEYWORDS="~amd64 ~arm64"
 
 if [[ ${PV} != 9999 ]]; then
         #EGIT_COMMIT="tags/v${PV}"
-		EGIT_COMMIT="6bbaaacf14f2f1ab42ae860935513ca107954174"
+		EGIT_COMMIT="2ac43f391aca1a916b37f66e293c2f8fd051902b"
 else
         KEYWORDS=""
 fi
@@ -27,27 +27,25 @@ REQUIRED_USE="vala? ( introspection )"
 
 DEPEND="
 		dev-libs/feedbackd
-		gui-libs/libhandy
+		>=gui-libs/libhandy-1.0.0
 		dev-libs/folks
 		dev-libs/gom
 		dev-libs/libpeas
 		>=net-misc/modemmanager-1.12.0
-		vala? ( $(vala_depend) )
-		media-sound/callaudiod
+		>=media-sound/callaudiod-0.0.5
 		gnome-extra/evolution-data-server
+		net-libs/sofia-sip
 		"
 RDEPEND="${DEPEND}"
 BDEPEND="
+		vala? ( $(vala_depend) )
 		dev-util/meson
 		dev-libs/gobject-introspection
+		dev-util/wayland-scanner
 "
 
 PATCHES=(
-#	"${FILESDIR}/0001-call-display-use-PinePhone-s-device-for-ugly-hacks.patch"
-#	"${FILESDIR}/inhibit-suspend-during-call.patch"
-#	"${FILESDIR}/add-call-back-button.patch"
-	"${FILESDIR}/188.patch"
-	"${FILESDIR}/calll-display.patch"
+	"${FILESDIR}/0001-use-at-cmds-to-mute.patch"
 )
 
 #S="${WORKDIR}/${PN}-v${PV}"
@@ -56,7 +54,6 @@ src_prepare() {
 	default
 	eapply_user
 	use vala && vala_src_prepare
-#   gnome2_src_prepare
 }
 
 pkg_postinst() {
@@ -68,4 +65,3 @@ pkg_postrm() {
 	xdg_pkg_postrm
 	gnome2_schemas_update
 }
-

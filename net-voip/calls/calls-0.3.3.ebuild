@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~arm64"
 
 if [[ ${PV} != 9999 ]]; then
         #EGIT_COMMIT="tags/v${PV}"
-		EGIT_COMMIT="95bde23f2e4ca20ff3f106dcb8c09a98163c4d0a"
+		EGIT_COMMIT="2ac43f391aca1a916b37f66e293c2f8fd051902b"
 else
         KEYWORDS=""
 fi
@@ -45,7 +45,7 @@ BDEPEND="
 "
 
 PATCHES=(
-#	"${FILESDIR}/188.patch"
+	"${FILESDIR}/0001-use-at-cmds-to-mute.patch"
 )
 
 #S="${WORKDIR}/${PN}-v${PV}"

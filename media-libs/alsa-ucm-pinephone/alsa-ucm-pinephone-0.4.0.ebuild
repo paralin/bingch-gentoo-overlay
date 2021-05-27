@@ -4,7 +4,7 @@
 EAPI=7
 
 DESCRIPTION="ALSA ucm configuration files for PinePhone"
-HOMEPAGE="https://github.com/dreemurrs-embedded/Pine64-Arch"
+HOMEPAGE="https://gitlab.com/pine64-org/pine64-alsa-ucm"
 LICENSE="MIT"
 SLOT="0"
 

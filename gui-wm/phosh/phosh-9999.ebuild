@@ -5,12 +5,12 @@ EAPI=7
 
 inherit pam vala meson git-r3 gnome2-utils systemd readme.gentoo-r1 xdg
 
-KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~sparc ~x86"
+KEYWORDS="~amd64 ~arm64"
 
 EGIT_REPO_URI="https://source.puri.sm/Librem5/phosh.git"
 if [[ ${PV} != 9999 ]]; then
 	#EGIT_COMMIT="tags/v${PV}"
-	EGIT_COMMIT="8616d62239a20b3702bf86f38c59804f5ac1e44a"
+	EGIT_COMMIT="ee065b5faf760b0d8448932ab656b6a11462e2b0"
 else
 	KEYWORDS=""
 fi
@@ -26,7 +26,7 @@ DEPEND="
 		app-crypt/gcr
 		dev-libs/feedbackd
 		media-sound/pulseaudio
-		>=gui-libs/libhandy-1.0.0
+		>=gui-libs/libhandy-1.1.90
 		net-misc/networkmanager
 		gnome-base/gnome-desktop
 		gnome-base/gnome-session
@@ -43,9 +43,8 @@ BDEPEND="
 
 PATCHES=(
 	${FILESDIR}/0001-system-prompt-allow-blank-passwords.patch
-	${FILESDIR}/MR434.patch
-	${FILESDIR}/MR434-fix-rotation-on-a-PP.patch
-	#${FILESDIR}/flashlight-torch.patch
+	${FILESDIR}/0002-fix-locale-issue.patch
+	${FILESDIR}/0003-fix-locale-issue-in-service-file.patch
 )
 
 src_prepare() {

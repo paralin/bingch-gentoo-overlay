@@ -45,6 +45,7 @@ PATCHES=(
 	${FILESDIR}/0178-sun8i-codec-fix-headphone-jack-pin-name.patch
 	${FILESDIR}/0179-arm64-dts-allwinner-pinephone-improve-device-tree-5.12.patch
     ${FILESDIR}/panic-led-5.12.patch
+    ${FILESDIR}/improve-jack-button-handling-and-mic.patch
     #${FILESDIR}/camera-added-bggr-bayer-mode.patch
     #${FILESDIR}/0002-Bluetooth-Fix-LL-PRivacy-BLE-device-fails-to-connect.patch
     #${FILESDIR}/0003-Bluetooth-Fix-attempting-to-set-RPA-timeout-when-unsupported.patch

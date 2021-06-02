@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{7,8,9} )
 
 #inherit python-r1
 DISTUTILS_USE_SETUPTOOLS=no
@@ -56,6 +56,8 @@ python_install_all() {
 pkg_postinst() {
 	ewarn "Downloading and extracting validity sensor firmware..."
 	validity-sensors-firmware || true
+	ewarn "Pairing validity sensor ..."
+	python -c "from validitysensor.init import open; open()"
 	if use open-fprintd; then
 		systemctl daemon-reload || true
 		udevadm control --reload-rules || true

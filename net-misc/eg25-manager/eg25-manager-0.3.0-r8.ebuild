@@ -32,6 +32,7 @@ RDEPEND="${DEPEND}"
 PATCHES=(
 		${FILESDIR}/15.patch
 		${FILESDIR}/18.patch
+		${FILESDIR}/21.patch
 )
 
 src_install() {

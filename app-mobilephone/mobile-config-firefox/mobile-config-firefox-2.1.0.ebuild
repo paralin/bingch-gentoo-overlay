@@ -16,7 +16,10 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
-PATCHES="${FILESDIR}/0001-src-prefs.js-disable-sandbox-for-non-ESR.patch"
+PATCHES=(
+	${FILESDIR}/0001-src-prefs.js-disable-sandbox-for-non-ESR.patch
+	${FILESDIR}/disable-proton-ui.patch
+	)
 
 src_install() {
 	default

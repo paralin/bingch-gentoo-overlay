@@ -411,7 +411,7 @@ index 30028e6..3cc0118 100644
 GitLab
 
 
-From e3f23cfe1aa43407990a95481554e0d554b9933c Mon Sep 17 00:00:00 2001
+From 6ebf4b78c0cb026c4b3c8429c122425bfbc437c6 Mon Sep 17 00:00:00 2001
 From: Dylan Van Assche <me@dylanvanassche.be>
 Date: Wed, 12 May 2021 19:37:21 +0200
 Subject: [PATCH 5/5] gnss: add GNSS assistance support
@@ -629,7 +629,7 @@ index 1f3ad8c..49cf213 100644
  
 diff --git a/src/gnss.c b/src/gnss.c
 new file mode 100644
-index 0000000..15814e9
+index 0000000..d986be0
 --- /dev/null
 +++ b/src/gnss.c
 @@ -0,0 +1,478 @@
@@ -874,7 +874,7 @@ index 0000000..15814e9
 +
 +/******************************************************************************/
 +
-+static void init_assistance_data_upload_step2(struct EG25Manager *manager,
++static void init_assistance_data_upload_ready(struct EG25Manager *manager,
 +                                              const char *response)
 +{
 +    /* Search for 'CONNECT' in response to start upload */
@@ -885,7 +885,7 @@ index 0000000..15814e9
 +    }
 +}
 +
-+static void init_assistance_data_upload_step1(struct EG25Manager *manager,
++static void init_assistance_data_upload_start(struct EG25Manager *manager,
 +                                              const char *response)
 +{
 +    gchar value[BUFFER_SIZE];
@@ -903,7 +903,7 @@ index 0000000..15814e9
 +               manager->gnss_assistance_file, size);
 +    g_message("Initiate GNSS assistance data upload: %s", value);
 +    at_append_command(manager, "QFUPL", NULL, value, NULL,
-+                      init_assistance_data_upload_step2);
++                      init_assistance_data_upload_ready);
 +    at_send_command(manager);
 +}
 +
@@ -914,7 +914,7 @@ index 0000000..15814e9
 +     * and start uploading the latest one to RAM.
 +     */
 +    at_append_command(manager, "QFDEL", NULL, "\"RAM:*\"\r\n",
-+                         NULL, init_assistance_data_upload_step1);
++                         NULL, init_assistance_data_upload_start);
 +    at_send_command(manager);
 +}
 +

@@ -22,6 +22,10 @@ DEPEND="media-libs/tiff
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
+PATCHES=(
+	${FILESDIR}/fix-preview-color.patch	
+)
+
 pkg_postinst() {
 	xdg_pkg_postinst
 	gnome2_schemas_update

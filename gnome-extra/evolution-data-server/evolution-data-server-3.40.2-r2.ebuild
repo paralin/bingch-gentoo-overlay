@@ -48,7 +48,7 @@ RDEPEND="
 		${gdata_depend}
 	)
 	phonenumber? (
-		dev-libs/libphonenumber
+		>=dev-libs/libphonenumber-8.12.24
 	)
 	gnome-online-accounts? (
 		>=net-libs/gnome-online-accounts-3.8:=

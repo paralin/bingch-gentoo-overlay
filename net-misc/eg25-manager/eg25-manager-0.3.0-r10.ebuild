@@ -14,7 +14,7 @@ KEYWORDS="~arm64"
 EGIT_REPO_URI="${HOMEPAGE}.git"
 
 if [[ ${PV} != 9999 ]]; then
-	EGIT_COMMIT="64145acbae79d0903c73fccfd6071d1f437557af"
+	EGIT_COMMIT="f2593b62b10513f94039d5c9ba995905b23e7eb4"
 else
 	KEYWORDS=""
 fi
@@ -30,9 +30,8 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 PATCHES=(
-		${FILESDIR}/15.patch
 		${FILESDIR}/18.patch
-		${FILESDIR}/21.patch
+		${FILESDIR}/15.patch
 )
 
 src_install() {

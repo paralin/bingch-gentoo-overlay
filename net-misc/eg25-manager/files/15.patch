@@ -444,12 +444,18 @@ diff --git a/data/pine64,pinephone-1.0.toml b/data/pine64,pinephone-1.0.toml
 index e1f5b24..e127f1a 100644
 --- a/data/pine64,pinephone-1.0.toml
 +++ b/data/pine64,pinephone-1.0.toml
-@@ -43,13 +43,33 @@ configure = [
-     { cmd = "QCFG", subcmd = "urc/ri/other", expect = "\"off\",1" },
+@@ -43,7 +43,6 @@ configure = [
+     { cmd = "QCFG", subcmd = "urc/ri/other", expect = "\"off\",1,1" },
      { cmd = "QCFG", subcmd = "urc/delay", expect = "1" },
      { cmd = "QURCCFG", subcmd = "urcport", expect = "\"all\"" },
 -    { cmd = "QGPS", value = "1" },
      { cmd = "QSCLK", value = "1" },
+ # Reset modem-power configurations to what we expect
+     { cmd = "QCFG", subcmd = "urc/cache", expect = "0" },
+@@ -54,11 +53,32 @@ configure = [
+     { cmd = "QCFG", subcmd = "ApRstLevel", expect = "0" },
+     { cmd = "QCFG", subcmd = "ModemRstLevel", expect = "0" },
+     { cmd = "QCFG", subcmd = "urc/ri/pin", expect = "uart_ri" },
 +# GNSS configuration:
 +#   * Enable A-GPS data upload support (XTRA)
 +#   * Disable On-Demand-Positioning (ODP) mode 
@@ -467,7 +473,7 @@ index e1f5b24..e127f1a 100644
 +    { cmd = "QGPSCFG", subcmd = "glonassnmeatype", expect = "7" },
 +    { cmd = "QGPSCFG", subcmd = "galileonmeatype", expect = "0" },
 +    { cmd = "QGPSCFG", subcmd = "beidounmeatype", expect = "0" },
-+    { cmd = "QGPSCFG", subcmd = "autogps", expect = "0" },
++    { cmd = "QGPSCFG", subcmd = "autogps", expect = "0" },    
  ]
  suspend = [
 -    { cmd = "QGPSEND" },
@@ -485,12 +491,18 @@ diff --git a/data/pine64,pinephone-1.1.toml b/data/pine64,pinephone-1.1.toml
 index e1f5b24..e127f1a 100644
 --- a/data/pine64,pinephone-1.1.toml
 +++ b/data/pine64,pinephone-1.1.toml
-@@ -43,13 +43,33 @@ configure = [
-     { cmd = "QCFG", subcmd = "urc/ri/other", expect = "\"off\",1" },
+@@ -43,7 +43,6 @@ configure = [
+     { cmd = "QCFG", subcmd = "urc/ri/other", expect = "\"off\",1,1" },
      { cmd = "QCFG", subcmd = "urc/delay", expect = "1" },
      { cmd = "QURCCFG", subcmd = "urcport", expect = "\"all\"" },
 -    { cmd = "QGPS", value = "1" },
      { cmd = "QSCLK", value = "1" },
+ # Reset modem-power configurations to what we expect
+     { cmd = "QCFG", subcmd = "urc/cache", expect = "0" },
+@@ -54,11 +53,32 @@ configure = [
+     { cmd = "QCFG", subcmd = "ApRstLevel", expect = "0" },
+     { cmd = "QCFG", subcmd = "ModemRstLevel", expect = "0" },
+     { cmd = "QCFG", subcmd = "urc/ri/pin", expect = "uart_ri" },
 +# GNSS configuration:
 +#   * Enable A-GPS data upload support (XTRA)
 +#   * Disable On-Demand-Positioning (ODP) mode 
@@ -508,7 +520,7 @@ index e1f5b24..e127f1a 100644
 +    { cmd = "QGPSCFG", subcmd = "glonassnmeatype", expect = "7" },
 +    { cmd = "QGPSCFG", subcmd = "galileonmeatype", expect = "0" },
 +    { cmd = "QGPSCFG", subcmd = "beidounmeatype", expect = "0" },
-+    { cmd = "QGPSCFG", subcmd = "autogps", expect = "0" },
++    { cmd = "QGPSCFG", subcmd = "autogps", expect = "0" },    
  ]
  suspend = [
 -    { cmd = "QGPSEND" },
@@ -526,12 +538,18 @@ diff --git a/data/pine64,pinephone-1.2.toml b/data/pine64,pinephone-1.2.toml
 index 4ca1274..e16f4f5 100644
 --- a/data/pine64,pinephone-1.2.toml
 +++ b/data/pine64,pinephone-1.2.toml
-@@ -37,13 +37,33 @@ configure = [
-     { cmd = "QCFG", subcmd = "ims", expect = "1" },
-     { cmd = "QCFG", subcmd = "apready", expect = "1,0,500" },
+@@ -41,7 +41,6 @@ configure = [
+     { cmd = "QCFG", subcmd = "urc/ri/other", expect = "\"off\",1,1" },
+     { cmd = "QCFG", subcmd = "urc/delay", expect = "0" },
      { cmd = "QURCCFG", subcmd = "urcport", expect = "\"all\"" },
 -    { cmd = "QGPS", value = "1" },
      { cmd = "QSCLK", value = "1" },
+ # Reset modem-power configurations to what we expect
+     { cmd = "QCFG", subcmd = "urc/cache", expect = "0" },
+@@ -51,11 +50,32 @@ configure = [
+     { cmd = "QCFG", subcmd = "ApRstLevel", expect = "0" },
+     { cmd = "QCFG", subcmd = "ModemRstLevel", expect = "0" },
+     { cmd = "QCFG", subcmd = "urc/ri/pin", expect = "uart_ri" },
 +# GNSS configuration:
 +#   * Enable A-GPS data upload support (XTRA)
 +#   * Disable On-Demand-Positioning (ODP) mode 
@@ -549,7 +567,7 @@ index 4ca1274..e16f4f5 100644
 +    { cmd = "QGPSCFG", subcmd = "glonassnmeatype", expect = "7" },
 +    { cmd = "QGPSCFG", subcmd = "galileonmeatype", expect = "0" },
 +    { cmd = "QGPSCFG", subcmd = "beidounmeatype", expect = "0" },
-+    { cmd = "QGPSCFG", subcmd = "autogps", expect = "0" },
++    { cmd = "QGPSCFG", subcmd = "autogps", expect = "0" },    
  ]
  suspend = [
 -    { cmd = "QGPSEND" },
@@ -563,7 +581,6 @@ index 4ca1274..e16f4f5 100644
 +enabled = true
 +url = "https://xtrapath4.izatcloud.net"
 +file = "xtra2.bin"
-diff --git a/meson.build b/meson.build
 index d57d2cb..2852778 100644
 --- a/meson.build
 +++ b/meson.build
@@ -579,15 +596,15 @@ diff --git a/src/at.c b/src/at.c
 index 1f3ad8c..49cf213 100644
 --- a/src/at.c
 +++ b/src/at.c
-@@ -6,6 +6,7 @@
- 
+@@ -7,6 +7,7 @@
  #include "at.h"
  #include "suspend.h"
+ #include "gpio.h"
 +#include "gnss.h"
  
  #include <fcntl.h>
  #include <stdio.h>
-@@ -205,20 +206,37 @@ static gboolean modem_response(gint fd,
+@@ -216,24 +216,40 @@ static gboolean modem_response(gint fd,
  
          g_message("Response: [%s]", response);
  
@@ -599,7 +616,7 @@ index 1f3ad8c..49cf213 100644
              suspend_inhibit(manager, TRUE, TRUE);
              manager->modem_state = EG25_STATE_STARTED;
          }
-+        /*
+         /*
 +         * Search for 'QGPSURC: "xtradataexpire"' in response to detect
 +         * if GNSS assistance data must be re-uploaded.
 +         * If that's the case, check if no AT commands are being processed
@@ -607,21 +624,23 @@ index 1f3ad8c..49cf213 100644
 +         */
 +        else if (strstr(response, "QGPSURC: \"xtradataexpire\"") && manager->at_cmds == NULL)
 +            gnss_upload_assistance_data(manager);
-+        /* AT command failed, retry */
-         else if (strstr(response, "ERROR"))
++        /*        
+          * QCFG="fast/poweroff" configuration is only available in
+          * newer firmware versions
+          */
+         else if (strstr(response, "ERROR") && !strstr(response, "fast/poweroff"))
              retry_at_command(manager);
--        else if (strstr(response, "OK")) {
 +        /*
 +         * Successfull AT responses contain 'OK', except for AT+QFUPL which also
 +         * returns 'CONNECT' when the modem is ready to receive data over serial
 +         */
-+        else if (strstr(response, "OK") || strstr(response, "CONNECT")) {
+         else if (strstr(response, "OK")) {
              if (manager->at_callback != NULL)
                  manager->at_callback(manager, response);
              else
                  g_warning("AT command succesfull but no callback registered");
          }
-+        /* Not a recognized response, try running next command, just in case */
++        /* Not a recognized response, try running next command, just in case */            
          else
 -            // Not a recognized response, try running next command, just in case
              at_next_command(manager);
@@ -1219,9 +1238,9 @@ index f9eb27f..d1127dc 100644
          'toml.c', 'toml.h',
          'udev.c', 'udev.h',
 +        'gnss.c', 'gnss.h',
+         gdbofono_headers,
  ]
  
- if mmglib_dep.found()
 diff --git a/src/mm-iface.c b/src/mm-iface.c
 index 0409236..2bbdfe5 100644
 --- a/src/mm-iface.c

@@ -40,7 +40,7 @@ BDEPEND="app-doc/doxygen
 		media-gfx/graphviz
 "
 
-#PATCHES="${FILESDIR}/0001-Add-0001-Bring-back-LanguagePluginInterface.patch"
+PATCHES="${FILESDIR}/0001-Add-0001-Bring-back-LanguagePluginInterface.patch"
 
 src_prepare() {
 	cmake-utils_src_prepare

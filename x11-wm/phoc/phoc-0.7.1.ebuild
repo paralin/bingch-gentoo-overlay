@@ -9,7 +9,7 @@ EGIT_REPO_URI="https://source.puri.sm/Librem5/phoc.git"
 KEYWORDS="~x86 ~amd64 ~arm ~arm64"
 if [[ ${PV} != 9999 ]]; then
     #EGIT_COMMIT="tags/v${PV}"
-	EGIT_COMMIT="8654bbe3169b24652e0784ae80213d2f86ef964b"
+	EGIT_COMMIT="8e51b02c7fb9b103d8e80fb77145dddfb4b5b3a2"
 else
     KEYWORDS=""
 fi
@@ -17,8 +17,8 @@ fi
 PATCHES=(
 	"${FILESDIR}/0001-seat-Don-t-notify-on-key-release.patch"
 	"${FILESDIR}/0002-seat-inhibit-touch-events-when-in-power-save-mode-or.patch"
-	#"${FILESDIR}/242.patch"
-	#"${FILESDIR}/243.patch"
+	#"${FILESDIR}/xcursor-fix-false-positive-stringop-truncation.diff"
+	#"${FILESDIR}/Revert-layer-shell-error-on-0-dimension-without-anchors.diff"
 )
 
 DESCRIPTION="Wlroots based Phone compositor"

@@ -1,4 +1,4 @@
-# Copyright 2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -13,17 +13,13 @@ EGIT_REPO_URI="https://megous.com/git/linux-firmware"
 
 LICENSE=""
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~arm64 ~arm"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="rtlwifi"
-
-DEPEND=""
-RDEPEND="${DEPEND}"
-BDEPEND=""
 
 src_install() {
 	default
-	mkdir -p ${D}/lib/firmware/
-	cp -pr ${S}/rtl_bt ${D}/lib/firmware/
-	cd ${D}/lib/firmware/rtl_bt
+	mkdir -p "${ED}"/lib/firmware/
+	cp -pr "${S}"/rtl_bt "${ED}"/lib/firmware/
+	cd "${ED}"/lib/firmware/rtl_bt
 	ln -s rtl8723cs_xx_config-pinephone.bin rtl8723cs_xx_config.bin
 }

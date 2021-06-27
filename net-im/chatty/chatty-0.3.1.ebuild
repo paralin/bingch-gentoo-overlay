@@ -16,18 +16,19 @@ KEYWORDS="~amd64 ~arm64 ~arm ~x86"
 
 if [[ ${PV} != 9999 ]]; then
         #EGIT_COMMIT="tags/v${PV}"
-        EGIT_COMMIT="6355b74eccf52c902b43f5d3445e9091ecb8d38a"
+        EGIT_COMMIT="76e2813c6fe6d3e7d918bae71cd4b270802af18f"
 else
         KEYWORDS=""
 fi
 
 
-DEPEND="gnome-extra/evolution-data-server[phonenumber]
+#DEPEND="gnome-extra/evolution-data-server[phonenumber]
+DEPEND="gnome-extra/evolution-data-server
+		dev-libs/libphonenumber
 		dev-libs/feedbackd
 		gui-libs/libhandy
 		x11-plugins/purple-mm-sms
 		dev-libs/olm
-		dev-libs/libphonenumber
 		x11-libs/gtk+:3
 		net-im/jabber-base
 "

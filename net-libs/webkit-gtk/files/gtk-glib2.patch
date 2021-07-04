@@ -1,0 +1,15 @@
+diff --git a/Source/WTF/wtf/gobject/GRefPtr.h b/Source/WTF/wtf/gobject/GRefPtr.h
+index b25b7bb..598626d 100644
+--- a/Source/WTF/wtf/gobject/GRefPtr.h
++++ b/Source/WTF/wtf/gobject/GRefPtr.h
+@@ -28,8 +28,8 @@
+ #include <wtf/RefPtr.h>
+ #include <algorithm>
+ 
+-extern "C" void g_object_unref(gpointer);
+-extern "C" gpointer g_object_ref_sink(gpointer);
++//extern "C" void g_object_unref(gpointer);
++//extern "C" gpointer g_object_ref_sink(gpointer);
+ 
+ namespace WTF {
+ 

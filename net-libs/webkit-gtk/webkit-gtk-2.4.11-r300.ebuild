@@ -56,7 +56,7 @@ RDEPEND="
 		>=media-libs/gst-plugins-base-1.2:1.0 )
 	introspection? ( >=dev-libs/gobject-introspection-1.32.0:= )
 	opengl? ( virtual/opengl )
-	spell? ( >=app-text/enchant-0.22:= )
+	spell? ( >=app-text/enchant-2.2:= )
 	webgl? (
 		x11-libs/cairo[opengl]
 		x11-libs/libXcomposite
@@ -162,9 +162,24 @@ src_prepare() {
 	eapply "${FILESDIR}"/${PN}-2.4.9-gcc-6.patch
 	# patch for gcc 9
 	eapply "${FILESDIR}"/${PN}-2.4.11.patch
-	eapply "${FILESDIR}"/${PN}-2.4.11-use-lowercase-bool.patch
+	#eapply "${FILESDIR}"/${PN}-2.4.11-use-lowercase-bool.patch
+	# enchant2 patch
+	eapply "${FILESDIR}/enchant-2.x.patch"
+	eapply "${FILESDIR}/icu59.patch"
+	# https://www.archlinux.org/todo/enchant-221-rebuild/
+	eapply "${FILESDIR}/pkgconfig-enchant-2.patch"
+	eapply "${FILESDIR}/icu68.patch"
+	eapply "${FILESDIR}/gtk-doc.patch"
 
 	AT_M4DIR=Source/autotools eautoreconf
+	# patch for glib-2.68
+	eapply "${FILESDIR}/glib-2.68.0.patch"
+	# patch for gcc11+ compiler volatile
+	eapply "${FILESDIR}/volatile.patch"
+	# https://www.linuxquestions.org/questions/slackware-14/sbo-scripts-not-building-on-current-read-1st-post-pls-4175561999/page195.html#post6160562
+	eapply "${FILESDIR}/grammar.patch"
+
+	#AT_M4DIR=Source/autotools eautoreconf
 
 	gnome2_src_prepare
 }

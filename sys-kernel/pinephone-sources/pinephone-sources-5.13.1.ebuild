@@ -2,30 +2,23 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="6"
-UNIPATCH_STRICTORDER="yes"
 K_NOUSENAME="yes"
 K_NOSETEXTRAVERSION="yes"
-K_NOUSEPR="yes"
 K_SECURITY_UNSUPPORTED="1"
-K_BASE_VER="5.12"
-K_EXP_GENPATCHES_NOUSE="1"
-K_FROM_GIT="yes"
 ETYPE="sources"
-CKV="${PVR/-r/-git}"
-
-# only use this if it's not an _rc/_pre release
-[ "${PV/_pre}" == "${PV}" ] && [ "${PV/_rc}" == "${PV}" ] && OKV="${PV}"
 inherit kernel-2
 detect_version
+
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sparc ~x86"
+# Copyright 1999-2021 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
 
 
 DEPEND="${RDEPEND}
 	>=sys-devel/patch-2.7.5"
 
 DESCRIPTION="Full sources for the Linux kernel, with megi's patch for pinephone"
-HOMEPAGE="https://www.kernel.org"
 
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sparc ~x86"
 MEGI_PATCH_URI="https://xff.cz/kernels/${PV:0:4}/patches/all.patch"
 SRC_URI="${KERNEL_URI} ${MEGI_PATCH_URI} -> all-${PV}.patch"
 

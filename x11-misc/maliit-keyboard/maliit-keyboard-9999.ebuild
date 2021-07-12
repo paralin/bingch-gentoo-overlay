@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit cmake-utils git-r3 gnome2-utils xdg
+inherit cmake-utils git-r3 gnome2-utils xdg flag-o-matic
 
 DESCRIPTION="Maliit keyboard"
 HOMEPAGE="https://github.com/maliit/keyboard"
@@ -45,7 +45,11 @@ BDEPEND="app-doc/doxygen
 src_prepare() {
 	cmake-utils_src_prepare
 }
+
 src_configure() {
+	# code is not C++17 ready
+	append-cxxflags -std=c++14
+
 	local mycmakeargs=(
 		-Denable-tests=$(usex test ON OFF)
 	)

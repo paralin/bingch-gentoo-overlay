@@ -4,7 +4,7 @@
 
 EAPI=7
 
-inherit eutils autotools flag-o-matic
+inherit eutils autotools flag-o-matic git-r3
 DESCRIPTION="The intelligent predictive text entry system"
 HOMEPAGE="http://presage.sourceforge.io"
 
@@ -12,13 +12,15 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~arm ~x86"
 
-SRC_URI="https://download.sourceforge.net/project/presage/presage/${PV}/${P}.tar.gz"
+#SRC_URI="https://download.sourceforge.net/project/presage/presage/${PV}/${P}.tar.gz"
 
-if [[ ${PV} = 9999 ]]; then
-	inherit git-r3
-	SRC_URI=""
-    KEYWORDS=""
-	EGIT_REPO_URI="https://git.code.sf.net/p/presage/presage"
+#
+EGIT_REPO_URI="https://github.com/sailfish-keyboard/presage.git"
+
+#EGIT_REPO_URI="https://git.code.sf.net/p/presage/presage"
+
+if [[ ${PV} != 9999 ]]; then
+	EGIT_COMMIT="tags/${PV}"
 fi
 
 
@@ -29,7 +31,9 @@ RDEPEND="
 	gtk? ( x11-libs/gtk+ )
 	python? ( dev-lang/python dev-python/dbus-python )
 	sqlite? ( dev-db/sqlite )
+	dev-libs/marisa
 	app-text/dos2unix
+
 "
 
 DEPEND="${COMMON_DEPEND}
@@ -58,6 +62,5 @@ src_configure() {
 		$(use_enable python) \
 		$(use_enable python python-binding) \
 		$(use_enable sqlite) \
-		$(use_enable test) \
-		--disable-gprompter
+		$(use_enable test)
 }

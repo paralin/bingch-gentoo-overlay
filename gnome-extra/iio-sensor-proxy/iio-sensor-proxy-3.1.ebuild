@@ -25,8 +25,5 @@ DEPEND="${RDEPEND}
 BDEPEND=""
 
 src_prepare() {
-	# Remove problematic LDFLAGS declaration
-	#sed -i -e '/^LDFLAGS/d' src/Makefile.am || die
-	#${S}/autogen.sh
 	eapply_user
 }

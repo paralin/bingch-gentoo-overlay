@@ -14,7 +14,7 @@ DESCRIPTION="KDE Plasma applet for NetworkManager"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="5"
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
-IUSE="modemmanager openconnect teamd"
+IUSE="mobile modemmanager openconnect teamd"
 
 DEPEND="
 	>=app-crypt/qca-2.3.0:2
@@ -62,6 +62,7 @@ RDEPEND="${DEPEND}
 
 src_configure() {
 	local mycmakeargs=(
+		-DBUILD_MOBILE=$(usex mobile)
 		-DDISABLE_MODEMMANAGER_SUPPORT=$(usex !modemmanager)
 		$(cmake_use_find_package modemmanager KF5ModemManagerQt)
 		$(cmake_use_find_package openconnect OpenConnect)

@@ -52,13 +52,13 @@ src_prepare() {
 	eapply_user
 }
 
-src_configure() {
-	local emesonargs=(
-		-Dsystemd=true
-		-Dtests=false
-	)
-	meson_src_configure
-}
+#src_configure() {
+#	local emesonargs=(
+#		-Dsystemd=true
+#		-Dtests=false
+#	)
+#	meson_src_configure
+#}
 
 src_install() {
 	default

@@ -10,7 +10,7 @@ KEYWORDS="~amd64 ~arm64"
 EGIT_REPO_URI="https://source.puri.sm/Librem5/phosh.git"
 if [[ ${PV} != 9999 ]]; then
 	#EGIT_COMMIT="tags/v${PV}"
-	EGIT_COMMIT="22d86963b4f95bf759d5d6495f26dd94b39504d8"
+	EGIT_COMMIT="f10df68ebf4c93fa186711f66e36526039d29c03"
 else
 	KEYWORDS=""
 fi
@@ -44,14 +44,20 @@ BDEPEND="
 PATCHES=(
 	${FILESDIR}/0001-system-prompt-allow-blank-passwords.patch
 	${FILESDIR}/0002-fix-locale-issue.patch
-	${FILESDIR}/0003-fix-locale-issue-in-service-file.patch
-	${FILESDIR}/833.patch
-	${FILESDIR}/777.patch
+	${FILESDIR}/0003-fix-locale-issue-in-service-file-1.patch
 )
 
 src_prepare() {
 	default
 	eapply_user
+}
+
+src_configure() {
+	local emesonargs=(
+		-Dsystemd=true
+		-Dtests=false
+	)
+	meson_src_configure
 }
 
 src_install() {

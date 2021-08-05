@@ -10,10 +10,11 @@ QTMIN=5.15.1
 inherit ecm kde.org git-r3
 
 
-DESCRIPTION="Plasma Dialer"
+DESCRIPTION="Phonebook application for Mobile Devices running Plasma"
 HOMEPAGE="https://community.kde.org/Plasma/Mobile"
 SRC_URI=""
-EGIT_REPO_URI="https://invent.kde.org/kde/${PN}.git"
+EGIT_REPO_URI="https://invent.kde.org/plasma-mobile/${PN}.git"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 
 if [[ ${PV} != 9999 ]]; then
         EGIT_COMMIT="tags/v${PV}"
@@ -23,20 +24,14 @@ else
 fi
 
 LICENSE="GPL-3"
-SLOT="5"
-KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
+SLOT="0"
 IUSE=""
 
-DEPEND="kde-plasma/plasma-workspace
-		net-misc/ofono
-		kde-frameworks/kcontacts
-		dev-qt/libqofono
+DEPEND="kde-frameworks/kcontacts
+		kde-frameworks/kirigami
 		kde-frameworks/kpeople
-		net-libs/telepathy-qt
-		dev-libs/libphonenumber
-		dev-qt/qtdeclarative[localstorage]
-		kde-frameworks/kwayland
-		kde-plasma/oxygen
-		net-im/telepathy-mission-control
+		dev-libs/kpeoplevcard
+		dev-qt/qtquickcontrols2
+		dev-qt/qtsvg
 "
 RDEPEND="${DEPEND}"

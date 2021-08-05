@@ -15,7 +15,7 @@ REQUIRED_USE="vala? ( introspection )"
 if [[ ${PV} == "0.0.0" ]]; then
 	MY_PV="${PV}+git20210426"
 	MY_P="${PN}-${MY_PV}"
-	MY_COMMIT="48b4bb97d62fa1917a9e54852f593d3190ef188c"
+	MY_COMMIT="b45468080eee851da500613ecedd709639b6d769"
 	MY_THEME_COMMIT="1602d415aed30b1a67c0ff270551230725b8ef92"
 fi
 
@@ -48,12 +48,12 @@ RDEPEND="${DEPEND}"
 BDEPEND="
 		dev-libs/gobject-introspection
 		dev-util/meson
-		dev-util/pkgconfig
+		virtual/pkgconfig
 		vala? ( $(vala_depend) )
 "
 
 PATCHES=(
-	${FILESDIR}/55.patch
+#	${FILESDIR}/55.patch
 )
 
 src_prepare() {

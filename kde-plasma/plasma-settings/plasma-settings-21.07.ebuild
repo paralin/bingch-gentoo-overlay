@@ -10,7 +10,7 @@ QTMIN=5.15.1
 inherit ecm kde.org git-r3
 
 
-DESCRIPTION="Phonebook application for Mobile Devices running Plasma"
+DESCRIPTION="Settings application for Mobile Devices running Plasma"
 HOMEPAGE="https://community.kde.org/Plasma/Mobile"
 SRC_URI=""
 EGIT_REPO_URI="https://invent.kde.org/plasma-mobile/${PN}.git"
@@ -27,11 +27,13 @@ LICENSE="GPL-3"
 SLOT="0"
 IUSE=""
 
-DEPEND="kde-frameworks/kcontacts
-		kde-frameworks/kirigami
-		kde-frameworks/kpeople
-		dev-libs/kpeoplevcard
-		dev-qt/qtquickcontrols2
-		dev-qt/qtsvg
+DEPEND="
+		sys-apps/accountsservice
+		kde-frameworks/plasma
+		kde-frameworks/kdelibs4support
+		kde-frameworks/kcontacts
+		kde-apps/libkgapi
 "
+#kde-frameworks/kdesignerplugin
+
 RDEPEND="${DEPEND}"

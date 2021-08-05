@@ -9,10 +9,15 @@ EGIT_REPO_URI="https://source.puri.sm/Librem5/phoc.git"
 KEYWORDS="~x86 ~amd64 ~arm ~arm64"
 if [[ ${PV} != 9999 ]]; then
     #EGIT_COMMIT="tags/v${PV}"
-	EGIT_COMMIT="8e51b02c7fb9b103d8e80fb77145dddfb4b5b3a2"
+	EGIT_COMMIT="527689df1300277af2cdfc872474c8322e38f690"
 else
     KEYWORDS=""
 fi
+
+WLROOT=0.12.0
+
+SRC_URI="https://github.com/swaywm/wlroots/archive/${WLROOT}.tar.gz -> wlroot-${WLROOT}.tar.gz"
+
 
 PATCHES=(
 	"${FILESDIR}/0001-seat-Don-t-notify-on-key-release.patch"
@@ -44,12 +49,23 @@ BDEPEND="
 		dev-util/ctags
 		x11-base/xorg-server
 		dev-util/meson
-		dev-util/pkgconfig
+		virtual/pkgconfig
 "
+
+src_unpack() {
+	default
+	git-r3_fetch
+	git-r3_checkout
+	rm -rf ${S}/subprojects/wlroots
+	mv ${WORKDIR}/wlroots-${WLROOT} ${S}/subprojects/wlroots
+}
 
 src_prepare() {
 	default
 	eapply_user
+	cd subprojects/wlroots
+	eapply ${FILESDIR}/xcursor-fix-false-positive-stringop-truncation.diff
+	eapply ${FILESDIR}/Revert-layer-shell-error-on-0-dimension-without-anchors.diff
 }
 
 src_configure() {

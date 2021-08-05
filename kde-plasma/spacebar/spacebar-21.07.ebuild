@@ -10,7 +10,7 @@ QTMIN=5.15.1
 inherit ecm kde.org git-r3
 
 
-DESCRIPTION="Phonebook application for Mobile Devices running Plasma"
+DESCRIPTION="SMS and messaging application for Mobile Devices running Plasma"
 HOMEPAGE="https://community.kde.org/Plasma/Mobile"
 SRC_URI=""
 EGIT_REPO_URI="https://invent.kde.org/plasma-mobile/${PN}.git"
@@ -28,10 +28,11 @@ SLOT="0"
 IUSE=""
 
 DEPEND="kde-frameworks/kcontacts
+		kde-frameworks/knotifications
 		kde-frameworks/kirigami
 		kde-frameworks/kpeople
-		dev-libs/kpeoplevcard
+		kde-frameworks/ki18n
 		dev-qt/qtquickcontrols2
-		dev-qt/qtsvg
+		net-libs/telepathy-qt
 "
 RDEPEND="${DEPEND}"

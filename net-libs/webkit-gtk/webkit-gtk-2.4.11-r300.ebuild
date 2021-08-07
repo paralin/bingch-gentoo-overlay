@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="6"
-PYTHON_COMPAT=( python2_7 )
-USE_RUBY="ruby24 ruby25 ruby26 ruby27"
+PYTHON_COMPAT=( python3_9 )
+USE_RUBY="ruby30"
 
 inherit autotools check-reqs flag-o-matic gnome2 pax-utils python-any-r1 ruby-single toolchain-funcs versionator virtualx
 

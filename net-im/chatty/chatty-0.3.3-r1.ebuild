@@ -31,6 +31,7 @@ DEPEND="gnome-extra/evolution-data-server
 		dev-libs/olm
 		x11-libs/gtk+:3
 		net-im/jabber-base
+		net-im/pidgin
 "
 RDEPEND="${DEPEND}"
 BDEPEND="${DEPEND}"

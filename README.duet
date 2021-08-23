@@ -1,0 +1,15 @@
+* install dev-embedded/u-boot-tools and sys-boot/vboot-utils
+* create kernel partitions using cgpt like:
+<pre>
+cgpt add -i 1  -l MYKernelA -t kernel -T 2 -S 1 -P 10  /path/to/drive
+</pre>
+* run command like:
+<pre>
+# create dummy bootloader
+dd if=/dev/zero of=bootloader.bin bs=512 count=1
+# make kernel image with initrd
+mkimage -D "-I dts -O dtb -p 2048" -f auto -A arm64 -O linux -T kernel -C lz4 -a 0 -d Image.lz4 -b /path/to/board/dtb -i initrd.img kernel.itb
+# sign kernel image
+vbutil_kernel --pack vmlinux.kpart --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --config cmdline --bootloader bootloader.bin --vmlinuz kernel.itb --arch arm
+# dd to boot part
+dd if=vmlinux.kpart of=/path/to/bootpart

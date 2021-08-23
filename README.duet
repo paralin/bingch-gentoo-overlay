@@ -16,3 +16,4 @@ console=tty1 cryptroot=/path/to/encrypted/partition root=/dev/mapper/root rootwa
 vbutil_kernel --pack vmlinux.kpart --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --config cmdline --bootloader bootloader.bin --vmlinuz kernel.itb --arch arm
 # dd to boot part
 dd if=vmlinux.kpart of=/path/to/bootpart
+* ref: https://wiki.debian.org/InstallingDebianOn/Asus/C201

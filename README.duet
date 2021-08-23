@@ -9,6 +9,9 @@ cgpt add -i 1  -l MYKernelA -t kernel -T 2 -S 1 -P 10  /path/to/drive
 dd if=/dev/zero of=bootloader.bin bs=512 count=1
 # make kernel image with initrd
 mkimage -D "-I dts -O dtb -p 2048" -f auto -A arm64 -O linux -T kernel -C lz4 -a 0 -d Image.lz4 -b /path/to/board/dtb -i initrd.img kernel.itb
+# config boot cmdline option (for osk-sdl)
+cat cmdline
+console=tty1 cryptroot=/path/to/encrypted/partition root=/dev/mapper/root rootwait fsck.fix=yes fsck.repair=yes net.ifnames=0 ipv6.disable=1 fw_devlink=off noresume
 # sign kernel image
 vbutil_kernel --pack vmlinux.kpart --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --config cmdline --bootloader bootloader.bin --vmlinuz kernel.itb --arch arm
 # dd to boot part

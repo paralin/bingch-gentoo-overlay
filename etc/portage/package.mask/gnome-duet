@@ -1,4 +1,0 @@
-#panfrost in duet is broken in gnome 40
->gnome-base/gnome-settings-daemon-3.38.1
->x11-wm/mutter-3.38.4-r1
->gnome-base/gnome-shell-3.38.4-r1

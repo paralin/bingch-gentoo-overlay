@@ -17,7 +17,7 @@ fi
 EGIT_SUBMODULES=("subprojects/gvc")
 
 DESCRIPTION="A pure Wayland shell prototype for GNOME on mobile devices"
-HOMEPAGE="https://source.puri.sm/Librem5/phosh"
+HOMEPAGE="https://gitlab.gnome.org/World/Phosh/phosh"
 
 LICENSE="GPL-3"
 SLOT="0"

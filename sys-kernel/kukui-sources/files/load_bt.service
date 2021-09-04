@@ -1,0 +1,11 @@
+[Unit]
+Description=QCA6390 Workaround
+Wants=time-sync.target
+After=time-sync.target
+
+[Service]
+ExecStart=/sbin/modprobe hci_uart
+#ExecStart=/sbin/modprobe mt8183-mt6358-ts3a227-max98357
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,8 @@
+[Unit]
+Description=MT8183 Sound Workaround
+
+[Service]
+ExecStart=/sbin/modprobe mt8183-mt6358-ts3a227-max98357
+
+[Install]
+WantedBy=multi-user.target

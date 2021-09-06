@@ -42,6 +42,15 @@ PATCHES=(
 	${FILESDIR}/mt8183-panel-orientation.patch
 	${FILESDIR}/mt8183-silence-some-log-spam.patch
 	${FILESDIR}/mt8183-sound-juniper.patch
+	# cherry-pick from https://patchwork.kernel.org/project/linux-mediatek
+	${FILESDIR}/v3-media-mtk-vpu-Ensure-alignment-of-8-for-DTCM-buffer.patch
+	${FILESDIR}/media-mediatek-support-mdp3-on-mt8183-platform-fix.patch
+	${FILESDIR}/Introducing-an-attribute-to-select-the-time-setting.patch
+	${FILESDIR}/ASoC-mediatek-common-handle-NULL-case-in-suspend-resume-function.patch
+	${FILESDIR}/drm-panel-boe-tv101wum-nl6-Support-enabling-a-3.3V-rail.patch
+	#${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix.patch
+	#${FILESDIR}/Using-component-framework-to-support-multi-hardware-decode.patch
+
 )
 
 src_prepare() {

@@ -13,7 +13,7 @@ inherit ecm kde.org
 DESCRIPTION="A minimal Plasma shell package"
 HOMEPAGE="https://invent.kde.org/kde/plasma-nano"
 
-KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
+KEYWORDS="~amd64 ~arm64"
 
 if [[ ${PV} = 9999 ]]; then
 	inherit git-r3
@@ -24,7 +24,6 @@ fi
 
 LICENSE="GPL-3"
 SLOT="5"
-KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 IUSE=""
 
 DEPEND=" =kde-plasma/plasma-workspace-${PV}

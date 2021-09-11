@@ -16,14 +16,14 @@ IUSE=""
 DEPEND="media-libs/tiff
 		x11-libs/gtk+:3
 		media-gfx/dcraw
-		media-libs/hdr-plus
 		media-gfx/zbar
+		media-gfx/imagemagick
 "
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
 PATCHES=(
-	${FILESDIR}/fix-preview-color.patch	
+#	${FILESDIR}/fix-preview-color.patch	
 )
 
 pkg_postinst() {

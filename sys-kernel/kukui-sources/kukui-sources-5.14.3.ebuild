@@ -50,7 +50,8 @@ PATCHES=(
 	${FILESDIR}/drm-panel-boe-tv101wum-nl6-Support-enabling-a-3.3V-rail.patch
 	#${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix.patch
 	#${FILESDIR}/Using-component-framework-to-support-multi-hardware-decode.patch
-
+	# 
+	${FILESDIR}/Multigenerational-LRU-Framework.patch
 )
 
 src_prepare() {

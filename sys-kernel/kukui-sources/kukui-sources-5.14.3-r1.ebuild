@@ -18,14 +18,6 @@ DESCRIPTION="Full sources for the Linux kernel, with patches for kukui chromeboo
 
 PATCHES=(
 	# From https://github.com/Maccraft123/Cadmium/tree/master/baseboard/kukui/patches
-    ${FILESDIR}/cci-1-fix.patch
-    ${FILESDIR}/cci-2.patch
-    ${FILESDIR}/cci-3.patch
-    ${FILESDIR}/cci-4.patch
-    ${FILESDIR}/cci-5.patch
-    ${FILESDIR}/cci-6.patch
-    ${FILESDIR}/cci-7.patch
-    ${FILESDIR}/cci-8.patch
     ${FILESDIR}/drm.patch
     ${FILESDIR}/gpu-vsram.patch
     ${FILESDIR}/move-gpu-opp-to-3.patch
@@ -43,6 +35,7 @@ PATCHES=(
 	${FILESDIR}/mt8183-silence-some-log-spam.patch
 	${FILESDIR}/mt8183-sound-juniper.patch
 	# cherry-pick from https://patchwork.kernel.org/project/linux-mediatek
+	${FILESDIR}/Add-cpufreq-and-cci-devfreq-for-mt8183-and-SVS-support-fix.patch
 	${FILESDIR}/v3-media-mtk-vpu-Ensure-alignment-of-8-for-DTCM-buffer.patch
 	${FILESDIR}/media-mediatek-support-mdp3-on-mt8183-platform-fix.patch
 	${FILESDIR}/Introducing-an-attribute-to-select-the-time-setting.patch

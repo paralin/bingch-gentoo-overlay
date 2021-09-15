@@ -1,0 +1,114 @@
+From 7b96296938fb51bc2f08503dbf19d41b7a45bcb6 Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Fri, 3 Sep 2021 21:33:05 +0200
+Subject: [PATCH 1/3] at: fix indentation
+
+---
+ src/at.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/at.c b/src/at.c
+index 228ded6..ff77fbc 100644
+--- a/src/at.c
++++ b/src/at.c
+@@ -77,20 +77,20 @@ gboolean at_send_command(struct EG25Manager *manager)
+     } else {
+     	/* Allow the modem to enter soft sleep again when we sent the AT command*/
+     	gpio_sequence_sleep(manager);
+-	
+-	if (manager->modem_state < EG25_STATE_CONFIGURED) {
+-	    if (manager->modem_iface == MODEM_IFACE_MODEMMANAGER) {
++
++        if (manager->modem_state < EG25_STATE_CONFIGURED) {
++            if (manager->modem_iface == MODEM_IFACE_MODEMMANAGER) {
+ #ifdef HAVE_MMGLIB
+                 MMModemState modem_state = mm_modem_get_state(manager->mm_modem);
+ 
+-		if (manager->mm_modem && modem_state >= MM_MODEM_STATE_REGISTERED)
++                if (manager->mm_modem && modem_state >= MM_MODEM_STATE_REGISTERED)
+                     modem_update_state(manager, modem_state);
+-		else
++                else
+                     manager->modem_state = EG25_STATE_CONFIGURED;
+ #endif
+             } else {
+                 manager->modem_state = EG25_STATE_CONFIGURED;
+-	    }
++            }
+         } else if (manager->modem_state == EG25_STATE_SUSPENDING) {
+             modem_suspend_post(manager);
+         } else if (manager->modem_state == EG25_STATE_RESETTING) {
+-- 
+GitLab
+
+
+From 8913300997e9491fab8f3649e632251d06a3a8c2 Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Tue, 7 Sep 2021 07:28:34 +0200
+Subject: [PATCH 2/3] gnss: open temporary file as read/write
+
+Opening as write-only may cause undefined behavior when reading the file
+---
+ src/gnss.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/gnss.c b/src/gnss.c
+index aeb73af..aa1bb6f 100644
+--- a/src/gnss.c
++++ b/src/gnss.c
+@@ -190,7 +190,7 @@ static void fetch_assistance_data(struct EG25Manager *manager)
+     long int size;
+ 
+     /* Fetch assistance data with curl */
+-    tmp_file = fdopen(manager->gnss_assistance_fd, "w");
++    tmp_file = fdopen(manager->gnss_assistance_fd, "wb+");
+     url = g_strconcat(manager->gnss_assistance_url, "/",
+                       manager->gnss_assistance_file, NULL);
+     curl = curl_easy_init();
+-- 
+GitLab
+
+
+From 41511cbc5f51a48fbe97b24993c7837b8f583ea3 Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Tue, 7 Sep 2021 07:32:55 +0200
+Subject: [PATCH 3/3] gnss: truncate temporary file before download
+
+A temporary file is used to download the GNSS assistance data.
+It's created and truncated at initialization, but not truncated
+when a re-upload is necessary (when data expires).
+This causes to corrupt the GNSS assistance data if the new downloaded
+data is smaller than the previous download.
+---
+ src/gnss.c | 2 ++
+ src/gnss.h | 1 +
+ 2 files changed, 3 insertions(+)
+
+diff --git a/src/gnss.c b/src/gnss.c
+index aa1bb6f..2116c18 100644
+--- a/src/gnss.c
++++ b/src/gnss.c
+@@ -191,6 +191,8 @@ static void fetch_assistance_data(struct EG25Manager *manager)
+ 
+     /* Fetch assistance data with curl */
+     tmp_file = fdopen(manager->gnss_assistance_fd, "wb+");
++    lseek(manager->gnss_assistance_fd, 0, SEEK_SET);
++    ftruncate(manager->gnss_assistance_fd, 0);
+     url = g_strconcat(manager->gnss_assistance_url, "/",
+                       manager->gnss_assistance_file, NULL);
+     curl = curl_easy_init();
+diff --git a/src/gnss.h b/src/gnss.h
+index 1b49403..c3b5553 100644
+--- a/src/gnss.h
++++ b/src/gnss.h
+@@ -7,6 +7,7 @@
+ #pragma once
+ 
+ #include <time.h>
++#include <unistd.h>
+ #include <curl/curl.h>
+ 
+ #include "manager.h"
+-- 
+GitLab
+

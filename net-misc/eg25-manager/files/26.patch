@@ -1,0 +1,96 @@
+From f7c655c297e5f6d61d53f0f3009c19638b8fde96 Mon Sep 17 00:00:00 2001
+From: ArenM <aren@peacevolution.org>
+Date: Sat, 4 Sep 2021 12:18:52 -0400
+Subject: [PATCH] gnss: Support using ofono when compiled with HAVE_MMGLIB
+
+---
+ src/gnss.c    | 35 ++++++++++++++++++++++++++---------
+ src/manager.h |  4 ++--
+ 2 files changed, 28 insertions(+), 11 deletions(-)
+
+diff --git a/src/gnss.c b/src/gnss.c
+index aeb73af..7ee415e 100644
+--- a/src/gnss.c
++++ b/src/gnss.c
+@@ -27,13 +27,26 @@ gboolean gnss_upload_assistance_data(struct EG25Manager *manager)
+         return FALSE;
+     }
+ 
++    /* data upload isn't necessary to bring the modem onine, so we should wait
++     * until we've finished the rest of our configuration */
++    if (!manager->modem_iface ||
++         manager->modem_state < EG25_STATE_CONFIGURED ||
++         manager->modem_state > EG25_STATE_CONNECTED) {
++        g_message ("Rescheduling upload since modem isn't online yet, in %ds",
++                   RESCHEDULE_IN_SECS);
++        manager->gnss_assistance_step = EG25_GNSS_STEP_LAST;
++        return TRUE;
++    }
++
++#ifdef HAVE_MMGLIB
+     /* ModemManager's Location is only available after unlocking */
+-    if(!manager->mm_location) {
++    if(manager->modem_iface == MODEM_IFACE_MODEMMANAGER && !manager->mm_location) {
+         g_message ("Rescheduling upload since Location interface is not available, in %ds",
+                    RESCHEDULE_IN_SECS);
+         manager->gnss_assistance_step = EG25_GNSS_STEP_LAST;
+         return TRUE;
+     }
++#endif
+ 
+     manager->gnss_assistance_step = EG25_GNSS_STEP_FIRST;
+     gnss_step(manager);
+@@ -421,10 +434,12 @@ void gnss_step(struct EG25Manager *manager)
+ 
+ #ifdef HAVE_MMGLIB
+     case EG25_GNSS_STEP_MM_GNSS_DISABLE:
+-        g_message("GNSS assistance upload step (%d/%d): "
+-                  "disabling GNSS engine through ModemManager",
+-                  manager->gnss_assistance_step, EG25_GNSS_STEP_LAST);
+-        disable_mm_gnss(manager);
++        if (manager->modem_iface == MODEM_IFACE_MODEMMANAGER) {
++            g_message("GNSS assistance upload step (%d/%d): "
++                      "disabling GNSS engine through ModemManager",
++                      manager->gnss_assistance_step, EG25_GNSS_STEP_LAST);
++            disable_mm_gnss(manager);
++        }
+         manager->gnss_assistance_step++;
+         /* fall-through */
+ #endif
+@@ -464,10 +479,12 @@ void gnss_step(struct EG25Manager *manager)
+ 
+ #ifdef HAVE_MMGLIB
+     case EG25_GNSS_STEP_MM_GNSS_ENABLE:
+-        g_message("GNSS assistance upload step (%d/%d): "
+-                  "re-enabling GNSS through ModemManager",
+-                  manager->gnss_assistance_step, EG25_GNSS_STEP_LAST);
+-        enable_mm_gnss(manager);
++        if (manager->modem_iface == MODEM_IFACE_MODEMMANAGER) {
++            g_message("GNSS assistance upload step (%d/%d): "
++                      "re-enabling GNSS through ModemManager",
++                      manager->gnss_assistance_step, EG25_GNSS_STEP_LAST);
++            enable_mm_gnss(manager);
++        }
+         manager->gnss_assistance_step++;
+         /* fall-through */
+ #endif
+diff --git a/src/manager.h b/src/manager.h
+index 3e097b3..f0f01ba 100644
+--- a/src/manager.h
++++ b/src/manager.h
+@@ -48,10 +48,10 @@ enum EG25State {
+     EG25_STATE_STARTED, // Modem has been started and declared itdata ready
+     EG25_STATE_ACQUIRED, // Modem has been probed by ModemManager
+     EG25_STATE_CONFIGURED, // Modem has been configured through AT commands
+-    EG25_STATE_SUSPENDING, // System is going into suspend
+-    EG25_STATE_RESUMING, // System is being resumed, waiting for modem to come back
+     EG25_STATE_REGISTERED, // Modem is unlocked and registered to a network provider
+     EG25_STATE_CONNECTED, // Modem is connected (data connection active)
++    EG25_STATE_SUSPENDING, // System is going into suspend
++    EG25_STATE_RESUMING, // System is being resumed, waiting for modem to come back
+     EG25_STATE_RESETTING, // Something went wrong, we're restarting the modem
+     EG25_STATE_FINISHING
+ };
+-- 
+GitLab
+

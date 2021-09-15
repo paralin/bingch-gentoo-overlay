@@ -1,0 +1,291 @@
+From bf9a6297c18809089b0e42d260e5c8e93c82f30c Mon Sep 17 00:00:00 2001
+From: ArenM <aren@peacevolution.org>
+Date: Tue, 7 Sep 2021 19:44:14 -0400
+Subject: [PATCH 1/5] gnss: rearrange enable_mm_gnss so it doesn't noop
+
+---
+ src/gnss.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/src/gnss.c b/src/gnss.c
+index aeb73af..f0585af 100644
+--- a/src/gnss.c
++++ b/src/gnss.c
+@@ -370,9 +370,9 @@ static void finish_assistance_data_upload(struct EG25Manager *manager)
+ #ifdef HAVE_MMGLIB
+ static void enable_mm_gnss(struct EG25Manager *manager)
+ {
+-    MMModemLocationSource sources;
+-    gboolean signal_location;
+     g_autoptr (GError) error = NULL;
++    MMModemLocationSource sources = mm_modem_location_get_enabled(manager->mm_location);
++    gboolean signal_location = mm_modem_location_signals_location(manager->mm_location);
+ 
+     if (manager->gnss_sources & EG25_GNSS_SOURCE_UNMANAGED)
+         sources |= MM_MODEM_LOCATION_SOURCE_GPS_UNMANAGED;
+@@ -381,8 +381,6 @@ static void enable_mm_gnss(struct EG25Manager *manager)
+     if (manager->gnss_sources & EG25_GNSS_SOURCE_RAW)
+         sources |= MM_MODEM_LOCATION_SOURCE_GPS_RAW;
+ 
+-    sources = mm_modem_location_get_enabled(manager->mm_location);
+-    signal_location = mm_modem_location_signals_location(manager->mm_location);
+     mm_modem_location_setup_sync(manager->mm_location, sources,
+                                  signal_location, NULL, &error);
+     if (error != NULL)
+-- 
+GitLab
+
+
+From 7bf77c9d90bec7f564cdaa4a57f21fad7b1e6487 Mon Sep 17 00:00:00 2001
+From: ArenM <aren@peacevolution.org>
+Date: Tue, 7 Sep 2021 19:48:40 -0400
+Subject: [PATCH 2/5] gnss: use sendfile to upload xtra data
+
+This should make the data upload much faster because it handles
+incomplete writes better, and because it the kernel copies the data
+between the files directly, and it doesn't get sent to userspace and
+back.
+---
+ src/gnss.c | 48 +++++++++++++++++++++++-------------------------
+ 1 file changed, 23 insertions(+), 25 deletions(-)
+
+diff --git a/src/gnss.c b/src/gnss.c
+index f0585af..61656e0 100644
+--- a/src/gnss.c
++++ b/src/gnss.c
+@@ -4,12 +4,15 @@
+  * SPDX-License-Identifier: GPL-3.0-or-later
+  */
+ 
++#include <sys/sendfile.h>
++#include <sys/stat.h>
++#include <errno.h>
+ #include "gnss.h"
+ #include "manager.h"
+ #include "at.h"
+ 
+ #define BUFFER_SIZE 256
+-#define UPLOAD_DELAY 100000
++#define UPLOAD_DELAY_US 10000
+ #define RESCHEDULE_IN_SECS 30
+ 
+ static void gnss_step(struct EG25Manager *manager);
+@@ -295,39 +298,34 @@ static void init_assistance_data_upload(struct EG25Manager *manager)
+ 
+ static void upload_assistance_data(struct EG25Manager *manager)
+ {
+-    char buffer[2*BUFFER_SIZE];
+-    gint len;
+-    gboolean success = TRUE;
+-
+-    /* Copy downloaded XTRA assistance data to the modem over serial */
+-    while((len = read(manager->gnss_assistance_fd, buffer, 2*BUFFER_SIZE)) > 0)
+-    {
+-        len = write(manager->at_fd, buffer, len);
+-        if (len < 0) {
+-            success = FALSE;
+-            g_error("Writing GNSS assistance data failed: %d", len);
+-            break;
+-        }
+-        usleep(UPLOAD_DELAY);
+-        g_message("Uploaded %d bytes", len);
++    gint error;
++    glong written_total = 0;
++    gint ret;
++    struct stat sb;
++
++    if (fstat(manager->gnss_assistance_fd, &sb) != 0) {
++        g_error("Unable to upload xtra data: %s", g_strerror(errno));
+     }
+ 
++    do {
++        errno = 0;
++        /* Copy downloaded XTRA assistance data to the modem over serial */
++        ret = sendfile(manager->at_fd, manager->gnss_assistance_fd, &written_total, sb.st_size);
++        error = errno;
++        usleep(UPLOAD_DELAY_US);
++    } while ((!error && written_total < sb.st_size) || (ret == -1 && error == EAGAIN));
++
+     /* Clear QFUPL AT command and process next */
+     at_next_command(manager);
+ 
+     /* Go to the next step if successful */
+-    if (success) {
++    if (!error) {
++        g_message("Successfully uploaded %ld bytes to the modem", written_total);
+         manager->gnss_assistance_step++;
+         gnss_step(manager);
+-    }
+-    /* Restart upload */
+-    else {
+-        g_message ("Rescheduling upload because of failure in %ds",
+-                   RESCHEDULE_IN_SECS);
++    } else {
++        g_critical("Unable to upload xtra data: %s", g_strerror(error));
+         manager->gnss_assistance_step = EG25_GNSS_STEP_LAST;
+-        g_timeout_add_seconds(RESCHEDULE_IN_SECS,
+-                              G_SOURCE_FUNC(gnss_upload_assistance_data),
+-                              manager);
+     }
+ }
+ 
+-- 
+GitLab
+
+
+From c23b3e24425e4b8660f2dcd29a1570eed3267233 Mon Sep 17 00:00:00 2001
+From: ArenM <aren@peacevolution.org>
+Date: Sat, 11 Sep 2021 13:42:59 -0400
+Subject: [PATCH 3/5] gnss: increase upload timeout to 10 seconds
+
+The timeout for QFUPL defaults to 5 seconds which is about how long it
+takes to upload data under ideal circumstances.
+
+I'm not sure if this will actually have an effect, the docs say
+"<timeout> The time waiting for data to be inputted to USB/UART. The
+default value is 5. Unit: s." which could be the time before the first
+byte is received.
+---
+ src/gnss.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/gnss.c b/src/gnss.c
+index 61656e0..4e21ad4 100644
+--- a/src/gnss.c
++++ b/src/gnss.c
+@@ -13,6 +13,7 @@
+ 
+ #define BUFFER_SIZE 256
+ #define UPLOAD_DELAY_US 10000
++#define UPLOAD_TIMEOUT_S 10
+ #define RESCHEDULE_IN_SECS 30
+ 
+ static void gnss_step(struct EG25Manager *manager);
+@@ -277,8 +278,8 @@ static void init_assistance_data_upload_start(struct EG25Manager *manager,
+     lseek(manager->gnss_assistance_fd, 0, SEEK_SET);
+ 
+     /* Start upload */
+-    g_snprintf(value, BUFFER_SIZE, "\"RAM:%s\",%ld\r\n",
+-               manager->gnss_assistance_file, size);
++    g_snprintf(value, BUFFER_SIZE, "\"RAM:%s\",%ld,%d\r\n",
++               manager->gnss_assistance_file, size, UPLOAD_TIMEOUT_S);
+     g_message("Initiate GNSS assistance data upload: %s", value);
+     at_append_command(manager, "QFUPL", NULL, value, NULL,
+                       init_assistance_data_upload_ready);
+-- 
+GitLab
+
+
+From 7297bb834ea1a2d141d811282a3b640c7fd8b688 Mon Sep 17 00:00:00 2001
+From: ArenM <aren@peacevolution.org>
+Date: Sun, 12 Sep 2021 12:46:28 -0400
+Subject: [PATCH 4/5] gnss: include error messages directly from curl
+
+This will print the error message from curl instead of just the http
+status code if downloading gpsOneXtra data fails. This also removes the
+need to check to check the size of the file curl downloaded.
+---
+ src/gnss.c | 37 +++++++++----------------------------
+ 1 file changed, 9 insertions(+), 28 deletions(-)
+
+diff --git a/src/gnss.c b/src/gnss.c
+index 4e21ad4..128afd3 100644
+--- a/src/gnss.c
++++ b/src/gnss.c
+@@ -188,29 +188,31 @@ static void fetch_assistance_data(struct EG25Manager *manager)
+ {
+     CURL *curl;
+     CURLcode response;
+-    long status_code;
+     gchar *url = NULL;
+     FILE *tmp_file = NULL;
+-    long int size;
++    gchar errbuf[CURL_ERROR_SIZE];
++    errbuf[0] = 0;
+ 
+     /* Fetch assistance data with curl */
+-    tmp_file = fdopen(manager->gnss_assistance_fd, "wb");
++    tmp_file = fdopen(manager->gnss_assistance_fd, "w");
+     url = g_strconcat(manager->gnss_assistance_url, "/",
+                       manager->gnss_assistance_file, NULL);
+     curl = curl_easy_init();
+     if (!curl)
+         g_error ("Unable to initialize curl");
++
+     curl_easy_setopt(curl, CURLOPT_URL, url);
+     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
+     curl_easy_setopt(curl, CURLOPT_WRITEDATA, tmp_file);
++    curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
+     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+     curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
++
+     response = curl_easy_perform(curl);
+-    if (response == CURLE_HTTP_RETURNED_ERROR) {
+-        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &status_code);
++    if (response != CURLE_OK) {
+         curl_easy_cleanup(curl);
+-        g_warning ("Unable to fetch GNSS assistance data from %s (HTTP %ld)",
+-                   url, status_code);
++        g_warning ("Unable to fetch GNSS assistance data from %s: %s",
++                   url, strlen(errbuf) ? errbuf : curl_easy_strerror(response));
+ 
+         /* Restart upload on HTTP error status code */
+         g_message ("Rescheduling upload because of failure in %ds",
+@@ -222,28 +224,7 @@ static void fetch_assistance_data(struct EG25Manager *manager)
+         return;
+     }
+ 
+-    /* Get file size in bytes */
+-    size = (long int)lseek(manager->gnss_assistance_fd, 0, SEEK_END);
+-    lseek(manager->gnss_assistance_fd, 0, SEEK_SET);
+-
+-    if (size <= 0) {
+-        g_warning ("GNSS assistance data contains 0 bytes,"
+-                   "check network connection.");
+-        /*
+-         * Restart upload when file does not contain any data,
+-         * mostly because of no network connection.
+-         */
+-        g_message ("Rescheduling upload because of failure in %ds",
+-                   RESCHEDULE_IN_SECS);
+-        manager->gnss_assistance_step = EG25_GNSS_STEP_LAST;
+-        g_timeout_add_seconds(RESCHEDULE_IN_SECS,
+-                              G_SOURCE_FUNC(gnss_upload_assistance_data),
+-                              manager);
+-        return;
+-    }
+-
+     g_message("Fetching GNSS assistance data from %s was successfull", url);
+-    curl_easy_cleanup(curl);
+     g_free(url);
+ 
+     /* Go to the next step */
+-- 
+GitLab
+
+
+From 751c684b079d92de7be295af8307d578241c7bdc Mon Sep 17 00:00:00 2001
+From: ArenM <aren@peacevolution.org>
+Date: Sun, 12 Sep 2021 16:03:45 -0400
+Subject: [PATCH 5/5] gnss: flush tmp_file after downloading gpsOneXtra data
+
+---
+ src/gnss.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/gnss.c b/src/gnss.c
+index 128afd3..6340e0a 100644
+--- a/src/gnss.c
++++ b/src/gnss.c
+@@ -225,6 +225,8 @@ static void fetch_assistance_data(struct EG25Manager *manager)
+     }
+ 
+     g_message("Fetching GNSS assistance data from %s was successfull", url);
++
++    fflush(tmp_file);
+     g_free(url);
+ 
+     /* Go to the next step */
+-- 
+GitLab
+

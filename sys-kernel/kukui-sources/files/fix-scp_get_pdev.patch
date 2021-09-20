@@ -1,29 +1,3 @@
-diff --git a/drivers/media/platform/mtk-isp/Kconfig b/drivers/media/platform/mtk-isp/Kconfig
-index 3334499..b22d503 100644
---- a/drivers/media/platform/mtk-isp/Kconfig
-+++ b/drivers/media/platform/mtk-isp/Kconfig
-@@ -1,3 +1,21 @@
-+config MTK_SENINF
-+	tristate "Mediatek mipi csi2 driver"
-+	depends on VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
-+	depends on MEDIA_CAMERA_SUPPORT
-+	depends on ARCH_MEDIATEK || COMPILE_TEST
-+	select V4L2_FWNODE
-+
-+	default n
-+	help
-+    	    This driver provides a mipi-csi2 host driver used as a
-+    	    interface to connect camera with Mediatek's
-+    	    MT8183 SOCs. It is able to handle multiple cameras
-+    	    at the same time.
-+    
-+    	    Choose y if you want to use Mediatek SoCs to create image
-+    	    capture application such as video recording and still image
-+    	    capture.
-+
- config VIDEO_MEDIATEK_ISP_DIP
- 	bool "Mediatek Digital Image Processing function"
- 	select VIDEO_V4L2_SUBDEV_API
 diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c b/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c
 index cf9bc15..56322d2 100644
 --- a/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c
@@ -36,17 +10,3 @@ index cf9bc15..56322d2 100644
 +	return scp_ipi_send(scp, SCP_IPI_FD_CMD, &fd_init_msg,
  			    sizeof(fd_init_msg), 300);
  }
- 
-diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c b/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c
-index cf9bc15..56322d2 100644
---- a/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c
-+++ b/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c
-@@ -118,7 +118,7 @@ static int mtk_fd_send_ipi_init(struct mtk_fd_dev *fd)
- 
- 	fd_init_msg.fd_init_param.rs_dma_addr = fd->rs_dma_handle;
- 
--	return scp_ipi_send(fd->scp_pdev, SCP_IPI_FD_CMD, &fd_init_msg,
-+	return scp_ipi_send(scp, SCP_IPI_FD_CMD, &fd_init_msg,
- 			    sizeof(fd_init_msg), 300);
- }
- 

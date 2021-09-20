@@ -37,3 +37,16 @@ index cf9bc15..56322d2 100644
  			    sizeof(fd_init_msg), 300);
  }
  
+diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c b/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c
+index cf9bc15..56322d2 100644
+--- a/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c
++++ b/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c
+@@ -118,7 +118,7 @@ static int mtk_fd_send_ipi_init(struct mtk_fd_dev *fd)
+ 
+ 	fd_init_msg.fd_init_param.rs_dma_addr = fd->rs_dma_handle;
+ 
+-	return scp_ipi_send(fd->scp_pdev, SCP_IPI_FD_CMD, &fd_init_msg,
++	return scp_ipi_send(scp, SCP_IPI_FD_CMD, &fd_init_msg,
+ 			    sizeof(fd_init_msg), 300);
+ }
+ 

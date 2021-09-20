@@ -1,0 +1,13 @@
+diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.c
+index 27c7028..3da3540 100644
+--- a/drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.c
++++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.c
+@@ -1214,7 +1214,7 @@ int mdp_component_init(struct mdp_dev *mdp)
+ 	struct device_node *node, *parent;
+ 	struct platform_device *pdev;
+ 	u32 alias_id;
+-	int i, ret;
++	int ret;
+ 
+ 	parent = dev->of_node->parent;
+ 	/* Iterate over sibling MDP function blocks */

@@ -1,0 +1,12 @@
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+index 77acff5..c5db51e 100644
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -462,7 +462,6 @@ static void update_bus_bw(struct mu3h_sch_bw_info *sch_bw,
+ static int check_fs_bus_bw(struct mu3h_sch_ep_info *sch_ep, int offset)
+ {
+ 	struct mu3h_sch_tt *tt = sch_ep->sch_tt;
+-	int base;
+ 	int i, j;
+ 	u32 tmp;
+ 	const int nr_lower_uframes =

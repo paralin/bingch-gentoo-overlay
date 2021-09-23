@@ -449,45 +449,6 @@ Signed-off-by: Frederic Chen <frederic.chen@mediatek.com>
  2 files changed, 21 insertions(+)
  create mode 100644 drivers/media/platform/mtk-isp/Kconfig
 
-diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 0c725d4dcf80..b8501e1b134f 100644
---- a/drivers/media/platform/Kconfig
-+++ b/drivers/media/platform/Kconfig
-@@ -32,6 +32,8 @@ source "drivers/media/platform/davinci/Kconfig"
- 
- source "drivers/media/platform/omap/Kconfig"
- 
-+source "drivers/media/platform/mtk-isp/Kconfig"
-+
- config VIDEO_ASPEED
- 	tristate "Aspeed AST2400 and AST2500 Video Engine driver"
- 	depends on VIDEO_V4L2
-diff --git a/drivers/media/platform/mtk-isp/Kconfig b/drivers/media/platform/mtk-isp/Kconfig
-new file mode 100644
-index 000000000000..a4267db70c24
---- /dev/null
-+++ b/drivers/media/platform/mtk-isp/Kconfig
-@@ -0,0 +1,19 @@
-+config VIDEO_MEDIATEK_ISP_DIP
-+	bool "Mediatek Digital Image Processing function"
-+	select VIDEO_V4L2_SUBDEV_API
-+	select VIDEOBUF2_DMA_CONTIG
-+	select VIDEOBUF2_CORE
-+	select VIDEOBUF2_V4L2
-+	select VIDEOBUF2_MEMOPS
-+	select MEDIA_CONTROLLER
-+
-+	default n
-+	help
-+	    Support the basic Digital Image Processing (DIP) driver.
-+
-+	    DIP driver provides image format conversion, resizing,
-+	    and rotation function through the low power hardware.
-+	    DIP also supports multiple output feature. It can
-+	    generate two or more output image with different effect
-+	    based on a single input image at the same time.
-+
-
 From patchwork Mon Sep  9 19:22:43 2019
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
@@ -626,32 +587,6 @@ Signed-off-by: Frederic Chen <frederic.chen@mediatek.com>
  create mode 100644 drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-sys.c
  create mode 100644 drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.c
 
-diff --git a/drivers/media/platform/mtk-isp/Makefile b/drivers/media/platform/mtk-isp/Makefile
-new file mode 100644
-index 000000000000..b08d3bdf2800
---- /dev/null
-+++ b/drivers/media/platform/mtk-isp/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (C) 2019 MediaTek Inc.
-+#
-+
-+obj-y += isp_50/
-+
-diff --git a/drivers/media/platform/mtk-isp/isp_50/Makefile b/drivers/media/platform/mtk-isp/isp_50/Makefile
-new file mode 100644
-index 000000000000..564c3889c34c
---- /dev/null
-+++ b/drivers/media/platform/mtk-isp/isp_50/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (C) 2019 MediaTek Inc.
-+#
-+
-+obj-$(CONFIG_VIDEO_MEDIATEK_ISP_DIP) += dip/
-+
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/Makefile b/drivers/media/platform/mtk-isp/isp_50/dip/Makefile
 new file mode 100644
 index 000000000000..99e760d7d5a9
@@ -666,16 +601,16 @@ index 000000000000..99e760d7d5a9
 +$(info $(srctree))
 +ccflags-y += -I$(srctree)/drivers/media/platform/mtk-mdp3
 +
-+obj-$(CONFIG_VIDEO_MEDIATEK_ISP_DIP) += mtk_dip-v4l2.o
++#obj-$(CONFIG_VIDEO_MEDIATEK_ISP_DIP) += mtk_dip-v4l2.o
 +
 +# Utilities to provide frame-based streaming model
 +# with v4l2 user interfaces and alloc context managing
-+# memory shared between ISP and coprocessor
-+mtk_dip_util-objs := \
++# memory shared between ISP and coprocessor 
++mtk_dip-objs := mtk_dip-v4l2.o \
 +mtk_dip-dev.o \
 +mtk_dip-sys.o
 +
-+obj-$(CONFIG_VIDEO_MEDIATEK_ISP_DIP) += mtk_dip_util.o
++obj-$(CONFIG_VIDEO_MEDIATEK_ISP_DIP) += mtk_dip.o
 diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-dev.c b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-dev.c
 new file mode 100644
 index 000000000000..d964ae0c4700
@@ -4854,3 +4789,168 @@ index 000000000000..57a016438960
 +MODULE_LICENSE("GPL v2");
 +MODULE_DESCRIPTION("Mediatek DIP driver");
 +
+diff -arNu drivers/media/platform/mtk-isp.orig/isp_50/dip/Kconfig drivers/media/platform/mtk-isp/isp_50/dip/Kconfig
+--- a/drivers/media/platform/mtk-isp.orig/isp_50/dip/Kconfig	1970-01-01 10:00:00.000000000 +1000
++++ b/drivers/media/platform/mtk-isp/isp_50/dip/Kconfig	2021-09-21 15:26:52.637645315 +1000
+@@ -0,0 +1,19 @@
++config VIDEO_MEDIATEK_ISP_DIP
++        tristate "Mediatek Digital Image Processing function"
++        depends on VIDEO_MEDIATEK_MDP3 && MTK_SCP
++        select VIDEO_V4L2_SUBDEV_API
++        select VIDEOBUF2_DMA_CONTIG
++        select VIDEOBUF2_CORE
++        select VIDEOBUF2_V4L2
++        select VIDEOBUF2_MEMOPS
++        select MEDIA_CONTROLLER
++
++	default n
++	help
++	    Support the basic Digital Image Processing (DIP) driver.
++
++	    DIP driver provides image format conversion, resizing,
++	    and rotation function through the low power hardware.
++	    DIP also supports multiple output feature. It can
++	    generate two or more output image with different effect
++	    based on a single input image at the same time.
+diff -arNu drivers/media/platform/mtk-isp.orig/isp_50/dip/mtk_dip-sys.c drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-sys.c
+--- a/drivers/media/platform/mtk-isp.orig/isp_50/dip/mtk_dip-sys.c	2021-09-21 14:34:57.475903671 +1000
++++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-sys.c	2021-09-21 14:27:59.596327522 +1000
+@@ -197,9 +199,10 @@
+ {
+ 	struct mtk_dip_request *req = mtk_dip_hw_mdpcb_work_to_req(work);
+ 	struct img_ipi_param ipi_param;
++	struct mtk_scp *scp = platform_get_drvdata(req->dip_pipe->dip_dev->scp_pdev);
+ 
+ 	ipi_param.usage = IMG_IPI_DEBUG;
+-	scp_ipi_send(req->dip_pipe->dip_dev->scp_pdev, SCP_IPI_DIP,
++	scp_ipi_send(scp, SCP_IPI_DIP,
+ 		     &ipi_param, sizeof(ipi_param), 0);
+ 	mtk_dip_notify(req);
+ }
+@@ -226,7 +229,7 @@
+ 		req->img_fparam.frameparam.num_inputs,
+ 		req->img_fparam.frameparam.num_outputs);
+ 
+-	if (data.sta != CMDQ_CB_NORMAL) {
++	if (data.sta != 0) {
+ 		dev_err(dip_dev->dev, "%s: frame no(%d) HW timeout\n",
+ 			__func__, req->img_fparam.frameparam.frame_no);
+ 		req->img_fparam.frameparam.state = FRAME_STATE_HW_TIMEOUT;
+@@ -251,7 +254,7 @@
+ 	 */
+ 	pm_runtime_get_sync(dip_dev->dev);
+ 	mdp_cmdq_sendtask(dip_dev->mdp_pdev, config_data,
+-			  &req->img_fparam.frameparam, NULL, false,
++			  &req->img_fparam.frameparam, NULL,
+ 			  dip_mdp_cb_func, req);
+ }
+ 
+@@ -318,6 +321,7 @@
+ 	struct img_ipi_param ipi_param;
+ 	struct mtk_dip_hw_subframe *buf;
+ 	int ret;
++	struct mtk_scp *scp = platform_get_drvdata(dip_dev->scp_pdev);
+ 
+ 	down(&dip_dev->sem);
+ 
+@@ -361,7 +365,7 @@
+ 
+ 	mutex_lock(&dip_dev->hw_op_lock);
+ 	atomic_inc(&dip_dev->num_composing);
+-	ret = scp_ipi_send(dip_dev->scp_pdev, SCP_IPI_DIP, &ipi_param,
++	ret = scp_ipi_send(scp, SCP_IPI_DIP, &ipi_param,
+ 			   sizeof(ipi_param), 0);
+ 	if (ret) {
+ 		dev_err(dip_dev->dev,
+@@ -415,14 +419,15 @@
+ {
+ 	int ret;
+ 	struct img_ipi_param ipi_param;
++	struct mtk_scp *scp = platform_get_drvdata(dip_dev->scp_pdev);
+ 
+ 	pm_runtime_get_sync(dip_dev->dev);
+-	scp_ipi_register(dip_dev->scp_pdev, SCP_IPI_DIP, dip_scp_handler,
++	scp_ipi_register(scp, SCP_IPI_DIP, dip_scp_handler,
+ 			 dip_dev);
+ 	memset(&ipi_param, 0, sizeof(ipi_param));
+ 	ipi_param.usage = IMG_IPI_INIT;
+ 
+-	ret = scp_ipi_send(dip_dev->scp_pdev, SCP_IPI_DIP, &ipi_param,
++	ret = scp_ipi_send(scp, SCP_IPI_DIP, &ipi_param,
+ 			   sizeof(ipi_param), 200);
+ 	if (ret) {
+ 		dev_err(dip_dev->dev, "%s: send SCP_IPI_DIP_FRAME failed %d\n",
+@@ -439,16 +444,17 @@
+ {
+ 	struct img_ipi_param ipi_param;
+ 	int ret;
++	struct mtk_scp *scp = platform_get_drvdata(dip_dev->scp_pdev);
+ 
+ 	ipi_param.usage = IMG_IPI_DEINIT;
+-	ret = scp_ipi_send(dip_dev->scp_pdev, SCP_IPI_DIP, &ipi_param,
++	ret = scp_ipi_send(scp, SCP_IPI_DIP, &ipi_param,
+ 			   sizeof(ipi_param), 0);
+ 	if (ret) {
+ 		dev_err(dip_dev->dev,
+ 			"%s: SCP IMG_IPI_DEINIT failed(%d)\n", __func__, ret);
+ 	}
+ 
+-	scp_ipi_unregister(dip_dev->scp_pdev, SCP_IPI_DIP);
++	scp_ipi_unregister(scp, SCP_IPI_DIP);
+ }
+ 
+ int mtk_dip_hw_streamon(struct mtk_dip_pipe *pipe)
+diff -arNu drivers/media/platform/mtk-isp.orig/isp_50/dip/mtk_dip-v4l2.c drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.c
+--- a/drivers/media/platform/mtk-isp.orig/isp_50/dip/mtk_dip-v4l2.c	2021-09-21 14:34:57.551904285 +1000
++++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.c	2021-09-21 15:17:25.728305171 +1000
+@@ -28,9 +28,9 @@
+ 	struct mtk_dip_pipe *pipe = mtk_dip_subdev_to_pipe(sd);
+ 
+ 	for (i = 0; i < pipe->desc->total_queues; i++) {
+-		*v4l2_subdev_get_try_format(&pipe->subdev, fh->pad, i) =
++		*v4l2_subdev_get_try_format(&pipe->subdev, fh->state, i) =
+ 			pipe->nodes[i].pad_fmt;
+-		*v4l2_subdev_get_try_crop(&pipe->subdev, fh->pad, i) =
++		*v4l2_subdev_get_try_crop(&pipe->subdev, fh->state, i) =
+ 			pipe->nodes[i].crop;
+ 	}
+ 
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index b7f331d..721c2a8 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -31,6 +31,8 @@ source "drivers/media/platform/davinci/Kconfig"
+ 
+ source "drivers/media/platform/omap/Kconfig"
+ 
++source "drivers/media/platform/mtk-isp/isp_50/dip/Kconfig"
++
+ config VIDEO_ASPEED
+ 	tristate "Aspeed AST2400 and AST2500 Video Engine driver"
+ 	depends on VIDEO_V4L2
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 5e10a38..2dab7ea 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -81,6 +81,8 @@ obj-$(CONFIG_VIDEO_MEDIATEK_MDP3)	+= mtk-mdp3/
+ 
+ obj-$(CONFIG_VIDEO_MEDIATEK_JPEG)	+= mtk-jpeg/
+ 
++obj-$(CONFIG_VIDEO_MEDIATEK_ISP_DIP)    += mtk-isp/isp_50/dip/
++
+ obj-$(CONFIG_VIDEO_QCOM_CAMSS)		+= qcom/camss/
+ 
+ obj-$(CONFIG_VIDEO_QCOM_VENUS)		+= qcom/venus/
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 32db286..1ddc48a 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -1911,7 +1911,7 @@ larb2: larb@1502f000 {
+ 		dip: dip@15022000 {
+ 			compatible = "mediatek,mt8183-dip";
+ 			mediatek,larb = <&larb5>;
+-			mediatek,mdp3 = <&mdp_rdma0>;
++			mediatek,mdp3 = <&mdp3_rdma0>;
+ 			mediatek,scp = <&scp>;
+ 			iommus = <&iommu M4U_PORT_CAM_IMGI>;
+ 			reg = <0 0x15022000 0 0x6000>;

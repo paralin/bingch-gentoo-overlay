@@ -1,12 +1,58 @@
-diff --git a/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c b/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c
-index cf9bc15..56322d2 100644
---- a/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c
-+++ b/drivers/media/platform/mtk-isp/fd/mtk_fd_40.c
-@@ -118,7 +118,7 @@ static int mtk_fd_send_ipi_init(struct mtk_fd_dev *fd)
- 
- 	fd_init_msg.fd_init_param.rs_dma_addr = fd->rs_dma_handle;
- 
--	return scp_ipi_send(fd->scp_pdev, SCP_IPI_FD_CMD, &fd_init_msg,
-+	return scp_ipi_send(scp, SCP_IPI_FD_CMD, &fd_init_msg,
- 			    sizeof(fd_init_msg), 300);
+diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+index 9679cc2..e7467dd 100644
+--- a/drivers/remoteproc/mtk_scp.c
++++ b/drivers/remoteproc/mtk_scp.c
+@@ -55,6 +55,31 @@ struct mtk_scp *scp_get(struct platform_device *pdev)
  }
+ EXPORT_SYMBOL_GPL(scp_get);
+ 
++
++struct platform_device *scp_get_pdev(struct platform_device *pdev)
++{
++        struct device *dev = &pdev->dev;
++        struct device_node *scp_node;
++        struct platform_device *scp_pdev;
++
++        scp_node = of_parse_phandle(dev->of_node, "mediatek,scp", 0);
++        if (!scp_node) {
++                dev_err(dev, "can't get SCP node\n");
++                return NULL;
++        }
++
++        scp_pdev = of_find_device_by_node(scp_node);
++        if (WARN_ON(!scp_pdev)) {
++                dev_err(dev, "SCP pdev failed\n");
++                of_node_put(scp_node);
++                return NULL;
++        }
++
++        return scp_pdev;
++}
++EXPORT_SYMBOL_GPL(scp_get_pdev);
++
++
+ /**
+  * scp_put() - "free" the SCP
+  *
+diff --git a/include/linux/remoteproc/mtk_scp.h b/include/linux/remoteproc/mtk_scp.h
+index b47416f..92857a2 100644
+--- a/include/linux/remoteproc/mtk_scp.h
++++ b/include/linux/remoteproc/mtk_scp.h
+@@ -61,6 +61,17 @@ int scp_ipi_send(struct mtk_scp *scp, u32 id, void *buf, unsigned int len,
+ unsigned int scp_get_vdec_hw_capa(struct mtk_scp *scp);
+ unsigned int scp_get_venc_hw_capa(struct mtk_scp *scp);
+ 
++/**
++ * scp_get_pdev - get SCP's platform device
++ *
++ * @pdev:	the platform device of the module requesting SCP platform
++ *		device for using SCP API.
++ *
++ * Return: Return NULL if it is failed.
++ * otherwise it is SCP's platform device
++ **/
++struct platform_device *scp_get_pdev(struct platform_device *pdev);
++
+ void *scp_mapping_dm_addr(struct mtk_scp *scp, u32 mem_addr);
+ 
+ #endif /* _MTK_SCP_H */

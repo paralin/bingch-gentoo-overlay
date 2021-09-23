@@ -151,44 +151,6 @@ Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
 
 --
 2.18.0
-diff --git a/drivers/media/platform/mtk-isp/Kconfig b/drivers/media/platform/mtk-isp/Kconfig
-index 3334499..b22d503 100644
---- a/drivers/media/platform/mtk-isp/Kconfig
-+++ b/drivers/media/platform/mtk-isp/Kconfig
-@@ -1,3 +1,21 @@
-+config MTK_SENINF
-+       tristate "Mediatek mipi csi2 driver"
-+       depends on VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
-+       depends on MEDIA_CAMERA_SUPPORT
-+       depends on ARCH_MEDIATEK || COMPILE_TEST
-+       select V4L2_FWNODE
-+
-+       default n
-+       help
-+           This driver provides a mipi-csi2 host driver used as a
-+           interface to connect camera with Mediatek's
-+           MT8183 SOCs. It is able to handle multiple cameras
-+           at the same time.
-+    
-+           Choose y if you want to use Mediatek SoCs to create image
-+           capture application such as video recording and still image
-+           capture.
-+
- config VIDEO_MEDIATEK_ISP_DIP
-        bool "Mediatek Digital Image Processing function"
-        select VIDEO_V4L2_SUBDEV_API
-
-diff --git a/drivers/media/platform/mtk-isp/Makefile b/drivers/media/platform/mtk-isp/Makefile
-index b08d3bd..d104439 100644
---- a/drivers/media/platform/mtk-isp/Makefile
-+++ b/drivers/media/platform/mtk-isp/Makefile
-@@ -4,4 +4,4 @@
- #
-
- obj-y += isp_50/
--
-+obj-$(CONFIG_MTK_SENINF) += seninf/
-
 diff --git a/drivers/media/platform/mtk-isp/seninf/Makefile b/drivers/media/platform/mtk-isp/seninf/Makefile
 new file mode 100644
 index 000000000000..d75bf612f787
@@ -3929,3 +3891,117 @@ index 000000000000..917b393acc0c
 +        };
 +    };
 \ No newline at end of file
+diff --git a/drivers/media/platform/mtk-isp/seninf/Kconfig b/drivers/media/platform/mtk-isp/seninf/Kconfig
+new file mode 100644
+index 0000000..fa4d009
+--- /dev/null
++++ b/drivers/media/platform/mtk-isp/seninf/Kconfig
+@@ -0,0 +1,17 @@
++config MTK_SENINF
++       tristate "Mediatek mipi csi2 driver"
++       depends on VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
++       depends on MEDIA_CAMERA_SUPPORT
++       depends on ARCH_MEDIATEK || COMPILE_TEST
++       select V4L2_FWNODE
++
++       default n
++       help
++           This driver provides a mipi-csi2 host driver used as a
++           interface to connect camera with Mediatek's
++           MT8183 SOCs. It is able to handle multiple cameras
++           at the same time.
++    
++           Choose y if you want to use Mediatek SoCs to create image
++           capture application such as video recording and still image
++           capture.
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index a846807..5684382 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -35,6 +35,8 @@ source "drivers/media/platform/mtk-isp/isp_50/dip/Kconfig"
+ 
+ source "drivers/media/platform/mtk-isp/fd/Kconfig"
+ 
++source "drivers/media/platform/mtk-isp/seninf/Kconfig"
++
+ config VIDEO_ASPEED
+ 	tristate "Aspeed AST2400 and AST2500 Video Engine driver"
+ 	depends on VIDEO_V4L2
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index a2d472e..179d4d5 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -85,6 +85,8 @@ obj-$(CONFIG_VIDEO_MEDIATEK_ISP_DIP)    += mtk-isp/isp_50/dip/
+ 
+ obj-$(CONFIG_VIDEO_MEDIATEK_FD)		+= mtk-isp/fd/
+ 
++obj-$(CONFIG_MTK_SENINF)                += mtk-isp/seninf/
++
+ obj-$(CONFIG_VIDEO_QCOM_CAMSS)		+= qcom/camss/
+ 
+ obj-$(CONFIG_VIDEO_QCOM_VENUS)		+= qcom/venus/
+diff --git a/drivers/media/platform/mtk-isp/seninf/mtk_seninf.c b/drivers/media/platform/mtk-isp/seninf/mtk_seninf.c
+index c5883dc..7c7928b 100644
+--- a/drivers/media/platform/mtk-isp/seninf/mtk_seninf.c
++++ b/drivers/media/platform/mtk-isp/seninf/mtk_seninf.c
+@@ -820,7 +820,7 @@ static int mtk_seninf_media_register(struct mtk_seninf *priv)
+ 		s_asd->port = vep.base.port;
+ 		s_asd->lanes = vep.bus.mipi_csi2.num_data_lanes;
+ 		ret = v4l2_async_notifier_add_fwnode_remote_subdev(
+-				&priv->notifier, ep, &s_asd->asd);
++				&priv->notifier, ep, struct sensor_async_subdev);
+ 		if (ret)
+ 			goto err_parse;
+ 
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 6bfbbd2..bc91790 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -1998,6 +1998,32 @@ camsys: syscon@1a000000 {
+ 			#clock-cells = <1>;
+ 		};
+ 
++		seninf: seninf@1a040000 {
++                        compatible = "mediatek,mt8183-seninf";
++                        reg = <0 0x1a040000 0 0x8000>;
++                        interrupts = <GIC_SPI 251 IRQ_TYPE_LEVEL_LOW>;
++                        power-domains = <&scpsys MT8183_POWER_DOMAIN_CAM>;
++                        clocks = <&camsys CLK_CAM_SENINF>,
++                                 <&topckgen CLK_TOP_MUX_SENINF>;
++                        clock-names = "cam_seninf", "top_mux_seninf";
++                        phys = <&mipi_dphy 0>;
++                        phy-names = "seninf";
++                        status = "disabled";
++
++                        ports {
++                                #address-cells = <1>;
++                                #size-cells = <0>;
++
++                                port@4 {
++                                        reg = <4>;
++
++                                        seninf_camisp_endpoint: endpoint {
++                                                remote-endpoint = <&camisp_endpoint>;
++                                        };
++                                };
++                        };
++                };
++
+ 		larb6: larb@1a001000 {
+ 			compatible = "mediatek,mt8183-smi-larb";
+ 			reg = <0 0x1a001000 0 0x1000>;
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 1ddc48a..80c2567 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -2043,8 +2043,8 @@ seninf: seninf@1a040000 {
+                         clocks = <&camsys CLK_CAM_SENINF>,
+                                  <&topckgen CLK_TOP_MUX_SENINF>;
+                         clock-names = "cam_seninf", "top_mux_seninf";
+-                        phys = <&mipi_dphy 0>;
+-                        phy-names = "seninf";
++                        //phys = <&mipi_dphy 0>;
++                        //phy-names = "seninf";
+                         status = "disabled";
+ 
+                         ports {

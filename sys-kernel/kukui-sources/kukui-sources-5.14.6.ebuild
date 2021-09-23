@@ -52,11 +52,12 @@ PATCHES=(
 #	${FILESDIR}/Multigenerational-LRU-Framework.patch
 	# various fixes
 	${FILESDIR}/fix-v4l2-ioctl.patch
-	${FILESDIR}/fix-mtk-cam.patch
-	${FILESDIR}/fix-mtk-mdp3.patch
+	#${FILESDIR}/fix-mtk-cam.patch
+	#${FILESDIR}/fix-mtk-mdp3.patch
 	${FILESDIR}/fix-v4l2-subdev.patch
-	${FILESDIR}/fix-mtk-seninf.patch
+	#${FILESDIR}/fix-mtk-seninf.patch
 	${FILESDIR}/fix-xhci-mtk-sch.patch
+	${FILESDIR}/fix-scp_get_pdev.patch
 )
 
 src_prepare() {

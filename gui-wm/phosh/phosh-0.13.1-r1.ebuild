@@ -10,7 +10,7 @@ KEYWORDS="~amd64 ~arm64"
 EGIT_REPO_URI="https://gitlab.gnome.org/World/Phosh/${PN}.git"
 if [[ ${PV} != 9999 ]]; then
 	#EGIT_COMMIT="tags/v${PV}"
-	EGIT_COMMIT="b48f17bb99e1b23208670f2fe2676ecb055d4ce1"
+	EGIT_COMMIT="c66b31e48e70a912aefa06ca83c2da8fa850d50e"
 else
 	KEYWORDS=""
 fi
@@ -45,6 +45,7 @@ PATCHES=(
 	${FILESDIR}/0001-system-prompt-allow-blank-passwords.patch
 	${FILESDIR}/0002-fix-locale-issue.patch
 	${FILESDIR}/0003-fix-locale-issue-in-service-file-1.patch
+	${FILESDIR}/886.patch
 )
 
 src_prepare() {

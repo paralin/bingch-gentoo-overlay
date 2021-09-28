@@ -8,9 +8,9 @@ DESCRIPTION="Call audio routing daemon"
 HOMEPAGE="https://gitlab.com/mobian1/callaudiod"
 EGIT_REPO_URI="https://gitlab.com/mobian1/${PN}.git"
 
-KEYWORDS="~amd64 ~x86 ~arm ~arm64"
+KEYWORDS="~amd64 ~arm64"
 if [[ ${PV} != 9999 ]]; then
-        EGIT_COMMIT="84ed2eb164711e73d30a88d540f59ddd8bc88b45"
+        EGIT_COMMIT="c9550e17e6e26802dda23c6070d100aca0cc2810"
         #EGIT_COMMIT="tags/${PV}"
 else
         KEYWORDS=""
@@ -29,5 +29,7 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 BDEPEND=""
+
+PATCHES=("${FILESDIR}/10.patch")
 
 BUILD_DIR=${S}/build

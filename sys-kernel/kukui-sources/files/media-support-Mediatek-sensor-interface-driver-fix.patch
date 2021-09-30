@@ -4005,3 +4005,54 @@ index 1ddc48a..80c2567 100644
                          status = "disabled";
  
                          ports {
+diff --git a/drivers/media/platform/mtk-isp/seninf/mtk_seninf_reg.h b/drivers/media/platform/mtk-isp/seninf/mtk_seninf_reg.h
+index 1d1147b..5873bb1 100644
+--- a/drivers/media/platform/mtk-isp/seninf/mtk_seninf_reg.h
++++ b/drivers/media/platform/mtk-isp/seninf/mtk_seninf_reg.h
+@@ -3,8 +3,6 @@
+ #ifndef __SENINF_REG_H__
+ #define __SENINF_REG_H__
+ 
+-#define BIT(nr) (1UL << (nr))
+-
+ #define SENINF_TOP_CTRL                                        0x0000
+ #define SENINF_TOP_CTRL_SENINF_PCLK_SEL_SHIFT 8
+ #define SENINF_TOP_CTRL_SENINF_PCLK_SEL_MASK  BIT(8)
+diff --git a/drivers/media/platform/mtk-isp/seninf/mtk_seninf.c b/drivers/media/platform/mtk-isp/seninf/mtk_seninf.c
+index c5883dc..49daea4 100644
+--- a/drivers/media/platform/mtk-isp/seninf/mtk_seninf.c
++++ b/drivers/media/platform/mtk-isp/seninf/mtk_seninf.c
+@@ -470,7 +470,7 @@ static void init_fmt(struct mtk_seninf *priv)
+ }
+ 
+ static int seninf_init_cfg(struct v4l2_subdev *sd,
+-			   struct v4l2_subdev_pad_config *cfg)
++			   struct v4l2_subdev_state *cfg)
+ {
+ 	struct v4l2_mbus_framefmt *mf;
+ 	unsigned int i;
+@@ -484,7 +484,7 @@ static int seninf_init_cfg(struct v4l2_subdev *sd,
+ }
+ 
+ static int seninf_set_fmt(struct v4l2_subdev *sd,
+-			  struct v4l2_subdev_pad_config *cfg,
++			  struct v4l2_subdev_state *cfg,
+ 			  struct v4l2_subdev_format *fmt)
+ {
+ 	struct mtk_seninf *priv = sd_to_mtk_seninf(sd);
+@@ -505,7 +505,7 @@ static int seninf_set_fmt(struct v4l2_subdev *sd,
+ }
+ 
+ static int seninf_get_fmt(struct v4l2_subdev *sd,
+-			  struct v4l2_subdev_pad_config *cfg,
++			  struct v4l2_subdev_state *cfg,
+ 			  struct v4l2_subdev_format *fmt)
+ {
+ 	struct mtk_seninf *priv = sd_to_mtk_seninf(sd);
+@@ -519,7 +519,7 @@ static int seninf_get_fmt(struct v4l2_subdev *sd,
+ }
+ 
+ static int seninf_enum_mbus_code(struct v4l2_subdev *sd,
+-				 struct v4l2_subdev_pad_config *cfg,
++				 struct v4l2_subdev_state *cfg,
+ 				 struct v4l2_subdev_mbus_code_enum *code)

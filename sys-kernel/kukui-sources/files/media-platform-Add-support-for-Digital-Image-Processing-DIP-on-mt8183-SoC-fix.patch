@@ -4954,3 +4954,56 @@ index 32db286..1ddc48a 100644
  			mediatek,scp = <&scp>;
  			iommus = <&iommu M4U_PORT_CAM_IMGI>;
  			reg = <0 0x15022000 0 0x6000>;
+diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.c b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.c
+index 57a0164..2fcbbcc 100644
+--- a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.c
++++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.c
+@@ -962,7 +962,7 @@ static int mtk_dip_video_device_v4l2_register(struct mtk_dip_pipe *pipe,
+ 
+ 	video_set_drvdata(vdev, pipe);
+ 
+-	ret = video_register_device(vdev, VFL_TYPE_GRABBER, -1);
++	ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
+ 	if (ret) {
+ 		dev_err(pipe->dip_dev->dev,
+ 			"failed to register video device (%d)\n", ret);
+diff --git a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.c b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.c
+index 2fcbbcc..1aa7ae6 100644
+--- a/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.c
++++ b/drivers/media/platform/mtk-isp/isp_50/dip/mtk_dip-v4l2.c
+@@ -61,7 +61,7 @@ static int mtk_dip_subdev_s_stream(struct v4l2_subdev *sd,
+ }
+ 
+ static int mtk_dip_subdev_get_fmt(struct v4l2_subdev *sd,
+-				  struct v4l2_subdev_pad_config *cfg,
++				  struct v4l2_subdev_state *cfg,
+ 				  struct v4l2_subdev_format *fmt)
+ {
+ 	struct mtk_dip_pipe *dip_pipe = mtk_dip_subdev_to_pipe(sd);
+@@ -82,7 +82,7 @@ static int mtk_dip_subdev_get_fmt(struct v4l2_subdev *sd,
+ }
+ 
+ static int mtk_dip_subdev_set_fmt(struct v4l2_subdev *sd,
+-				  struct v4l2_subdev_pad_config *cfg,
++				  struct v4l2_subdev_state *cfg,
+ 				  struct v4l2_subdev_format *fmt)
+ {
+ 	struct mtk_dip_pipe *dip_pipe = mtk_dip_subdev_to_pipe(sd);
+@@ -114,7 +114,7 @@ static int mtk_dip_subdev_set_fmt(struct v4l2_subdev *sd,
+ }
+ 
+ static int mtk_dip_subdev_get_selection(struct v4l2_subdev *sd,
+-					struct v4l2_subdev_pad_config *cfg,
++					struct v4l2_subdev_state *cfg,
+ 					struct v4l2_subdev_selection *sel)
+ {
+ 	struct v4l2_rect *try_sel, *r;
+@@ -150,7 +150,7 @@ static int mtk_dip_subdev_get_selection(struct v4l2_subdev *sd,
+ }
+ 
+ static int mtk_dip_subdev_set_selection(struct v4l2_subdev *sd,
+-					struct v4l2_subdev_pad_config *cfg,
++					struct v4l2_subdev_state *cfg,
+ 					struct v4l2_subdev_selection *sel)
+ {
+ 	struct v4l2_rect *rect, *try_sel;

@@ -1,0 +1,124 @@
+From patchwork Sat Sep 18 09:13:34 2021
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Patchwork-Submitter: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+X-Patchwork-Id: 12503737
+Return-Path: 
+ <SRS0=6guZ=OI=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	aws-us-west-2-korg-lkml-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9C47C433EF
+	for <linux-mediatek@archiver.kernel.org>;
+ Sat, 18 Sep 2021 09:14:19 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org
+ [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 9B56961100
+	for <linux-mediatek@archiver.kernel.org>;
+ Sat, 18 Sep 2021 09:14:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9B56961100
+Authentication-Results: mail.kernel.org;
+ dmarc=fail (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: mail.kernel.org;
+ spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:List-Subscribe:List-Help:
+	List-Post:List-Archive:List-Unsubscribe:List-Id:Message-Id:Date:Subject:Cc:To
+	:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=SvCzvLFRx1D+CxNxto9Vs6DXso9brzyo3rGNg7mfn1w=; b=frxjAuN8xbA3fL
+	Wnq9rLvHL3uU56lOGOPdAEcnkDwjAVrFBwLzFBvFvOXYuZhUhd//xHE0XWTuYHRJAI4BDGixiYHb5
+	ImuiQ/IhGgiKHFt7hNKO9vwBB/Un75b4DPM7yfshyec69oG1xoputYAcx7Vz9o2Zj+JuhC3wkbunK
+	9ozyI+wfVse2g74KHa+mqpWGdKcZWhLdpi92UxqWUSvvhk4W+Vdr5FznDqu1wQSv0fTZTXLiQwZZ4
+	9tvTnA2Q7DIWMpe0BCxiopLI3rVbswrPmXAO0xSxhDZZMXsuEi7pB7i+wwb4Pm0gIg+2WenwVjM6Z
+	45Miv3y8OE8PE+IzLRPg==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mRWQ5-00Fgw9-UN; Sat, 18 Sep 2021 09:14:01 +0000
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mRWPt-00Fgsk-H1; Sat, 18 Sep 2021 09:13:51 +0000
+X-Alimail-AntiSpam: AC=PASS; BC=-1|-1; BR=01201311R151e4; CH=green;
+ DM=||false|;
+ DS=||; FP=0|-1|-1|-1|0|-1|-1|-1; HT=e01e04395;
+ MF=jiapeng.chong@linux.alibaba.com; NM=1; PH=DS; RN=16; SR=0;
+ TI=SMTPD_---0Uom.Rp3_1631956417;
+Received: from
+ j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com
+ fp:SMTPD_---0Uom.Rp3_1631956417) by smtp.aliyun-inc.com(127.0.0.1);
+ Sat, 18 Sep 2021 17:13:43 +0800
+From: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To: robh@kernel.org
+Cc: tomeu.vizoso@collabora.com, steven.price@arm.com,
+ alyssa.rosenzweig@collabora.com, airlied@linux.ie, daniel@ffwll.ch,
+ matthias.bgg@gmail.com, sumit.semwal@linaro.org, christian.koenig@amd.com,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+ Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH] panfrost: make mediatek_mt8183_supplies and
+ mediatek_mt8183_pm_domains static
+Date: Sat, 18 Sep 2021 17:13:34 +0800
+Message-Id: 
+ <1631956414-85412-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210918_021349_870317_1E747B22 
+X-CRM114-Status: GOOD (  10.10  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+MIME-Version: 1.0
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: 
+ linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+
+This symbol is not used outside of panfrost_drv.c, so marks it static.
+
+Fix the following sparse warning:
+
+drivers/gpu/drm/panfrost/panfrost_drv.c:641:12: warning: symbol
+'mediatek_mt8183_supplies' was not declared. Should it be static?
+
+drivers/gpu/drm/panfrost/panfrost_drv.c:642:12: warning: symbol
+'mediatek_mt8183_pm_domains' was not declared. Should it be static?
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Reviewed-by: Steven Price <steven.price@arm.com>
+---
+ drivers/gpu/drm/panfrost/panfrost_drv.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
+index 077cbbf..82ad9a6 100644
+--- a/drivers/gpu/drm/panfrost/panfrost_drv.c
++++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+@@ -638,8 +638,8 @@ static int panfrost_remove(struct platform_device *pdev)
+ 	.vendor_quirk = panfrost_gpu_amlogic_quirk,
+ };
+ 
+-const char * const mediatek_mt8183_supplies[] = { "mali", "sram" };
+-const char * const mediatek_mt8183_pm_domains[] = { "core0", "core1", "core2" };
++static const char * const mediatek_mt8183_supplies[] = { "mali", "sram" };
++static const char * const mediatek_mt8183_pm_domains[] = { "core0", "core1", "core2" };
+ static const struct panfrost_compatible mediatek_mt8183_data = {
+ 	.num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies),
+ 	.supply_names = mediatek_mt8183_supplies,

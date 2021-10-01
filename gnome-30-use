@@ -1,4 +1,0 @@
-gnome-base/gnome-extra-apps -games -tracker
-app-cdr/brasero -tracker
-net-vpn/openconnect stoken
-#net-libs/gnutls tools

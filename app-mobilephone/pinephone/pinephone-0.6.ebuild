@@ -5,14 +5,13 @@ EAPI=7
 
 inherit systemd udev
 
-DESCRIPTION="PinePhone device packages and tweak scripts stolen from Manjanro"
+DESCRIPTION="PinePhone device packages and tweak scripts copied from Manjanro"
 HOMEPAGE="https://gitlab.manjaro.org/manjaro-arm/packages/community/phosh/pinephone-manjaro-tweaks.git"
 SRC_URI=""
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~arm64"
-IUSE="+eg25-manager"
 
 DEPEND="media-libs/alsa-ucm-pinephone
 		gnome-extra/iio-sensor-proxy
@@ -22,12 +21,7 @@ DEPEND="media-libs/alsa-ucm-pinephone
 		sys-firmware/ov5640-firmware
 		media-tv/v4l-utils
 		app-mobilephone/usb-tethering
-		eg25-manager? ( net-misc/eg25-manager
-			>=app-mobilephone/pinephone-modem-scripts-0.20.3-r5
-		)
-		!eg25-manager? ( <=app-mobilephone/pinephone-modem-scripts-0.20.3-r4
-			!net-misc/eg25-manager
-		)
+		net-misc/eg25-manager
 		sys-boot/osk-sdl
 "
 
@@ -38,6 +32,7 @@ S=${WORKDIR}
 
 src_install() {
 	udev_dorules "${FILESDIR}/10-proximity.rules"
+	udev_dorules "${FILESDIR}/10-pinephone-brightness.rules"
 	udev_dorules "${FILESDIR}/20-pinephone-led.rules"
 	udev_dorules "${FILESDIR}/90-usb-gadget-managed.rules"
 	#udev_dorules "${FILESDIR}/99-automount-sd.rules"
@@ -47,6 +42,7 @@ src_install() {
 
 	insinto /etc/profile.d
 	doins "${FILESDIR}/manjaro-tweaks.sh"
+	doins "${FILESDIR}/gsk-renderer-gl.sh"
 
 	insinto /usr/share/glib-2.0/schemas
 	doins "${FILESDIR}/90_manjaro.gschema.override"
@@ -66,8 +62,12 @@ src_install() {
 	insinto /etc/systemd/logind.conf.d
 	doins "${FILESDIR}/ignore-power-key.conf"
 
+	insinto /etc/systemd/journald.conf.d/
+	doins "${FILESDIR}/00-journal-size.conf"
+
 	insinto /etc/dconf/profile/
 	newins "${FILESDIR}/dconf-profile-manjaro" "user"
+	doins "${FILESDIR}/gsk-renderer-gl.sh"
 
 	insinto /etc/dconf/db/manjaro.d
 	doins "${FILESDIR}/01-phoc-scaling"
@@ -79,11 +79,24 @@ src_install() {
 	doins "${FILESDIR}/pinephone.pa"
 
 	exeinto /etc/pulse/daemon.conf.d
-	doexe "${FILESDIR}/90-pinephone.conf"
+	doins "${FILESDIR}/90-pinephone.conf"
 
 #	dobin "${FILESDIR}/pinephone-camera-setup.sh"
 	newbin "${FILESDIR}/phosh_renice.sh" phosh_renice
 
 	systemd_dounit ${FILESDIR}/pinephone-camera-setup.service
 	systemd_dounit ${FILESDIR}/phosh-renice.service
+
+	systemd_dounit ${FILESDIR}/pinephone-setup-usb-network.service
+	systemd_dounit ${FILESDIR}/pinephone-usb-gadget.service
+
+	insinto /etc/umtprd
+	doins ${FILESDIR}/umtp-responder-manjaro.conf
+	insinto /lib/systemd/system/umtp-responder.service.d
+	newins ${FILESDIR}/umtp-responder-override.conf override.conf
+
+	dobin ${FILESDIR}/pinephone-usb-gadget.sh
+	dobin ${FILESDIR}/pinephone-setup-usb-network.sh
+	#insinto /etc/xdg/autostart
+	#doins ${FILESDIR}/pinephone-speaker.desktop
 }

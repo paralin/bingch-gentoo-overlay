@@ -1,0 +1,357 @@
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
+index 3aa7940..39888e2 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
+@@ -92,6 +92,79 @@ &mt6358_vcama2_reg {
+ 	regulator-max-microvolt = <2800000>;
+ };
+ 
++&i2c2 {
++        pinctrl-names = "default";
++        pinctrl-0 = <&i2c2_pins>;
++        status = "okay";
++        clock-frequency = <400000>;
++
++        at24@50 {
++                compatible = "atmel,24c64";
++                reg = <0x50>;
++                pagesize = <64>;
++                power-supply = <&mt6358_vcamio_reg>;
++                i2c-supply = <&mt6358_vcamio_reg>;
++        };
++
++        camera_main_af: camera_main_af {
++                compatible = "dongwoon,dw9768";
++                reg = <0x0c>;
++
++                vin-supply = <&mt6358_vcamio_reg>;
++                vdd-supply = <&mt6358_vcama2_reg>;
++        };
++};
++
++&i2c4 {
++        pinctrl-names = "default";
++        pinctrl-0 = <&i2c4_pins>;
++        status = "okay";
++        clock-frequency = <400000>;
++
++        at24@50 {
++                compatible = "atmel,24c64";
++                reg = <0x50>;
++                pagesize = <64>;
++                power-supply = <&mt6358_vcn18_reg>;
++                i2c-supply = <&mt6358_vcn18_reg>;
++        };
++
++        sensor_sub: sensor_sub {
++                status = "okay";
++                compatible = "ovti,ov02a10";
++                reg = <0x3d>;
++
++                clocks = <&topckgen CLK_TOP_MUX_CAMTG2>,
++                         <&topckgen CLK_TOP_UNIVP_192M_D8>;
++                clock-names = "eclk", "freq_mux";
++                clock-frequency = <24000000>;
++                rotation = <180>;
++                ovti,mipi-tx-speed = <4>;
++
++                assigned-clocks = <&topckgen CLK_TOP_MUX_CAMTG2>,
++                                  <&topckgen CLK_TOP_UNIVP_192M_D8>;
++                assigned-clock-parents = <&topckgen CLK_TOP_UNIVP_192M_D8>;
++                assigned-clock-rates = <0>, <24000000>;
++
++                powerdown-gpios = <&pio 107 1>;
++                reset-gpios = <&pio 109 0>;
++                pinctrl-names = "default";
++                pinctrl-0 = <&camera_pins_cam1>;
++
++                avdd-supply = <&mt6358_vcama1_reg>;
++                dvdd-supply = <&mt6358_vcn18_reg>;
++                dovdd-supply = <&mt6358_vcamio_reg>;
++
++                port {
++                        ov02a10_endpoint: endpoint {
++                                data-lanes = <1>;
++                                link-frequencies = /bits/ 64 <390000000>;
++                                remote-endpoint = <&seninf_port1_endpoint>;
++                        };
++                };
++        };
++};
++
+ &pio {
+ 	/* 192 lines */
+ 	gpio-line-names =
+@@ -338,6 +411,20 @@ touch_pin_reset: pin_reset {
+ 	};
+ };
+ 
++&seninf {
++        ports {
++                port@1 {
++                        reg = <1>;
++
++                        seninf_port1_endpoint: endpoint {
++                                data-lanes = <1>;
++                                link-frequencies = /bits/ 64 <390000000>;
++                                remote-endpoint = <&ov02a10_endpoint>;
++                        };
++                };
++        };
++};
++
+ &qca_wifi {
+ 	qcom,ath10k-calibration-variant = "GO_KODAMA";
+ };
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
+index a7b0cb3..ff4d748 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
+@@ -80,6 +80,50 @@ eeprom@58 {
+ 		pagesize = <32>;
+ 		vcc-supply = <&mt6358_vcama2_reg>;
+ 	};
++
++	sensor_main: sensor_main {
++                status = "okay";
++                compatible = "ovti,ov8856";
++                reg = <0x10>;
++
++                clocks = <&topckgen CLK_TOP_MUX_CAMTG>,
++                         <&topckgen CLK_TOP_UNIVP_192M_D8>;
++                clock-names = "xvclk", "freq_mux";
++                clock-frequency = <19200000>;
++
++                assigned-clocks = <&topckgen CLK_TOP_MUX_CAMTG>,
++                                  <&topckgen CLK_TOP_UNIVP_192M_D8>;
++                assigned-clock-parents = <&topckgen CLK_TOP_UNIVP_192M_D8>;
++                assigned-clock-rates = <0>, <24000000>;
++
++                reset-gpios = <&pio 111 GPIO_ACTIVE_HIGH>;
++                pinctrl-names = "default";
++                pinctrl-0 = <&camera_pins_cam0>;
++
++                avdd-supply = <&mt6358_vcama2_reg>;
++                dvdd-supply = <&mt6358_vcamd_reg>;
++                dovdd-supply = <&mt6358_vcamio_reg>;
++
++                lens-focus = <&camera_main_af>;
++
++                port {
++                        ov8856_endpoint: endpoint {
++                                clock-lanes = <0>;
++                                clock-noncontinuous;
++                                data-lanes = <1 2 3 4>;
++                                link-frequencies = /bits/ 64 <360000000 180000000>;
++                                remote-endpoint = <&seninf_port0_endpoint>;
++                        };
++                };
++        };
++
++        camera_main_af: camera_main_af {
++                compatible = "dongwoon,dw9768";
++                reg = <0x0c>;
++
++                vin-supply = <&mt6358_vcamio_reg>;
++                vdd-supply = <&mt6358_vcama2_reg>;
++        };
+ };
+ 
+ &i2c4 {
+@@ -95,6 +139,42 @@ eeprom@54 {
+ 		pagesize = <32>;
+ 		vcc-supply = <&mt6358_vcn18_reg>;
+ 	};
++
++	sensor_sub: sensor_sub {
++                status = "okay";
++                compatible = "ovti,ov02a10";
++                reg = <0x3d>;
++
++                clocks = <&topckgen CLK_TOP_MUX_CAMTG2>,
++                         <&topckgen CLK_TOP_UNIVP_192M_D8>;
++                clock-names = "eclk", "freq_mux";
++                clock-frequency = <24000000>;
++                rotation = <180>;
++                ovti,mipi-tx-speed = <3>;
++
++                assigned-clocks = <&topckgen CLK_TOP_MUX_CAMTG2>,
++                                  <&topckgen CLK_TOP_UNIVP_192M_D8>;
++                assigned-clock-parents = <&topckgen CLK_TOP_UNIVP_192M_D8>;
++                assigned-clock-rates = <0>, <24000000>;
++
++                powerdown-gpios = <&pio 107 1>;
++                reset-gpios = <&pio 109 0>;
++                pinctrl-names = "default";
++                pinctrl-0 = <&camera_pins_cam1>;
++
++                avdd-supply = <&mt6358_vcama1_reg>;
++                dvdd-supply = <&mt6358_vcn18_reg>;
++                dovdd-supply = <&mt6358_vcamio_reg>;
++
++                port {
++                        ov02a10_endpoint: endpoint {
++                                data-lanes = <1>;
++                                clock-noncontinuous;
++                                link-frequencies = /bits/ 64 <390000000>;
++                                remote-endpoint = <&seninf_port1_endpoint>;
++                        };
++                };
++        };
+ };
+ 
+ &pio {
+@@ -347,6 +427,52 @@ &qca_wifi {
+ 	qcom,ath10k-calibration-variant = "LE_Krane";
+ };
+ 
++&seninf {
++        status = "okay";
++
++        ports {
++                port@0 {
++                        reg = <0>;
++
++                        seninf_port0_endpoint: endpoint {
++                                clock-lanes = <2>;
++                                clock-noncontinuous;
++                                data-lanes = <0 1 3 4>;
++                                link-frequencies = /bits/ 64 <360000000 180000000>;
++                                remote-endpoint = <&ov8856_endpoint>;
++                        };
++                };
++
++                port@1 {
++                        reg = <1>;
++
++                        seninf_port1_endpoint: endpoint {
++                                data-lanes = <1>;
++                                remote-endpoint = <&ov02a10_endpoint>;
++                        };
++                };
++        };
++};
++
++&camera_pins_cam0 {
++        pins_reset {
++                pinmux = <PINMUX_GPIO111__FUNC_GPIO111>;
++                output-low;
++        };
++};
++
++&camera_pins_cam1 {
++        pins_powerdown {
++                pinmux = <PINMUX_GPIO107__FUNC_GPIO107>;
++                output-high;
++        };
++
++        pins_reset {
++                pinmux = <PINMUX_GPIO109__FUNC_GPIO109>;
++                output-low;
++        };
++};
++
+ &sound {
+ 	compatible = "mediatek,mt8183_mt6358_ts3a227_max98357";
+ };
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+index 3cf6dda..fae89aa 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+@@ -474,6 +474,63 @@ pins_bt_en {
+ 		};
+ 	};
+ 
++        camera_pins_cam0: cam0@2 {
++                pins_cmd_dat {
++                        pinmux = <PINMUX_GPIO99__FUNC_CMMCLK0>;
++                };
++        };
++
++        camera_pins_cam1: cam1@2 {
++                pins_cmd_dat {
++                        pinmux = <PINMUX_GPIO100__FUNC_CMMCLK1>;
++                };
++        };
++
++        dpi_pin_default: dpi_pin_default {
++                pins_cmd_dat {
++                        pinmux = <PINMUX_GPIO13__FUNC_GPIO13>,
++                                <PINMUX_GPIO14__FUNC_GPIO14>,
++                                <PINMUX_GPIO15__FUNC_GPIO15>,
++                                <PINMUX_GPIO16__FUNC_GPIO16>,
++                                <PINMUX_GPIO17__FUNC_GPIO17>,
++                                <PINMUX_GPIO18__FUNC_GPIO18>,
++                                <PINMUX_GPIO19__FUNC_GPIO19>,
++                                <PINMUX_GPIO20__FUNC_GPIO20>,
++                                <PINMUX_GPIO21__FUNC_GPIO21>,
++                                <PINMUX_GPIO22__FUNC_GPIO22>,
++                                <PINMUX_GPIO23__FUNC_GPIO23>,
++                                <PINMUX_GPIO24__FUNC_GPIO24>,
++                                <PINMUX_GPIO25__FUNC_GPIO25>,
++                                <PINMUX_GPIO26__FUNC_GPIO26>,
++                                <PINMUX_GPIO27__FUNC_GPIO27>,
++                                <PINMUX_GPIO28__FUNC_GPIO28>;
++                                drive-strength = <MTK_DRIVE_6mA>;
++                                output-low;
++                };
++        };
++
++        dpi_pin_func: dpi_pin_func {
++                pins_cmd_dat {
++                        pinmux = <PINMUX_GPIO13__FUNC_DBPI_D0>,
++                                <PINMUX_GPIO14__FUNC_DBPI_D1>,
++                                <PINMUX_GPIO15__FUNC_DBPI_D2>,
++                                <PINMUX_GPIO16__FUNC_DBPI_D3>,
++                                <PINMUX_GPIO17__FUNC_DBPI_D4>,
++                                <PINMUX_GPIO18__FUNC_DBPI_D5>,
++                                <PINMUX_GPIO19__FUNC_DBPI_D6>,
++                                <PINMUX_GPIO20__FUNC_DBPI_D7>,
++                                <PINMUX_GPIO21__FUNC_DBPI_D8>,
++                                <PINMUX_GPIO22__FUNC_DBPI_D9>,
++                                <PINMUX_GPIO23__FUNC_DBPI_D10>,
++                                <PINMUX_GPIO24__FUNC_DBPI_D11>,
++                                <PINMUX_GPIO25__FUNC_DBPI_HSYNC>,
++                                <PINMUX_GPIO26__FUNC_DBPI_VSYNC>,
++                                <PINMUX_GPIO27__FUNC_DBPI_DE>,
++                                <PINMUX_GPIO28__FUNC_DBPI_CK>;
++                                drive-strength = <MTK_DRIVE_6mA>;
++                };
++        };
++
+ 	ec_ap_int_odl: ec_ap_int_odl {
+ 		pins1 {
+ 			pinmux = <PINMUX_GPIO151__FUNC_GPIO151>;
+@@ -551,6 +608,32 @@ pins_bus {
+ 		};
+ 	};
+ 
++        it6505_pins: it6505_pins {
++                pins_hpd {
++                        pinmux = <PINMUX_GPIO9__FUNC_GPIO9>;
++                        input-enable;
++                        bias-pull-up;
++                };
++
++                pins_int {
++                        pinmux = <PINMUX_GPIO152__FUNC_GPIO152>;
++                        input-enable;
++                        bias-pull-up;
++                };
++
++                pins_power_enable {
++                        pinmux = <PINMUX_GPIO178__FUNC_GPIO178>;
++                        output-low;
++                        bias-pull-up;
++                };
++
++                pins_reset {
++                        pinmux = <PINMUX_GPIO179__FUNC_GPIO179>;
++                        output-low;
++                        bias-pull-up;
++                };
++        };
++
+ 	mmc0_pins_default: mmc0-pins-default {
+ 		pins_cmd_dat {
+ 			pinmux = <PINMUX_GPIO123__FUNC_MSDC0_DAT0>,

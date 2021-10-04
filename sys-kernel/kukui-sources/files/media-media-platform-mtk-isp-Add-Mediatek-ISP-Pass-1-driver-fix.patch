@@ -171,7 +171,7 @@ index 000000000000..a85f37c0b87d
 +				"camsys_camtg_cgpdn";
 +		mediatek,larb = <&larb3>,
 +				<&larb6>;
-+		power-domains = <&scpsys MT8183_POWER_DOMAIN_CAM>;
++		power-domains = <&spm MT8183_POWER_DOMAIN_CAM>;
 +		mediatek,scp = <&scp>;
 +
 +		port {
@@ -4757,53 +4757,3 @@ index a2d472e..2e2239c 100644
  obj-$(CONFIG_VIDEO_MEDIATEK_FD)		+= mtk-isp/fd/
  
  obj-$(CONFIG_VIDEO_QCOM_CAMSS)		+= qcom/camss/
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 6bfbbd2..5c63a7d 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -1992,6 +1992,43 @@ ipu_core1: syscon@19280000 {
- 			#clock-cells = <1>;
- 		};
- 
-+                camisp: camisp@1a000000 {
-+                        compatible = "mediatek,mt8183-camisp";
-+                        reg = <0 0x1a000000 0 0x1000>,
-+                                        <0 0x1a003000 0 0x1000>,
-+                                        <0 0x1a004000 0 0x2000>,
-+                                        <0 0x1a006000 0 0x2000>,
-+                                        <0 0x1a008000 0 0x2000>;
-+                        reg-names = "cam_sys",
-+                                        "cam_uni",
-+                                        "cam_a",
-+                                        "cam_b",
-+                                        "cam_c";
-+                        interrupts = <GIC_SPI 253 IRQ_TYPE_LEVEL_LOW>,
-+                                        <GIC_SPI 254 IRQ_TYPE_LEVEL_LOW>,
-+                                        <GIC_SPI 255 IRQ_TYPE_LEVEL_LOW>,
-+                                        <GIC_SPI 256 IRQ_TYPE_LEVEL_LOW>;
-+                        interrupt-names = "cam_uni",
-+                                        "cam_a",
-+                                        "cam_b",
-+                                        "cam_c";
-+                        iommus = <&iommu M4U_PORT_CAM_IMGO>;
-+                        clocks = <&camsys CLK_CAM_CAM>,
-+                                        <&camsys CLK_CAM_CAMTG>;
-+                        clock-names = "camsys_cam_cgpdn",
-+                                        "camsys_camtg_cgpdn";
-+                        mediatek,larb = <&larb3>,
-+                                        <&larb6>;
-+                        power-domains = <&scpsys MT8183_POWER_DOMAIN_CAM>;
-+                        mediatek,scp = <&scp>;
-+
-+                        port {
-+                                camisp_endpoint: endpoint {
-+                                        remote-endpoint = <&seninf_camisp_endpoint>;
-+                                };
-+                        };
-+                };
-+
- 		camsys: syscon@1a000000 {
- 			compatible = "mediatek,mt8183-camsys", "syscon";
- 			reg = <0 0x1a000000 0 0x1000>;
-diff --git a/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam.c b/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam.c
-index 23fdb8b..5aaea0c 100644

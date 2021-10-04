@@ -36,15 +36,38 @@ PATCHES=(
 	${FILESDIR}/mt8183-sound-juniper.patch
 	# cherry-pick from https://patchwork.kernel.org/project/linux-mediatek
 	${FILESDIR}/Add-cpufreq-and-cci-devfreq-for-mt8183-and-SVS-support-fix.patch
-	${FILESDIR}/v3-media-mtk-vpu-Ensure-alignment-of-8-for-DTCM-buffer.patch
+	${FILESDIR}/v4-media-mtk-vpu-Ensure-alignment-of-8-for-DTCM-buffer.patch
 	${FILESDIR}/media-mediatek-support-mdp3-on-mt8183-platform-fix.patch
 	${FILESDIR}/Introducing-an-attribute-to-select-the-time-setting.patch
 	${FILESDIR}/ASoC-mediatek-common-handle-NULL-case-in-suspend-resume-function.patch
 	${FILESDIR}/drm-panel-boe-tv101wum-nl6-Support-enabling-a-3.3V-rail.patch
+	${FILESDIR}/soc-mediatek-SVS-introduce-MTK-SVS-engine-fix.patch
+	${FILESDIR}/media-platform-Add-support-for-Digital-Image-Processing-DIP-on-mt8183-SoC-fix.patch
+	${FILESDIR}/media-platform-Add-support-for-Face-Detection-FD-on-mt8183-SoC-fix.patch
+	${FILESDIR}/media-media-platform-mtk-isp-Add-Mediatek-ISP-Pass-1-driver-fix.patch
+	${FILESDIR}/media-support-Mediatek-sensor-interface-driver-fix.patch
+	${FILESDIR}/media-support-Mediatek-sensor-interface-driver-fix-2.patch
+	#${FILESDIR}/Fix-the-issues-caused-by-CMDQ-refinement-of-mtk-drm.patch
+	
+
+	${FILESDIR}/mailbox-Remove-WARN_ON-for-async_cb.cb-in-cmdq_exec_done.patch
+	${FILESDIR}/drm-mediatek-add-dither-6-setting.patch
+	#${FILESDIR}/v6-RESEND-1-3-gpu-drm-separate-panel-orientation-property-creating-and-value-setting.patch
+	${FILESDIR}/v5-1-3-dt-bindings-mediatek-convert-mtk-jpeg-decoder-encoder-to-yaml.patch
+	${FILESDIR}/v4-3-3-arm64-dts-mt8183-add-jpeg-enc-node-for-mt8183.diff
+	#${FILESDIR}/Clean-up-mediatek-larb-fix.patch
 	#${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix.patch
 	#${FILESDIR}/Using-component-framework-to-support-multi-hardware-decode.patch
 	# 
-	${FILESDIR}/Multigenerational-LRU-Framework.patch
+#	${FILESDIR}/Multigenerational-LRU-Framework.patch
+	# various fixes
+	${FILESDIR}/fix-v4l2-ioctl.patch
+	${FILESDIR}/fix-xhci-mtk-sch.patch
+	${FILESDIR}/fix-scp_get_pdev.patch
+	${FILESDIR}/add-ov02a10-ov8856.patch
+	${FILESDIR}/fix-mt8183-svs.patch
+	${FILESDIR}/fix-mt8183-dpi.patch
+	${FILESDIR}/fix-mt8183-fssource.patch
 )
 
 src_prepare() {

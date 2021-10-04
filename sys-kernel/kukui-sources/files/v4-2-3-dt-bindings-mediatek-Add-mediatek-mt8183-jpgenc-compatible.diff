@@ -1,0 +1,12 @@
+diff --git a/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml b/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml
+index 28f26e79fcb3a..e4e791d76cdaa 100644
+--- a/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml
+@@ -17,6 +17,7 @@ properties:
+     items:
+       - enum:
+           - mediatek,mt2701-jpgenc
++          - mediatek,mt8183-jpgenc
+       - const: mediatek,mtk-jpgenc
+   reg:
+     maxItems: 1

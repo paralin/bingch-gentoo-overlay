@@ -3810,7 +3810,7 @@ index 000000000000..917b393acc0c
 +            compatible = "mediatek,mt8183-seninf";
 +            reg = <0 0x1a040000 0 0x8000>;
 +            interrupts = <GIC_SPI 251 IRQ_TYPE_LEVEL_LOW>;
-+            power-domains = <&scpsys MT8183_POWER_DOMAIN_CAM>;
++            power-domains = <&spm MT8183_POWER_DOMAIN_CAM>;
 +            clocks = <&camsys CLK_CAM_SENINF>,
 +                <&topckgen CLK_TOP_MUX_SENINF>;
 +            clock-names = "cam_seninf", "top_mux_seninf";

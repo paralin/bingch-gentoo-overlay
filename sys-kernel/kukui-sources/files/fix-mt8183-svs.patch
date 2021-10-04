@@ -23,7 +23,7 @@ index a27e5f0..914ed18 100644
 +
 +                        svs_gpu: svs_gpu {
 +                                compatible = "mediatek,mt8183-svs-gpu";
-+                                power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_2D>;
++                                power-domains = <&spm MT8183_POWER_DOMAIN_MFG_2D>;
 +                                operating-points-v2 = <&gpu_opp_table>;
 +                        };
  		};

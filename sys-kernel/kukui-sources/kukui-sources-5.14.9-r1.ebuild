@@ -55,7 +55,7 @@ PATCHES=(
 	#${FILESDIR}/v6-RESEND-1-3-gpu-drm-separate-panel-orientation-property-creating-and-value-setting.patch
 	${FILESDIR}/v5-1-3-dt-bindings-mediatek-convert-mtk-jpeg-decoder-encoder-to-yaml.patch
 	${FILESDIR}/v4-3-3-arm64-dts-mt8183-add-jpeg-enc-node-for-mt8183.diff
-	#${FILESDIR}/Clean-up-mediatek-larb-fix.patch
+	${FILESDIR}/Clean-up-mediatek-larb-fix.patch
 	#${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix.patch
 	#${FILESDIR}/Using-component-framework-to-support-multi-hardware-decode.patch
 	# 

@@ -1,0 +1,23 @@
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+index a150dec..7fbbf95 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+@@ -318,6 +328,18 @@ &gpu {
+ 	supply-names = "mali", "sram";
+ 	mali-supply = <&mt6358_vgpu_reg>;
+ 	sram-supply = <&mt6358_vsram_gpu_reg>;
++	operating-points-v2 = <&gpu_opp_table>;
++        power_model@0 {
++                compatible = "arm,mali-simple-power-model";
++                static-coefficient = <2427750>;
++                dynamic-coefficient = <4687>;
++                ts = <20000 2000 (-20) 2>;
++                thermal-zone = "cpu_thermal";
++        };
++        power_model@1 {
++                compatible = "arm,mali-g72-power-model";
++                scale = <15000>;
++        };
+ };
+ 
+ &i2c0 {

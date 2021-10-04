@@ -68,6 +68,12 @@ PATCHES=(
 	${FILESDIR}/fix-mt8183-svs.patch
 	${FILESDIR}/fix-mt8183-dpi.patch
 	${FILESDIR}/fix-mt8183-fssource.patch
+	${FILESDIR}/fix-mt8183-mdp.patch
+	${FILESDIR}/fix-mt8183-vcodec.patch
+	${FILESDIR}/fix-kukui-sspm.patch
+	${FILESDIR}/fix-kukui-snd.patch
+	${FILESDIR}/fix-kukui-gpu.patch
+	${FILESDIR}/fix-kukui-pin.patch
 )
 
 src_prepare() {

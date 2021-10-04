@@ -1,0 +1,75 @@
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 744526d..fed276a 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -2031,6 +2031,35 @@ vdecsys: syscon@16000000 {
+ 			#clock-cells = <1>;
+ 		};
+ 
++		vcodec_dec: vcodec@16000000 {
++                        compatible = "mediatek,mt8183-vcodec-dec";
++                        reg = <0 0x16000000 0 0x1000>,          /* VDEC_SYS */
++                                 <0 0x16020000 0 0x1000>,               /* VDEC_MISC */
++                                 <0 0x16021000 0 0x800>,                /* VDEC_VLD */
++                                 <0 0x16021800 0 0x800>,                /* VDEC_TOP */
++                                 <0 0x16022000 0 0x1000>,               /* VDEC_MC */
++                                 <0 0x16023000 0 0x1000>,               /* VDEC_AVCVLD */
++                                 <0 0x16024000 0 0x1000>,               /* VDEC_AVCMV */
++                                 <0 0x16025000 0 0x1000>,               /* VDEC_PP */
++                                 <0 0x16026800 0 0x800>,                /* VP8_VD */
++                                 <0 0x16027000 0 0x800>,                /* VP6_VD */
++                                 <0 0x16027800 0 0x800>,                /* VP8_VL */
++                                 <0 0x16028400 0 0x400>;                /* VP9_VD */
++                        interrupts = <GIC_SPI 250 IRQ_TYPE_LEVEL_LOW>;
++                        mediatek,larb = <&larb1>;
++                        iommus = <&iommu M4U_PORT_HW_VDEC_MC_EXT>,
++                                 <&iommu M4U_PORT_HW_VDEC_PP_EXT>,
++                                 <&iommu M4U_PORT_HW_VDEC_VLD_EXT>,
++                                 <&iommu M4U_PORT_HW_VDEC_AVC_MV_EXT>,
++                                 <&iommu M4U_PORT_HW_VDEC_PRED_RD_EXT>,
++                                 <&iommu M4U_PORT_HW_VDEC_PRED_WR_EXT>,
++                                 <&iommu M4U_PORT_HW_VDEC_PPWRAP_EXT>;
++                        mediatek,scp = <&scp>;
++                        power-domains = <&spm MT8183_POWER_DOMAIN_VDEC>;
++                        clocks = <&vdecsys CLK_VDEC_VDEC>;
++                        clock-names = "MT_CG_VDEC";
++                };
++
+ 		larb1: larb@16010000 {
+ 			compatible = "mediatek,mt8183-smi-larb";
+ 			reg = <0 0x16010000 0 0x1000>;
+@@ -2056,6 +2085,25 @@ larb4: larb@17010000 {
+ 			power-domains = <&spm MT8183_POWER_DOMAIN_VENC>;
+ 		};
+ 
++		vcodec_enc: vcodec@17020000 {
++                        compatible = "mediatek,mt8183-vcodec-enc";
++                        reg = <0 0x17020000 0 0x1000>,
++                                 <0 0x17000000 0 0x1000>; /* Dummy */
++                        interrupts = <GIC_SPI 247 IRQ_TYPE_LEVEL_LOW>;
++                        mediatek,larb = <&larb4>;
++                        iommus = <&iommu M4U_PORT_VENC_REC>,
++                                 <&iommu M4U_PORT_VENC_BSDMA>,
++                                 <&iommu M4U_PORT_VENC_RD_COMV>,
++                                 <&iommu M4U_PORT_VENC_CUR_LUMA>,
++                                 <&iommu M4U_PORT_VENC_CUR_CHROMA>,
++                                 <&iommu M4U_PORT_VENC_REF_LUMA>,
++                                 <&iommu M4U_PORT_VENC_REF_CHROMA>;
++                        mediatek,scp = <&scp>;
++                        power-domains = <&spm MT8183_POWER_DOMAIN_VENC>;
++                        clocks = <&vencsys CLK_VENC_VENC>;
++                        clock-names = "MT_CG_VENC";
++                };
++
+ 		venc_jpg: venc_jpg@17030000 {
+ 			compatible = "mediatek,mt8183-jpgenc", "mediatek,mtk-jpgenc";
+ 			reg = <0 0x17030000 0 0x1000>;
+@@ -2124,7 +2172,7 @@ camisp: camisp@1a000000 {
+                                         "camsys_camtg_cgpdn";
+                         mediatek,larb = <&larb3>,
+                                         <&larb6>;
+-                        power-domains = <&scpsys MT8183_POWER_DOMAIN_CAM>;
++                        power-domains = <&spm MT8183_POWER_DOMAIN_CAM>;
+                         mediatek,scp = <&scp>;
+ 
+                         port {

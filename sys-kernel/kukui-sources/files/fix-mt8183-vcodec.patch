@@ -64,12 +64,3 @@ index 744526d..fed276a 100644
  		venc_jpg: venc_jpg@17030000 {
  			compatible = "mediatek,mt8183-jpgenc", "mediatek,mtk-jpgenc";
  			reg = <0 0x17030000 0 0x1000>;
-@@ -2124,7 +2172,7 @@ camisp: camisp@1a000000 {
-                                         "camsys_camtg_cgpdn";
-                         mediatek,larb = <&larb3>,
-                                         <&larb6>;
--                        power-domains = <&scpsys MT8183_POWER_DOMAIN_CAM>;
-+                        power-domains = <&spm MT8183_POWER_DOMAIN_CAM>;
-                         mediatek,scp = <&scp>;
- 
-                         port {

@@ -13,7 +13,7 @@ KEYWORDS="~arm64"
 EGIT_REPO_URI="${HOMEPAGE}.git"
 
 if [[ ${PV} != 9999 ]]; then
-	EGIT_COMMIT="5c61d41090d1a6b39de29beb375be9d3ecc48b9c"
+	EGIT_COMMIT="1f8fa88d377fe60940be682a23d1c3f991edee4e"
 else
 	KEYWORDS=""
 fi
@@ -28,9 +28,9 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-PATCHES=(
-	${FILESDIR}/24.patch
-)
+#PATCHES=(
+#	${FILESDIR}/24.patch
+#)
 
 src_install() {
 	meson_src_install

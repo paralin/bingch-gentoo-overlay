@@ -38,8 +38,8 @@ PATCHES=(
 	${FILESDIR}/Add-cpufreq-and-cci-devfreq-for-mt8183-and-SVS-support-fix.patch
 	${FILESDIR}/v4-media-mtk-vpu-Ensure-alignment-of-8-for-DTCM-buffer.patch
 	${FILESDIR}/media-mediatek-support-mdp3-on-mt8183-platform-fix.patch
-	${FILESDIR}/Introducing-an-attribute-to-select-the-time-setting.patch
-	${FILESDIR}/ASoC-mediatek-common-handle-NULL-case-in-suspend-resume-function.patch
+	${FILESDIR}/Introducing-an-attribute-to-select-the-time-setting-5.14.patch
+	#${FILESDIR}/ASoC-mediatek-common-handle-NULL-case-in-suspend-resume-function.patch
 	${FILESDIR}/drm-panel-boe-tv101wum-nl6-Support-enabling-a-3.3V-rail.patch
 	${FILESDIR}/soc-mediatek-SVS-introduce-MTK-SVS-engine-fix.patch
 	${FILESDIR}/media-platform-Add-support-for-Digital-Image-Processing-DIP-on-mt8183-SoC-fix.patch

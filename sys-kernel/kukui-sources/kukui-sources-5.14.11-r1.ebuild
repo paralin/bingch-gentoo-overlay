@@ -55,13 +55,16 @@ PATCHES=(
 	#${FILESDIR}/v6-RESEND-1-3-gpu-drm-separate-panel-orientation-property-creating-and-value-setting.patch
 	${FILESDIR}/v5-1-3-dt-bindings-mediatek-convert-mtk-jpeg-decoder-encoder-to-yaml.patch
 	${FILESDIR}/v4-3-3-arm64-dts-mt8183-add-jpeg-enc-node-for-mt8183.diff
+	${FILESDIR}/media-mtk-vcodec-support-for-MT8183-decoder.patch
+	${FILESDIR}/Support-multi-hardware-decode-using-of_platform_populate.patch
 	${FILESDIR}/Clean-up-mediatek-larb-fix.patch
+
 	#${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix.patch
 	#${FILESDIR}/Using-component-framework-to-support-multi-hardware-decode.patch
 	# 
 #	${FILESDIR}/Multigenerational-LRU-Framework.patch
 	# various fixes
-	${FILESDIR}/fix-v4l2-ioctl.patch
+	${FILESDIR}/fix-v4l2-ioctl-2.patch
 	${FILESDIR}/fix-xhci-mtk-sch.patch
 	${FILESDIR}/fix-scp_get_pdev.patch
 	${FILESDIR}/add-ov02a10-ov8856.patch

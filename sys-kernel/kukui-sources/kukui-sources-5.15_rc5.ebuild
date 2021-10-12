@@ -38,11 +38,11 @@ DEPEND="${RDEPEND}
 
 PATCHES=(
 	# From https://github.com/Maccraft123/Cadmium/tree/master/baseboard/kukui/patches
-	${FILESDIR}/drm.patch
-	${FILESDIR}/gpu-vsram.patch
-	${FILESDIR}/move-gpu-opp-to-3.patch
-	${FILESDIR}/mutex-gce-events.patch
-	${FILESDIR}/opp-multi-regulator.patch
+    ${FILESDIR}/drm.patch
+    ${FILESDIR}/gpu-vsram.patch
+    ${FILESDIR}/move-gpu-opp-to-3.patch
+    ${FILESDIR}/mutex-gce-events.patch
+    ${FILESDIR}/opp-multi-regulator.patch
     ${FILESDIR}/panel-dts-rotation.patch
     ${FILESDIR}/panel-dts-rotation_sku0.patch
     ${FILESDIR}/sound_1.patch
@@ -74,15 +74,20 @@ PATCHES=(
 	#${FILESDIR}/v6-RESEND-1-3-gpu-drm-separate-panel-orientation-property-creating-and-value-setting.patch
 	${FILESDIR}/v5-1-3-dt-bindings-mediatek-convert-mtk-jpeg-decoder-encoder-to-yaml.patch
 	${FILESDIR}/v4-3-3-arm64-dts-mt8183-add-jpeg-enc-node-for-mt8183.diff
-	${FILESDIR}/Clean-up-mediatek-larb-fix-5.15.patch
 	${FILESDIR}/v2-dma-buf-remove-restriction-of-IOCTL-DMA_BUF_SET_NAME.patch
 	${FILESDIR}/v2-dma-buf-acquire-name-lock-before-read-write-dma_buf.name.patch
+	${FILESDIR}/media-mtk-vcodec-support-for-MT8183-decoder.patch
+	${FILESDIR}/Support-multi-hardware-decode-using-of_platform_populate.patch
 	#${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix.patch
 	#${FILESDIR}/Using-component-framework-to-support-multi-hardware-decode.patch
+	${FILESDIR}/Clean-up-mediatek-larb-fix-5.15.patch
 	# 
 #	${FILESDIR}/Multigenerational-LRU-Framework.patch
+
+
+	
 	# various fixes
-	${FILESDIR}/fix-v4l2-ioctl.patch
+	${FILESDIR}/fix-v4l2-ioctl-2.patch
 	${FILESDIR}/fix-scp_get_pdev.patch
 	${FILESDIR}/add-ov02a10-ov8856.patch
 	${FILESDIR}/fix-mt8183-svs.patch
@@ -93,6 +98,7 @@ PATCHES=(
 	${FILESDIR}/fix-kukui-sspm.patch
 	${FILESDIR}/fix-kukui-gpu.patch
 	${FILESDIR}/fix-kukui-pin.patch
+
 	#
 	#${FILESDIR}/fix-kukui-snd.patch
 )

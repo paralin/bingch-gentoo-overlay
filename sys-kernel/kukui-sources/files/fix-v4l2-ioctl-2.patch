@@ -1,9 +1,9 @@
 diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 05d5db3..d56ace6 100644
+index ce31885..2bd075e 100644
 --- a/drivers/media/v4l2-core/v4l2-ioctl.c
 +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1348,6 +1348,38 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_PIX_FMT_KONICA420:	descr = "GSPCA KONICA420"; break;
+@@ -1349,6 +1349,38 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_PIX_FMT_MM21:		descr = "Mediatek 8-bit block format"; break;
  	case V4L2_PIX_FMT_HSV24:	descr = "24-bit HSV 8-8-8"; break;
  	case V4L2_PIX_FMT_HSV32:	descr = "32-bit XHSV 8-8-8-8"; break;
 +	case V4L2_PIX_FMT_MTISP_SBGGR8: descr = "8-bit Bayer BGGR MTISP Packed"; break;
@@ -41,7 +41,7 @@ index 05d5db3..d56ace6 100644
  	case V4L2_SDR_FMT_CU8:		descr = "Complex U8"; break;
  	case V4L2_SDR_FMT_CU16LE:	descr = "Complex U16LE"; break;
  	case V4L2_SDR_FMT_CS8:		descr = "Complex S8"; break;
-@@ -1363,5 +1394,12 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+@@ -1364,6 +1396,11 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
  	case V4L2_META_FMT_VSP1_HGO:	descr = "R-Car VSP1 1-D Histogram"; break;
  	case V4L2_META_FMT_VSP1_HGT:	descr = "R-Car VSP1 2-D Histogram"; break;
  	case V4L2_META_FMT_UVC:		descr = "UVC Payload Header Metadata"; break;
@@ -54,10 +54,10 @@ index 05d5db3..d56ace6 100644
  	case V4L2_META_FMT_VIVID:       descr = "Vivid Metadata"; break;
  	case V4L2_META_FMT_RK_ISP1_PARAMS:	descr = "Rockchip ISP1 3A Parameters"; break;
 diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 758271f..55aa481 100644
+index 2175ddd..55aa481 100644
 --- a/include/uapi/linux/videodev2.h
 +++ b/include/uapi/linux/videodev2.h
-@@ -744,6 +745,40 @@ struct v4l2_pix_format {
+@@ -745,6 +745,40 @@ struct v4l2_pix_format {
  #define V4L2_PIX_FMT_IPU3_SGRBG10	v4l2_fourcc('i', 'p', '3', 'G') /* IPU3 packed 10-bit GRBG bayer */
  #define V4L2_PIX_FMT_IPU3_SRGGB10	v4l2_fourcc('i', 'p', '3', 'r') /* IPU3 packed 10-bit RGGB bayer */
  
@@ -98,7 +98,7 @@ index 758271f..55aa481 100644
  /* SDR formats - used only for Software Defined Radio devices */
  #define V4L2_SDR_FMT_CU8          v4l2_fourcc('C', 'U', '0', '8') /* IQ u8 */
  #define V4L2_SDR_FMT_CU16LE       v4l2_fourcc('C', 'U', '1', '6') /* IQ u16le */
-@@ -764,9 +799,18 @@ struct v4l2_pix_format {
+@@ -765,9 +799,18 @@ struct v4l2_pix_format {
  #define V4L2_META_FMT_VSP1_HGO    v4l2_fourcc('V', 'S', 'P', 'H') /* R-Car VSP1 1-D Histogram */
  #define V4L2_META_FMT_VSP1_HGT    v4l2_fourcc('V', 'S', 'P', 'T') /* R-Car VSP1 2-D Histogram */
  #define V4L2_META_FMT_UVC         v4l2_fourcc('U', 'V', 'C', 'H') /* UVC Payload Header metadata */

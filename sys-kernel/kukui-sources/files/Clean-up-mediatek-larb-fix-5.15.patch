@@ -312,43 +312,6 @@ index caa24943da33..53ef26e2c857 100644
  		iommus = <&iommu M4U_PORT_MDP_WROT1>;
 -		mediatek,larb = <&larb4>;
  	};
-diff --git a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-index ad1321e5a22d..71237355cc7e 100644
---- a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-+++ b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-@@ -13,7 +13,6 @@ Required properties:
- - reg : Physical base address of the video codec registers and length of
-   memory mapped region.
- - interrupts : interrupt number to the cpu.
--- mediatek,larb : must contain the local arbiters in the current Socs.
- - clocks : list of clock specifiers, corresponding to entries in
-   the clock-names property.
- - clock-names: avc encoder must contain "venc_sel", vp8 encoder must
-@@ -46,7 +45,6 @@ vcodec_dec: vcodec@16000000 {
-           <0 0x16027800 0 0x800>,   /*VP8_VL*/
-           <0 0x16028400 0 0x400>;   /*VP9_VD*/
-     interrupts = <GIC_SPI 204 IRQ_TYPE_LEVEL_LOW>;
--    mediatek,larb = <&larb1>;
-     iommus = <&iommu M4U_PORT_HW_VDEC_MC_EXT>,
-              <&iommu M4U_PORT_HW_VDEC_PP_EXT>,
-              <&iommu M4U_PORT_HW_VDEC_AVC_MV_EXT>,
-@@ -99,7 +97,6 @@ vcodec_enc_avc: vcodec@18002000 {
-              <&iommu M4U_PORT_VENC_REF_CHROMA>,
-              <&iommu M4U_PORT_VENC_NBM_RDMA>,
-              <&iommu M4U_PORT_VENC_NBM_WDMA>;
--    mediatek,larb = <&larb3>;
-     mediatek,vpu = <&vpu>;
-     clocks = <&topckgen CLK_TOP_VENC_SEL>;
-     clock-names = "venc_sel";
-@@ -120,7 +117,6 @@ vcodec_enc_vp8: vcodec@19002000 {
-              <&iommu M4U_PORT_VENC_CUR_CHROMA_SET2>,
-              <&iommu M4U_PORT_VENC_REF_LUMA_SET2>,
-              <&iommu M4U_PORT_VENC_REC_CHROMA_SET2>;
--    mediatek,larb = <&larb5>;
-     mediatek,vpu = <&vpu>;
-     clocks = <&topckgen CLK_TOP_VENC_LT_SEL>;
-     clock-names = "venc_lt_sel";
-
 From patchwork Wed Sep 29 01:37:09 2021
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
@@ -1865,6 +1828,23 @@ index 99cbf44463e4..48642e814370 100644
  
  	if (comp_id < 0 || comp_id >= DDP_COMPONENT_ID_MAX)
  		return -EINVAL;
+@@ -460,16 +438,6 @@ int mtk_ddp_comp_init(struct device_node *node, struct mtk_ddp_comp *comp,
+ 	}
+ 	comp->dev = &comp_pdev->dev;
+ 
+-	/* Only DMA capable components need the LARB property */
+-	if (type == MTK_DISP_OVL ||
+-	    type == MTK_DISP_OVL_2L ||
+-	    type == MTK_DISP_RDMA ||
+-	    type == MTK_DISP_WDMA) {
+-		ret = mtk_ddp_get_larb_dev(node, comp, comp->dev);
+-		if (ret)
+-			return ret;
+-	}
+-
+ 	if (type == MTK_DISP_AAL ||
+ 	    type == MTK_DISP_BLS ||
+ 	    type == MTK_DISP_CCORR ||
 diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
 index bb914d976cf5..1b582262b682 100644
 --- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
@@ -2019,114 +1999,6 @@ Reviewed-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
  .../platform/mtk-vcodec/mtk_vcodec_enc_pm.c   | 44 +++----------------
  4 files changed, 10 insertions(+), 75 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-index 6038db96f71c..d0bf9aa3b29d 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
-@@ -8,14 +8,12 @@
- #include <linux/of_address.h>
- #include <linux/of_platform.h>
- #include <linux/pm_runtime.h>
--#include <soc/mediatek/smi.h>
- 
- #include "mtk_vcodec_dec_pm.h"
- #include "mtk_vcodec_util.h"
- 
- int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *mtkdev)
- {
--	struct device_node *node;
- 	struct platform_device *pdev;
- 	struct mtk_vcodec_pm *pm;
- 	struct mtk_vcodec_clk *dec_clk;
-@@ -26,18 +24,7 @@ int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *mtkdev)
- 	pm = &mtkdev->pm;
- 	pm->mtkdev = mtkdev;
- 	dec_clk = &pm->vdec_clk;
--	node = of_parse_phandle(pdev->dev.of_node, "mediatek,larb", 0);
--	if (!node) {
--		mtk_v4l2_err("of_parse_phandle mediatek,larb fail!");
--		return -1;
--	}
- 
--	pdev = of_find_device_by_node(node);
--	of_node_put(node);
--	if (WARN_ON(!pdev)) {
--		return -1;
--	}
--	pm->larbvdec = &pdev->dev;
- 	pdev = mtkdev->plat_dev;
- 	pm->dev = &pdev->dev;
- 
-@@ -47,14 +34,11 @@ int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *mtkdev)
- 		dec_clk->clk_info = devm_kcalloc(&pdev->dev,
- 			dec_clk->clk_num, sizeof(*clk_info),
- 			GFP_KERNEL);
--		if (!dec_clk->clk_info) {
--			ret = -ENOMEM;
--			goto put_device;
--		}
-+		if (!dec_clk->clk_info)
-+			return -ENOMEM;
- 	} else {
- 		mtk_v4l2_err("Failed to get vdec clock count");
--		ret = -EINVAL;
--		goto put_device;
-+		return -EINVAL;
- 	}
- 
- 	for (i = 0; i < dec_clk->clk_num; i++) {
-@@ -63,29 +47,24 @@ int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *mtkdev)
- 			"clock-names", i, &clk_info->clk_name);
- 		if (ret) {
- 			mtk_v4l2_err("Failed to get clock name id = %d", i);
--			goto put_device;
-+			return ret;
- 		}
- 		clk_info->vcodec_clk = devm_clk_get(&pdev->dev,
- 			clk_info->clk_name);
- 		if (IS_ERR(clk_info->vcodec_clk)) {
- 			mtk_v4l2_err("devm_clk_get (%d)%s fail", i,
- 				clk_info->clk_name);
--			ret = PTR_ERR(clk_info->vcodec_clk);
--			goto put_device;
-+			return PTR_ERR(clk_info->vcodec_clk);
- 		}
- 	}
- 
- 	pm_runtime_enable(&pdev->dev);
- 	return 0;
--put_device:
--	put_device(pm->larbvdec);
--	return ret;
- }
- 
- void mtk_vcodec_release_dec_pm(struct mtk_vcodec_dev *dev)
- {
- 	pm_runtime_disable(dev->pm.dev);
--	put_device(dev->pm.larbvdec);
- }
- 
- int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
-@@ -122,11 +101,6 @@ void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
- 		}
- 	}
- 
--	ret = mtk_smi_larb_get(pm->larbvdec);
--	if (ret) {
--		mtk_v4l2_err("mtk_smi_larb_get larbvdec fail %d", ret);
--		goto error;
--	}
- 	return;
- 
- error:
-@@ -139,7 +113,6 @@ void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm)
- 	struct mtk_vcodec_clk *dec_clk = &pm->vdec_clk;
- 	int i = 0;
- 
--	mtk_smi_larb_put(pm->larbvdec);
- 	for (i = dec_clk->clk_num - 1; i >= 0; i--)
- 		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
- }
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
 index c6c7672fecfb..64b73dd880ce 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
@@ -2154,125 +2026,6 @@ index 416f356af363..9a1515cf862d 100644
  #include <linux/pm_runtime.h>
  
  #include "mtk_vcodec_drv.h"
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
-index 1b2e4930ed27..dffb190267ed 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
-@@ -8,58 +8,36 @@
- #include <linux/of_address.h>
- #include <linux/of_platform.h>
- #include <linux/pm_runtime.h>
--#include <soc/mediatek/smi.h>
- 
- #include "mtk_vcodec_enc_pm.h"
- #include "mtk_vcodec_util.h"
- 
- int mtk_vcodec_init_enc_pm(struct mtk_vcodec_dev *mtkdev)
- {
--	struct device_node *node;
- 	struct platform_device *pdev;
- 	struct mtk_vcodec_pm *pm;
- 	struct mtk_vcodec_clk *enc_clk;
- 	struct mtk_vcodec_clk_info *clk_info;
- 	int ret = 0, i = 0;
--	struct device *dev;
- 
- 	pdev = mtkdev->plat_dev;
- 	pm = &mtkdev->pm;
- 	memset(pm, 0, sizeof(struct mtk_vcodec_pm));
- 	pm->mtkdev = mtkdev;
- 	pm->dev = &pdev->dev;
--	dev = &pdev->dev;
- 	enc_clk = &pm->venc_clk;
- 
--	node = of_parse_phandle(dev->of_node, "mediatek,larb", 0);
--	if (!node) {
--		mtk_v4l2_err("no mediatek,larb found");
--		return -ENODEV;
--	}
--	pdev = of_find_device_by_node(node);
--	of_node_put(node);
--	if (!pdev) {
--		mtk_v4l2_err("no mediatek,larb device found");
--		return -ENODEV;
--	}
--	pm->larbvenc = &pdev->dev;
--	pdev = mtkdev->plat_dev;
--	pm->dev = &pdev->dev;
--
- 	enc_clk->clk_num = of_property_count_strings(pdev->dev.of_node,
- 		"clock-names");
- 	if (enc_clk->clk_num > 0) {
- 		enc_clk->clk_info = devm_kcalloc(&pdev->dev,
- 			enc_clk->clk_num, sizeof(*clk_info),
- 			GFP_KERNEL);
--		if (!enc_clk->clk_info) {
--			ret = -ENOMEM;
--			goto put_larbvenc;
--		}
-+		if (!enc_clk->clk_info)
-+			return -ENOMEM;
- 	} else {
- 		mtk_v4l2_err("Failed to get venc clock count");
--		ret = -EINVAL;
--		goto put_larbvenc;
-+		return -EINVAL;
- 	}
- 
- 	for (i = 0; i < enc_clk->clk_num; i++) {
-@@ -68,29 +46,23 @@ int mtk_vcodec_init_enc_pm(struct mtk_vcodec_dev *mtkdev)
- 			"clock-names", i, &clk_info->clk_name);
- 		if (ret) {
- 			mtk_v4l2_err("venc failed to get clk name %d", i);
--			goto put_larbvenc;
-+			return ret;
- 		}
- 		clk_info->vcodec_clk = devm_clk_get(&pdev->dev,
- 			clk_info->clk_name);
- 		if (IS_ERR(clk_info->vcodec_clk)) {
- 			mtk_v4l2_err("venc devm_clk_get (%d)%s fail", i,
- 				clk_info->clk_name);
--			ret = PTR_ERR(clk_info->vcodec_clk);
--			goto put_larbvenc;
-+			return PTR_ERR(clk_info->vcodec_clk);
- 		}
- 	}
- 
- 	return 0;
--
--put_larbvenc:
--	put_device(pm->larbvenc);
--	return ret;
- }
- 
- void mtk_vcodec_release_enc_pm(struct mtk_vcodec_dev *mtkdev)
- {
- 	pm_runtime_disable(mtkdev->pm.dev);
--	put_device(mtkdev->pm.larbvenc);
- }
- 
- 
-@@ -108,11 +80,6 @@ void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm)
- 		}
- 	}
- 
--	ret = mtk_smi_larb_get(pm->larbvenc);
--	if (ret) {
--		mtk_v4l2_err("mtk_smi_larb_get larb3 fail %d", ret);
--		goto clkerr;
--	}
- 	return;
- 
- clkerr:
-@@ -125,7 +92,6 @@ void mtk_vcodec_enc_clock_off(struct mtk_vcodec_pm *pm)
- 	struct mtk_vcodec_clk *enc_clk = &pm->venc_clk;
- 	int i = 0;
- 
--	mtk_smi_larb_put(pm->larbvenc);
- 	for (i = enc_clk->clk_num - 1; i >= 0; i--)
- 		clk_disable_unprepare(enc_clk->clk_info[i].vcodec_clk);
- }
-
 From patchwork Wed Sep 29 01:37:17 2021
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
@@ -2937,24 +2690,229 @@ index bead8e486239..d214ff0f4f59 100644
  			iommus = <&iommu M4U_PORT_JPGENC_RDMA>,
  				 <&iommu M4U_PORT_JPGENC_BSDMA>;
  			power-domains = <&spm MT8183_POWER_DOMAIN_VENC>;
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
-index a1ac306..6a190bb 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
-@@ -478,16 +478,6 @@ int mtk_ddp_comp_init(struct device_node *node, struct mtk_ddp_comp *comp,
- 	}
- 	comp->dev = &comp_pdev->dev;
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+index 183d4c4..95afb79 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+@@ -9,7 +9,6 @@
+ #include <linux/of_address.h>
+ #include <linux/of_platform.h>
+ #include <linux/pm_runtime.h>
+-#include <soc/mediatek/smi.h>
  
--	/* Only DMA capable components need the LARB property */
--	if (type == MTK_DISP_OVL ||
--	    type == MTK_DISP_OVL_2L ||
--	    type == MTK_DISP_RDMA ||
--	    type == MTK_DISP_WDMA) {
--		ret = mtk_ddp_get_larb_dev(node, comp, comp->dev);
--		if (ret)
--			return ret;
+ #include "mtk_vcodec_dec_hw.h"
+ #include "mtk_vcodec_dec_pm.h"
+@@ -18,25 +17,12 @@
+ int mtk_vcodec_init_dec_pm(struct platform_device *pdev,
+ 	struct mtk_vcodec_pm *pm)
+ {
+-	struct device_node *node;
+-	struct platform_device *larb_pdev;
+ 	struct mtk_vcodec_clk *dec_clk;
+ 	struct mtk_vcodec_clk_info *clk_info;
+-	int i = 0, ret = 0;
++	int i = 0, ret = 0; 
+ 
+ 	dec_clk = &pm->vdec_clk;
+-	node = of_parse_phandle(pdev->dev.of_node, "mediatek,larb", 0);
+-	if (!node) {
+-		mtk_v4l2_err("of_parse_phandle mediatek,larb fail!");
+-		return -1;
 -	}
+ 
+-	larb_pdev = of_find_device_by_node(node);
+-	of_node_put(node);
+-	if (WARN_ON(!larb_pdev)) {
+-		return -1;
+-	}
+-	pm->larbvdec = &larb_pdev->dev;
+ 	pm->dev = &pdev->dev;
+ 
+ 	dec_clk->clk_num =
+@@ -45,14 +31,11 @@ int mtk_vcodec_init_dec_pm(struct platform_device *pdev,
+ 		dec_clk->clk_info = devm_kcalloc(&pdev->dev,
+ 			dec_clk->clk_num, sizeof(*clk_info),
+ 			GFP_KERNEL);
+-		if (!dec_clk->clk_info) {
+-			ret = -ENOMEM;
+-			goto put_device;
+-		}
++		if (!dec_clk->clk_info)
++                        return -ENOMEM;
+ 	} else {
+ 		mtk_v4l2_err("Failed to get vdec clock count");
+-		ret = -EINVAL;
+-		goto put_device;
++		return -EINVAL;
+ 	}
+ 
+ 	for (i = 0; i < dec_clk->clk_num; i++) {
+@@ -61,29 +44,24 @@ int mtk_vcodec_init_dec_pm(struct platform_device *pdev,
+ 			"clock-names", i, &clk_info->clk_name);
+ 		if (ret) {
+ 			mtk_v4l2_err("Failed to get clock name id = %d", i);
+-			goto put_device;
++			return -EINVAL;
+ 		}
+ 		clk_info->vcodec_clk = devm_clk_get(&pdev->dev,
+ 			clk_info->clk_name);
+ 		if (IS_ERR(clk_info->vcodec_clk)) {
+ 			mtk_v4l2_err("devm_clk_get (%d)%s fail", i,
+ 				clk_info->clk_name);
+-			ret = PTR_ERR(clk_info->vcodec_clk);
+-			goto put_device;
++			return PTR_ERR(clk_info->vcodec_clk);
+ 		}
+ 	}
+ 
+ 	pm_runtime_enable(&pdev->dev);
+ 	return 0;
+-put_device:
+-	put_device(pm->larbvdec);
+-	return ret;
+ }
+ 
+ void mtk_vcodec_release_dec_pm(struct mtk_vcodec_pm *pm)
+ {
+ 	pm_runtime_disable(pm->dev);
+-	put_device(pm->larbvdec);
+ }
+ 
+ int mtk_vcodec_dec_pw_on(struct mtk_vcodec_dev *vdec_dev, int comp_idx)
+@@ -162,11 +140,6 @@ void mtk_vcodec_dec_clock_on(struct mtk_vcodec_dev *vdec_dev, int comp_idx)
+ 		}
+ 	}
+ 
+-	ret = mtk_smi_larb_get(pm->larbvdec);
+-	if (ret) {
+-		mtk_v4l2_err("mtk_smi_larb_get larbvdec fail %d", ret);
+-		goto error;
+-	}
+ 	return;
+ 
+ error:
+@@ -195,7 +168,6 @@ void mtk_vcodec_dec_clock_off(struct mtk_vcodec_dev *vdec_dev, int comp_idx)
+ 	}
+ 
+ 	dec_clk = &pm->vdec_clk;
+-	mtk_smi_larb_put(pm->larbvdec);
+ 	for (i = dec_clk->clk_num - 1; i >= 0; i--)
+ 		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
+ }
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
+index 0c8c8f8..d460b5f 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
+@@ -8,57 +8,35 @@
+ #include <linux/of_address.h>
+ #include <linux/of_platform.h>
+ #include <linux/pm_runtime.h>
+-#include <soc/mediatek/smi.h>
+ 
+ #include "mtk_vcodec_enc_pm.h"
+ #include "mtk_vcodec_util.h"
+ 
+ int mtk_vcodec_init_enc_pm(struct mtk_vcodec_dev *mtkdev)
+ {
+-	struct device_node *node;
+ 	struct platform_device *pdev;
+ 	struct mtk_vcodec_pm *pm;
+ 	struct mtk_vcodec_clk *enc_clk;
+ 	struct mtk_vcodec_clk_info *clk_info;
+ 	int ret = 0, i = 0;
+-	struct device *dev;
+ 
+ 	pdev = mtkdev->plat_dev;
+ 	pm = &mtkdev->pm;
+ 	memset(pm, 0, sizeof(struct mtk_vcodec_pm));
+ 	pm->dev = &pdev->dev;
+-	dev = &pdev->dev;
+ 	enc_clk = &pm->venc_clk;
+ 
+-	node = of_parse_phandle(dev->of_node, "mediatek,larb", 0);
+-	if (!node) {
+-		mtk_v4l2_err("no mediatek,larb found");
+-		return -ENODEV;
+-	}
+-	pdev = of_find_device_by_node(node);
+-	of_node_put(node);
+-	if (!pdev) {
+-		mtk_v4l2_err("no mediatek,larb device found");
+-		return -ENODEV;
+-	}
+-	pm->larbvenc = &pdev->dev;
+-	pdev = mtkdev->plat_dev;
+-	pm->dev = &pdev->dev;
 -
- 	if (type == MTK_DISP_AAL ||
- 	    type == MTK_DISP_BLS ||
- 	    type == MTK_DISP_CCORR ||
+ 	enc_clk->clk_num = of_property_count_strings(pdev->dev.of_node,
+ 		"clock-names");
+ 	if (enc_clk->clk_num > 0) {
+ 		enc_clk->clk_info = devm_kcalloc(&pdev->dev,
+ 			enc_clk->clk_num, sizeof(*clk_info),
+ 			GFP_KERNEL);
+-		if (!enc_clk->clk_info) {
+-			ret = -ENOMEM;
+-			goto put_larbvenc;
+-		}
++		if (!enc_clk->clk_info)
++                        return -ENOMEM;
+ 	} else {
+ 		mtk_v4l2_err("Failed to get venc clock count");
+-		ret = -EINVAL;
+-		goto put_larbvenc;
++		return -EINVAL;
+ 	}
+ 
+ 	for (i = 0; i < enc_clk->clk_num; i++) {
+@@ -67,29 +45,23 @@ int mtk_vcodec_init_enc_pm(struct mtk_vcodec_dev *mtkdev)
+ 			"clock-names", i, &clk_info->clk_name);
+ 		if (ret) {
+ 			mtk_v4l2_err("venc failed to get clk name %d", i);
+-			goto put_larbvenc;
++			return ret;
+ 		}
+ 		clk_info->vcodec_clk = devm_clk_get(&pdev->dev,
+ 			clk_info->clk_name);
+ 		if (IS_ERR(clk_info->vcodec_clk)) {
+ 			mtk_v4l2_err("venc devm_clk_get (%d)%s fail", i,
+ 				clk_info->clk_name);
+-			ret = PTR_ERR(clk_info->vcodec_clk);
+-			goto put_larbvenc;
++			return PTR_ERR(clk_info->vcodec_clk);
+ 		}
+ 	}
+ 
+ 	return 0;
+-
+-put_larbvenc:
+-	put_device(pm->larbvenc);
+-	return ret;
+ }
+ 
+ void mtk_vcodec_release_enc_pm(struct mtk_vcodec_dev *mtkdev)
+ {
+ 	pm_runtime_disable(mtkdev->pm.dev);
+-	put_device(mtkdev->pm.larbvenc);
+ }
+ 
+ 
+@@ -107,11 +79,6 @@ void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm)
+ 		}
+ 	}
+ 
+-	ret = mtk_smi_larb_get(pm->larbvenc);
+-	if (ret) {
+-		mtk_v4l2_err("mtk_smi_larb_get larb3 fail %d", ret);
+-		goto clkerr;
+-	}
+ 	return;
+ 
+ clkerr:
+@@ -124,7 +91,6 @@ void mtk_vcodec_enc_clock_off(struct mtk_vcodec_pm *pm)
+ 	struct mtk_vcodec_clk *enc_clk = &pm->venc_clk;
+ 	int i = 0;
+ 
+-	mtk_smi_larb_put(pm->larbvenc);
+ 	for (i = enc_clk->clk_num - 1; i >= 0; i--)
+ 		clk_disable_unprepare(enc_clk->clk_info[i].vcodec_clk);
+ }

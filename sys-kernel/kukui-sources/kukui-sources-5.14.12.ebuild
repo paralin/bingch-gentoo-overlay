@@ -55,13 +55,15 @@ PATCHES=(
 	#${FILESDIR}/v6-RESEND-1-3-gpu-drm-separate-panel-orientation-property-creating-and-value-setting.patch
 	${FILESDIR}/v5-1-3-dt-bindings-mediatek-convert-mtk-jpeg-decoder-encoder-to-yaml.patch
 	${FILESDIR}/v4-3-3-arm64-dts-mt8183-add-jpeg-enc-node-for-mt8183.diff
+	${FILESDIR}/v2-dma-buf-remove-restriction-of-IOCTL-DMA_BUF_SET_NAME.patch
+    ${FILESDIR}/v2-dma-buf-acquire-name-lock-before-read-write-dma_buf.name.patch
 	${FILESDIR}/media-mtk-vcodec-support-for-MT8183-decoder.patch
 	${FILESDIR}/Support-multi-hardware-decode-using-of_platform_populate.patch
+	${FILESDIR}/ASoC-mediatek-Constify-static-snd_soc_ops.patch
+    #${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix.patch
+    #${FILESDIR}/Using-component-framework-to-support-multi-hardware-decode.patch
 	${FILESDIR}/Clean-up-mediatek-larb-fix.patch
-
-	#${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix.patch
-	#${FILESDIR}/Using-component-framework-to-support-multi-hardware-decode.patch
-	# 
+	#
 #	${FILESDIR}/Multigenerational-LRU-Framework.patch
 	# various fixes
 	${FILESDIR}/fix-v4l2-ioctl-2.patch

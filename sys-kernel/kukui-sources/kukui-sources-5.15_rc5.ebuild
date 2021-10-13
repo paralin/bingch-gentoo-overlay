@@ -78,6 +78,7 @@ PATCHES=(
 	${FILESDIR}/v2-dma-buf-acquire-name-lock-before-read-write-dma_buf.name.patch
 	${FILESDIR}/media-mtk-vcodec-support-for-MT8183-decoder.patch
 	${FILESDIR}/Support-multi-hardware-decode-using-of_platform_populate.patch
+	${FILESDIR}/ASoC-mediatek-Constify-static-snd_soc_ops.patch
 	#${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix.patch
 	#${FILESDIR}/Using-component-framework-to-support-multi-hardware-decode.patch
 	${FILESDIR}/Clean-up-mediatek-larb-fix-5.15.patch

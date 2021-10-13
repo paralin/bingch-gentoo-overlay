@@ -1,0 +1,160 @@
+From patchwork Tue Oct 12 20:55:21 2021
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Patchwork-Submitter: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+X-Patchwork-Id: 12553689
+Return-Path: 
+ <SRS0=GRN7=PA=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	aws-us-west-2-korg-lkml-1.web.codeaurora.org
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FA15C433EF
+	for <linux-mediatek@archiver.kernel.org>;
+ Tue, 12 Oct 2021 20:56:02 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org
+ [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 160BB60F12
+	for <linux-mediatek@archiver.kernel.org>;
+ Tue, 12 Oct 2021 20:56:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 160BB60F12
+Authentication-Results: mail.kernel.org;
+ dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org;
+ spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-Id:Date:Subject:Cc
+	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=WyETgHFIWkeQh/f2w3IWMxhxzMC2Ies4gQAlICH8D+g=; b=23ddRqpDyHsu/w
+	9fDj4I83z9kAqG/nGQHeqUqG3LHNoE4UFBETYIMQm6Q3ypy7/1ADtqvwMvVh/6EB1XuFXGYdnKCBS
+	iykMocdukbTZ7bWV/Qj6c/HgvtD9WWAQL3uaCWsTxbhS18Kgb05ESrorsWCOPD6NkRpJtAKpZJPwE
+	aGYpsMjD0iaXMe28EAmR9tuxGINdlQXRW0xVm4WHS5BvjkfwnJro5Ub/YqjOyGHe/jx1lqYDInbil
+	c4Of1C5kKvS8WGk7IjtGMV+JaNrUoGzlu1WF6K+M65YO9R93WXVXYy+fXq/4as3DGKBI2IH02L06J
+	WkFbp9WjDwiRGXYfg6zw==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1maOoK-00DyT1-2u; Tue, 12 Oct 2021 20:55:44 +0000
+Received: from mail-lf1-x134.google.com ([2a00:1450:4864:20::134])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1maOo7-00DyQV-SG; Tue, 12 Oct 2021 20:55:33 +0000
+Received: by mail-lf1-x134.google.com with SMTP id j5so2210511lfg.8;
+ Tue, 12 Oct 2021 13:55:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=jsTwWPNABO7t6fYSb716Ke2gFPfWwq6MzrlHVefhOG4=;
+ b=do27g9P3KSwt6TKXbelpk/lcgXOP6GAq8OMm5ZHF/QAlOrJTGEOkXuRQqA4TUJ9c/P
+ 66JUgBvqGQLSmp13USy9H6SlSuFXh0cYCidN0h/0pSpTGwW04N6fMGJ7VMaKENkwSjj4
+ 14SbMobnC4j+lhRxoNOlGSfbmvsiksnZoLUiLsxkbVL77M6iqYhkMLiVa4m9vE6Fqyze
+ 0Mef049jkTxMYqYvutftjFLn3g5OsQJVA9vNT4fTVpa22hwfkRJVOg3fiS7tf2cHdmbz
+ WIx8LqVz/eHXA6efl75cAHbBCGlf1Ae1qenLFwaF2m21Y4LsU8vSvFTEpzbW80JCsb/G
+ KyGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=jsTwWPNABO7t6fYSb716Ke2gFPfWwq6MzrlHVefhOG4=;
+ b=TkyMtNqnZCsOQyiwSVKv1MMsbBCyAOteFrHDvwm2TXyp+gurfQtR70bneDXUZXV6Uc
+ rCQWFTEgosmYqIQ33TCBr9Tprz8FQk1sj4VJRVTC2MzWxF3jHiUlqCTKvHuhR0Bk6+Uv
+ MhY1xtiGIyDJAuPGHjCWnvNHZhKs3n5lj5zz1v2QM1oraMMhjVomRVGWgqW888hjlJUT
+ T4EjVDg2cZ30FAVlaRq39Dp4699S0j31LExZK10EM9rdQiAI6e9sms9eYgTe6ecQo0GD
+ vH+hgKpLtk3Xwv5RIY3RAfyx8SW976HzA/y22/diyfXdX9cKU2PVp/p8SurV0meORohN
+ Cm6w==
+X-Gm-Message-State: AOAM533mrDyWdYidfju7hxM35e/ICVwRXj6Q6ge9EwjSHgSc/VjZFLsB
+ vxigbuSiSktQ1Zr1iF8cwgw=
+X-Google-Smtp-Source: 
+ ABdhPJz0oVp0tzpS6B29DUSsGL7OQuWzGhvARKE6lL1ybJlZbpr+cXjJ8yKiFPTS4fdrrCuRDf44iw==
+X-Received: by 2002:ac2:4c48:: with SMTP id o8mr30372629lfk.286.1634072129486;
+ Tue, 12 Oct 2021 13:55:29 -0700 (PDT)
+Received: from localhost.localdomain (h-158-174-22-5.NA.cust.bahnhof.se.
+ [158.174.22.5])
+ by smtp.gmail.com with ESMTPSA id p23sm1274514ljm.127.2021.10.12.13.55.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 12 Oct 2021 13:55:29 -0700 (PDT)
+From: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To: Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>
+Cc: Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ Tzung-Bi Shih <tzungbi@google.com>, Jiaxin Yu <jiaxin.yu@mediatek.com>,
+ alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] ASoC: mediatek: Constify static snd_soc_ops
+Date: Tue, 12 Oct 2021 22:55:21 +0200
+Message-Id: <20211012205521.14098-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211012_135531_939632_EDCF6F1B 
+X-CRM114-Status: GOOD (  12.99  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: 
+ linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+
+These are only assigned to the ops field in the snd_soc_dai_link struct
+which is a pointer to const struct snd_soc_ops. Make them const to allow
+the compiler to put them in read-only memory.
+
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+---
+ sound/soc/mediatek/mt2701/mt2701-cs42448.c                 | 2 +-
+ sound/soc/mediatek/mt2701/mt2701-wm8960.c                  | 2 +-
+ sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/sound/soc/mediatek/mt2701/mt2701-cs42448.c b/sound/soc/mediatek/mt2701/mt2701-cs42448.c
+index 44a8d5cfb0aa..d9fd6eb786aa 100644
+--- a/sound/soc/mediatek/mt2701/mt2701-cs42448.c
++++ b/sound/soc/mediatek/mt2701/mt2701-cs42448.c
+@@ -146,7 +146,7 @@ static int mt2701_cs42448_be_ops_hw_params(struct snd_pcm_substream *substream,
+ 	return 0;
+ }
+ 
+-static struct snd_soc_ops mt2701_cs42448_be_ops = {
++static const struct snd_soc_ops mt2701_cs42448_be_ops = {
+ 	.hw_params = mt2701_cs42448_be_ops_hw_params
+ };
+ 
+diff --git a/sound/soc/mediatek/mt2701/mt2701-wm8960.c b/sound/soc/mediatek/mt2701/mt2701-wm8960.c
+index 414e422c0eba..f56de1b918bf 100644
+--- a/sound/soc/mediatek/mt2701/mt2701-wm8960.c
++++ b/sound/soc/mediatek/mt2701/mt2701-wm8960.c
+@@ -40,7 +40,7 @@ static int mt2701_wm8960_be_ops_hw_params(struct snd_pcm_substream *substream,
+ 	return 0;
+ }
+ 
+-static struct snd_soc_ops mt2701_wm8960_be_ops = {
++static const struct snd_soc_ops mt2701_wm8960_be_ops = {
+ 	.hw_params = mt2701_wm8960_be_ops_hw_params
+ };
+ 
+diff --git a/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c b/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
+index 94dcbd36c869..aeb1af86047e 100644
+--- a/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
++++ b/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
+@@ -335,7 +335,7 @@ static void mt8183_mt6358_tdm_shutdown(struct snd_pcm_substream *substream)
+ 			__func__, ret);
+ }
+ 
+-static struct snd_soc_ops mt8183_mt6358_tdm_ops = {
++static const struct snd_soc_ops mt8183_mt6358_tdm_ops = {
+ 	.startup = mt8183_mt6358_tdm_startup,
+ 	.shutdown = mt8183_mt6358_tdm_shutdown,
+ };

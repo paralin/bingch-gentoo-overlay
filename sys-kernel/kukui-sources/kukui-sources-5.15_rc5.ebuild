@@ -56,7 +56,7 @@ PATCHES=(
 	${FILESDIR}/Add-cpufreq-and-cci-devfreq-for-mt8183-and-SVS-support-fix.patch
 	${FILESDIR}/Revert-series-CMDQ-refinement-of-Mediatek-DRM-driver.patch
 	${FILESDIR}/v4-media-mtk-vpu-Ensure-alignment-of-8-for-DTCM-buffer.patch
-	${FILESDIR}/media-mediatek-support-mdp3-on-mt8183-platform-fix-5.15.patch
+	${FILESDIR}/media-mediatek-support-mdp3-on-mt8183-platform.patch
 	${FILESDIR}/Introducing-an-attribute-to-select-the-time-setting.patch
 	#${FILESDIR}/ASoC-mediatek-common-handle-NULL-case-in-suspend-resume-function.patch
 	${FILESDIR}/drm-panel-boe-tv101wum-nl6-Support-enabling-a-3.3V-rail.patch
@@ -79,6 +79,15 @@ PATCHES=(
 	${FILESDIR}/media-mtk-vcodec-support-for-MT8183-decoder.patch
 	${FILESDIR}/Support-multi-hardware-decode-using-of_platform_populate.patch
 	${FILESDIR}/ASoC-mediatek-Constify-static-snd_soc_ops.patch
+	${FILESDIR}/Bluetooth-btusb-fix-memory-leak-in-btusb_mtk_submit_wmt_recv_urb.patch
+	${FILESDIR}/drm-bridge-Drop-deprecated-functions-fix.patch
+	${FILESDIR}/v10-drm-bridge-add-it6505-driver.patch
+
+	${FILESDIR}/v3-dma-buf-remove-restriction-of-IOCTL-DMA_BUF_SET_NAME-fix.patch
+	${FILESDIR}/Fixups-for-mtk-cmdq-multi-gce-support.patch
+	${FILESDIR}/media-mtk-vpu-Remove-redundant-flush_workqueue-calls.patch
+	${FILESDIR}/scsi-sd-fix-crashes-in-sd_resume_runtime.patch
+	${FILESDIR}/v3-PCI-mediatek-gen3-Disable-DVFSRC-voltage-request.patch
 	#${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix.patch
 	#${FILESDIR}/Using-component-framework-to-support-multi-hardware-decode.patch
 	${FILESDIR}/Clean-up-mediatek-larb-fix-5.15.patch

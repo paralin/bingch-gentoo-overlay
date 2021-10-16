@@ -1,412 +1,136 @@
-From patchwork Tue Aug 24 10:00:23 2021
+From patchwork Fri Oct 15 12:38:26 2021
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Patchwork-Submitter: moudy ho <moudy.ho@mediatek.com>
-X-Patchwork-Id: 12454451
-Return-Path: <linux-media-owner@kernel.org>
+X-Patchwork-Submitter: Moudy Ho <moudy.ho@mediatek.com>
+X-Patchwork-Id: 12561375
+Return-Path: 
+ <SRS0=QAkp=PD=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27EFFC4320A
-	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 10:00:40 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 10D6A613B1
-	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 10:00:40 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235963AbhHXKBV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Aug 2021 06:01:21 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:43024 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235918AbhHXKBT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Aug 2021 06:01:19 -0400
-X-UUID: b65551dc6f614309804a157af522a069-20210824
-X-UUID: b65551dc6f614309804a157af522a069-20210824
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BFD4C4332F
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 15 Oct 2021 12:39:33 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org
+ [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id F216060F44
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 15 Oct 2021 12:39:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F216060F44
+Authentication-Results: mail.kernel.org;
+ dmarc=fail (p=none dis=none) header.from=mediatek.com
+Authentication-Results: mail.kernel.org;
+ spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=z74iAiUMZwyLOZxf+tmpN/UPcPIqSs0BRPdic5MXaQc=; b=VlFvWEzQ91oOhv
+	ToAGyvx6fjXMnYFqHeNM1airAP6GLnaKOU7B991yFTlEU5CBiCBnz+2EgCjXY7o92PFMdDVpQkh7F
+	yuiz1+jB0O7dAIOe6RxlQGLdRHb84q+XC47ISEC4awgRUnPNDGpmuPV6Wv5xeSbvt3AxPcY1X1QLP
+	Gnu6/mV3KCHuvxq2srNRmSJRqcG2/p0oLBugx2/tW6qQOsi1bUDX+uITc9MTQcgPDnlD6UxFD5W2Q
+	jTIIqTVMlHqKFpGp96HKg4MqCBLCtBdywpOVwzL3AvgrGOzd/cq0z6keW5QPZ7p/M4AOmdXWPbPen
+	5tHdIzm+JyBKAzV6fuOw==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mbMUd-006wZF-3x; Fri, 15 Oct 2021 12:39:23 +0000
+Received: from mailgw01.mediatek.com ([216.200.240.184])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mbMU8-006wOj-Vj; Fri, 15 Oct 2021 12:38:56 +0000
+X-UUID: 312d92cc386e4e578e551396a6fe2d29-20211015
+X-UUID: 312d92cc386e4e578e551396a6fe2d29-20211015
+Received: from mtkcas66.mediatek.inc [(172.29.193.44)] by
  mailgw01.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 727353568; Tue, 24 Aug 2021 18:00:30 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 24 Aug 2021 18:00:29 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 24 Aug 2021 18:00:29 +0800
+ (envelope-from <moudy.ho@mediatek.com>)
+ (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+ with ESMTP id 2129491417; Fri, 15 Oct 2021 05:38:50 -0700
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ MTKMBS62N2.mediatek.inc (172.29.193.42) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 15 Oct 2021 05:38:49 -0700
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 15 Oct 2021 20:38:47 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via
+ Frontend Transport; Fri, 15 Oct 2021 20:38:47 +0800
 From: Moudy Ho <moudy.ho@mediatek.com>
-To: <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-CC: Maoguang Meng <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
-        <drinkcat@chromium.org>, <acourbot@chromium.org>,
-        <pihsun@chromium.org>, <menghui.lin@mediatek.com>,
-        <sj.huang@mediatek.com>, <ben.lok@mediatek.com>,
-        <randy.wu@mediatek.com>, <srv_heupstream@mediatek.com>,
-        <hsinyi@google.com>
-Subject: [PATCH v7 1/5] soc: mediatek: mutex: add support for MDP
-Date: Tue, 24 Aug 2021 18:00:23 +0800
-Message-ID: <20210824100027.25989-2-moudy.ho@mediatek.com>
+To: <moudy.ho@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Rob
+ Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ "Hans Verkuil" <hverkuil-cisco@xs4all.nl>, Jernej Skrabec
+ <jernej.skrabec@siol.net>
+CC: Maoguang Meng <maoguang.meng@mediatek.com>, daoyuan huang
+ <daoyuan.huang@mediatek.com>, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>, Rob Landley
+ <rob@landley.net>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+ <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+ <drinkcat@chromium.org>, <acourbot@chromium.org>, <pihsun@chromium.org>,
+ <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
+ <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
+ <srv_heupstream@mediatek.com>, <hsinyi@google.com>
+Subject: [PATCH v8 1/7] soc: mediatek: mmsys: add support for MDP
+Date: Fri, 15 Oct 2021 20:38:26 +0800
+Message-ID: <20211015123832.17914-2-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210824100027.25989-1-moudy.ho@mediatek.com>
-References: <20210824100027.25989-1-moudy.ho@mediatek.com>
+In-Reply-To: <20211015123832.17914-1-moudy.ho@mediatek.com>
+References: <20211015123832.17914-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 X-MTK: N
-Precedence: bulk
-List-ID: <linux-media.vger.kernel.org>
-X-Mailing-List: linux-media@vger.kernel.org
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211015_053853_063324_FDB28303 
+X-CRM114-Status: GOOD (  20.31  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: 
+ linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
 
-Add functions to support MDP:
-  1. Get mutex function
-  2. Enable/disable mutex
-  3. Enable MDP's modules
-  4. Write register via CMDQ
-
-Add MDP related settings for 8183 SoC
-  1. Register settings
+For the purpose of module independence, related settings should be moved
+from MDP to the corresponding driver.
+This patch adds more 8183 MDP settings and interface. and MDP
+related settings must be set via CMDQ to avoid frame unsynchronized.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- drivers/soc/mediatek/mtk-mutex.c       | 106 +++++++++++++++++++++++--
- include/linux/soc/mediatek/mtk-mutex.h |   8 ++
- 2 files changed, 108 insertions(+), 6 deletions(-)
+ drivers/soc/mediatek/Kconfig           |   1 +
+ drivers/soc/mediatek/mt8183-mmsys.h    | 219 +++++++++++++++++++++++++
+ drivers/soc/mediatek/mtk-mmsys.c       |  52 ++++++
+ drivers/soc/mediatek/mtk-mmsys.h       |   2 +
+ include/linux/soc/mediatek/mtk-mmsys.h |  56 +++++++
+ 5 files changed, 330 insertions(+)
 
-diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
-index 2e4bcc300576..935f2849a094 100644
---- a/drivers/soc/mediatek/mtk-mutex.c
-+++ b/drivers/soc/mediatek/mtk-mutex.c
-@@ -7,9 +7,11 @@
- #include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
-+#include <linux/of_address.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/soc/mediatek/mtk-mmsys.h>
-+#include <linux/soc/mediatek/mtk-cmdq.h>
- #include <linux/soc/mediatek/mtk-mutex.h>
- 
- #define MT2701_MUTEX0_MOD0			0x2c
-@@ -107,6 +109,10 @@
- #define MT8183_MUTEX_EOF_DSI0			(MT8183_MUTEX_SOF_DSI0 << 6)
- #define MT8183_MUTEX_EOF_DPI0			(MT8183_MUTEX_SOF_DPI0 << 6)
- 
-+#define MT8183_MUTEX_MDP_START			5
-+#define MT8183_MUTEX_MDP_MOD_MASK		0x07FFFFFF
-+#define MT8183_MUTEX_MDP_SOF_MASK		0x00000007
-+
- struct mtk_mutex {
- 	int id;
- 	bool claimed;
-@@ -123,11 +129,14 @@ enum mtk_mutex_sof_id {
- };
- 
- struct mtk_mutex_data {
--	const unsigned int *mutex_mod;
--	const unsigned int *mutex_sof;
--	const unsigned int mutex_mod_reg;
--	const unsigned int mutex_sof_reg;
--	const bool no_clk;
-+	const unsigned int	*mutex_mod;
-+	const unsigned int	*mutex_sof;
-+	const unsigned int	mutex_mod_reg;
-+	const unsigned int	mutex_sof_reg;
-+	const unsigned int	*mutex_mdp_offset;
-+	const unsigned int	mutex_mdp_mod_mask;
-+	const unsigned int	mutex_mdp_sof_mask;
-+	const bool		no_clk;
- };
- 
- struct mtk_mutex_ctx {
-@@ -136,6 +145,8 @@ struct mtk_mutex_ctx {
- 	void __iomem			*regs;
- 	struct mtk_mutex		mutex[10];
- 	const struct mtk_mutex_data	*data;
-+	phys_addr_t			addr;
-+	u8				subsys_id;
- };
- 
- static const unsigned int mt2701_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-@@ -238,6 +249,14 @@ static const unsigned int mt8183_mutex_sof[MUTEX_SOF_DSI3 + 1] = {
- 	[MUTEX_SOF_DPI0] = MT8183_MUTEX_SOF_DPI0 | MT8183_MUTEX_EOF_DPI0,
- };
- 
-+/* indicate which mutex is used by each pipepline */
-+static const unsigned int mt8183_mutex_mdp_offset[MDP_PIPE_MAX] = {
-+	[MDP_PIPE_IMGI] = MT8183_MUTEX_MDP_START,
-+	[MDP_PIPE_RDMA0] = MT8183_MUTEX_MDP_START + 1,
-+	[MDP_PIPE_WPEI] = MT8183_MUTEX_MDP_START + 2,
-+	[MDP_PIPE_WPEI2] = MT8183_MUTEX_MDP_START + 3
-+};
-+
- static const struct mtk_mutex_data mt2701_mutex_driver_data = {
- 	.mutex_mod = mt2701_mutex_mod,
- 	.mutex_sof = mt2712_mutex_sof,
-@@ -272,6 +291,9 @@ static const struct mtk_mutex_data mt8183_mutex_driver_data = {
- 	.mutex_sof = mt8183_mutex_sof,
- 	.mutex_mod_reg = MT8183_MUTEX0_MOD0,
- 	.mutex_sof_reg = MT8183_MUTEX0_SOF0,
-+	.mutex_mdp_offset = mt8183_mutex_mdp_offset,
-+	.mutex_mdp_mod_mask = MT8183_MUTEX_MDP_MOD_MASK,
-+	.mutex_mdp_sof_mask = MT8183_MUTEX_MDP_SOF_MASK,
- 	.no_clk = true,
- };
- 
-@@ -290,6 +312,21 @@ struct mtk_mutex *mtk_mutex_get(struct device *dev)
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_get);
- 
-+struct mtk_mutex *mtk_mutex_mdp_get(struct device *dev,
-+				    enum mtk_mdp_pipe_id id)
-+{
-+	struct mtk_mutex_ctx *mtx = dev_get_drvdata(dev);
-+	int i = mtx->data->mutex_mdp_offset[id];
-+
-+	if (!mtx->mutex[i].claimed) {
-+		mtx->mutex[i].claimed = true;
-+		return &mtx->mutex[i];
-+	}
-+
-+	return ERR_PTR(-EBUSY);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_mdp_get);
-+
- void mtk_mutex_put(struct mtk_mutex *mutex)
- {
- 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-@@ -369,6 +406,25 @@ void mtk_mutex_add_comp(struct mtk_mutex *mutex,
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_add_comp);
- 
-+void mtk_mutex_add_mdp_mod(struct mtk_mutex *mutex, u32 mod,
-+			   struct mmsys_cmdq_cmd *cmd)
-+{
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+	unsigned int offset;
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg, mutex->id);
-+	cmdq_pkt_write_mask(cmd->pkt, mtx->subsys_id, mtx->addr + offset,
-+			    mod, mtx->data->mutex_mdp_mod_mask);
-+
-+	offset = DISP_REG_MUTEX_SOF(mtx->data->mutex_sof_reg, mutex->id);
-+	cmdq_pkt_write_mask(cmd->pkt, mtx->subsys_id, mtx->addr + offset,
-+			    0, mtx->data->mutex_mdp_sof_mask);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_add_mdp_mod);
-+
- void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
- 			   enum mtk_ddp_comp_id id)
- {
-@@ -420,6 +476,20 @@ void mtk_mutex_enable(struct mtk_mutex *mutex)
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_enable);
- 
-+void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
-+			      struct mmsys_cmdq_cmd *cmd)
-+{
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	cmdq_pkt_write_mask(cmd->pkt, mtx->subsys_id,
-+			    mtx->addr + DISP_REG_MUTEX_EN(mutex->id),
-+			    0x1, 0x00000001);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_enable_by_cmdq);
-+
- void mtk_mutex_disable(struct mtk_mutex *mutex)
- {
- 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-@@ -431,6 +501,20 @@ void mtk_mutex_disable(struct mtk_mutex *mutex)
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_disable);
- 
-+void mtk_mutex_disable_by_cmdq(struct mtk_mutex *mutex,
-+			       struct mmsys_cmdq_cmd *cmd)
-+{
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	cmdq_pkt_write_mask(cmd->pkt, mtx->subsys_id,
-+			    mtx->addr + DISP_REG_MUTEX_EN(mutex->id),
-+			    0x0, 0x00000001);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_disable_by_cmdq);
-+
- void mtk_mutex_acquire(struct mtk_mutex *mutex)
- {
- 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-@@ -458,7 +542,8 @@ static int mtk_mutex_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct mtk_mutex_ctx *mtx;
--	struct resource *regs;
-+	struct cmdq_client_reg cmdq_reg;
-+	struct resource *regs, addr;
- 	int i;
- 
- 	mtx = devm_kzalloc(dev, sizeof(*mtx), GFP_KERNEL);
-@@ -479,6 +564,15 @@ static int mtk_mutex_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	if (of_address_to_resource(dev->of_node, 0, &addr) < 0)
-+		mtx->addr = 0L;
-+	else
-+		mtx->addr = addr.start;
-+
-+	if (cmdq_dev_get_client_reg(dev, &cmdq_reg, 0) != 0)
-+		dev_info(dev, "cmdq subsys id has not been set\n");
-+	mtx->subsys_id = cmdq_reg.subsys;
-+
- 	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	mtx->regs = devm_ioremap_resource(dev, regs);
- 	if (IS_ERR(mtx->regs)) {
-diff --git a/include/linux/soc/mediatek/mtk-mutex.h b/include/linux/soc/mediatek/mtk-mutex.h
-index 6fe4ffbde290..d08b98419dd9 100644
---- a/include/linux/soc/mediatek/mtk-mutex.h
-+++ b/include/linux/soc/mediatek/mtk-mutex.h
-@@ -11,11 +11,19 @@ struct device;
- struct mtk_mutex;
- 
- struct mtk_mutex *mtk_mutex_get(struct device *dev);
-+struct mtk_mutex *mtk_mutex_mdp_get(struct device *dev,
-+				    enum mtk_mdp_pipe_id id);
- int mtk_mutex_prepare(struct mtk_mutex *mutex);
- void mtk_mutex_add_comp(struct mtk_mutex *mutex,
- 			enum mtk_ddp_comp_id id);
-+void mtk_mutex_add_mdp_mod(struct mtk_mutex *mutex, u32 mod,
-+			   struct mmsys_cmdq_cmd *cmd);
- void mtk_mutex_enable(struct mtk_mutex *mutex);
-+void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
-+			      struct mmsys_cmdq_cmd *cmd);
- void mtk_mutex_disable(struct mtk_mutex *mutex);
-+void mtk_mutex_disable_by_cmdq(struct mtk_mutex *mutex,
-+			       struct mmsys_cmdq_cmd *cmd);
- void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
- 			   enum mtk_ddp_comp_id id);
- void mtk_mutex_unprepare(struct mtk_mutex *mutex);
-
-From patchwork Tue Aug 24 10:00:24 2021
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Patchwork-Submitter: moudy ho <moudy.ho@mediatek.com>
-X-Patchwork-Id: 12454457
-Return-Path: <linux-media-owner@kernel.org>
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59F76C4320A
-	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 10:00:43 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 44A40613B1
-	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 10:00:43 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236025AbhHXKBZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Aug 2021 06:01:25 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:43050 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235952AbhHXKBU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Aug 2021 06:01:20 -0400
-X-UUID: 918a1bc1c83d470bbfa7e08b1341c80e-20210824
-X-UUID: 918a1bc1c83d470bbfa7e08b1341c80e-20210824
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by
- mailgw01.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1002476127; Tue, 24 Aug 2021 18:00:31 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 24 Aug 2021 18:00:29 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 24 Aug 2021 18:00:29 +0800
-From: Moudy Ho <moudy.ho@mediatek.com>
-To: <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-CC: Maoguang Meng <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
-        <drinkcat@chromium.org>, <acourbot@chromium.org>,
-        <pihsun@chromium.org>, <menghui.lin@mediatek.com>,
-        <sj.huang@mediatek.com>, <ben.lok@mediatek.com>,
-        <randy.wu@mediatek.com>, <srv_heupstream@mediatek.com>,
-        <hsinyi@google.com>
-Subject: [PATCH v7 2/5] soc: mediatek: mmsys: Add support for MDP
-Date: Tue, 24 Aug 2021 18:00:24 +0800
-Message-ID: <20210824100027.25989-3-moudy.ho@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210824100027.25989-1-moudy.ho@mediatek.com>
-References: <20210824100027.25989-1-moudy.ho@mediatek.com>
-MIME-Version: 1.0
-X-MTK: N
-Precedence: bulk
-List-ID: <linux-media.vger.kernel.org>
-X-Mailing-List: linux-media@vger.kernel.org
-
-Add functions to support MDP:
-  1. MDP connect/disconnect functions
-  2. ISP control function
-  3. Write register via CMDQ
-
-Add MDP related settings for 8183 SoC
-  1. Register settings
-  2. MDP route table
-
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
----
- drivers/soc/mediatek/mt8183-mmsys.h    | 235 +++++++++++++++++++++++++
- drivers/soc/mediatek/mtk-mmsys.c       | 164 +++++++++++++++++
- drivers/soc/mediatek/mtk-mmsys.h       |   9 +-
- include/linux/soc/mediatek/mtk-mmsys.h |  81 +++++++++
- 4 files changed, 486 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
+index fdd8bc08569e..172bc7828aca 100644
+--- a/drivers/soc/mediatek/Kconfig
++++ b/drivers/soc/mediatek/Kconfig
+@@ -69,6 +69,7 @@ config MTK_MMSYS
+ 	bool "MediaTek MMSYS Support"
+ 	default ARCH_MEDIATEK
+ 	depends on HAS_IOMEM
++	select MTK_CMDQ
+ 	help
+ 	  Say yes here to add support for the MediaTek Multimedia
+ 	  Subsystem (MMSYS).
 diff --git a/drivers/soc/mediatek/mt8183-mmsys.h b/drivers/soc/mediatek/mt8183-mmsys.h
-index 579dfc8dc8fc..2fa79e745a45 100644
+index 9dee485807c9..663f196fc4e7 100644
 --- a/drivers/soc/mediatek/mt8183-mmsys.h
 +++ b/drivers/soc/mediatek/mt8183-mmsys.h
-@@ -12,6 +12,32 @@
+@@ -12,6 +12,25 @@
  #define MT8183_DISP_DPI0_SEL_IN			0xf30
  #define MT8183_DISP_RDMA0_SOUT_SEL_IN		0xf50
  #define MT8183_DISP_RDMA1_SOUT_SEL_IN		0xf54
@@ -429,17 +153,10 @@ index 579dfc8dc8fc..2fa79e745a45 100644
 +#define MT8183_MDP_AAL_SEL_IN			0xfec
 +#define MT8183_MDP_CCORR_SEL_IN			0xff0
 +#define MT8183_MDP_CCORR_SOUT_SEL		0xff4
-+
-+#define MT8183_ISP_CTRL_MMSYS_SW0_RST_B		0x140
-+#define MT8183_ISP_CTRL_MMSYS_SW1_RST_B		0x144
-+#define MT8183_ISP_CTRL_MDP_ASYNC_CFG_WD	0x934
-+#define MT8183_ISP_CTRL_MDP_ASYNC_IPU_CFG_WD	0x93C
-+#define MT8183_ISP_CTRL_ISP_RELAY_CFG_WD	0x994
-+#define MT8183_ISP_CTRL_IPU_RELAY_CFG_WD	0x9a0
  
  #define MT8183_OVL0_MOUT_EN_OVL0_2L		BIT(4)
  #define MT8183_OVL0_2L_MOUT_EN_DISP_PATH0	BIT(0)
-@@ -24,6 +50,55 @@
+@@ -24,6 +43,55 @@
  #define MT8183_DPI0_SEL_IN_RDMA1		0x2
  #define MT8183_RDMA0_SOUT_COLOR0		0x1
  #define MT8183_RDMA1_SOUT_DSI0			0x1
@@ -495,7 +212,7 @@ index 579dfc8dc8fc..2fa79e745a45 100644
  
  static const struct mtk_mmsys_routes mmsys_mt8183_routing_table[] = {
  	{
-@@ -50,5 +125,165 @@ static const struct mtk_mmsys_routes mmsys_mt8183_routing_table[] = {
+@@ -57,5 +125,156 @@ static const struct mtk_mmsys_routes mmsys_mt8183_routing_table[] = {
  	}
  };
  
@@ -650,19 +367,10 @@ index 579dfc8dc8fc..2fa79e745a45 100644
 +	}
 +};
 +
-+static const unsigned int mmsys_mt8183_mdp_isp_ctrl_table[ISP_CTRL_MAX] = {
-+	[ISP_CTRL_MMSYS_SW0_RST_B] = MT8183_ISP_CTRL_MMSYS_SW0_RST_B,
-+	[ISP_CTRL_MMSYS_SW1_RST_B] = MT8183_ISP_CTRL_MMSYS_SW1_RST_B,
-+	[ISP_CTRL_MDP_ASYNC_CFG_WD] = MT8183_ISP_CTRL_MDP_ASYNC_CFG_WD,
-+	[ISP_CTRL_MDP_ASYNC_IPU_CFG_WD] = MT8183_ISP_CTRL_MDP_ASYNC_IPU_CFG_WD,
-+	[ISP_CTRL_ISP_RELAY_CFG_WD] = MT8183_ISP_CTRL_ISP_RELAY_CFG_WD,
-+	[ISP_CTRL_IPU_RELAY_CFG_WD] = MT8183_ISP_CTRL_IPU_RELAY_CFG_WD,
-+};
-+
  #endif /* __SOC_MEDIATEK_MT8183_MMSYS_H */
  
 diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-index 080660ef11bf..c4b99a99ee1e 100644
+index a78e88f27b62..31fec490617e 100644
 --- a/drivers/soc/mediatek/mtk-mmsys.c
 +++ b/drivers/soc/mediatek/mtk-mmsys.c
 @@ -7,8 +7,10 @@
@@ -676,15 +384,16 @@ index 080660ef11bf..c4b99a99ee1e 100644
  
  #include "mtk-mmsys.h"
  #include "mt8167-mmsys.h"
-@@ -50,11 +52,16 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
+@@ -51,6 +53,8 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
  	.clk_driver = "clk-mt8183-mm",
  	.routes = mmsys_mt8183_routing_table,
  	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
 +	.mdp_routes = mmsys_mt8183_mdp_routing_table,
 +	.mdp_num_routes = ARRAY_SIZE(mmsys_mt8183_mdp_routing_table),
-+	.mdp_isp_ctrl = mmsys_mt8183_mdp_isp_ctrl_table,
  };
  
+ static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data = {
+@@ -62,6 +66,8 @@ static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data = {
  struct mtk_mmsys {
  	void __iomem *regs;
  	const struct mtk_mmsys_driver_data *data;
@@ -693,7 +402,7 @@ index 080660ef11bf..c4b99a99ee1e 100644
  };
  
  void mtk_mmsys_ddp_connect(struct device *dev,
-@@ -91,12 +98,160 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+@@ -101,12 +107,49 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
  }
  EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
  
@@ -732,6 +441,290 @@ index 080660ef11bf..c4b99a99ee1e 100644
 +}
 +EXPORT_SYMBOL_GPL(mtk_mmsys_mdp_disconnect);
 +
+ static int mtk_mmsys_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct platform_device *clks;
+ 	struct platform_device *drm;
+ 	struct mtk_mmsys *mmsys;
++	struct resource res;
++	struct cmdq_client_reg cmdq_reg;
+ 	int ret;
+ 
+ 	mmsys = devm_kzalloc(dev, sizeof(*mmsys), GFP_KERNEL);
+@@ -120,6 +163,15 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	if (of_address_to_resource(dev->of_node, 0, &res) < 0)
++		mmsys->addr = 0L;
++	else
++		mmsys->addr = res.start;
++
++	if (cmdq_dev_get_client_reg(dev, &cmdq_reg, 0) != 0)
++		dev_info(dev, "cmdq subsys id has not been set\n");
++	mmsys->subsys_id = cmdq_reg.subsys;
++
+ 	mmsys->data = of_device_get_match_data(&pdev->dev);
+ 	platform_set_drvdata(pdev, mmsys);
+ 
+diff --git a/drivers/soc/mediatek/mtk-mmsys.h b/drivers/soc/mediatek/mtk-mmsys.h
+index 9e2b81bd38db..a823eb5bf94f 100644
+--- a/drivers/soc/mediatek/mtk-mmsys.h
++++ b/drivers/soc/mediatek/mtk-mmsys.h
+@@ -90,6 +90,8 @@ struct mtk_mmsys_driver_data {
+ 	const char *clk_driver;
+ 	const struct mtk_mmsys_routes *routes;
+ 	const unsigned int num_routes;
++	const struct mtk_mmsys_routes *mdp_routes;
++	const unsigned int mdp_num_routes;
+ };
+ 
+ /*
+diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
+index 2228bf6133da..d1afeabca97d 100644
+--- a/include/linux/soc/mediatek/mtk-mmsys.h
++++ b/include/linux/soc/mediatek/mtk-mmsys.h
+@@ -7,8 +7,14 @@
+ #define __MTK_MMSYS_H
+ 
+ enum mtk_ddp_comp_id;
++enum mtk_mdp_comp_id;
+ struct device;
+ 
++struct mmsys_cmdq_cmd {
++	struct cmdq_pkt *pkt;
++	s32 *event;
++};
++
+ enum mtk_ddp_comp_id {
+ 	DDP_COMPONENT_AAL0,
+ 	DDP_COMPONENT_AAL1,
+@@ -42,6 +48,46 @@ enum mtk_ddp_comp_id {
+ 	DDP_COMPONENT_ID_MAX,
+ };
+ 
++enum mtk_mdp_comp_id {
++	MDP_COMP_NONE = -1,	/* Invalid engine */
++
++	/* ISP */
++	MDP_COMP_WPEI = 0,
++	MDP_COMP_WPEO,		/* 1 */
++	MDP_COMP_WPEI2,		/* 2 */
++	MDP_COMP_WPEO2,		/* 3 */
++	MDP_COMP_ISP_IMGI,	/* 4 */
++	MDP_COMP_ISP_IMGO,	/* 5 */
++	MDP_COMP_ISP_IMG2O,	/* 6 */
++
++	/* IPU */
++	MDP_COMP_IPUI,		/* 7 */
++	MDP_COMP_IPUO,		/* 8 */
++
++	/* MDP */
++	MDP_COMP_CAMIN,		/* 9 */
++	MDP_COMP_CAMIN2,	/* 10 */
++	MDP_COMP_RDMA0,		/* 11 */
++	MDP_COMP_AAL0,		/* 12 */
++	MDP_COMP_CCORR0,	/* 13 */
++	MDP_COMP_RSZ0,		/* 14 */
++	MDP_COMP_RSZ1,		/* 15 */
++	MDP_COMP_TDSHP0,	/* 16 */
++	MDP_COMP_COLOR0,	/* 17 */
++	MDP_COMP_PATH0_SOUT,	/* 18 */
++	MDP_COMP_PATH1_SOUT,	/* 19 */
++	MDP_COMP_WROT0,		/* 20 */
++	MDP_COMP_WDMA,		/* 21 */
++
++	/* Dummy Engine */
++	MDP_COMP_RDMA1,		/* 22 */
++	MDP_COMP_RSZ2,		/* 23 */
++	MDP_COMP_TDSHP1,	/* 24 */
++	MDP_COMP_WROT1,		/* 25 */
++
++	MDP_MAX_COMP_COUNT	/* ALWAYS keep at the end */
++};
++
+ void mtk_mmsys_ddp_connect(struct device *dev,
+ 			   enum mtk_ddp_comp_id cur,
+ 			   enum mtk_ddp_comp_id next);
+@@ -50,4 +96,14 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+ 			      enum mtk_ddp_comp_id cur,
+ 			      enum mtk_ddp_comp_id next);
+ 
++void mtk_mmsys_mdp_connect(struct device *dev,
++			   struct mmsys_cmdq_cmd *cmd,
++			   enum mtk_mdp_comp_id cur,
++			   enum mtk_mdp_comp_id next);
++
++void mtk_mmsys_mdp_disconnect(struct device *dev,
++			      struct mmsys_cmdq_cmd *cmd,
++			      enum mtk_mdp_comp_id cur,
++			      enum mtk_mdp_comp_id next);
++
+ #endif /* __MTK_MMSYS_H */
+
+From patchwork Fri Oct 15 12:38:27 2021
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Patchwork-Submitter: Moudy Ho <moudy.ho@mediatek.com>
+X-Patchwork-Id: 12561373
+Return-Path: 
+ <SRS0=QAkp=PD=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	aws-us-west-2-korg-lkml-1.web.codeaurora.org
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDED3C433F5
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 15 Oct 2021 12:39:07 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org
+ [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id AF9956108E
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 15 Oct 2021 12:39:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF9956108E
+Authentication-Results: mail.kernel.org;
+ dmarc=fail (p=none dis=none) header.from=mediatek.com
+Authentication-Results: mail.kernel.org;
+ spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=koflvGlhTdXkj9cl5/yMOmL/IY12l/haN4yL5J5B3h8=; b=uMDP0WLpfv9PhJ
+	uqZABtcd5NDDLaxP+AzeIwsINQw0iN9cuzM5PmsEDerYkMeyufIva4HiTpP0RvsfsOLgmROL0VCmS
+	aKzW0qYXIszicqR691gJKgDQ4/OajGcCwW7+3qaMYKvsM30mm00P8perFUKSbDjRkaerp63YN2vuT
+	uNRnu7AIGY3szSotAU2hHIDUw/NTV8xxbrLSedH2iREA03RlKv0isTOfEVV8gMybj+A7C7VsEYvRY
+	eAKlOBGg/6EdnSjVyCTQ2F3cieFu+qIKmyjnY/y0U1TOsFFzZ2CCAlFLvqUIfG580kTSLLuEsMePa
+	HnzpjQ5+QUn0+Lx361dw==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mbMUB-006wQS-J9; Fri, 15 Oct 2021 12:38:55 +0000
+Received: from mailgw01.mediatek.com ([216.200.240.184])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mbMU8-006wO0-81; Fri, 15 Oct 2021 12:38:54 +0000
+X-UUID: 788f4732bb8741d9b007bd1097436e15-20211015
+X-UUID: 788f4732bb8741d9b007bd1097436e15-20211015
+Received: from mtkcas66.mediatek.inc [(172.29.193.44)] by
+ mailgw01.mediatek.com
+ (envelope-from <moudy.ho@mediatek.com>)
+ (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+ with ESMTP id 456821176; Fri, 15 Oct 2021 05:38:50 -0700
+Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
+ MTKMBS62N2.mediatek.inc (172.29.193.42) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 15 Oct 2021 05:38:49 -0700
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 15 Oct 2021 20:38:47 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via
+ Frontend Transport; Fri, 15 Oct 2021 20:38:47 +0800
+From: Moudy Ho <moudy.ho@mediatek.com>
+To: <moudy.ho@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Rob
+ Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ Hans Verkuil <hverkuil-cisco@xs4all.nl>, Jernej Skrabec
+ <jernej.skrabec@siol.net>
+CC: Maoguang Meng <maoguang.meng@mediatek.com>, daoyuan huang
+ <daoyuan.huang@mediatek.com>, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>, Geert
+ Uytterhoeven <geert+renesas@glider.be>, Rob Landley <rob@landley.net>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+ <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+ <drinkcat@chromium.org>, <acourbot@chromium.org>, <pihsun@chromium.org>,
+ <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
+ <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
+ <srv_heupstream@mediatek.com>, <hsinyi@google.com>
+Subject: [PATCH v8 2/7] soc: mediatek: mmsys: add support for ISP control
+Date: Fri, 15 Oct 2021 20:38:27 +0800
+Message-ID: <20211015123832.17914-3-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20211015123832.17914-1-moudy.ho@mediatek.com>
+References: <20211015123832.17914-1-moudy.ho@mediatek.com>
+MIME-Version: 1.0
+X-MTK: N
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211015_053852_318257_54994D6E 
+X-CRM114-Status: GOOD (  17.13  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: 
+ linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+
+This patch adds 8183 ISP settings in MMSYS domain and interface.
+
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+---
+ drivers/soc/mediatek/mt8183-mmsys.h    |  16 ++++
+ drivers/soc/mediatek/mtk-mmsys.c       | 108 +++++++++++++++++++++++++
+ drivers/soc/mediatek/mtk-mmsys.h       |   1 +
+ include/linux/soc/mediatek/mtk-mmsys.h |  25 ++++++
+ 4 files changed, 150 insertions(+)
+
+diff --git a/drivers/soc/mediatek/mt8183-mmsys.h b/drivers/soc/mediatek/mt8183-mmsys.h
+index 663f196fc4e7..c490cc1b1072 100644
+--- a/drivers/soc/mediatek/mt8183-mmsys.h
++++ b/drivers/soc/mediatek/mt8183-mmsys.h
+@@ -32,6 +32,13 @@
+ #define MT8183_MDP_CCORR_SEL_IN			0xff0
+ #define MT8183_MDP_CCORR_SOUT_SEL		0xff4
+ 
++#define MT8183_ISP_CTRL_MMSYS_SW0_RST_B		0x140
++#define MT8183_ISP_CTRL_MMSYS_SW1_RST_B		0x144
++#define MT8183_ISP_CTRL_MDP_ASYNC_CFG_WD	0x934
++#define MT8183_ISP_CTRL_MDP_ASYNC_IPU_CFG_WD	0x93C
++#define MT8183_ISP_CTRL_ISP_RELAY_CFG_WD	0x994
++#define MT8183_ISP_CTRL_IPU_RELAY_CFG_WD	0x9a0
++
+ #define MT8183_OVL0_MOUT_EN_OVL0_2L		BIT(4)
+ #define MT8183_OVL0_2L_MOUT_EN_DISP_PATH0	BIT(0)
+ #define MT8183_OVL1_2L_MOUT_EN_RDMA1		BIT(4)
+@@ -276,5 +283,14 @@ static const struct mtk_mmsys_routes mmsys_mt8183_mdp_routing_table[] = {
+ 	}
+ };
+ 
++static const unsigned int mmsys_mt8183_mdp_isp_ctrl_table[ISP_CTRL_MAX] = {
++	[ISP_CTRL_MMSYS_SW0_RST_B] = MT8183_ISP_CTRL_MMSYS_SW0_RST_B,
++	[ISP_CTRL_MMSYS_SW1_RST_B] = MT8183_ISP_CTRL_MMSYS_SW1_RST_B,
++	[ISP_CTRL_MDP_ASYNC_CFG_WD] = MT8183_ISP_CTRL_MDP_ASYNC_CFG_WD,
++	[ISP_CTRL_MDP_ASYNC_IPU_CFG_WD] = MT8183_ISP_CTRL_MDP_ASYNC_IPU_CFG_WD,
++	[ISP_CTRL_ISP_RELAY_CFG_WD] = MT8183_ISP_CTRL_ISP_RELAY_CFG_WD,
++	[ISP_CTRL_IPU_RELAY_CFG_WD] = MT8183_ISP_CTRL_IPU_RELAY_CFG_WD,
++};
++
+ #endif /* __SOC_MEDIATEK_MT8183_MMSYS_H */
+ 
+diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
+index 31fec490617e..f4b1d2fa41b4 100644
+--- a/drivers/soc/mediatek/mtk-mmsys.c
++++ b/drivers/soc/mediatek/mtk-mmsys.c
+@@ -55,6 +55,7 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
+ 	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
+ 	.mdp_routes = mmsys_mt8183_mdp_routing_table,
+ 	.mdp_num_routes = ARRAY_SIZE(mmsys_mt8183_mdp_routing_table),
++	.mdp_isp_ctrl = mmsys_mt8183_mdp_isp_ctrl_table,
+ };
+ 
+ static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data = {
+@@ -142,6 +143,113 @@ void mtk_mmsys_mdp_disconnect(struct device *dev, struct mmsys_cmdq_cmd *cmd,
+ }
+ EXPORT_SYMBOL_GPL(mtk_mmsys_mdp_disconnect);
+ 
 +void mtk_mmsys_mdp_isp_ctrl(struct device *dev, struct mmsys_cmdq_cmd *cmd,
 +			    enum mtk_mdp_comp_id id)
 +{
@@ -814,15 +807,13 @@ index 080660ef11bf..c4b99a99ee1e 100644
 +		if (isp_ctrl[ISP_CTRL_MDP_ASYNC_CFG_WD]) {
 +			reg = mmsys->addr + isp_ctrl[ISP_CTRL_MDP_ASYNC_CFG_WD];
 +			cmdq_pkt_write_mask(cmd->pkt, mmsys->subsys_id, reg,
-+					    (camin_h << 16) + camin_w,
-+					    0x3FFF3FFF);
++				     (camin_h << 16) + camin_w, 0x3FFF3FFF);
 +		}
 +
 +		if (isp_ctrl[ISP_CTRL_ISP_RELAY_CFG_WD]) {
 +			reg = mmsys->addr + isp_ctrl[ISP_CTRL_ISP_RELAY_CFG_WD];
 +			cmdq_pkt_write_mask(cmd->pkt, mmsys->subsys_id, reg,
-+					    (camin_h << 16) + camin_w,
-+					    0x3FFF3FFF);
++				     (camin_h << 16) + camin_w, 0x3FFF3FFF);
 +		}
 +	}
 +	if (id == MDP_COMP_CAMIN2) {
@@ -830,14 +821,12 @@ index 080660ef11bf..c4b99a99ee1e 100644
 +			reg = mmsys->addr +
 +			      isp_ctrl[ISP_CTRL_MDP_ASYNC_IPU_CFG_WD];
 +			cmdq_pkt_write_mask(cmd->pkt, mmsys->subsys_id, reg,
-+					    (camin_h << 16) + camin_w,
-+					    0x3FFF3FFF);
++				     (camin_h << 16) + camin_w, 0x3FFF3FFF);
 +		}
 +		if (isp_ctrl[ISP_CTRL_IPU_RELAY_CFG_WD]) {
 +			reg = mmsys->addr + isp_ctrl[ISP_CTRL_IPU_RELAY_CFG_WD];
 +			cmdq_pkt_write_mask(cmd->pkt, mmsys->subsys_id, reg,
-+					    (camin_h << 16) + camin_w,
-+					    0x3FFF3FFF);
++				     (camin_h << 16) + camin_w, 0x3FFF3FFF);
 +		}
 +	}
 +}
@@ -846,113 +835,26 @@ index 080660ef11bf..c4b99a99ee1e 100644
  static int mtk_mmsys_probe(struct platform_device *pdev)
  {
  	struct device *dev = &pdev->dev;
- 	struct platform_device *clks;
- 	struct platform_device *drm;
- 	struct mtk_mmsys *mmsys;
-+	struct resource res;
-+	struct cmdq_client_reg cmdq_reg;
- 	int ret;
- 
- 	mmsys = devm_kzalloc(dev, sizeof(*mmsys), GFP_KERNEL);
-@@ -110,6 +265,15 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	if (of_address_to_resource(dev->of_node, 0, &res) < 0)
-+		mmsys->addr = 0L;
-+	else
-+		mmsys->addr = res.start;
-+
-+	if (cmdq_dev_get_client_reg(dev, &cmdq_reg, 0) != 0)
-+		dev_info(dev, "cmdq subsys id has not been set\n");
-+	mmsys->subsys_id = cmdq_reg.subsys;
-+
- 	mmsys->data = of_device_get_match_data(&pdev->dev);
- 	platform_set_drvdata(pdev, mmsys);
- 
 diff --git a/drivers/soc/mediatek/mtk-mmsys.h b/drivers/soc/mediatek/mtk-mmsys.h
-index a760a34e6eca..025d4bc9c8cc 100644
+index a823eb5bf94f..fdfa3f0641ea 100644
 --- a/drivers/soc/mediatek/mtk-mmsys.h
 +++ b/drivers/soc/mediatek/mtk-mmsys.h
-@@ -74,9 +74,12 @@ struct mtk_mmsys_routes {
- };
- 
- struct mtk_mmsys_driver_data {
--	const char *clk_driver;
--	const struct mtk_mmsys_routes *routes;
--	const unsigned int num_routes;
-+	const char		*clk_driver;
-+	const struct		mtk_mmsys_routes *routes;
-+	const unsigned int	num_routes;
-+	const struct		mtk_mmsys_routes *mdp_routes;
-+	const unsigned int	mdp_num_routes;
-+	const unsigned int	*mdp_isp_ctrl;
+@@ -92,6 +92,7 @@ struct mtk_mmsys_driver_data {
+ 	const unsigned int num_routes;
+ 	const struct mtk_mmsys_routes *mdp_routes;
+ 	const unsigned int mdp_num_routes;
++	const unsigned int *mdp_isp_ctrl;
  };
  
  /*
 diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
-index 2228bf6133da..4eb48d073d2a 100644
+index d1afeabca97d..4eb48d073d2a 100644
 --- a/include/linux/soc/mediatek/mtk-mmsys.h
 +++ b/include/linux/soc/mediatek/mtk-mmsys.h
-@@ -7,8 +7,14 @@
- #define __MTK_MMSYS_H
- 
- enum mtk_ddp_comp_id;
-+enum mtk_mdp_comp_id;
- struct device;
- 
-+struct mmsys_cmdq_cmd {
-+	struct cmdq_pkt *pkt;
-+	s32 *event;
-+};
-+
- enum mtk_ddp_comp_id {
- 	DDP_COMPONENT_AAL0,
- 	DDP_COMPONENT_AAL1,
-@@ -42,6 +48,64 @@ enum mtk_ddp_comp_id {
- 	DDP_COMPONENT_ID_MAX,
+@@ -88,6 +88,24 @@ enum mtk_mdp_comp_id {
+ 	MDP_MAX_COMP_COUNT	/* ALWAYS keep at the end */
  };
  
-+enum mtk_mdp_comp_id {
-+	MDP_COMP_NONE = -1,	/* Invalid engine */
-+
-+	/* ISP */
-+	MDP_COMP_WPEI = 0,
-+	MDP_COMP_WPEO,		/* 1 */
-+	MDP_COMP_WPEI2,		/* 2 */
-+	MDP_COMP_WPEO2,		/* 3 */
-+	MDP_COMP_ISP_IMGI,	/* 4 */
-+	MDP_COMP_ISP_IMGO,	/* 5 */
-+	MDP_COMP_ISP_IMG2O,	/* 6 */
-+
-+	/* IPU */
-+	MDP_COMP_IPUI,		/* 7 */
-+	MDP_COMP_IPUO,		/* 8 */
-+
-+	/* MDP */
-+	MDP_COMP_CAMIN,		/* 9 */
-+	MDP_COMP_CAMIN2,	/* 10 */
-+	MDP_COMP_RDMA0,		/* 11 */
-+	MDP_COMP_AAL0,		/* 12 */
-+	MDP_COMP_CCORR0,	/* 13 */
-+	MDP_COMP_RSZ0,		/* 14 */
-+	MDP_COMP_RSZ1,		/* 15 */
-+	MDP_COMP_TDSHP0,	/* 16 */
-+	MDP_COMP_COLOR0,	/* 17 */
-+	MDP_COMP_PATH0_SOUT,	/* 18 */
-+	MDP_COMP_PATH1_SOUT,	/* 19 */
-+	MDP_COMP_WROT0,		/* 20 */
-+	MDP_COMP_WDMA,		/* 21 */
-+
-+	/* Dummy Engine */
-+	MDP_COMP_RDMA1,		/* 22 */
-+	MDP_COMP_RSZ2,		/* 23 */
-+	MDP_COMP_TDSHP1,	/* 24 */
-+	MDP_COMP_WROT1,		/* 25 */
-+
-+	MDP_MAX_COMP_COUNT	/* ALWAYS keep at the end */
-+};
-+
 +enum mtk_mdp_pipe_id {
 +	MDP_PIPE_RDMA0,
 +	MDP_PIPE_IMGI,
@@ -974,20 +876,10 @@ index 2228bf6133da..4eb48d073d2a 100644
  void mtk_mmsys_ddp_connect(struct device *dev,
  			   enum mtk_ddp_comp_id cur,
  			   enum mtk_ddp_comp_id next);
-@@ -50,4 +114,21 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
- 			      enum mtk_ddp_comp_id cur,
- 			      enum mtk_ddp_comp_id next);
+@@ -106,4 +124,11 @@ void mtk_mmsys_mdp_disconnect(struct device *dev,
+ 			      enum mtk_mdp_comp_id cur,
+ 			      enum mtk_mdp_comp_id next);
  
-+void mtk_mmsys_mdp_connect(struct device *dev,
-+			   struct mmsys_cmdq_cmd *cmd,
-+			   enum mtk_mdp_comp_id cur,
-+			   enum mtk_mdp_comp_id next);
-+
-+void mtk_mmsys_mdp_disconnect(struct device *dev,
-+			      struct mmsys_cmdq_cmd *cmd,
-+			      enum mtk_mdp_comp_id cur,
-+			      enum mtk_mdp_comp_id next);
-+
 +void mtk_mmsys_mdp_isp_ctrl(struct device *dev, struct mmsys_cmdq_cmd *cmd,
 +			    enum mtk_mdp_comp_id id);
 +
@@ -997,118 +889,594 @@ index 2228bf6133da..4eb48d073d2a 100644
 +
  #endif /* __MTK_MMSYS_H */
 
-From patchwork Tue Aug 24 10:00:25 2021
+From patchwork Fri Oct 15 12:38:28 2021
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Patchwork-Submitter: moudy ho <moudy.ho@mediatek.com>
-X-Patchwork-Id: 12454455
-Return-Path: <linux-media-owner@kernel.org>
+X-Patchwork-Submitter: Moudy Ho <moudy.ho@mediatek.com>
+X-Patchwork-Id: 12561387
+Return-Path: 
+ <SRS0=QAkp=PD=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54CC8C4338F
-	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 10:00:42 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42064613B1
-	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 10:00:42 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235918AbhHXKBY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Aug 2021 06:01:24 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:43098 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235947AbhHXKBU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Aug 2021 06:01:20 -0400
-X-UUID: 4b188475176c4b99ae26747846d05b4a-20210824
-X-UUID: 4b188475176c4b99ae26747846d05b4a-20210824
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by
- mailgw01.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 43432344; Tue, 24 Aug 2021 18:00:30 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 24 Aug 2021 18:00:29 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 24 Aug 2021 18:00:29 +0800
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18F46C433FE
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 15 Oct 2021 12:41:32 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org
+ [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id DA65260F44
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 15 Oct 2021 12:41:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DA65260F44
+Authentication-Results: mail.kernel.org;
+ dmarc=fail (p=none dis=none) header.from=mediatek.com
+Authentication-Results: mail.kernel.org;
+ spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=yi1ToLG3GL4c12BHK/Vr4JSeOI31rhsmOEdLJnwpuYk=; b=r3kgsZPYS1Uk7E
+	LZC2UljH9HsRwZ2NbSTov2GBWJGzQSSUqtOODuLsVPck2lA5okm5mW5ypr/H4EpFz4z4Zg+NiNPKP
+	86YekZTr0x4wFoiMVB0SDqqcvRno7IoByHfD3M00PVf2eQABomoaQ1unYUg0SWph0E+s7fJfjA6La
+	eScyK56RWxNy5CDWK1qT+FgD6lOmkSFRkDk4QRW0m9ACmfqgPznBTK6DIZ6F5a71eyj1EaJOVVb/s
+	ak3dJCZC/vnAhcyWMuY7YToeH2nTCpf2RR1+JXH4Usz1HT/LyAJ7mi/i7Z1rZWSy79Ad7xPuWXp18
+	+ltn1SGh+WyqAalruHsw==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mbMWV-006xiu-OO; Fri, 15 Oct 2021 12:41:19 +0000
+Received: from mailgw02.mediatek.com ([216.200.240.185])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mbMVW-006x7e-82; Fri, 15 Oct 2021 12:40:19 +0000
+X-UUID: 36b02ad38525452ba8fb4e06ff1091cf-20211015
+X-UUID: 36b02ad38525452ba8fb4e06ff1091cf-20211015
+Received: from mtkcas66.mediatek.inc [(172.29.193.44)] by
+ mailgw02.mediatek.com
+ (envelope-from <moudy.ho@mediatek.com>)
+ (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+ with ESMTP id 1557104748; Fri, 15 Oct 2021 05:40:16 -0700
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ MTKMBS62DR.mediatek.inc (172.29.94.18) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 15 Oct 2021 05:38:55 -0700
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+ Fri, 15 Oct 2021 20:38:47 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via
+ Frontend Transport; Fri, 15 Oct 2021 20:38:47 +0800
 From: Moudy Ho <moudy.ho@mediatek.com>
-To: <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-CC: Maoguang Meng <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
-        <drinkcat@chromium.org>, <acourbot@chromium.org>,
-        <pihsun@chromium.org>, <menghui.lin@mediatek.com>,
-        <sj.huang@mediatek.com>, <ben.lok@mediatek.com>,
-        <randy.wu@mediatek.com>, <srv_heupstream@mediatek.com>,
-        <hsinyi@google.com>
-Subject: [PATCH v7 3/5] dt-binding: mt8183: Add Mediatek MDP3 dt-bindings
-Date: Tue, 24 Aug 2021 18:00:25 +0800
-Message-ID: <20210824100027.25989-4-moudy.ho@mediatek.com>
+To: <moudy.ho@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Rob
+ Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ "Hans Verkuil" <hverkuil-cisco@xs4all.nl>, Jernej Skrabec
+ <jernej.skrabec@siol.net>
+CC: Maoguang Meng <maoguang.meng@mediatek.com>, daoyuan huang
+ <daoyuan.huang@mediatek.com>, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>, Rob Landley
+ <rob@landley.net>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+ <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+ <drinkcat@chromium.org>, <acourbot@chromium.org>, <pihsun@chromium.org>,
+ <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
+ <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
+ <srv_heupstream@mediatek.com>, <hsinyi@google.com>
+Subject: [PATCH v8 3/7] soc: mediatek: mutex: add support for MDP
+Date: Fri, 15 Oct 2021 20:38:28 +0800
+Message-ID: <20211015123832.17914-4-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210824100027.25989-1-moudy.ho@mediatek.com>
-References: <20210824100027.25989-1-moudy.ho@mediatek.com>
+In-Reply-To: <20211015123832.17914-1-moudy.ho@mediatek.com>
+References: <20211015123832.17914-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 X-MTK: N
-Precedence: bulk
-List-ID: <linux-media.vger.kernel.org>
-X-Mailing-List: linux-media@vger.kernel.org
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211015_054018_315054_AFFA559F 
+X-CRM114-Status: GOOD (  14.20  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: 
+ linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+
+For the purpose of module independence, related settings should be moved
+from MDP to the corresponding driver.
+This patch adds more 8183 MDP settings and interface.
+
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+---
+ drivers/soc/mediatek/mtk-mutex.c       | 33 ++++++++++++++++++++++++++
+ include/linux/soc/mediatek/mtk-mutex.h |  2 ++
+ 2 files changed, 35 insertions(+)
+
+diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
+index 2e4bcc300576..adab4c9edc16 100644
+--- a/drivers/soc/mediatek/mtk-mutex.c
++++ b/drivers/soc/mediatek/mtk-mutex.c
+@@ -107,6 +107,10 @@
+ #define MT8183_MUTEX_EOF_DSI0			(MT8183_MUTEX_SOF_DSI0 << 6)
+ #define MT8183_MUTEX_EOF_DPI0			(MT8183_MUTEX_SOF_DPI0 << 6)
+ 
++#define MT8183_MUTEX_MDP_START			5
++#define MT8183_MUTEX_MDP_MOD_MASK		0x07FFFFFF
++#define MT8183_MUTEX_MDP_SOF_MASK		0x00000007
++
+ struct mtk_mutex {
+ 	int id;
+ 	bool claimed;
+@@ -127,6 +131,9 @@ struct mtk_mutex_data {
+ 	const unsigned int *mutex_sof;
+ 	const unsigned int mutex_mod_reg;
+ 	const unsigned int mutex_sof_reg;
++	const unsigned int *mutex_mdp_offset;
++	const unsigned int mutex_mdp_mod_mask;
++	const unsigned int mutex_mdp_sof_mask;
+ 	const bool no_clk;
+ };
+ 
+@@ -238,6 +245,14 @@ static const unsigned int mt8183_mutex_sof[MUTEX_SOF_DSI3 + 1] = {
+ 	[MUTEX_SOF_DPI0] = MT8183_MUTEX_SOF_DPI0 | MT8183_MUTEX_EOF_DPI0,
+ };
+ 
++/* indicate which mutex is used by each pipepline */
++static const unsigned int mt8183_mutex_mdp_offset[MDP_PIPE_MAX] = {
++	[MDP_PIPE_IMGI] = MT8183_MUTEX_MDP_START,
++	[MDP_PIPE_RDMA0] = MT8183_MUTEX_MDP_START + 1,
++	[MDP_PIPE_WPEI] = MT8183_MUTEX_MDP_START + 2,
++	[MDP_PIPE_WPEI2] = MT8183_MUTEX_MDP_START + 3
++};
++
+ static const struct mtk_mutex_data mt2701_mutex_driver_data = {
+ 	.mutex_mod = mt2701_mutex_mod,
+ 	.mutex_sof = mt2712_mutex_sof,
+@@ -272,6 +287,9 @@ static const struct mtk_mutex_data mt8183_mutex_driver_data = {
+ 	.mutex_sof = mt8183_mutex_sof,
+ 	.mutex_mod_reg = MT8183_MUTEX0_MOD0,
+ 	.mutex_sof_reg = MT8183_MUTEX0_SOF0,
++	.mutex_mdp_offset = mt8183_mutex_mdp_offset,
++	.mutex_mdp_mod_mask = MT8183_MUTEX_MDP_MOD_MASK,
++	.mutex_mdp_sof_mask = MT8183_MUTEX_MDP_SOF_MASK,
+ 	.no_clk = true,
+ };
+ 
+@@ -290,6 +308,21 @@ struct mtk_mutex *mtk_mutex_get(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(mtk_mutex_get);
+ 
++struct mtk_mutex *mtk_mutex_mdp_get(struct device *dev,
++				    enum mtk_mdp_pipe_id id)
++{
++	struct mtk_mutex_ctx *mtx = dev_get_drvdata(dev);
++	int i = mtx->data->mutex_mdp_offset[id];
++
++	if (!mtx->mutex[i].claimed) {
++		mtx->mutex[i].claimed = true;
++		return &mtx->mutex[i];
++	}
++
++	return ERR_PTR(-EBUSY);
++}
++EXPORT_SYMBOL_GPL(mtk_mutex_mdp_get);
++
+ void mtk_mutex_put(struct mtk_mutex *mutex)
+ {
+ 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
+diff --git a/include/linux/soc/mediatek/mtk-mutex.h b/include/linux/soc/mediatek/mtk-mutex.h
+index 6fe4ffbde290..099ddb025d79 100644
+--- a/include/linux/soc/mediatek/mtk-mutex.h
++++ b/include/linux/soc/mediatek/mtk-mutex.h
+@@ -11,6 +11,8 @@ struct device;
+ struct mtk_mutex;
+ 
+ struct mtk_mutex *mtk_mutex_get(struct device *dev);
++struct mtk_mutex *mtk_mutex_mdp_get(struct device *dev,
++				    enum mtk_mdp_pipe_id id);
+ int mtk_mutex_prepare(struct mtk_mutex *mutex);
+ void mtk_mutex_add_comp(struct mtk_mutex *mutex,
+ 			enum mtk_ddp_comp_id id);
+
+From patchwork Fri Oct 15 12:38:29 2021
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Patchwork-Submitter: Moudy Ho <moudy.ho@mediatek.com>
+X-Patchwork-Id: 12561379
+Return-Path: 
+ <SRS0=QAkp=PD=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	aws-us-west-2-korg-lkml-1.web.codeaurora.org
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4ECAC433FE
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 15 Oct 2021 12:40:06 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org
+ [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id B6F9560F44
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 15 Oct 2021 12:40:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B6F9560F44
+Authentication-Results: mail.kernel.org;
+ dmarc=fail (p=none dis=none) header.from=mediatek.com
+Authentication-Results: mail.kernel.org;
+ spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=kBS9Xwtc9P23RvUqWhZ1e1SeRiz3vxfixR+Th/hptvE=; b=JZXv78lLlXsCX7
+	0GMKC9PvPZ4xnzJ486Vkk1RhcDLlcloNO/Q8hAJ9hVphOndAkjLRMlYWB02OcNg7jzjZVFU5tmxsN
+	ukKfI3vgAkldzyHyCdSLVkK145w/MXIpy7+uRl7zOKGjUwMlgxZoQJxgCv5I/Uq7QZzlDiTOye8nB
+	d/w1Uhfo+liSvxhiyrlQ8j34FZf5O3+AZqSgadqdTsdEsxDsWGLfj8ekt2QpuM1rJM2Q+DHHn43wC
+	1zOeVEABtgD/UeFu74I9H62h5e47ytSTvkrvi0gCBYMHhQnzW4NWYQqsAI2BuBAIaQcM8iPssOv60
+	TunO0b3PvXpCWKGSKVlQ==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mbMV7-006wp6-R1; Fri, 15 Oct 2021 12:39:53 +0000
+Received: from mailgw01.mediatek.com ([216.200.240.184])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mbMUH-006wRw-0P; Fri, 15 Oct 2021 12:39:03 +0000
+X-UUID: 6ee8f59e17634c47a2ab5a7308829705-20211015
+X-UUID: 6ee8f59e17634c47a2ab5a7308829705-20211015
+Received: from mtkcas68.mediatek.inc [(172.29.94.19)] by mailgw01.mediatek.com
+ (envelope-from <moudy.ho@mediatek.com>)
+ (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+ with ESMTP id 750298532; Fri, 15 Oct 2021 05:38:57 -0700
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ MTKMBS62N2.mediatek.inc (172.29.193.42) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 15 Oct 2021 05:38:55 -0700
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+ Fri, 15 Oct 2021 20:38:47 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via
+ Frontend Transport; Fri, 15 Oct 2021 20:38:47 +0800
+From: Moudy Ho <moudy.ho@mediatek.com>
+To: <moudy.ho@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Rob
+ Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ "Hans Verkuil" <hverkuil-cisco@xs4all.nl>, Jernej Skrabec
+ <jernej.skrabec@siol.net>
+CC: Maoguang Meng <maoguang.meng@mediatek.com>, daoyuan huang
+ <daoyuan.huang@mediatek.com>, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>, Rob Landley
+ <rob@landley.net>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+ <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+ <drinkcat@chromium.org>, <acourbot@chromium.org>, <pihsun@chromium.org>,
+ <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
+ <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
+ <srv_heupstream@mediatek.com>, <hsinyi@google.com>
+Subject: [PATCH v8 4/7] soc: mediatek: mutex: add functions that operate
+ registers by CMDQ
+Date: Fri, 15 Oct 2021 20:38:29 +0800
+Message-ID: <20211015123832.17914-5-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20211015123832.17914-1-moudy.ho@mediatek.com>
+References: <20211015123832.17914-1-moudy.ho@mediatek.com>
+MIME-Version: 1.0
+X-MTK: N
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211015_053901_109527_969D6CEF 
+X-CRM114-Status: GOOD (  16.37  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: 
+ linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+
+Considering that some functions have timing requirements
+in specific situation, this patch adds several interface that
+operate registers by CMDQ.
+
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+---
+ drivers/soc/mediatek/mtk-mutex.c       | 63 +++++++++++++++++++++++++-
+ include/linux/soc/mediatek/mtk-mutex.h |  6 +++
+ 2 files changed, 68 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
+index adab4c9edc16..874d4c60b844 100644
+--- a/drivers/soc/mediatek/mtk-mutex.c
++++ b/drivers/soc/mediatek/mtk-mutex.c
+@@ -7,10 +7,12 @@
+ #include <linux/iopoll.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
++#include <linux/of_address.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/soc/mediatek/mtk-mmsys.h>
+ #include <linux/soc/mediatek/mtk-mutex.h>
++#include <linux/soc/mediatek/mtk-cmdq.h>
+ 
+ #define MT2701_MUTEX0_MOD0			0x2c
+ #define MT2701_MUTEX0_SOF0			0x30
+@@ -143,6 +145,8 @@ struct mtk_mutex_ctx {
+ 	void __iomem			*regs;
+ 	struct mtk_mutex		mutex[10];
+ 	const struct mtk_mutex_data	*data;
++	phys_addr_t			addr;
++	u8				subsys_id;
+ };
+ 
+ static const unsigned int mt2701_mutex_mod[DDP_COMPONENT_ID_MAX] = {
+@@ -442,6 +446,25 @@ void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
+ }
+ EXPORT_SYMBOL_GPL(mtk_mutex_remove_comp);
+ 
++void mtk_mutex_add_mod_by_cmdq(struct mtk_mutex *mutex, u32 mod,
++			       struct mmsys_cmdq_cmd *cmd)
++{
++	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
++						 mutex[mutex->id]);
++	unsigned int offset;
++
++	WARN_ON(&mtx->mutex[mutex->id] != mutex);
++
++	offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg, mutex->id);
++	cmdq_pkt_write_mask(cmd->pkt, mtx->subsys_id, mtx->addr + offset,
++			    mod, mtx->data->mutex_mdp_mod_mask);
++
++	offset = DISP_REG_MUTEX_SOF(mtx->data->mutex_sof_reg, mutex->id);
++	cmdq_pkt_write_mask(cmd->pkt, mtx->subsys_id, mtx->addr + offset,
++			    0, mtx->data->mutex_mdp_sof_mask);
++}
++EXPORT_SYMBOL_GPL(mtk_mutex_add_mod_by_cmdq);
++
+ void mtk_mutex_enable(struct mtk_mutex *mutex)
+ {
+ 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
+@@ -453,6 +476,20 @@ void mtk_mutex_enable(struct mtk_mutex *mutex)
+ }
+ EXPORT_SYMBOL_GPL(mtk_mutex_enable);
+ 
++void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
++			      struct mmsys_cmdq_cmd *cmd)
++{
++	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
++						 mutex[mutex->id]);
++
++	WARN_ON(&mtx->mutex[mutex->id] != mutex);
++
++	cmdq_pkt_write_mask(cmd->pkt, mtx->subsys_id,
++			    mtx->addr + DISP_REG_MUTEX_EN(mutex->id),
++			    0x1, 0x00000001);
++}
++EXPORT_SYMBOL_GPL(mtk_mutex_enable_by_cmdq);
++
+ void mtk_mutex_disable(struct mtk_mutex *mutex)
+ {
+ 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
+@@ -464,6 +501,20 @@ void mtk_mutex_disable(struct mtk_mutex *mutex)
+ }
+ EXPORT_SYMBOL_GPL(mtk_mutex_disable);
+ 
++void mtk_mutex_disable_by_cmdq(struct mtk_mutex *mutex,
++			       struct mmsys_cmdq_cmd *cmd)
++{
++	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
++						 mutex[mutex->id]);
++
++	WARN_ON(&mtx->mutex[mutex->id] != mutex);
++
++	cmdq_pkt_write_mask(cmd->pkt, mtx->subsys_id,
++			    mtx->addr + DISP_REG_MUTEX_EN(mutex->id),
++			    0x0, 0x00000001);
++}
++EXPORT_SYMBOL_GPL(mtk_mutex_disable_by_cmdq);
++
+ void mtk_mutex_acquire(struct mtk_mutex *mutex)
+ {
+ 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
+@@ -491,7 +542,8 @@ static int mtk_mutex_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct mtk_mutex_ctx *mtx;
+-	struct resource *regs;
++	struct cmdq_client_reg cmdq_reg;
++	struct resource *regs, addr;
+ 	int i;
+ 
+ 	mtx = devm_kzalloc(dev, sizeof(*mtx), GFP_KERNEL);
+@@ -512,6 +564,15 @@ static int mtk_mutex_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
++	if (of_address_to_resource(dev->of_node, 0, &addr) < 0)
++		mtx->addr = 0L;
++	else
++		mtx->addr = addr.start;
++
++	if (cmdq_dev_get_client_reg(dev, &cmdq_reg, 0) != 0)
++		dev_info(dev, "cmdq subsys id has not been set\n");
++	mtx->subsys_id = cmdq_reg.subsys;
++
+ 	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	mtx->regs = devm_ioremap_resource(dev, regs);
+ 	if (IS_ERR(mtx->regs)) {
+diff --git a/include/linux/soc/mediatek/mtk-mutex.h b/include/linux/soc/mediatek/mtk-mutex.h
+index 099ddb025d79..86c17c024d83 100644
+--- a/include/linux/soc/mediatek/mtk-mutex.h
++++ b/include/linux/soc/mediatek/mtk-mutex.h
+@@ -16,8 +16,14 @@ struct mtk_mutex *mtk_mutex_mdp_get(struct device *dev,
+ int mtk_mutex_prepare(struct mtk_mutex *mutex);
+ void mtk_mutex_add_comp(struct mtk_mutex *mutex,
+ 			enum mtk_ddp_comp_id id);
++void mtk_mutex_add_mod_by_cmdq(struct mtk_mutex *mutex, u32 mod,
++			       struct mmsys_cmdq_cmd *cmd);
+ void mtk_mutex_enable(struct mtk_mutex *mutex);
++void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
++			      struct mmsys_cmdq_cmd *cmd);
+ void mtk_mutex_disable(struct mtk_mutex *mutex);
++void mtk_mutex_disable_by_cmdq(struct mtk_mutex *mutex,
++			       struct mmsys_cmdq_cmd *cmd);
+ void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
+ 			   enum mtk_ddp_comp_id id);
+ void mtk_mutex_unprepare(struct mtk_mutex *mutex);
+
+From patchwork Fri Oct 15 12:38:30 2021
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Patchwork-Submitter: Moudy Ho <moudy.ho@mediatek.com>
+X-Patchwork-Id: 12561377
+Return-Path: 
+ <SRS0=QAkp=PD=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	aws-us-west-2-korg-lkml-1.web.codeaurora.org
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F6FDC433F5
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 15 Oct 2021 12:39:47 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org
+ [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id C971F6109E
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 15 Oct 2021 12:39:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C971F6109E
+Authentication-Results: mail.kernel.org;
+ dmarc=fail (p=none dis=none) header.from=mediatek.com
+Authentication-Results: mail.kernel.org;
+ spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=FsReTtNDeSWmlajQj1BN8edwdLueYWhVA8WvSWFv/78=; b=eDek0JZbfo+aQD
+	5RTkFIm9NNagZwhaCWw26Jkdd401dMZyP3IpxaIMKtN4IL36mep+yoMmUrnFxJ/GvCM3zwV/Eme3b
+	0Imr5GKkSo6WII2E4nv+FWkSI9OWsKL1WzmwpHqevQKQht54lLJ7wP04GdGLukEz+2/vZdhgvaLjW
+	mHYkVkfhLCFB99pdpfSi3iKwx8ZnC21OhvpFYkzX32PU70bL8Ix9rerxCJtAZtBhwyxvTEkfMHUzA
+	nY/Jn9F/aHYesRPZq5gVfvbS9vKNCQdAXhPMpVEArDvwMkthn6JoE4UBB0S7+LyiFUuX1kgyelDfK
+	BS5ffpkYbygWGgtOrNBQ==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mbMUp-006wes-93; Fri, 15 Oct 2021 12:39:35 +0000
+Received: from mailgw01.mediatek.com ([216.200.240.184])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mbMUA-006wO0-2t; Fri, 15 Oct 2021 12:38:57 +0000
+X-UUID: f5f97f82180f463785d81aea7c1e00ad-20211015
+X-UUID: f5f97f82180f463785d81aea7c1e00ad-20211015
+Received: from mtkcas66.mediatek.inc [(172.29.193.44)] by
+ mailgw01.mediatek.com
+ (envelope-from <moudy.ho@mediatek.com>)
+ (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+ with ESMTP id 1904365500; Fri, 15 Oct 2021 05:38:50 -0700
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ MTKMBS62N2.mediatek.inc (172.29.193.42) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 15 Oct 2021 05:38:49 -0700
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 15 Oct 2021 20:38:48 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via
+ Frontend Transport; Fri, 15 Oct 2021 20:38:47 +0800
+From: Moudy Ho <moudy.ho@mediatek.com>
+To: <moudy.ho@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Rob
+ Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ "Hans Verkuil" <hverkuil-cisco@xs4all.nl>, Jernej Skrabec
+ <jernej.skrabec@siol.net>
+CC: Maoguang Meng <maoguang.meng@mediatek.com>, daoyuan huang
+ <daoyuan.huang@mediatek.com>, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>, Rob Landley
+ <rob@landley.net>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+ <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+ <drinkcat@chromium.org>, <acourbot@chromium.org>, <pihsun@chromium.org>,
+ <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
+ <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
+ <srv_heupstream@mediatek.com>, <hsinyi@google.com>
+Subject: [PATCH v8 5/7] dt-binding: mt8183: add Mediatek MDP3 dt-bindings
+Date: Fri, 15 Oct 2021 20:38:30 +0800
+Message-ID: <20211015123832.17914-6-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20211015123832.17914-1-moudy.ho@mediatek.com>
+References: <20211015123832.17914-1-moudy.ho@mediatek.com>
+MIME-Version: 1.0
+X-MTK: N
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211015_053854_204041_304565F9 
+X-CRM114-Status: GOOD (  18.19  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: 
+ linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
 
 This patch adds DT binding document for Media Data Path 3 (MDP3)
 a unit in multimedia system used for scaling and color format convert.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- .../bindings/media/mediatek,mdp3-ccorr.yaml   |  57 +++++
- .../bindings/media/mediatek,mdp3-rdma.yaml    | 207 ++++++++++++++++++
- .../bindings/media/mediatek,mdp3-rsz.yaml     |  65 ++++++
- .../bindings/media/mediatek,mdp3-wdma.yaml    |  71 ++++++
- .../bindings/media/mediatek,mdp3-wrot.yaml    |  71 ++++++
- 5 files changed, 471 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-ccorr.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
+ .../bindings/arm/mediatek/mediatek,ccorr.yaml |  59 +++++
+ .../bindings/arm/mediatek/mediatek,rdma.yaml  | 211 ++++++++++++++++++
+ .../bindings/arm/mediatek/mediatek,wdma.yaml  |  70 ++++++
+ .../bindings/media/mediatek,mdp3-rsz.yaml     |  68 ++++++
+ .../bindings/media/mediatek,mdp3-wrot.yaml    |  70 ++++++
+ 5 files changed, 478 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,ccorr.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,rdma.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,wdma.yaml
  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-wdma.yaml
  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-ccorr.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-ccorr.yaml
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,ccorr.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,ccorr.yaml
 new file mode 100644
-index 000000000000..59fd68b46022
+index 000000000000..40ea7955efc6
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-ccorr.yaml
-@@ -0,0 +1,57 @@
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,ccorr.yaml
+@@ -0,0 +1,59 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-ccorr.yaml#
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,ccorr.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Mediatek Media Data Path 3 CCORR Device Tree Bindings
++title: Mediatek color correction
 +
 +maintainers:
-+  - Daoyuan Huang <daoyuan.huang@mediatek.com>
-+  - Moudy Ho <moudy.ho@mediatek.com>
++  - Matthias Brugger <matthias.bgg@gmail.com>
 +
 +description: |
-+  One of Media Data Path 3 (MDP3) components used to do color correction with 3X3 matrix.
++  Mediatek color correction with 3X3 matrix.
 +
 +properties:
 +  compatible:
@@ -1120,20 +1488,23 @@ index 000000000000..59fd68b46022
 +    $ref: /schemas/types.yaml#/definitions/uint32
 +    maxItems: 1
 +    description: |
-+      HW index to distinguish same functionality modules.
++      There may be multiple blocks with the same function but
++      different addresses in MDP3.
++      In order to distinguish the connection with other blocks,
++      a unique ID is needed to dynamically use one or more identical
++      blocks to implement multiple pipelines.
 +
 +  reg:
-+    description: |
-+      Physical base address and length of the function block
-+      register space, the number aligns with the component
-+      and its own subcomponent.
++    maxItems: 1
 +
 +  mediatek,gce-client-reg:
 +    $ref: /schemas/types.yaml#/definitions/phandle-array
 +    description: |
-+      sub-system id corresponding to the global command engine (GCE)
-+      register address.
-+      $ref: /schemas/mailbox/mtk-gce.txt
++      The register of client driver can be configured by gce with 4 arguments
++      defined in this property, such as phandle of gce, subsys id,
++      register offset and size.
++      Each GCE subsys id is mapping to a client defined in the header
++      include/dt-bindings/gce/<chip>-gce.h.
 +
 +  clocks:
 +    minItems: 1
@@ -1152,43 +1523,41 @@ index 000000000000..59fd68b46022
 +      mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0xc000 0x1000>;
 +      clocks = <&mmsys CLK_MM_MDP_CCORR>;
 +    };
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,rdma.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,rdma.yaml
 new file mode 100644
-index 000000000000..b355d7fe791e
+index 000000000000..ad0e56923494
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
-@@ -0,0 +1,207 @@
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,rdma.yaml
+@@ -0,0 +1,211 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-rdma.yaml#
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,rdma.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Mediatek Media Data Path 3 Device Tree Bindings
++title: Mediatek Read Direct Memory Access
 +
 +maintainers:
-+  - Daoyuan Huang <daoyuan.huang@mediatek.com>
-+  - Moudy Ho <moudy.ho@mediatek.com>
++  - Matthias Brugger <matthias.bgg@gmail.com>
 +
 +description: |
-+  One of Media Data Path 3 (MDP3) components used to do read DMA.
-+  RDMA0 is also used to be a controller node containing MMSYS,
-+  MUTEX, GCE and SCP settings.
++  Mediatek Read Direct Memory Access(RDMA) component used to do read DMA.
++  It contains one line buffer to store the sufficient pixel data, and
++  must be siblings to the central MMSYS_CONFIG node.
++  For a description of the MMSYS_CONFIG binding, see
++  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
++  for details.
++  The 1st RDMA is also used to be a controller node in Media Data Path 3(MDP3)
++  that containing MMSYS, MUTEX, GCE and SCP settings.
 +
 +properties:
 +  compatible:
 +    oneOf:
 +      - items:
-+        - enum:
-+          # controller node
-+          - mediatek,mt8183-mdp3
-+        - enum:
-+          - mediatek,mt8183-mdp3-rdma
-+
++          - const: mediatek,mt8183-mdp3
++          - const: mediatek,mt8183-mdp3-rdma
 +      - items:
-+        - enum:
-+          # read DMA
-+          - mediatek,mt8183-mdp3-rdma
++          - const: mediatek,mt8183-mdp3-rdma
 +
 +  mediatek,scp:
 +    $ref: /schemas/types.yaml#/definitions/phandle
@@ -1202,50 +1571,60 @@ index 000000000000..b355d7fe791e
 +    $ref: /schemas/types.yaml#/definitions/uint32
 +    maxItems: 1
 +    description: |
-+      In MDP3, it can allocate multiple identical modules for
-+      different data path selection or multi-pipeline execution.
-+      This node is used to indicate the ID of each module.
++      There may be multiple blocks with the same function but
++      different addresses in MDP3.
++      In order to distinguish the connection with other blocks,
++      a unique ID is needed to dynamically use one or more identical
++      blocks to implement multiple pipelines.
 +
 +  mdp3-comps:
 +    $ref: /schemas/types.yaml#/definitions/string-array
 +    items:
-+        - enum:
++      - enum:
 +          # MDP direct-link input path selection, create a
 +          # component for path connectedness of HW pipe control
 +          - mediatek,mt8183-mdp3-dl1
-+        - enum:
++      - enum:
 +          - mediatek,mt8183-mdp3-dl2
-+        - enum:
++      - enum:
 +          # MDP direct-link output path selection, create a
 +          # component for path connectedness of HW pipe control
 +          - mediatek,mt8183-mdp3-path1
-+        - enum:
++      - enum:
 +          - mediatek,mt8183-mdp3-path2
-+        - enum:
++      - enum:
 +          # Input DMA of ISP PASS2 (DIP) module for raw image input
 +          - mediatek,mt8183-mdp3-imgi
-+        - enum:
++      - enum:
 +          # Output DMA of ISP PASS2 (DIP) module for YUV image output
 +          - mediatek,mt8183-mdp3-exto
++    description: |
++      MTK sub-system of direct-link or DIP
 +
 +  mdp3-comp-ids:
 +    maxItems: 1
 +    $ref: /schemas/types.yaml#/definitions/uint32-array
 +    description: |
-+      Pipeline ID of MDP direct-link or DIP.
++      Pipeline ID of MDP sub-system.
 +
 +  reg:
++    minItems: 1
++    maxItems: 5
 +    description: |
-+      Physical base address and length of the function block
-+      register space, the number aligns with the component
-+      and its own subcomponent.
++      1st: basic HW address
++      2nd: mediatek,mt8183-mdp-dl1, mediatek,mt8183-mdp-dl2
++      3rd: mediatek,mt8183-mdp-path1
++      4th: mediatek,mt8183-mdp-path2
++      5th: mediatek,mt8183-mdp3-imgi, mediatek,mt8183-mdp3-exto
 +
 +  mediatek,gce-client-reg:
 +    $ref: /schemas/types.yaml#/definitions/phandle-array
 +    description: |
-+      sub-system id corresponding to the global command engine (GCE)
-+      register address.
-+      $ref: /schemas/mailbox/mtk-gce.txt
++      The register of client driver can be configured by gce with 4 arguments
++      defined in this property, such as phandle of gce, subsys id,
++      register offset and size.
++      Each GCE subsys id is mapping to a client defined in the header
++      include/dt-bindings/gce/<chip>-gce.h.
 +
 +  power-domains:
 +    maxItems: 1
@@ -1253,13 +1632,16 @@ index 000000000000..b355d7fe791e
 +  clocks:
 +    minItems: 1
 +    maxItems: 6
++    description: |
++      1st: RDMA0 clock
++      2nd: RSZ1 clock
++      3rd: direck-link TX clock in MDP side
++      4th: direck-link RX clock in MDP side
++      5th: direck-link TX clock in ISP side
++      6th: direck-link RX clock in ISP side
 +
 +  iommus:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: |
-+      Should point to the respective IOMMU block with master
-+      port as argument.
-+      $ref: /schemas/iommu/mediatek,iommu.yaml
++    maxItems: 1
 +
 +  mediatek,mmsys:
 +    $ref: /schemas/types.yaml#/definitions/phandle
@@ -1278,28 +1660,21 @@ index 000000000000..b355d7fe791e
 +    description: |
 +      The node of global command engine (GCE), used to read/write
 +      registers with critical time limitation.
-+      $ref: /schemas/mailbox/mtk-gce.txt
 +
 +  mboxes:
 +    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    description: |
-+      $ref: /schemas/mailbox/mailbox.txt
 +
 +  gce-subsys:
 +    $ref: /schemas/types.yaml#/definitions/phandle-array
 +    description: |
 +      sub-system id corresponding to the global command engine (GCE)
 +      register address.
-+      $ref: /schemas/mailbox/mtk-gce.txt
 +
 +if:
 +  properties:
 +    compatible:
-+      items:
-+        - enum:
-+          - mediatek,mt8183-mdp3
-+        - enum:
-+          - mediatek,mt8183-mdp3-rdma
++      contains:
++        const: mediatek,mt8183-mdp3
 +
 +then:
 +  required:
@@ -1366,19 +1741,95 @@ index 000000000000..b355d7fe791e
 +                   <&gce 0x15020000 SUBSYS_1502XXXX>;
 +    };
 \ No newline at end of file
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,wdma.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,wdma.yaml
+new file mode 100644
+index 000000000000..53a4eae9f963
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,wdma.yaml
+@@ -0,0 +1,70 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,wdma.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mediatek Write Direct Memory Access
++
++maintainers:
++  - Matthias Brugger <matthias.bgg@gmail.com>
++
++description: |
++  Mediatek Write Direct Memory Access(WDMA) component used to write
++  the data into DMA.
++
++properties:
++  compatible:
++    items:
++      - enum:
++        - mediatek,mt8183-mdp3-wdma
++
++  mediatek,mdp3-id:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    maxItems: 1
++    description: |
++      There may be multiple blocks with the same function but
++      different addresses in MDP3.
++      In order to distinguish the connection with other blocks,
++      a unique ID is needed to dynamically use one or more identical
++      blocks to implement multiple pipelines.
++
++  reg:
++    maxItems: 1
++
++  mediatek,gce-client-reg:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: |
++      The register of client driver can be configured by gce with 4 arguments
++      defined in this property, such as phandle of gce, subsys id,
++      register offset and size.
++      Each GCE subsys id is mapping to a client defined in the header
++      include/dt-bindings/gce/<chip>-gce.h.
++
++  power-domains:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++
++  iommus:
++    maxItems: 1
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt8183-clk.h>
++    #include <dt-bindings/gce/mt8183-gce.h>
++    #include <dt-bindings/power/mt8183-power.h>
++    #include <dt-bindings/memory/mt8183-larb-port.h>
++
++    mdp3_wdma: mdp3_wdma@14006000 {
++      compatible = "mediatek,mt8183-mdp3-wdma";
++      mediatek,mdp3-id = <0>;
++      reg = <0x14006000 0x1000>;
++      mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x6000 0x1000>;
++      power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++      clocks = <&mmsys CLK_MM_MDP_WDMA0>;
++      iommus = <&iommu>;
++    };
 diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
 new file mode 100644
-index 000000000000..c55a52cd32b7
+index 000000000000..5be288cffc38
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
-@@ -0,0 +1,65 @@
+@@ -0,0 +1,68 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
 +$id: http://devicetree.org/schemas/media/mediatek,mdp3-rsz.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Mediatek Media Data Path 3 Resizer Device Tree Bindings
++title: Mediatek Resizer
 +
 +maintainers:
 +  - Daoyuan Huang <daoyuan.huang@mediatek.com>
@@ -1397,20 +1848,23 @@ index 000000000000..c55a52cd32b7
 +    $ref: /schemas/types.yaml#/definitions/uint32
 +    maxItems: 1
 +    description: |
-+      HW index to distinguish same functionality modules.
++      There may be multiple blocks with the same function but
++      different addresses in MDP3.
++      In order to distinguish the connection with other blocks,
++      a unique ID is needed to dynamically use one or more identical
++      blocks to implement multiple pipelines.
 +
 +  reg:
-+    description: |
-+      Physical base address and length of the function block
-+      register space, the number aligns with the component
-+      and its own subcomponent.
++    maxItems: 1
 +
 +  mediatek,gce-client-reg:
 +    $ref: /schemas/types.yaml#/definitions/phandle-array
 +    description: |
-+      sub-system id corresponding to the global command engine (GCE)
-+      register address.
-+      $ref: /schemas/mailbox/mtk-gce.txt
++      The register of client driver can be configured by gce with 4 arguments
++      defined in this property, such as phandle of gce, subsys id,
++      register offset and size.
++      Each GCE subsys id is mapping to a client defined in the header
++      include/dt-bindings/gce/<chip>-gce.h.
 +
 +  clocks:
 +    minItems: 1
@@ -1437,96 +1891,19 @@ index 000000000000..c55a52cd32b7
 +      mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x4000 0x1000>;
 +      clocks = <&mmsys CLK_MM_MDP_RSZ1>;
 +    };
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-wdma.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-wdma.yaml
-new file mode 100644
-index 000000000000..93e6f331ada8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-wdma.yaml
-@@ -0,0 +1,71 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-wdma.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mediatek Media Data Path 3 Device Tree Bindings
-+
-+maintainers:
-+  - Daoyuan Huang <daoyuan.huang@mediatek.com>
-+  - Moudy Ho <moudy.ho@mediatek.com>
-+
-+description: |
-+  One of Media Data Path 3 (MDP3) components used to write DMA.
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+        - mediatek,mt8183-mdp3-wdma
-+
-+  mediatek,mdp3-id:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    maxItems: 1
-+    description: |
-+      HW index to distinguish same functionality modules.
-+
-+  reg:
-+    description: |
-+      Physical base address and length of the function block
-+      register space, the number aligns with the component
-+      and its own subcomponent.
-+
-+  mediatek,gce-client-reg:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    description: |
-+      sub-system id corresponding to the global command engine (GCE)
-+      register address.
-+      $ref: /schemas/mailbox/mtk-gce.txt
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+
-+  iommus:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: |
-+      Should point to the respective IOMMU block with master
-+      port as argument.
-+      $ref: /schemas/iommu/mediatek,iommu.yaml
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8183-clk.h>
-+    #include <dt-bindings/gce/mt8183-gce.h>
-+    #include <dt-bindings/power/mt8183-power.h>
-+    #include <dt-bindings/memory/mt8183-larb-port.h>
-+
-+    mdp3_wdma: mdp3_wdma@14006000 {
-+      compatible = "mediatek,mt8183-mdp3-wdma";
-+      mediatek,mdp3-id = <0>;
-+      reg = <0x14006000 0x1000>;
-+      mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x6000 0x1000>;
-+      power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
-+      clocks = <&mmsys CLK_MM_MDP_WDMA0>;
-+      iommus = <&iommu>;
-+    };
 diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
 new file mode 100644
-index 000000000000..2993da04c562
+index 000000000000..f9bed467c353
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
-@@ -0,0 +1,71 @@
+@@ -0,0 +1,70 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
 +$id: http://devicetree.org/schemas/media/mediatek,mdp3-wrot.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Mediatek Media Data Path 3 Device Tree Bindings
++title: Mediatek Write DMA with Rotation
 +
 +maintainers:
 +  - Daoyuan Huang <daoyuan.huang@mediatek.com>
@@ -1545,20 +1922,23 @@ index 000000000000..2993da04c562
 +    $ref: /schemas/types.yaml#/definitions/uint32
 +    maxItems: 1
 +    description: |
-+      HW index to distinguish same functionality modules.
++      There may be multiple blocks with the same function but
++      different addresses in MDP3.
++      In order to distinguish the connection with other blocks,
++      a unique ID is needed to dynamically use one or more identical
++      blocks to implement multiple pipelines.
 +
 +  reg:
-+    description: |
-+      Physical base address and length of the function block
-+      register space, the number aligns with the component
-+      and its own subcomponent.
++    maxItems: 1
 +
 +  mediatek,gce-client-reg:
 +    $ref: /schemas/types.yaml#/definitions/phandle-array
 +    description: |
-+      sub-system id corresponding to the global command engine (GCE)
-+      register address.
-+      $ref: /schemas/mailbox/mtk-gce.txt
++      The register of client driver can be configured by gce with 4 arguments
++      defined in this property, such as phandle of gce, subsys id,
++      register offset and size.
++      Each GCE subsys id is mapping to a client defined in the header
++      include/dt-bindings/gce/<chip>-gce.h.
 +
 +  power-domains:
 +    maxItems: 1
@@ -1567,11 +1947,7 @@ index 000000000000..2993da04c562
 +    minItems: 1
 +
 +  iommus:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: |
-+      Should point to the respective IOMMU block with master
-+      port as argument.
-+      $ref: /schemas/iommu/mediatek,iommu.yaml
++    maxItems: 1
 +
 +additionalProperties: false
 +
@@ -1592,92 +1968,117 @@ index 000000000000..2993da04c562
 +      iommus = <&iommu>;
 +    };
 
-From patchwork Tue Aug 24 10:00:26 2021
+From patchwork Fri Oct 15 12:38:31 2021
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Patchwork-Submitter: moudy ho <moudy.ho@mediatek.com>
-X-Patchwork-Id: 12454449
-Return-Path: <linux-media-owner@kernel.org>
+X-Patchwork-Submitter: Moudy Ho <moudy.ho@mediatek.com>
+X-Patchwork-Id: 12561383
+Return-Path: 
+ <SRS0=QAkp=PD=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58136C4320A
-	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 10:00:36 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42EB16120A
-	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 10:00:36 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235933AbhHXKBT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Aug 2021 06:01:19 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:43024 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235566AbhHXKBS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Aug 2021 06:01:18 -0400
-X-UUID: 322b4236e3aa4e25b7d96b9e6fe24009-20210824
-X-UUID: 322b4236e3aa4e25b7d96b9e6fe24009-20210824
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by
- mailgw01.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 633261771; Tue, 24 Aug 2021 18:00:31 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 24 Aug 2021 18:00:29 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 24 Aug 2021 18:00:29 +0800
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E920C433FE
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 15 Oct 2021 12:41:03 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org
+ [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id B90BA61090
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 15 Oct 2021 12:41:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B90BA61090
+Authentication-Results: mail.kernel.org;
+ dmarc=fail (p=none dis=none) header.from=mediatek.com
+Authentication-Results: mail.kernel.org;
+ spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=mEafFsSsjc1cz0PmMQLe+3yAUvRKC/z7p4EPykWLQ6I=; b=0g8BnkpNLh3rhi
+	3so29FazqwcDRsDPQC2+WKMcoiRtDSftv0EfN+KEpoSFwJ+mV6Fd8DTCP9EUEQ+pGlOYtDPbv8YHX
+	iBJmyw9cu15Bph3qmchoBxpby1TyE52dHBijmPQwxs0pRIvo4oeZ1biUD+hq61oBEYhktGe86flJA
+	amIe6lmT/GiI6OEfq7QPAETjIIgTyhDiQpa4mQgA71FGf0FDsBUuCQhYnpblm5c2YBLPEf6dEu7vu
+	BWq7rOSSjDV9tcPLB16kFnkKkRdipCzjHmp6iZtPMzqLY8nd1FjsLM1pUyjOnGV1BFKC1chWcaaJc
+	hScIrjW0sCjum1zeQ3UA==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mbMVz-006xNr-7J; Fri, 15 Oct 2021 12:40:47 +0000
+Received: from mailgw02.mediatek.com ([216.200.240.185])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mbMVV-006x6r-BQ; Fri, 15 Oct 2021 12:40:18 +0000
+X-UUID: f35e3b559f5b4dac9f33fd48d25031cb-20211015
+X-UUID: f35e3b559f5b4dac9f33fd48d25031cb-20211015
+Received: from mtkcas66.mediatek.inc [(172.29.193.44)] by
+ mailgw02.mediatek.com
+ (envelope-from <moudy.ho@mediatek.com>)
+ (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+ with ESMTP id 184835592; Fri, 15 Oct 2021 05:40:16 -0700
+Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
+ MTKMBS62DR.mediatek.inc (172.29.94.18) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 15 Oct 2021 05:38:49 -0700
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 15 Oct 2021 20:38:48 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via
+ Frontend Transport; Fri, 15 Oct 2021 20:38:48 +0800
 From: Moudy Ho <moudy.ho@mediatek.com>
-To: <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-CC: Maoguang Meng <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
-        <drinkcat@chromium.org>, <acourbot@chromium.org>,
-        <pihsun@chromium.org>, <menghui.lin@mediatek.com>,
-        <sj.huang@mediatek.com>, <ben.lok@mediatek.com>,
-        <randy.wu@mediatek.com>, <srv_heupstream@mediatek.com>,
-        <hsinyi@google.com>
-Subject: [PATCH v7 4/5] dts: arm64: mt8183: Add Mediatek MDP3 nodes
-Date: Tue, 24 Aug 2021 18:00:26 +0800
-Message-ID: <20210824100027.25989-5-moudy.ho@mediatek.com>
+To: <moudy.ho@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Rob
+ Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ "Hans Verkuil" <hverkuil-cisco@xs4all.nl>, Jernej Skrabec
+ <jernej.skrabec@siol.net>
+CC: Maoguang Meng <maoguang.meng@mediatek.com>, daoyuan huang
+ <daoyuan.huang@mediatek.com>, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>, Rob Landley
+ <rob@landley.net>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+ <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+ <drinkcat@chromium.org>, <acourbot@chromium.org>, <pihsun@chromium.org>,
+ <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
+ <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
+ <srv_heupstream@mediatek.com>, <hsinyi@google.com>
+Subject: [PATCH v8 6/7] dts: arm64: mt8183: add Mediatek MDP3 nodes
+Date: Fri, 15 Oct 2021 20:38:31 +0800
+Message-ID: <20211015123832.17914-7-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210824100027.25989-1-moudy.ho@mediatek.com>
-References: <20210824100027.25989-1-moudy.ho@mediatek.com>
+In-Reply-To: <20211015123832.17914-1-moudy.ho@mediatek.com>
+References: <20211015123832.17914-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 X-MTK: N
-Precedence: bulk
-List-ID: <linux-media.vger.kernel.org>
-X-Mailing-List: linux-media@vger.kernel.org
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211015_054017_424609_4A4ECE4F 
+X-CRM114-Status: GOOD (  10.42  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: 
+ linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
 
 Add device nodes for Media Data Path 3 (MDP3) modules.
 
-Signed-off-by: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
-Signed-off-by: daoyuan huang <daoyuan.huang@mediatek.com>
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8183.dtsi | 110 +++++++++++++++++++++++
- 1 file changed, 110 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 112 ++++++++++++++++++++++-
+ 1 file changed, 111 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index f90df6439c08..067cfb0d6621 100644
+index 409cf827970c..89597256e5c3 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 @@ -1232,6 +1232,82 @@
@@ -1763,11 +2164,13 @@ index f90df6439c08..067cfb0d6621 100644
  		ovl0: ovl@14008000 {
  			compatible = "mediatek,mt8183-disp-ovl";
  			reg = <0 0x14008000 0 0x1000>;
-@@ -1355,6 +1431,32 @@
- 			reg = <0 0x14016000 0 0x1000>;
+@@ -1356,7 +1432,33 @@
  			interrupts = <GIC_SPI 217 IRQ_TYPE_LEVEL_LOW>;
  			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
-+			mediatek,gce-events = <CMDQ_EVENT_MDP_RDMA0_SOF>,
+ 			mediatek,gce-events = <CMDQ_EVENT_MUTEX_STREAM_DONE0>,
+-					      <CMDQ_EVENT_MUTEX_STREAM_DONE1>;
++					      <CMDQ_EVENT_MUTEX_STREAM_DONE1>,
++					      <CMDQ_EVENT_MDP_RDMA0_SOF>,
 +					      <CMDQ_EVENT_MDP_RDMA0_EOF>,
 +					      <CMDQ_EVENT_MDP_RSZ0_SOF>,
 +					      <CMDQ_EVENT_MDP_RSZ1_SOF>,
@@ -1796,7 +2199,7 @@ index f90df6439c08..067cfb0d6621 100644
  		};
  
  		larb0: larb@14017000 {
-@@ -1378,6 +1480,14 @@
+@@ -1380,6 +1482,14 @@
  			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
  		};
  
@@ -1812,80 +2215,105 @@ index f90df6439c08..067cfb0d6621 100644
  			compatible = "mediatek,mt8183-imgsys", "syscon";
  			reg = <0 0x15020000 0 0x1000>;
 
-From patchwork Tue Aug 24 10:00:27 2021
+From patchwork Fri Oct 15 12:38:32 2021
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Patchwork-Submitter: moudy ho <moudy.ho@mediatek.com>
-X-Patchwork-Id: 12454459
-Return-Path: <linux-media-owner@kernel.org>
+X-Patchwork-Submitter: Moudy Ho <moudy.ho@mediatek.com>
+X-Patchwork-Id: 12561381
+Return-Path: 
+ <SRS0=QAkp=PD=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57243C43214
-	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 10:00:45 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 38AAE613D2
-	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 10:00:45 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235982AbhHXKB1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Aug 2021 06:01:27 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:43114 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235566AbhHXKBW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Aug 2021 06:01:22 -0400
-X-UUID: b650847ea46f4f07baa549cb4de2707a-20210824
-X-UUID: b650847ea46f4f07baa549cb4de2707a-20210824
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by
- mailgw01.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 775525513; Tue, 24 Aug 2021 18:00:30 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 24 Aug 2021 18:00:30 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 24 Aug 2021 18:00:30 +0800
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 705CAC433F5
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 15 Oct 2021 12:40:17 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org
+ [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 2F8176108E
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 15 Oct 2021 12:40:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2F8176108E
+Authentication-Results: mail.kernel.org;
+ dmarc=fail (p=none dis=none) header.from=mediatek.com
+Authentication-Results: mail.kernel.org;
+ spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=phAgfpEFfWIN0yGV+v9roEMe7kIhPwTdvdjKMD+nEjE=; b=WYgGf3spgeMJh8
+	HQzmrz46cKpzU+5KD59UrQDsImZKqMiQiEJ6F783L90ytKzcpv+YVlMZLlwZPbvCj+z8JNnKqU5Yz
+	EAAMG5f99oCKAutdDmjZt6nVYdEbOtdbl79fB0mh8TRG30YU/nt9Q77UcSDOmEENU+dgW5ZwYwt0R
+	hRwpmZ1J2X3imb66kJM20q9/Ca/pdlLwDY0TiZl2qboVxucnhvEvNBCR5ZMTnjCjl9HPHWMQbWltu
+	Ssjb9u+IihDHFRkjwx+l4eCZjxhzBBK5osIpPpFOlBfZRck2oHtn57SXfyQ9LpGrogIW1Y9IaLBwx
+	hzLKzutbIh38UTiryDzQ==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mbMVA-006wqw-Oq; Fri, 15 Oct 2021 12:39:56 +0000
+Received: from mailgw02.mediatek.com ([216.200.240.185])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mbMUC-006wP8-Sd; Fri, 15 Oct 2021 12:39:04 +0000
+X-UUID: 03ba23b1ddee4f09adf21b968542b91e-20211015
+X-UUID: 03ba23b1ddee4f09adf21b968542b91e-20211015
+Received: from mtkcas67.mediatek.inc [(172.29.193.45)] by
+ mailgw02.mediatek.com
+ (envelope-from <moudy.ho@mediatek.com>)
+ (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+ with ESMTP id 974422203; Fri, 15 Oct 2021 05:38:52 -0700
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ MTKMBS62N2.mediatek.inc (172.29.193.42) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 15 Oct 2021 05:38:50 -0700
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 15 Oct 2021 20:38:48 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via
+ Frontend Transport; Fri, 15 Oct 2021 20:38:48 +0800
 From: Moudy Ho <moudy.ho@mediatek.com>
-To: <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-CC: Maoguang Meng <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
-        <drinkcat@chromium.org>, <acourbot@chromium.org>,
-        <pihsun@chromium.org>, <menghui.lin@mediatek.com>,
-        <sj.huang@mediatek.com>, <ben.lok@mediatek.com>,
-        <randy.wu@mediatek.com>, <srv_heupstream@mediatek.com>,
-        <hsinyi@google.com>
-Subject: [PATCH v7 5/5] media: platform: mtk-mdp3: Add Mediatek MDP3 driver
-Date: Tue, 24 Aug 2021 18:00:27 +0800
-Message-ID: <20210824100027.25989-6-moudy.ho@mediatek.com>
+To: <moudy.ho@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Rob
+ Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ Hans Verkuil <hverkuil-cisco@xs4all.nl>, Jernej Skrabec
+ <jernej.skrabec@siol.net>
+CC: Maoguang Meng <maoguang.meng@mediatek.com>, daoyuan huang
+ <daoyuan.huang@mediatek.com>, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>, Geert
+ Uytterhoeven <geert+renesas@glider.be>, Rob Landley <rob@landley.net>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+ <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+ <drinkcat@chromium.org>, <acourbot@chromium.org>, <pihsun@chromium.org>,
+ <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
+ <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
+ <srv_heupstream@mediatek.com>, <hsinyi@google.com>
+Subject: [PATCH v8 7/7] media: platform: mtk-mdp3: add Mediatek MDP3 driver
+Date: Fri, 15 Oct 2021 20:38:32 +0800
+Message-ID: <20211015123832.17914-8-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210824100027.25989-1-moudy.ho@mediatek.com>
-References: <20210824100027.25989-1-moudy.ho@mediatek.com>
+In-Reply-To: <20211015123832.17914-1-moudy.ho@mediatek.com>
+References: <20211015123832.17914-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 X-MTK: N
-Precedence: bulk
-List-ID: <linux-media.vger.kernel.org>
-X-Mailing-List: linux-media@vger.kernel.org
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: 
+ linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
 
 This patch adds driver for Mediatek's Media Data Path ver.3 (MDP3).
 It provides the following functions:
@@ -1923,19 +2351,19 @@ Depend on:
  .../media/platform/mtk-mdp3/mdp_reg_wdma.h    |   47 +
  .../media/platform/mtk-mdp3/mdp_reg_wrot.h    |   55 +
  drivers/media/platform/mtk-mdp3/mtk-img-ipi.h |  280 ++++
- .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.c   |  507 +++++++
+ .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.c   |  514 +++++++
  .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.h   |   46 +
  .../media/platform/mtk-mdp3/mtk-mdp3-comp.c   | 1307 +++++++++++++++++
  .../media/platform/mtk-mdp3/mtk-mdp3-comp.h   |  147 ++
- .../media/platform/mtk-mdp3/mtk-mdp3-core.c   |  329 +++++
- .../media/platform/mtk-mdp3/mtk-mdp3-core.h   |   75 +
- .../media/platform/mtk-mdp3/mtk-mdp3-m2m.c    |  801 ++++++++++
- .../media/platform/mtk-mdp3/mtk-mdp3-m2m.h    |   41 +
- .../media/platform/mtk-mdp3/mtk-mdp3-regs.c   |  746 ++++++++++
- .../media/platform/mtk-mdp3/mtk-mdp3-regs.h   |  372 +++++
- .../media/platform/mtk-mdp3/mtk-mdp3-vpu.c    |  312 ++++
+ .../media/platform/mtk-mdp3/mtk-mdp3-core.c   |  340 +++++
+ .../media/platform/mtk-mdp3/mtk-mdp3-core.h   |   76 +
+ .../media/platform/mtk-mdp3/mtk-mdp3-m2m.c    |  789 ++++++++++
+ .../media/platform/mtk-mdp3/mtk-mdp3-m2m.h    |   49 +
+ .../media/platform/mtk-mdp3/mtk-mdp3-regs.c   |  737 ++++++++++
+ .../media/platform/mtk-mdp3/mtk-mdp3-regs.h   |  373 +++++
+ .../media/platform/mtk-mdp3/mtk-mdp3-vpu.c    |  313 ++++
  .../media/platform/mtk-mdp3/mtk-mdp3-vpu.h    |   78 +
- 22 files changed, 5320 insertions(+)
+ 22 files changed, 5328 insertions(+)
  create mode 100644 drivers/media/platform/mtk-mdp3/Makefile
  create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_ccorr.h
  create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_isp.h
@@ -1958,7 +2386,7 @@ Depend on:
  create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.h
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 157c924686e4..b7f331dbe1b5 100644
+index 80321e03809a..b480d19832c7 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
 @@ -299,6 +299,25 @@ config VIDEO_MEDIATEK_MDP
@@ -1967,7 +2395,7 @@ index 157c924686e4..b7f331dbe1b5 100644
  
 +config VIDEO_MEDIATEK_MDP3
 +	tristate "Mediatek MDP v3 driver"
-+	depends on MTK_IOMMU
++	depends on MTK_IOMMU || COMPLIE_TEST
 +	depends on VIDEO_DEV && VIDEO_V4L2
 +	depends on ARCH_MEDIATEK || COMPILE_TEST
 +	depends on HAS_DMA
@@ -2589,10 +3017,10 @@ index 000000000000..f8560dad87da
 +#endif  /* __MTK_IMG_IPI_H__ */
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
 new file mode 100644
-index 000000000000..1636b60251ce
+index 000000000000..110f8911638f
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
-@@ -0,0 +1,507 @@
+@@ -0,0 +1,514 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (c) 2021 MediaTek Inc.
@@ -2725,7 +3153,7 @@ index 000000000000..1636b60251ce
 +
 +	/* Set mutex modules */
 +	if (subfrm->mutex_mod)
-+		mtk_mutex_add_mdp_mod(mutex[mutex_id], subfrm->mutex_mod, cmd);
++		mtk_mutex_add_mod_by_cmdq(mutex[mutex_id], subfrm->mutex_mod, cmd);
 +
 +	return 0;
 +}
@@ -2986,7 +3414,7 @@ index 000000000000..1636b60251ce
 +int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
 +{
 +	struct mmsys_cmdq_cmd cmd;
-+	struct mdp_path path;
++	struct mdp_path *path = NULL;
 +	struct mdp_cmdq_cb_param *cb_param = NULL;
 +	struct mdp_comp *comps = NULL;
 +	struct device *dev = &mdp->pdev->dev;
@@ -3005,21 +3433,27 @@ index 000000000000..1636b60251ce
 +	}
 +	cmd.event = &mdp->event[0];
 +
-+	path.mdp_dev = mdp;
-+	path.config = param->config;
-+	path.param = param->param;
-+	for (i = 0; i < param->param->num_outputs; i++) {
-+		path.bounds[i].left = 0;
-+		path.bounds[i].top = 0;
-+		path.bounds[i].width =
-+			param->param->outputs[i].buffer.format.width;
-+		path.bounds[i].height =
-+			param->param->outputs[i].buffer.format.height;
-+		path.composes[i] = param->composes[i] ?
-+			param->composes[i] : &path.bounds[i];
++	path = kzalloc(sizeof(*path), GFP_KERNEL);
++	if (!path) {
++		ret = -ENOMEM;
++		goto err_destroy_pkt;
 +	}
 +
-+	ret = mdp_path_ctx_init(mdp, &path);
++	path->mdp_dev = mdp;
++	path->config = param->config;
++	path->param = param->param;
++	for (i = 0; i < param->param->num_outputs; i++) {
++		path->bounds[i].left = 0;
++		path->bounds[i].top = 0;
++		path->bounds[i].width =
++			param->param->outputs[i].buffer.format.width;
++		path->bounds[i].height =
++			param->param->outputs[i].buffer.format.height;
++		path->composes[i] = param->composes[i] ?
++			param->composes[i] : &path->bounds[i];
++	}
++
++	ret = mdp_path_ctx_init(mdp, path);
 +	if (ret) {
 +		pr_info("%s mdp_path_ctx_init error\n", __func__);
 +		goto err_destroy_pkt;
@@ -3027,9 +3461,9 @@ index 000000000000..1636b60251ce
 +
 +	mtk_mutex_prepare(mdp->mdp_mutex[MDP_PIPE_RDMA0]);
 +	for (i = 0; i < param->config->num_components; i++)
-+		mdp_comp_clock_on(&mdp->pdev->dev, path.comps[i].comp);
++		mdp_comp_clock_on(&mdp->pdev->dev, path->comps[i].comp);
 +
-+	ret = mdp_path_config(mdp, &cmd, &path);
++	ret = mdp_path_config(mdp, &cmd, path);
 +	if (ret) {
 +		pr_info("%s mdp_path_config error\n", __func__);
 +		goto err_destroy_pkt;
@@ -3049,7 +3483,7 @@ index 000000000000..1636b60251ce
 +	}
 +
 +	for (i = 0; i < param->config->num_components; i++)
-+		memcpy(&comps[i], path.comps[i].comp,
++		memcpy(&comps[i], path->comps[i].comp,
 +		       sizeof(struct mdp_comp));
 +	cb_param->mdp = mdp;
 +	cb_param->user_cmdq_cb = param->cmdq_cb;
@@ -3079,6 +3513,7 @@ index 000000000000..1636b60251ce
 +	wake_up(&mdp->callback_wq);
 +	kfree(comps);
 +	kfree(cb_param);
++	kfree(path);
 +
 +	return ret;
 +}
@@ -3154,7 +3589,7 @@ index 000000000000..16933507333b
 +#endif  /* __MTK_MDP3_CMDQ_H__ */
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.c
 new file mode 100644
-index 000000000000..27c70289cc90
+index 000000000000..837491ef2d0c
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.c
 @@ -0,0 +1,1307 @@
@@ -4308,7 +4743,7 @@ index 000000000000..27c70289cc90
 +
 +	of_property_for_each_string(node, "mdp3-comps", prop, name) {
 +		const struct of_device_id *matches = mdp_sub_comp_dt_ids;
-+		enum mdp_comp_type type = MDP_COMP_NONE;
++		enum mdp_comp_type type = MDP_COMP_TYPE_INVALID;
 +		u32 alias_id;
 +		int id, ret;
 +		struct mdp_comp *comp;
@@ -4374,7 +4809,7 @@ index 000000000000..27c70289cc90
 +	struct device_node *node, *parent;
 +	struct platform_device *pdev;
 +	u32 alias_id;
-+	int i, ret;
++	int ret;
 +
 +	parent = dev->of_node->parent;
 +	/* Iterate over sibling MDP function blocks */
@@ -4620,10 +5055,10 @@ index 000000000000..7b34f9c42410
 +#endif  /* __MTK_MDP3_COMP_H__ */
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c
 new file mode 100644
-index 000000000000..8459b0afa84c
+index 000000000000..b3aa169d16da
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c
-@@ -0,0 +1,329 @@
+@@ -0,0 +1,340 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (c) 2021 MediaTek Inc.
@@ -4649,7 +5084,7 @@ index 000000000000..8459b0afa84c
 +	.rdma_upsample_repeat_only	= true,
 +	.rsz_disable_dcm_small_sample	= false,
 +	.wrot_filter_constraint		= false,
-+	.gce_event_offset		= 0,
++	.gce_event_offset		= 2,
 +};
 +
 +static const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
@@ -4738,16 +5173,39 @@ index 000000000000..8459b0afa84c
 +	}
 +}
 +
++void mdp_video_device_release(struct video_device *vdev)
++{
++	struct mdp_dev *mdp = (struct mdp_dev *)video_get_drvdata(vdev);
++
++	scp_put(mdp->scp);
++
++	destroy_workqueue(mdp->job_wq);
++	destroy_workqueue(mdp->clock_wq);
++
++	pm_runtime_disable(&mdp->pdev->dev);
++
++	vb2_dma_contig_clear_max_seg_size(&mdp->pdev->dev);
++	mdp_component_deinit(mdp);
++
++#ifdef MDP_DEBUG
++	mdp_debug_deinit();
++#endif
++
++	mdp_vpu_shared_mem_free(&mdp->vpu);
++	v4l2_m2m_release(mdp->m2m_dev);
++	kfree(mdp);
++}
++
 +static int mdp_probe(struct platform_device *pdev)
 +{
 +	struct device *dev = &pdev->dev;
 +	struct mdp_dev *mdp;
 +	struct device_node *mdp_node;
 +	struct platform_device *mm_pdev;
-+	u32 i, event_ofst;
-+	int ret;
++	u32 event_ofst;
++	int ret, i;
 +
-+	mdp = devm_kzalloc(dev, sizeof(*mdp), GFP_KERNEL);
++	mdp = kzalloc(sizeof(*mdp), GFP_KERNEL);
 +	if (!mdp) {
 +		ret = -ENOMEM;
 +		goto err_return;
@@ -4876,6 +5334,7 @@ index 000000000000..8459b0afa84c
 +err_deinit_comp:
 +	mdp_component_deinit(mdp);
 +err_return:
++	kfree(mdp);
 +	dev_dbg(dev, "Errno %d\n", ret);
 +	return ret;
 +}
@@ -4884,20 +5343,7 @@ index 000000000000..8459b0afa84c
 +{
 +	struct mdp_dev *mdp = platform_get_drvdata(pdev);
 +
-+	mdp_m2m_device_unregister(mdp);
 +	v4l2_device_unregister(&mdp->v4l2_dev);
-+
-+	scp_put(mdp->scp);
-+
-+	destroy_workqueue(mdp->job_wq);
-+	destroy_workqueue(mdp->clock_wq);
-+
-+	pm_runtime_disable(&pdev->dev);
-+
-+	vb2_dma_contig_clear_max_seg_size(&pdev->dev);
-+	mdp_component_deinit(mdp);
-+
-+	mdp_vpu_shared_mem_free(&mdp->vpu);
 +
 +	dev_dbg(&pdev->dev, "%s driver unloaded\n", pdev->name);
 +	return 0;
@@ -4955,10 +5401,10 @@ index 000000000000..8459b0afa84c
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.h b/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.h
 new file mode 100644
-index 000000000000..d996d9e71356
+index 000000000000..d688071b0bf1
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.h
-@@ -0,0 +1,75 @@
+@@ -0,0 +1,76 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (c) 2021 MediaTek Inc.
@@ -5032,14 +5478,15 @@ index 000000000000..d996d9e71356
 +void mdp_vpu_put_locked(struct mdp_dev *mdp);
 +int mdp_vpu_register(struct mdp_dev *mdp);
 +void mdp_vpu_unregister(struct mdp_dev *mdp);
++void mdp_video_device_release(struct video_device *vdev);
 +
 +#endif  /* __MTK_MDP3_CORE_H__ */
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.c
 new file mode 100644
-index 000000000000..584804ef7bc4
+index 000000000000..664076294730
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.c
-@@ -0,0 +1,801 @@
+@@ -0,0 +1,789 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (c) 2021 MediaTek Inc.
@@ -5088,20 +5535,6 @@ index 000000000000..584804ef7bc4
 +	return ret;
 +}
 +
-+static void mdp_m2m_ctx_lock(struct vb2_queue *q)
-+{
-+	struct mdp_m2m_ctx *ctx = vb2_get_drv_priv(q);
-+
-+	mutex_lock(&ctx->mdp_dev->m2m_lock);
-+}
-+
-+static void mdp_m2m_ctx_unlock(struct vb2_queue *q)
-+{
-+	struct mdp_m2m_ctx *ctx = vb2_get_drv_priv(q);
-+
-+	mutex_unlock(&ctx->mdp_dev->m2m_lock);
-+}
-+
 +static void mdp_m2m_job_abort(void *priv)
 +{
 +}
@@ -5110,27 +5543,20 @@ index 000000000000..584804ef7bc4
 +{
 +	struct mdp_m2m_ctx *ctx = priv;
 +	struct vb2_v4l2_buffer *src_vbuf, *dst_vbuf;
-+	u32 valid_output_flags = V4L2_BUF_FLAG_TIMECODE |
-+				 V4L2_BUF_FLAG_TSTAMP_SRC_MASK |
-+				 V4L2_BUF_FLAG_KEYFRAME |
-+				 V4L2_BUF_FLAG_PFRAME | V4L2_BUF_FLAG_BFRAME;
 +
 +	src_vbuf = (struct vb2_v4l2_buffer *)
 +			v4l2_m2m_src_buf_remove(ctx->m2m_ctx);
 +	dst_vbuf = (struct vb2_v4l2_buffer *)
 +			v4l2_m2m_dst_buf_remove(ctx->m2m_ctx);
-+
-+	src_vbuf->sequence = ctx->frame_count;
-+	dst_vbuf->sequence = src_vbuf->sequence;
-+	dst_vbuf->timecode = src_vbuf->timecode;
-+	dst_vbuf->flags &= ~valid_output_flags;
-+	dst_vbuf->flags |= src_vbuf->flags & valid_output_flags;
++	src_vbuf->sequence = ctx->frame_count[MDP_M2M_SRC]++;
++	dst_vbuf->sequence = ctx->frame_count[MDP_M2M_DST]++;
++	v4l2_m2m_buf_copy_metadata(src_vbuf, dst_vbuf, true);
 +
 +	v4l2_m2m_buf_done(src_vbuf, vb_state);
 +	v4l2_m2m_buf_done(dst_vbuf, vb_state);
 +	v4l2_m2m_job_finish(ctx->mdp_dev->m2m_dev, ctx->m2m_ctx);
 +
-+	ctx->curr_param.frame_no = ctx->frame_count++;
++	ctx->curr_param.frame_no = ctx->frame_count[MDP_M2M_SRC];
 +}
 +
 +static void mdp_m2m_worker(struct work_struct *work)
@@ -5162,7 +5588,6 @@ index 000000000000..584804ef7bc4
 +	dst_vb = v4l2_m2m_next_dst_buf(ctx->m2m_ctx);
 +	mdp_set_dst_config(&param.outputs[0], frame, &dst_vb->vb2_buf);
 +
-+	dst_vb->vb2_buf.timestamp = src_vb->vb2_buf.timestamp;
 +	param.timestamp = src_vb->vb2_buf.timestamp;
 +
 +	ret = mdp_vpu_process(&ctx->vpu, &param);
@@ -5203,7 +5628,8 @@ index 000000000000..584804ef7bc4
 +{
 +	struct mdp_m2m_ctx *ctx = vb2_get_drv_priv(q);
 +
-+	ctx->frame_count = 0;
++	ctx->frame_count[MDP_M2M_SRC] = 0;
++	ctx->frame_count[MDP_M2M_DST] = 0;
 +
 +	return 0;
 +}
@@ -5302,8 +5728,8 @@ index 000000000000..584804ef7bc4
 +
 +static const struct vb2_ops mdp_m2m_qops = {
 +	.queue_setup	= mdp_m2m_queue_setup,
-+	.wait_prepare	= mdp_m2m_ctx_unlock,
-+	.wait_finish	= mdp_m2m_ctx_lock,
++	.wait_prepare	= vb2_ops_wait_prepare,
++	.wait_finish	= vb2_ops_wait_finish,
 +	.buf_prepare	= mdp_m2m_buf_prepare,
 +	.start_streaming = mdp_m2m_start_streaming,
 +	.stop_streaming	= mdp_m2m_stop_streaming,
@@ -5319,9 +5745,7 @@ index 000000000000..584804ef7bc4
 +	strscpy(cap->driver, MDP_MODULE_NAME, sizeof(cap->driver));
 +	strscpy(cap->card, ctx->mdp_dev->pdev->name, sizeof(cap->card));
 +	strscpy(cap->bus_info, "platform:mtk-mdp3", sizeof(cap->bus_info));
-+	cap->capabilities = V4L2_CAP_VIDEO_M2M_MPLANE | V4L2_CAP_STREAMING |
-+			V4L2_CAP_DEVICE_CAPS; /* | V4L2_CAP_META_OUTPUT */
-+	cap->device_caps = V4L2_CAP_VIDEO_M2M_MPLANE | V4L2_CAP_STREAMING;
++
 +	return 0;
 +}
 +
@@ -5400,7 +5824,8 @@ index 000000000000..584804ef7bc4
 +		capture->compose.height = f->fmt.pix_mp.height;
 +	}
 +
-+	ctx->frame_count = 0;
++	ctx->frame_count[MDP_M2M_SRC] = 0;
++	ctx->frame_count[MDP_M2M_DST] = 0;
 +
 +	dev_info(dev, "[%d] type:%d, frame:%ux%u", ctx->id, f->type,
 +		 f->fmt.pix_mp.width, f->fmt.pix_mp.height);
@@ -5416,14 +5841,6 @@ index 000000000000..584804ef7bc4
 +		return -EINVAL;
 +
 +	return 0;
-+}
-+
-+static int mdp_m2m_reqbufs(struct file *file, void *fh,
-+			   struct v4l2_requestbuffers *reqbufs)
-+{
-+	struct mdp_m2m_ctx *ctx = fh_to_ctx(fh);
-+
-+	return v4l2_m2m_reqbufs(file, ctx->m2m_ctx, reqbufs);
 +}
 +
 +static int mdp_m2m_streamon(struct file *file, void *fh,
@@ -5478,38 +5895,54 @@ index 000000000000..584804ef7bc4
 +	struct device *dev = &ctx->mdp_dev->pdev->dev;
 +	bool valid = false;
 +
-+	if (s->type <= V4L2_BUF_TYPE_META_OUTPUT) {
-+		if (V4L2_TYPE_IS_OUTPUT(s->type))
-+			valid = mdp_target_is_crop(s->target);
-+		else
-+			valid = mdp_target_is_compose(s->target);
-+	}
++	if (s->type == V4L2_BUF_TYPE_VIDEO_OUTPUT)
++		valid = mdp_target_is_crop(s->target);
++	else if (s->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
++		valid = mdp_target_is_compose(s->target);
 +
 +	if (!valid) {
-+		dev_info(dev, "[%d] invalid type:%u target:%u", ctx->id, s->type,
-+			 s->target);
++		dev_info(dev, "[%s:%d] invalid type:%u target:%u", __func__, ctx->id,
++			 s->type, s->target);
 +		return -EINVAL;
 +	}
 +
 +	switch (s->target) {
 +	case V4L2_SEL_TGT_CROP:
-+		frame = ctx_get_frame(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-+		s->r = frame->crop.c;
-+		return 0;
++		if (s->type == V4L2_BUF_TYPE_VIDEO_OUTPUT) {
++			frame = ctx_get_frame(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
++			s->r = frame->crop.c;
++			return 0;
++		}
++		break;
 +	case V4L2_SEL_TGT_COMPOSE:
-+		frame = ctx_get_frame(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-+		s->r = frame->compose;
-+		return 0;
++		if (s->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
++			frame = ctx_get_frame(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
++			s->r = frame->compose;
++			return 0;
++		}
++		break;
 +	case V4L2_SEL_TGT_CROP_DEFAULT:
 +	case V4L2_SEL_TGT_CROP_BOUNDS:
++		if (s->type == V4L2_BUF_TYPE_VIDEO_OUTPUT) {
++			frame = ctx_get_frame(ctx, s->type);
++			s->r.left = 0;
++			s->r.top = 0;
++			s->r.width = frame->format.fmt.pix_mp.width;
++			s->r.height = frame->format.fmt.pix_mp.height;
++			return 0;
++		}
++		break;
 +	case V4L2_SEL_TGT_COMPOSE_DEFAULT:
 +	case V4L2_SEL_TGT_COMPOSE_BOUNDS:
-+		frame = ctx_get_frame(ctx, s->type);
-+		s->r.left = 0;
-+		s->r.top = 0;
-+		s->r.width = frame->format.fmt.pix_mp.width;
-+		s->r.height = frame->format.fmt.pix_mp.height;
-+		return 0;
++		if (s->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
++			frame = ctx_get_frame(ctx, s->type);
++			s->r.left = 0;
++			s->r.top = 0;
++			s->r.width = frame->format.fmt.pix_mp.width;
++			s->r.height = frame->format.fmt.pix_mp.height;
++			return 0;
++		}
++		break;
 +	}
 +	return -EINVAL;
 +}
@@ -5525,15 +5958,14 @@ index 000000000000..584804ef7bc4
 +	bool valid = false;
 +	int ret;
 +
-+	if (s->type <= V4L2_BUF_TYPE_META_OUTPUT) {
-+		if (V4L2_TYPE_IS_OUTPUT(s->type))
-+			valid = (s->target == V4L2_SEL_TGT_CROP);
-+		else
-+			valid = (s->target == V4L2_SEL_TGT_COMPOSE);
-+	}
++	if (s->type == V4L2_BUF_TYPE_VIDEO_OUTPUT)
++		valid = (s->target == V4L2_SEL_TGT_CROP);
++	else if (s->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
++		valid = (s->target == V4L2_SEL_TGT_COMPOSE);
++
 +	if (!valid) {
-+		dev_err(dev, "[%d] invalid type:%u target:%u", ctx->id, s->type,
-+			s->target);
++		dev_err(dev, "[%s:%d] invalid type:%u target:%u", __func__, ctx->id,
++			s->type, s->target);
 +		return -EINVAL;
 +	}
 +
@@ -5550,7 +5982,8 @@ index 000000000000..584804ef7bc4
 +	s->r = r;
 +	memset(s->reserved, 0, sizeof(s->reserved));
 +
-+	ctx->frame_count = 0;
++	ctx->frame_count[MDP_M2M_SRC] = 0;
++	ctx->frame_count[MDP_M2M_DST] = 0;
 +	return 0;
 +}
 +
@@ -5564,7 +5997,7 @@ index 000000000000..584804ef7bc4
 +	.vidioc_s_fmt_vid_out_mplane	= mdp_m2m_s_fmt_mplane,
 +	.vidioc_try_fmt_vid_cap_mplane	= mdp_m2m_try_fmt_mplane,
 +	.vidioc_try_fmt_vid_out_mplane	= mdp_m2m_try_fmt_mplane,
-+	.vidioc_reqbufs			= mdp_m2m_reqbufs,
++	.vidioc_reqbufs			= v4l2_m2m_ioctl_reqbufs,
 +	.vidioc_querybuf		= v4l2_m2m_ioctl_querybuf,
 +	.vidioc_qbuf			= v4l2_m2m_ioctl_qbuf,
 +	.vidioc_expbuf			= v4l2_m2m_ioctl_expbuf,
@@ -5593,6 +6026,7 @@ index 000000000000..584804ef7bc4
 +	src_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
 +	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
 +	src_vq->dev = &ctx->mdp_dev->pdev->dev;
++	src_vq->lock = &ctx->ctx_lock;
 +
 +	ret = vb2_queue_init(src_vq);
 +	if (ret)
@@ -5606,6 +6040,7 @@ index 000000000000..584804ef7bc4
 +	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
 +	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
 +	dst_vq->dev = &ctx->mdp_dev->pdev->dev;
++	dst_vq->lock = &ctx->ctx_lock;
 +
 +	return vb2_queue_init(dst_vq);
 +}
@@ -5694,6 +6129,7 @@ index 000000000000..584804ef7bc4
 +	ctx->fh.ctrl_handler = &ctx->ctrl_handler;
 +	v4l2_fh_add(&ctx->fh);
 +
++	mutex_init(&ctx->ctx_lock);
 +	ctx->m2m_ctx = v4l2_m2m_ctx_init(mdp->m2m_dev, ctx, mdp_m2m_queue_init);
 +	if (IS_ERR(ctx->m2m_ctx)) {
 +		dev_err(dev, "Failed to initialize m2m context\n");
@@ -5704,6 +6140,7 @@ index 000000000000..584804ef7bc4
 +
 +	INIT_WORK(&ctx->work, mdp_m2m_worker);
 +
++	ctx->curr_param.ctx = ctx;
 +	ret = mdp_frameparam_init(&ctx->curr_param);
 +	if (ret) {
 +		dev_err(dev, "Failed to initialize mdp parameter\n");
@@ -5794,7 +6231,7 @@ index 000000000000..584804ef7bc4
 +		V4L2_CAP_STREAMING;
 +	mdp->m2m_vdev->fops = &mdp_m2m_fops;
 +	mdp->m2m_vdev->ioctl_ops = &mdp_m2m_ioctl_ops;
-+	mdp->m2m_vdev->release = video_device_release;
++	mdp->m2m_vdev->release = mdp_video_device_release;
 +	mdp->m2m_vdev->lock = &mdp->m2m_lock;
 +	mdp->m2m_vdev->vfl_dir = VFL_DIR_M2M;
 +	mdp->m2m_vdev->v4l2_dev = &mdp->v4l2_dev;
@@ -5831,8 +6268,6 @@ index 000000000000..584804ef7bc4
 +void mdp_m2m_device_unregister(struct mdp_dev *mdp)
 +{
 +	video_unregister_device(mdp->m2m_vdev);
-+	video_device_release(mdp->m2m_vdev);
-+	v4l2_m2m_release(mdp->m2m_dev);
 +}
 +
 +void mdp_m2m_job_finish(struct mdp_m2m_ctx *ctx)
@@ -5843,10 +6278,10 @@ index 000000000000..584804ef7bc4
 +}
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.h b/drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.h
 new file mode 100644
-index 000000000000..0b48b65a3b01
+index 000000000000..ffab59ac9dc7
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.h
-@@ -0,0 +1,41 @@
+@@ -0,0 +1,49 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (c) 2021 MediaTek Inc.
@@ -5863,6 +6298,12 @@ index 000000000000..0b48b65a3b01
 +
 +#define MDP_MAX_CTRLS	10
 +
++enum {
++	MDP_M2M_SRC = 0,
++	MDP_M2M_DST = 1,
++	MDP_M2M_MAX,
++};
++
 +struct mdp_m2m_ctrls {
 +	struct v4l2_ctrl	*hflip;
 +	struct v4l2_ctrl	*vflip;
@@ -5878,9 +6319,11 @@ index 000000000000..0b48b65a3b01
 +	struct v4l2_m2m_ctx		*m2m_ctx;
 +	struct mdp_vpu_ctx		vpu;
 +	struct work_struct		work;
-+	u32				frame_count;
++	u32				frame_count[MDP_M2M_MAX];
 +
 +	struct mdp_frameparam		curr_param;
++	/* synchronization protect for mdp m2m context */
++	struct mutex			ctx_lock;
 +};
 +
 +int mdp_m2m_device_register(struct mdp_dev *mdp);
@@ -5890,10 +6333,10 @@ index 000000000000..0b48b65a3b01
 +#endif  /* __MTK_MDP3_M2M_H__ */
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.c
 new file mode 100644
-index 000000000000..a6caefb097be
+index 000000000000..53cf8e406f7a
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.c
-@@ -0,0 +1,746 @@
+@@ -0,0 +1,737 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (c) 2021 MediaTek Inc.
@@ -5905,6 +6348,7 @@ index 000000000000..a6caefb097be
 +#include <media/videobuf2-dma-contig.h>
 +#include "mtk-mdp3-core.h"
 +#include "mtk-mdp3-regs.h"
++#include "mtk-mdp3-m2m.h"
 +
 +static const struct mdp_format mdp_formats[] = {
 +	{
@@ -6252,14 +6696,10 @@ index 000000000000..a6caefb097be
 +{
 +	const struct mdp_format *fmt;
 +
-+	if (!V4L2_TYPE_IS_MULTIPLANAR(f->type))
-+		return -EINVAL;
-+
 +	fmt = mdp_find_fmt_by_index(f->index, f->type);
 +	if (!fmt)
 +		return -EINVAL;
 +
-+	/* f->description */
 +	f->pixelformat = fmt->pixelformat;
 +	return 0;
 +}
@@ -6268,24 +6708,22 @@ index 000000000000..a6caefb097be
 +					    struct mdp_frameparam *param,
 +					    u32 ctx_id)
 +{
++	struct device *dev = &param->ctx->mdp_dev->pdev->dev;
 +	struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
 +	const struct mdp_format *fmt;
 +	const struct mdp_pix_limit *pix_limit;
 +	u32 wmin, wmax, hmin, hmax, org_w, org_h;
 +	unsigned int i;
 +
-+	if (!V4L2_TYPE_IS_MULTIPLANAR(f->type))
-+		return NULL;
-+
 +	fmt = mdp_find_fmt(pix_mp->pixelformat, f->type);
 +	if (!fmt)
 +		fmt = mdp_find_fmt_by_index(0, f->type);
 +	if (!fmt) {
-+		pr_err("[%s:%d] pixelformat %c%c%c%c invalid", __func__, ctx_id,
-+		       (pix_mp->pixelformat & 0xff),
-+		       (pix_mp->pixelformat >>  8) & 0xff,
-+		       (pix_mp->pixelformat >> 16) & 0xff,
-+		       (pix_mp->pixelformat >> 24) & 0xff);
++		dev_info(dev, "%d: pixelformat %c%c%c%c invalid", ctx_id,
++			 (pix_mp->pixelformat & 0xff),
++			 (pix_mp->pixelformat >>  8) & 0xff,
++			 (pix_mp->pixelformat >> 16) & 0xff,
++			 (pix_mp->pixelformat >> 24) & 0xff);
 +		return NULL;
 +	}
 +
@@ -6298,10 +6736,9 @@ index 000000000000..a6caefb097be
 +		pix_mp->ycbcr_enc = param->ycbcr_enc;
 +		pix_mp->quantization = param->quant;
 +	}
-+	memset(pix_mp->reserved, 0, sizeof(pix_mp->reserved));
 +
 +	pix_limit = V4L2_TYPE_IS_OUTPUT(f->type) ? &param->limit->out_limit :
-+		&param->limit->cap_limit;
++						&param->limit->cap_limit;
 +	wmin = pix_limit->wmin;
 +	wmax = pix_limit->wmax;
 +	hmin = pix_limit->hmin;
@@ -6313,12 +6750,12 @@ index 000000000000..a6caefb097be
 +			      &pix_mp->height, hmin, hmax, fmt->halign,
 +			      fmt->salign);
 +	if (org_w != pix_mp->width || org_h != pix_mp->height)
-+		pr_err("[%s:%d] size change: %ux%u to %ux%u", __func__, ctx_id,
-+		       org_w, org_h, pix_mp->width, pix_mp->height);
++		dev_info(dev, "%d: size change: %ux%u to %ux%u", ctx_id,
++			 org_w, org_h, pix_mp->width, pix_mp->height);
 +
 +	if (pix_mp->num_planes && pix_mp->num_planes != fmt->num_planes)
-+		pr_err("[%s:%d] num of planes change: %u to %u", __func__,
-+		       ctx_id, pix_mp->num_planes, fmt->num_planes);
++		dev_info(dev, "%d num of planes change: %u to %u", ctx_id,
++			 pix_mp->num_planes, fmt->num_planes);
 +	pix_mp->num_planes = fmt->num_planes;
 +
 +	for (i = 0; i < pix_mp->num_planes; ++i) {
@@ -6333,11 +6770,8 @@ index 000000000000..a6caefb097be
 +		pix_mp->plane_fmt[i].bytesperline = bpl;
 +		if (pix_mp->plane_fmt[i].sizeimage < si)
 +			pix_mp->plane_fmt[i].sizeimage = si;
-+		memset(pix_mp->plane_fmt[i].reserved, 0,
-+		       sizeof(pix_mp->plane_fmt[i].reserved));
-+		pr_info("[%s:%d] p%u, bpl:%u (%u), sizeimage:%u (%u)", __func__,
-+			ctx_id, i, bpl, min_bpl, pix_mp->plane_fmt[i].sizeimage,
-+			si);
++		dev_info(dev, "%d: p%u, bpl:%u (%u), sizeimage:%u (%u)", ctx_id,
++			 i, bpl, min_bpl, pix_mp->plane_fmt[i].sizeimage, si);
 +	}
 +
 +	return fmt;
@@ -6642,10 +7076,10 @@ index 000000000000..a6caefb097be
 +}
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.h b/drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.h
 new file mode 100644
-index 000000000000..b3aaef8eb7eb
+index 000000000000..3483fe6afe4e
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.h
-@@ -0,0 +1,372 @@
+@@ -0,0 +1,373 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (c) 2021 MediaTek Inc.
@@ -6984,6 +7418,7 @@ index 000000000000..b3aaef8eb7eb
 +
 +struct mdp_frameparam {
 +	struct list_head	list;
++	struct mdp_m2m_ctx	*ctx;
 +	/* synchronization protect for m2m context state */
 +	struct mutex		state_lock;
 +	u32			state;
@@ -7020,10 +7455,10 @@ index 000000000000..b3aaef8eb7eb
 +#endif  /* __MTK_MDP3_REGS_H__ */
 diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.c
 new file mode 100644
-index 000000000000..f91d817ea379
+index 000000000000..bbec056e4097
 --- /dev/null
 +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.c
-@@ -0,0 +1,312 @@
+@@ -0,0 +1,313 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (c) 2021 MediaTek Inc.
@@ -7165,7 +7600,8 @@ index 000000000000..f91d817ea379
 +		dev_err(&mdp->pdev->dev, "scp_ipi_send failed %d\n", ret);
 +		return -EPERM;
 +	}
-+	ret = wait_for_completion_timeout(&vpu->ipi_acked, msecs_to_jiffies(t));
++	ret = wait_for_completion_timeout(&vpu->ipi_acked,
++					  msecs_to_jiffies(t));
 +	if (!ret)
 +		ret = -ETIME;
 +	else if (vpu->status)

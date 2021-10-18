@@ -1,7 +1,7 @@
 # Copyright 2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 ECM_TEST="true"
 KFMIN=5.74.0
@@ -10,7 +10,7 @@ QTMIN=5.15.1
 inherit ecm kde.org git-r3
 
 
-DESCRIPTION="Simple Clock application for Mobile Devices running Plasma"
+DESCRIPTION="Phonebook application for Mobile Devices running Plasma"
 HOMEPAGE="https://community.kde.org/Plasma/Mobile"
 SRC_URI=""
 EGIT_REPO_URI="https://invent.kde.org/plasma-mobile/${PN}.git"
@@ -27,14 +27,11 @@ LICENSE="GPL-3"
 SLOT="0"
 IUSE=""
 
-DEPEND="
-		kde-frameworks/kdbusaddons
-		kde-frameworks/kirigami-addons
-		kde-frameworks/knotifications
-		kde-frameworks/plasma
+DEPEND="kde-frameworks/kcontacts
+		kde-frameworks/kirigami
+		kde-frameworks/kpeople
+		dev-libs/kpeoplevcard
 		dev-qt/qtquickcontrols2
-		dev-qt/qtdeclarative
-		dev-qt/qtmultimedia
+		dev-qt/qtsvg
 "
 RDEPEND="${DEPEND}"
-BDEPEND="dev-qt/qtsvg"

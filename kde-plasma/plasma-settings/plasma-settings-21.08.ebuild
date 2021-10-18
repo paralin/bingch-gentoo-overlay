@@ -1,7 +1,7 @@
 # Copyright 2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 ECM_TEST="true"
 KFMIN=5.74.0
@@ -10,10 +10,11 @@ QTMIN=5.15.1
 inherit ecm kde.org git-r3
 
 
-DESCRIPTION="Plasma Dialer"
+DESCRIPTION="Settings application for Mobile Devices running Plasma"
 HOMEPAGE="https://community.kde.org/Plasma/Mobile"
 SRC_URI=""
-EGIT_REPO_URI="https://invent.kde.org/kde/${PN}.git"
+EGIT_REPO_URI="https://invent.kde.org/plasma-mobile/${PN}.git"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 
 if [[ ${PV} != 9999 ]]; then
         EGIT_COMMIT="tags/v${PV}"
@@ -23,21 +24,16 @@ else
 fi
 
 LICENSE="GPL-3"
-SLOT="5"
-KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
+SLOT="0"
 IUSE=""
 
-DEPEND="kde-plasma/plasma-workspace
-		net-misc/ofono
+DEPEND="
+		sys-apps/accountsservice
+		kde-frameworks/plasma
+		kde-frameworks/kdelibs4support
 		kde-frameworks/kcontacts
-		dev-qt/libqofono
-		kde-frameworks/kpeople
-		net-libs/telepathy-qt
-		dev-libs/libphonenumber
-		dev-qt/qtdeclarative[localstorage]
-		kde-frameworks/kwayland
-		kde-plasma/oxygen
-		net-im/telepathy-mission-control
-		>=media-libs/pulseaudio-qt-1.3
+		kde-apps/libkgapi
 "
+#kde-frameworks/kdesignerplugin
+
 RDEPEND="${DEPEND}"

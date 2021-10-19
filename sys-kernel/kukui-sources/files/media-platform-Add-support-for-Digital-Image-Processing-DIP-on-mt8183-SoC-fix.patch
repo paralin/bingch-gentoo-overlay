@@ -5007,3 +5007,15 @@ index 2fcbbcc..1aa7ae6 100644
  					struct v4l2_subdev_selection *sel)
  {
  	struct v4l2_rect *rect, *try_sel;
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 175c661..beec0f0 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -1973,6 +1973,7 @@ dip: dip@15022000 {
+ 			clock-names =
+ 					"larb5",
+ 					"dip";
++			power-domains = <&spm MT8183_POWER_DOMAIN_ISP>;
+ 		};
+ 
+ 		vdecsys: syscon@16000000 {

@@ -41,7 +41,7 @@ PATCHES=(
     ${FILESDIR}/drm.patch
     ${FILESDIR}/gpu-vsram.patch
     ${FILESDIR}/move-gpu-opp-to-3.patch
-    ${FILESDIR}/mutex-gce-events.patch
+    #${FILESDIR}/mutex-gce-events.patch
     ${FILESDIR}/opp-multi-regulator.patch
     ${FILESDIR}/panel-dts-rotation.patch
     ${FILESDIR}/panel-dts-rotation_sku0.patch
@@ -49,68 +49,74 @@ PATCHES=(
     ${FILESDIR}/sound_2.patch
 	# From https://github.com/hexdump0815/linux-mainline-mediatek-mt81xx-kernel/tree/master/misc.cbm/patches/5.13.2
 	#${FILESDIR}/mt8183-disable-unsupported-thermal-zones.patch
-	${FILESDIR}/mt8183-panel-orientation.patch
-	${FILESDIR}/mt8183-silence-some-log-spam.patch
-	${FILESDIR}/mt8183-sound-juniper.patch
+	#${FILESDIR}/mt8183-panel-orientation.patch
+	#${FILESDIR}/mt8183-silence-some-log-spam.patch
+
 	# cherry-pick from https://patchwork.kernel.org/project/linux-mediatek
 	${FILESDIR}/Add-cpufreq-and-cci-devfreq-for-mt8183-and-SVS-support-fix.patch
-	${FILESDIR}/Revert-series-CMDQ-refinement-of-Mediatek-DRM-driver.patch
-	${FILESDIR}/v4-media-mtk-vpu-Ensure-alignment-of-8-for-DTCM-buffer.patch
-	${FILESDIR}/media-mediatek-support-mdp3-on-mt8183-platform.patch
-	${FILESDIR}/Introducing-an-attribute-to-select-the-time-setting.patch
-	#${FILESDIR}/ASoC-mediatek-common-handle-NULL-case-in-suspend-resume-function.patch
-	${FILESDIR}/drm-panel-boe-tv101wum-nl6-Support-enabling-a-3.3V-rail.patch
-	${FILESDIR}/soc-mediatek-SVS-introduce-MTK-SVS-engine-fix.patch
-	${FILESDIR}/media-platform-Add-support-for-Digital-Image-Processing-DIP-on-mt8183-SoC-fix.patch
-	${FILESDIR}/media-platform-Add-support-for-Face-Detection-FD-on-mt8183-SoC-fix.patch
-	${FILESDIR}/media-media-platform-mtk-isp-Add-Mediatek-ISP-Pass-1-driver-fix.patch
-	${FILESDIR}/media-support-Mediatek-sensor-interface-driver-fix.patch
-	${FILESDIR}/media-support-Mediatek-sensor-interface-driver-fix-2.patch
-	#${FILESDIR}/Fix-the-issues-caused-by-CMDQ-refinement-of-mtk-drm.patch
-	
-
-	${FILESDIR}/mailbox-Remove-WARN_ON-for-async_cb.cb-in-cmdq_exec_done.patch
-	${FILESDIR}/drm-mediatek-add-dither-6-setting.patch
-	#${FILESDIR}/v6-RESEND-1-3-gpu-drm-separate-panel-orientation-property-creating-and-value-setting.patch
-	${FILESDIR}/v5-1-3-dt-bindings-mediatek-convert-mtk-jpeg-decoder-encoder-to-yaml.patch
-	${FILESDIR}/v4-3-3-arm64-dts-mt8183-add-jpeg-enc-node-for-mt8183.diff
-	${FILESDIR}/v2-dma-buf-remove-restriction-of-IOCTL-DMA_BUF_SET_NAME.patch
-	${FILESDIR}/v2-dma-buf-acquire-name-lock-before-read-write-dma_buf.name.patch
+	${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix-5.15.patch
+    # mdp3 support depends on vcodec support
 	${FILESDIR}/media-mtk-vcodec-support-for-MT8183-decoder.patch
-	${FILESDIR}/Support-multi-hardware-decode-using-of_platform_populate.patch
-	${FILESDIR}/ASoC-mediatek-Constify-static-snd_soc_ops.patch
-	${FILESDIR}/Bluetooth-btusb-fix-memory-leak-in-btusb_mtk_submit_wmt_recv_urb.patch
-	${FILESDIR}/drm-bridge-Drop-deprecated-functions-fix.patch
-	${FILESDIR}/v10-drm-bridge-add-it6505-driver.patch
-
-	${FILESDIR}/v3-dma-buf-remove-restriction-of-IOCTL-DMA_BUF_SET_NAME-fix.patch
-	${FILESDIR}/Fixups-for-mtk-cmdq-multi-gce-support.patch
-	${FILESDIR}/media-mtk-vpu-Remove-redundant-flush_workqueue-calls.patch
-	${FILESDIR}/scsi-sd-fix-crashes-in-sd_resume_runtime.patch
-	${FILESDIR}/v3-PCI-mediatek-gen3-Disable-DVFSRC-voltage-request.patch
-	#${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix.patch
-	#${FILESDIR}/Using-component-framework-to-support-multi-hardware-decode.patch
-	${FILESDIR}/Clean-up-mediatek-larb-fix-5.15.patch
-	# 
-#	${FILESDIR}/Multigenerational-LRU-Framework.patch
-
-
-	
-	# various fixes
+	${FILESDIR}/soc-mediatek-SVS-introduce-MTK-SVS-engine-fix.patch
+	${FILESDIR}/media-mediatek-support-mdp3-on-mt8183-platform-fix-5.15.patch
+	# DIP  
+	${FILESDIR}/media-platform-Add-support-for-Digital-Image-Processing-DIP-on-mt8183-SoC-fix.patch
 	${FILESDIR}/fix-v4l2-ioctl-2.patch
 	${FILESDIR}/fix-scp_get_pdev.patch
-	${FILESDIR}/add-ov02a10-ov8856.patch
-	${FILESDIR}/fix-mt8183-svs.patch
-	${FILESDIR}/fix-mt8183-dpi.patch
-	${FILESDIR}/fix-mt8183-fssource.patch
-	${FILESDIR}/fix-mt8183-mdp-5.15.patch
-	${FILESDIR}/fix-mt8183-vcodec.patch
+	# extra conf for scp
 	${FILESDIR}/fix-kukui-sspm.patch
-	${FILESDIR}/fix-kukui-gpu.patch
 	${FILESDIR}/fix-kukui-pin.patch
+	# FD
+	${FILESDIR}/media-platform-Add-support-for-Face-Detection-FD-on-mt8183-SoC-fix.patch
+	# CAM
+	${FILESDIR}/media-support-Mediatek-sensor-interface-driver-fix.patch
+	${FILESDIR}/media-support-Mediatek-sensor-interface-driver-fix-2.patch
+	${FILESDIR}/media-media-platform-mtk-isp-Add-Mediatek-ISP-Pass-1-driver-fix.patch
+	# JPEG
+	${FILESDIR}/v5-1-3-dt-bindings-mediatek-convert-mtk-jpeg-decoder-encoder-to-yaml.patch
+	${FILESDIR}/v4-3-3-arm64-dts-mt8183-add-jpeg-enc-node-for-mt8183.diff
+	# add cam node
+	${FILESDIR}/add-ov02a10-ov8856.patch
+	# it6505
+	${FILESDIR}/drm-bridge-Drop-deprecated-functions-fix.patch
+	${FILESDIR}/v10-drm-bridge-add-it6505-driver.patch
+	${FILESDIR}/fix-mt8183-dpi.patch
+    # fsource
+	${FILESDIR}/fix-mt8183-fssource.patch
+	# MDP nodes
+	${FILESDIR}/fix-mt8183-mdp-5.15.patch
 
-	#
-	#${FILESDIR}/fix-kukui-snd.patch
+
+#   #${FILESDIR}/Fix-the-issues-caused-by-CMDQ-refinement-of-mtk-drm.patch
+#   ${FILESDIR}/mailbox-Remove-WARN_ON-for-async_cb.cb-in-cmdq_exec_done.patch
+#   ${FILESDIR}/drm-mediatek-add-dither-6-setting.patch
+#   #${FILESDIR}/v6-RESEND-1-3-gpu-drm-separate-panel-orientation-property-creating-and-value-setting.patch
+#   ${FILESDIR}/v2-dma-buf-remove-restriction-of-IOCTL-DMA_BUF_SET_NAME.patch
+#   ${FILESDIR}/v2-dma-buf-acquire-name-lock-before-read-write-dma_buf.name.patch
+#   ${FILESDIR}/Support-multi-hardware-decode-using-of_platform_populate.patch
+#   ${FILESDIR}/ASoC-mediatek-Constify-static-snd_soc_ops.patch
+#   ${FILESDIR}/Bluetooth-btusb-fix-memory-leak-in-btusb_mtk_submit_wmt_recv_urb.patch
+
+#   ${FILESDIR}/Introducing-an-attribute-to-select-the-time-setting.patch
+#   #${FILESDIR}/ASoC-mediatek-common-handle-NULL-case-in-suspend-resume-function.patch
+#   ${FILESDIR}/v4-media-mtk-vpu-Ensure-alignment-of-8-for-DTCM-buffer.patch
+#   ${FILESDIR}/drm-panel-boe-tv101wum-nl6-Support-enabling-a-3.3V-rail.patch
+#	${FILESDIR}/v3-dma-buf-remove-restriction-of-IOCTL-DMA_BUF_SET_NAME-fix.patch
+#	${FILESDIR}/Fixups-for-mtk-cmdq-multi-gce-support.patch
+#	${FILESDIR}/media-mtk-vpu-Remove-redundant-flush_workqueue-calls.patch
+#	${FILESDIR}/scsi-sd-fix-crashes-in-sd_resume_runtime.patch
+#	${FILESDIR}/v3-PCI-mediatek-gen3-Disable-DVFSRC-voltage-request.patch
+#	${FILESDIR}/mailbox-cmdq-Add-of_node_put-before-return.patch
+#	#${FILESDIR}/Using-component-framework-to-support-multi-hardware-decode.patch
+#	${FILESDIR}/Clean-up-mediatek-larb-fix-5.15.patch
+#	# 
+##	${FILESDIR}/Multigenerational-LRU-Framework.patch
+#
+#
+#	
+#	# various fixes
+#	${FILESDIR}/fix-kukui-snd.patch
+	${FILESDIR}/fix-mt8183-vcodec.patch
 )
 
 src_prepare() {

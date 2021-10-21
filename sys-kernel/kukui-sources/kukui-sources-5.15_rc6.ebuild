@@ -43,8 +43,8 @@ PATCHES=(
     ${FILESDIR}/move-gpu-opp-to-3.patch
     #${FILESDIR}/mutex-gce-events.patch
     ${FILESDIR}/opp-multi-regulator.patch
-    ${FILESDIR}/panel-dts-rotation.patch
-    ${FILESDIR}/panel-dts-rotation_sku0.patch
+    #${FILESDIR}/panel-dts-rotation.patch
+    #${FILESDIR}/panel-dts-rotation_sku0.patch
     ${FILESDIR}/sound_1.patch
     ${FILESDIR}/sound_2.patch
 	# From https://github.com/hexdump0815/linux-mainline-mediatek-mt81xx-kernel/tree/master/misc.cbm/patches/5.13.2

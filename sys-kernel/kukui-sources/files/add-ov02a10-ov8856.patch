@@ -20,7 +20,7 @@ index 3aa7940..39888e2 100644
 +                i2c-supply = <&mt6358_vcamio_reg>;
 +        };
 +
-+        camera_main_af: camera_main_af {
++        camera_main_af: camera_main_af@0c {
 +                compatible = "dongwoon,dw9768";
 +                reg = <0x0c>;
 +
@@ -43,7 +43,7 @@ index 3aa7940..39888e2 100644
 +                i2c-supply = <&mt6358_vcn18_reg>;
 +        };
 +
-+        sensor_sub: sensor_sub {
++        sensor_sub: sensor_sub@3d {
 +                status = "okay";
 +                compatible = "ovti,ov02a10";
 +                reg = <0x3d>;
@@ -112,7 +112,7 @@ index a7b0cb3..ff4d748 100644
  		vcc-supply = <&mt6358_vcama2_reg>;
  	};
 +
-+	sensor_main: sensor_main {
++	sensor_main: sensor_main@10 {
 +                status = "okay";
 +                compatible = "ovti,ov8856";
 +                reg = <0x10>;
@@ -148,7 +148,7 @@ index a7b0cb3..ff4d748 100644
 +                };
 +        };
 +
-+        camera_main_af: camera_main_af {
++        camera_main_af: camera_main_af@0c {
 +                compatible = "dongwoon,dw9768";
 +                reg = <0x0c>;
 +
@@ -163,7 +163,7 @@ index a7b0cb3..ff4d748 100644
  		vcc-supply = <&mt6358_vcn18_reg>;
  	};
 +
-+	sensor_sub: sensor_sub {
++	sensor_sub: sensor_sub@3d {
 +                status = "okay";
 +                compatible = "ovti,ov02a10";
 +                reg = <0x3d>;

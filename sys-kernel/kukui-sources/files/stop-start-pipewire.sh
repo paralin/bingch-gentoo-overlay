@@ -1,5 +1,7 @@
 #!/bin/bash
+# put in /lib/systemd/system-sleep/
 # workaround duet sound card issue, stop/start pipewire before/after suspend
+
 if [ "${1}" = "pre" ]; then
 for line in "$(ps -eo pid,user:32,args | grep "dbus-daemon.*--session" | grep -v grep | xargs)"
 do

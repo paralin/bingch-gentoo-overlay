@@ -20,7 +20,7 @@ index 3aa7940..39888e2 100644
 +                i2c-supply = <&mt6358_vcamio_reg>;
 +        };
 +
-+        camera_main_af: camera_main_af@0c {
++        camera_main_af: camera_main_af@c {
 +                compatible = "dongwoon,dw9768";
 +                reg = <0x0c>;
 +
@@ -148,7 +148,7 @@ index a7b0cb3..ff4d748 100644
 +                };
 +        };
 +
-+        camera_main_af: camera_main_af@0c {
++        camera_main_af: camera_main_af@c {
 +                compatible = "dongwoon,dw9768";
 +                reg = <0x0c>;
 +

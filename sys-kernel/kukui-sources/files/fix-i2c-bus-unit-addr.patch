@@ -1,0 +1,65 @@
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
+index 39888e2..72eb6ec 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
+@@ -106,7 +106,7 @@ at24@50 {
+                 i2c-supply = <&mt6358_vcamio_reg>;
+         };
+ 
+-        camera_main_af: camera_main_af {
++        camera_main_af: camera_main_af@c {
+                 compatible = "dongwoon,dw9768";
+                 reg = <0x0c>;
+ 
+@@ -129,7 +129,7 @@ at24@50 {
+                 i2c-supply = <&mt6358_vcn18_reg>;
+         };
+ 
+-        sensor_sub: sensor_sub {
++        sensor_sub: sensor_sub@3d {
+                 status = "okay";
+                 compatible = "ovti,ov02a10";
+                 reg = <0x3d>;
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
+index ff4d748..6d94b3a 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
+@@ -81,7 +81,7 @@ eeprom@58 {
+ 		vcc-supply = <&mt6358_vcama2_reg>;
+ 	};
+ 
+-	sensor_main: sensor_main {
++	sensor_main: sensor_main@10 {
+                 status = "okay";
+                 compatible = "ovti,ov8856";
+                 reg = <0x10>;
+@@ -117,7 +117,7 @@ ov8856_endpoint: endpoint {
+                 };
+         };
+ 
+-        camera_main_af: camera_main_af {
++        camera_main_af: camera_main_af@c {
+                 compatible = "dongwoon,dw9768";
+                 reg = <0x0c>;
+ 
+@@ -140,7 +140,7 @@ eeprom@54 {
+ 		vcc-supply = <&mt6358_vcn18_reg>;
+ 	};
+ 
+-	sensor_sub: sensor_sub {
++	sensor_sub: sensor_sub@3d {
+                 status = "okay";
+                 compatible = "ovti,ov02a10";
+                 reg = <0x3d>;
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index d34c246..e5e459a 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -1001,6 +1001,7 @@ i2c0: i2c@11007000 {
+ 
+ 		i2c4: i2c@11008000 {
+ 			compatible = "mediatek,mt8183-i2c";
++			id = <4>;
+ 			reg = <0 0x11008000 0 0x1000>,
+ 			      <0 0x11000100 0 0x80>;
+ 			interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_LOW>;

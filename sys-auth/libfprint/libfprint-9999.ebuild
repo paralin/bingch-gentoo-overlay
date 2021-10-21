@@ -57,7 +57,7 @@ src_configure() {
 			$(meson_use examples gtk-examples)
 			$(meson_use introspection)
 			-Ddrivers=all
-			-Dudev_rules=true
+			-Dudev_rules=auto
 			-Dudev_rules_dir=$(get_udevdir)/rules.d
 			--libdir=/usr/$(get_libdir)
 		)

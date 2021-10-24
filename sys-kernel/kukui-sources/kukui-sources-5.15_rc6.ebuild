@@ -39,7 +39,7 @@ DEPEND="${RDEPEND}
 PATCHES=(
 	# From https://github.com/Maccraft123/Cadmium/tree/master/baseboard/kukui/patches
     ${FILESDIR}/drm.patch
-    ${FILESDIR}/gpu-vsram.patch
+    #${FILESDIR}/gpu-vsram.patch
     ${FILESDIR}/move-gpu-opp-to-3.patch
     #${FILESDIR}/mutex-gce-events.patch
     ${FILESDIR}/opp-multi-regulator.patch
@@ -55,8 +55,18 @@ PATCHES=(
 	# cherry-pick from https://patchwork.kernel.org/project/linux-mediatek
 	${FILESDIR}/Add-cpufreq-and-cci-devfreq-for-mt8183-and-SVS-support-fix.patch
 	${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix-5.15.patch
+	# fix rotation
+	${FILESDIR}/v6-RESEND-1-3-gpu-drm-separate-panel-orientation-property-creating-and-value-setting.patch
+	#${FILESDIR}/mediatek-Set-default-value-for-Panel-Orientation-connector-prop.patch
+	#${FILESDIR}/drm-mediatek-Set-Rotation-default-value-to-1.patch
+	# it6505
+    ${FILESDIR}/drm-bridge-Drop-deprecated-functions-fix.patch
+    ${FILESDIR}/v10-drm-bridge-add-it6505-driver.patch
+    ${FILESDIR}/fix-mt8183-dpi.patch
     # mdp3 support depends on vcodec support
 	${FILESDIR}/media-mtk-vcodec-support-for-MT8183-decoder.patch
+	${FILESDIR}/media-mtk-vcodec-few-fixes.patch
+	${FILESDIR}/fix-mt8183-vcodec.patch
 	${FILESDIR}/soc-mediatek-SVS-introduce-MTK-SVS-engine-fix.patch
 	${FILESDIR}/media-mediatek-support-mdp3-on-mt8183-platform-fix-5.15.patch
 	# DIP  
@@ -68,7 +78,7 @@ PATCHES=(
 	${FILESDIR}/fix-kukui-pin.patch
 	# FD
 	${FILESDIR}/media-platform-Add-support-for-Face-Detection-FD-on-mt8183-SoC-fix.patch
-	# CAM
+  	# CAM
 	${FILESDIR}/media-support-Mediatek-sensor-interface-driver-fix.patch
 	${FILESDIR}/media-support-Mediatek-sensor-interface-driver-fix-2.patch
 	${FILESDIR}/media-media-platform-mtk-isp-Add-Mediatek-ISP-Pass-1-driver-fix.patch
@@ -77,10 +87,6 @@ PATCHES=(
 	${FILESDIR}/v4-3-3-arm64-dts-mt8183-add-jpeg-enc-node-for-mt8183.diff
 	# add cam node
 	${FILESDIR}/add-ov02a10-ov8856.patch
-	# it6505
-	${FILESDIR}/drm-bridge-Drop-deprecated-functions-fix.patch
-	${FILESDIR}/v10-drm-bridge-add-it6505-driver.patch
-	${FILESDIR}/fix-mt8183-dpi.patch
     # fsource
 	${FILESDIR}/fix-mt8183-fssource.patch
 	# MDP nodes
@@ -108,7 +114,6 @@ PATCHES=(
 #	${FILESDIR}/v3-PCI-mediatek-gen3-Disable-DVFSRC-voltage-request.patch
 #	${FILESDIR}/mailbox-cmdq-Add-of_node_put-before-return.patch
 #	#${FILESDIR}/Using-component-framework-to-support-multi-hardware-decode.patch
-#	${FILESDIR}/Clean-up-mediatek-larb-fix-5.15.patch
 #	# 
 ##	${FILESDIR}/Multigenerational-LRU-Framework.patch
 #
@@ -116,7 +121,8 @@ PATCHES=(
 #	
 #	# various fixes
 #	${FILESDIR}/fix-kukui-snd.patch
-	${FILESDIR}/fix-mt8183-vcodec.patch
+	${FILESDIR}/Clean-up-mediatek-larb.patch
+	${FILESDIR}/fix-mt8183-mutex.patch
 )
 
 src_prepare() {

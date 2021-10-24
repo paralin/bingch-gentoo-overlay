@@ -1,5 +1,5 @@
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
-index 3aa7940..39888e2 100644
+index 3aa7940..72eb6ec 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
 @@ -92,6 +92,79 @@ &mt6358_vcama2_reg {
@@ -104,7 +104,7 @@ index 3aa7940..39888e2 100644
  	qcom,ath10k-calibration-variant = "GO_KODAMA";
  };
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
-index a7b0cb3..ff4d748 100644
+index a7b0cb3..6d94b3a 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
 @@ -80,6 +80,50 @@ eeprom@58 {
@@ -255,14 +255,14 @@ index a7b0cb3..ff4d748 100644
  	compatible = "mediatek,mt8183_mt6358_ts3a227_max98357";
  };
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 3cf6dda..fae89aa 100644
+index 8e79060..775577c 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -474,6 +474,63 @@ pins_bt_en {
+@@ -507,6 +507,18 @@ pins_bt_en {
  		};
  	};
  
-+        camera_pins_cam0: cam0@2 {
++	camera_pins_cam0: cam0@2 {
 +                pins_cmd_dat {
 +                        pinmux = <PINMUX_GPIO99__FUNC_CMMCLK0>;
 +                };
@@ -274,84 +274,6 @@ index 3cf6dda..fae89aa 100644
 +                };
 +        };
 +
-+        dpi_pin_default: dpi_pin_default {
-+                pins_cmd_dat {
-+                        pinmux = <PINMUX_GPIO13__FUNC_GPIO13>,
-+                                <PINMUX_GPIO14__FUNC_GPIO14>,
-+                                <PINMUX_GPIO15__FUNC_GPIO15>,
-+                                <PINMUX_GPIO16__FUNC_GPIO16>,
-+                                <PINMUX_GPIO17__FUNC_GPIO17>,
-+                                <PINMUX_GPIO18__FUNC_GPIO18>,
-+                                <PINMUX_GPIO19__FUNC_GPIO19>,
-+                                <PINMUX_GPIO20__FUNC_GPIO20>,
-+                                <PINMUX_GPIO21__FUNC_GPIO21>,
-+                                <PINMUX_GPIO22__FUNC_GPIO22>,
-+                                <PINMUX_GPIO23__FUNC_GPIO23>,
-+                                <PINMUX_GPIO24__FUNC_GPIO24>,
-+                                <PINMUX_GPIO25__FUNC_GPIO25>,
-+                                <PINMUX_GPIO26__FUNC_GPIO26>,
-+                                <PINMUX_GPIO27__FUNC_GPIO27>,
-+                                <PINMUX_GPIO28__FUNC_GPIO28>;
-+                                drive-strength = <MTK_DRIVE_6mA>;
-+                                output-low;
-+                };
-+        };
-+
-+        dpi_pin_func: dpi_pin_func {
-+                pins_cmd_dat {
-+                        pinmux = <PINMUX_GPIO13__FUNC_DBPI_D0>,
-+                                <PINMUX_GPIO14__FUNC_DBPI_D1>,
-+                                <PINMUX_GPIO15__FUNC_DBPI_D2>,
-+                                <PINMUX_GPIO16__FUNC_DBPI_D3>,
-+                                <PINMUX_GPIO17__FUNC_DBPI_D4>,
-+                                <PINMUX_GPIO18__FUNC_DBPI_D5>,
-+                                <PINMUX_GPIO19__FUNC_DBPI_D6>,
-+                                <PINMUX_GPIO20__FUNC_DBPI_D7>,
-+                                <PINMUX_GPIO21__FUNC_DBPI_D8>,
-+                                <PINMUX_GPIO22__FUNC_DBPI_D9>,
-+                                <PINMUX_GPIO23__FUNC_DBPI_D10>,
-+                                <PINMUX_GPIO24__FUNC_DBPI_D11>,
-+                                <PINMUX_GPIO25__FUNC_DBPI_HSYNC>,
-+                                <PINMUX_GPIO26__FUNC_DBPI_VSYNC>,
-+                                <PINMUX_GPIO27__FUNC_DBPI_DE>,
-+                                <PINMUX_GPIO28__FUNC_DBPI_CK>;
-+                                drive-strength = <MTK_DRIVE_6mA>;
-+                };
-+        };
-+
- 	ec_ap_int_odl: ec_ap_int_odl {
- 		pins1 {
- 			pinmux = <PINMUX_GPIO151__FUNC_GPIO151>;
-@@ -551,6 +608,32 @@ pins_bus {
- 		};
- 	};
- 
-+        it6505_pins: it6505_pins {
-+                pins_hpd {
-+                        pinmux = <PINMUX_GPIO9__FUNC_GPIO9>;
-+                        input-enable;
-+                        bias-pull-up;
-+                };
-+
-+                pins_int {
-+                        pinmux = <PINMUX_GPIO152__FUNC_GPIO152>;
-+                        input-enable;
-+                        bias-pull-up;
-+                };
-+
-+                pins_power_enable {
-+                        pinmux = <PINMUX_GPIO178__FUNC_GPIO178>;
-+                        output-low;
-+                        bias-pull-up;
-+                };
-+
-+                pins_reset {
-+                        pinmux = <PINMUX_GPIO179__FUNC_GPIO179>;
-+                        output-low;
-+                        bias-pull-up;
-+                };
-+        };
-+
- 	mmc0_pins_default: mmc0-pins-default {
+ 	dpi_pin_default: dpi_pin_default {
  		pins_cmd_dat {
- 			pinmux = <PINMUX_GPIO123__FUNC_MSDC0_DAT0>,
+ 			pinmux = <PINMUX_GPIO13__FUNC_GPIO13>,

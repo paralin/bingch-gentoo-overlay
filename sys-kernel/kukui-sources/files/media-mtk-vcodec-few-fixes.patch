@@ -1,0 +1,456 @@
+From patchwork Fri Oct 22 15:04:08 2021
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Patchwork-Submitter: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+X-Patchwork-Id: 12578013
+Return-Path: 
+ <SRS0=WF8g=PK=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	aws-us-west-2-korg-lkml-1.web.codeaurora.org
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26215C433F5
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 22 Oct 2021 15:04:49 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org
+ [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id EE90260231
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 22 Oct 2021 15:04:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EE90260231
+Authentication-Results: mail.kernel.org;
+ dmarc=fail (p=none dis=none) header.from=collabora.com
+Authentication-Results: mail.kernel.org;
+ spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:List-Subscribe:List-Help:
+	List-Post:List-Archive:List-Unsubscribe:List-Id:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=notMz9tjXDF/GgOH7lf89/QU77yJgLv671r3P7wMskw=; b=ZB923vrJ6BAQw8
+	0TTTRtGfW2uxPbFt8Qu+tde9X76ktauxBXda//MsY+eOo8mjRZK7Vav+cWi0yFNR8D4oMfb3v5qju
+	RR6brhfAUAk2LU188kUPjQ1G2medfG2EvCcfvw7aTPQkpKMGHTkr1PBOGnU/Cf/QBSu+sfp96ac8J
+	R57rU14MfwC69WIGrYRpiTrqhtsG3zmFsU52K2hx+KggWE6DlU91e99vlPJtfPg6SG/n2snEgVfTL
+	PRhG/0kVCq00AY1y8bk+7Naaos0a07hs2oVnV7uDEmKvi4YpGbPWcx2OwuS/XgjzBPFBVuikroa2a
+	ClNO5kHCTHhNem0oerrQ==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mdw5y-00BLJk-VH; Fri, 22 Oct 2021 15:04:34 +0000
+Received: from bhuna.collabora.co.uk ([46.235.227.227])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mdw5k-00BLCE-Ns
+ for linux-mediatek@lists.infradead.org; Fri, 22 Oct 2021 15:04:23 +0000
+Received: from guri.fritz.box (unknown
+ [IPv6:2a02:810a:880:f54:50fa:5c7d:20f4:e8d3])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+ (No client certificate requested) (Authenticated sender: dafna)
+ by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 51CDB1F412A8;
+ Fri, 22 Oct 2021 16:04:18 +0100 (BST)
+From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To: linux-media@vger.kernel.org
+Cc: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>, kernel@collabora.com,
+ acourbot@chromium.org, andrew-ct.chen@mediatek.com, courbot@chromium.org,
+ dafna3@gmail.com, eizan@chromium.org, houlong.wei@mediatek.com,
+ hsinyi@chromium.org, hverkuil@xs4all.nl, irui.wang@mediatek.com,
+ linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ maoguang.meng@mediatek.com, matthias.bgg@gmail.com, mchehab@kernel.org,
+ minghsiu.tsai@mediatek.com, tfiga@chromium.org, tiffany.lin@mediatek.com
+Subject: [PATCH 1/3] media: mtk-vcodec: enc: add vp8 profile ctrl
+Date: Fri, 22 Oct 2021 17:04:08 +0200
+Message-Id: <20211022150410.29335-2-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211022150410.29335-1-dafna.hirschfeld@collabora.com>
+References: <20211022150410.29335-1-dafna.hirschfeld@collabora.com>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211022_080420_934562_2B1E7AB9 
+X-CRM114-Status: GOOD (  10.51  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+MIME-Version: 1.0
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: 
+ linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+
+In order for the encoder to work with gstreamer
+it needs to have the V4L2_CID_MPEG_VIDEO_VP8_PROFILE
+ctrl. This patch adds that ctrl with only profile 0
+supported.
+
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+---
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+index 8998244ea671..87a5114bf680 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+@@ -103,6 +103,13 @@ static int vidioc_venc_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		p->gop_size = ctrl->val;
+ 		ctx->param_change |= MTK_ENCODE_PARAM_GOP_SIZE;
+ 		break;
++	case V4L2_CID_MPEG_VIDEO_VP8_PROFILE:
++		/*
++		 * FIXME - what vp8 profiles are actually supported?
++		 * The ctrl is added (with only profile 0 supported) for now.
++		 */
++		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_VP8_PROFILE val = %d", ctrl->val);
++		break;
+ 	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:
+ 		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME");
+ 		p->force_intra = 1;
+@@ -1394,6 +1401,9 @@ int mtk_vcodec_enc_ctrls_setup(struct mtk_vcodec_ctx *ctx)
+ 	v4l2_ctrl_new_std_menu(handler, ops, V4L2_CID_MPEG_VIDEO_H264_LEVEL,
+ 			       h264_max_level,
+ 			       0, V4L2_MPEG_VIDEO_H264_LEVEL_4_0);
++	v4l2_ctrl_new_std_menu(handler, ops, V4L2_CID_MPEG_VIDEO_VP8_PROFILE,
++			       V4L2_MPEG_VIDEO_VP8_PROFILE_0, 0, V4L2_MPEG_VIDEO_VP8_PROFILE_0);
++
+ 
+ 	if (handler->error) {
+ 		mtk_v4l2_err("Init control handler fail %d",
+
+From patchwork Fri Oct 22 15:04:09 2021
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Patchwork-Submitter: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+X-Patchwork-Id: 12578017
+Return-Path: 
+ <SRS0=WF8g=PK=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	aws-us-west-2-korg-lkml-1.web.codeaurora.org
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3B28C433EF
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 22 Oct 2021 15:04:51 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org
+ [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id C6184611C3
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 22 Oct 2021 15:04:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C6184611C3
+Authentication-Results: mail.kernel.org;
+ dmarc=fail (p=none dis=none) header.from=collabora.com
+Authentication-Results: mail.kernel.org;
+ spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:List-Subscribe:List-Help:
+	List-Post:List-Archive:List-Unsubscribe:List-Id:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=g+Ra35cKB4Yj2i8kBh0cVZXtKgD2Oj/1KPrQN43KJn0=; b=CrfrruATBh3k/s
+	7+/es/23BCYfySS7TGs9Ni4oFeME/GFev+sOSherYTM3iUuopZLYD0M/hN/X51lj7zDMCiyKp9+Yi
+	55EqCQtqfaPBdGIIUa1Ol4v4vuNIhgRT8x7RbhozGDf0GyG5Bx00djxERdVlBielLTRjBZfmpn4Lr
+	o6gSUhnfI2c+n+VYg0ajK8k6/VGrb4yPLVDO2RyNbZCoTS6ZaGTYvqqKX1b7HSmfBIKihbPBvhCnD
+	cw4n8PxlbtH0A4D3SY6jhS6HHdCcZUXbMnoKZq0FRfHi8KJdWm9ah5tzQNnRH5LWzeJ50184wBU1x
+	1duE6JzT6Jbrg0yGe9tg==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mdw60-00BLKF-1U; Fri, 22 Oct 2021 15:04:36 +0000
+Received: from bhuna.collabora.co.uk ([2a00:1098:0:82:1000:25:2eeb:e3e3])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mdw5k-00BLCL-SD
+ for linux-mediatek@lists.infradead.org; Fri, 22 Oct 2021 15:04:23 +0000
+Received: from guri.fritz.box (unknown
+ [IPv6:2a02:810a:880:f54:50fa:5c7d:20f4:e8d3])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+ (No client certificate requested) (Authenticated sender: dafna)
+ by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 117821F4163C;
+ Fri, 22 Oct 2021 16:04:19 +0100 (BST)
+From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To: linux-media@vger.kernel.org
+Cc: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>, kernel@collabora.com,
+ acourbot@chromium.org, andrew-ct.chen@mediatek.com, courbot@chromium.org,
+ dafna3@gmail.com, eizan@chromium.org, houlong.wei@mediatek.com,
+ hsinyi@chromium.org, hverkuil@xs4all.nl, irui.wang@mediatek.com,
+ linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ maoguang.meng@mediatek.com, matthias.bgg@gmail.com, mchehab@kernel.org,
+ minghsiu.tsai@mediatek.com, tfiga@chromium.org, tiffany.lin@mediatek.com
+Subject: [PATCH 2/3] media: mtk-vcodec: enc: use "stream_started" flag for
+ "stop/start_streaming"
+Date: Fri, 22 Oct 2021 17:04:09 +0200
+Message-Id: <20211022150410.29335-3-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211022150410.29335-1-dafna.hirschfeld@collabora.com>
+References: <20211022150410.29335-1-dafna.hirschfeld@collabora.com>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211022_080421_143092_E6B389DD 
+X-CRM114-Status: GOOD (  16.68  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+MIME-Version: 1.0
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: 
+ linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+
+Currently the mtk-vcodec encoder init the hardware
+upon "start_streaming" cb when both queues are streaming and turns off
+the hardware upon "stop_streaming" when both queues stop
+streaming. This is wrong since the same queue might be started and
+then stopped causing the driver to turn off the hardware without
+turning it on. This cause for example unbalanced
+calls to pm_runtime_*
+
+Fixes: 4e855a6efa547 ("[media] vcodec: mediatek: Add Mediatek V4L2 Video Encoder Driver")
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+---
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h | 4 ++++
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c | 8 ++++++++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+index 9d36e3d27369..84c5289f872b 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+@@ -259,6 +259,9 @@ struct vdec_pic_info {
+  * @decoded_frame_cnt: number of decoded frames
+  * @lock: protect variables accessed by V4L2 threads and worker thread such as
+  *	  mtk_video_dec_buf.
++ * @stream_started: this flag is turned on when both queues (cap and out) starts streaming
++ *	  and it is turned off once both queues stop streaming. It is used for a correct
++ *	  setup and set-down of the hardware when starting and stopping streaming.
+  */
+ struct mtk_vcodec_ctx {
+ 	enum mtk_instance_type type;
+@@ -301,6 +304,7 @@ struct mtk_vcodec_ctx {
+ 
+ 	int decoded_frame_cnt;
+ 	struct mutex lock;
++	bool stream_started;
+ 
+ };
+ 
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+index 87a5114bf680..fb3cf804c96a 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+@@ -890,6 +890,9 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
+ 		goto err_start_stream;
+ 	}
+ 
++	if (ctx->stream_started)
++		return 0;
++
+ 	/* Do the initialization when both start_streaming have been called */
+ 	if (V4L2_TYPE_IS_OUTPUT(q->type)) {
+ 		if (!vb2_start_streaming_called(&ctx->m2m_ctx->cap_q_ctx.q))
+@@ -928,6 +931,7 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
+ 		ctx->state = MTK_STATE_HEADER;
+ 	}
+ 
++	ctx->stream_started = true;
+ 	return 0;
+ 
+ err_set_param:
+@@ -1002,6 +1006,9 @@ static void vb2ops_venc_stop_streaming(struct vb2_queue *q)
+ 		}
+ 	}
+ 
++	if (!ctx->stream_started)
++		return;
++
+ 	if ((q->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE &&
+ 	     vb2_is_streaming(&ctx->m2m_ctx->out_q_ctx.q)) ||
+ 	    (q->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE &&
+@@ -1023,6 +1030,7 @@ static void vb2ops_venc_stop_streaming(struct vb2_queue *q)
+ 		mtk_v4l2_err("pm_runtime_put fail %d", ret);
+ 
+ 	ctx->state = MTK_STATE_FREE;
++	ctx->stream_started = false;
+ }
+ 
+ static int vb2ops_venc_buf_out_validate(struct vb2_buffer *vb)
+
+From patchwork Fri Oct 22 15:04:10 2021
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Patchwork-Submitter: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+X-Patchwork-Id: 12578019
+Return-Path: 
+ <SRS0=WF8g=PK=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	aws-us-west-2-korg-lkml-1.web.codeaurora.org
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21275C433F5
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 22 Oct 2021 15:04:52 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org
+ [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id DB63D61205
+	for <linux-mediatek@archiver.kernel.org>;
+ Fri, 22 Oct 2021 15:04:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DB63D61205
+Authentication-Results: mail.kernel.org;
+ dmarc=fail (p=none dis=none) header.from=collabora.com
+Authentication-Results: mail.kernel.org;
+ spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:List-Subscribe:List-Help:
+	List-Post:List-Archive:List-Unsubscribe:List-Id:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	List-Owner; bh=vMFdi5IU4K6qqh2EQiqSV0S+mAU1FA4rswV+/qqkAzc=; b=We3zqrEjdOkYzf
+	sPnEEap13AUf1Y5RSd3VsTbGcTVxCbTm5o5GJWS+rO0XDAPrt+sN+nCX7Pp1EhiJLQymoh/b84p3z
+	Evk8mRj+YaCVbxeCU9HQfW0BzLmLSUvYyuZNJ40V5ZQTZ0mvlero54atxySX4bZwem8l8QTIWFNpv
+	IhyaR1yjmqFQ8nqRG5V0UCNCeu3BpJUA1rawKZUA39eWUWb7d5AGYkLpZTGiiNdVSwHirEXwDPtQw
+	OGqOQksoID+hgJ1V0EvEP5RzrCJIVU+1gZIZA7wf/8awh+5XejxrYd+wjkDudYlPZliPrTImT5MLa
+	LsEk7yCoGv16J0Vvz34g==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mdw61-00BLKq-0E; Fri, 22 Oct 2021 15:04:37 +0000
+Received: from bhuna.collabora.co.uk ([46.235.227.227])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mdw5l-00BLCf-Ls
+ for linux-mediatek@lists.infradead.org; Fri, 22 Oct 2021 15:04:23 +0000
+Received: from guri.fritz.box (unknown
+ [IPv6:2a02:810a:880:f54:50fa:5c7d:20f4:e8d3])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+ (No client certificate requested) (Authenticated sender: dafna)
+ by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D29DF1F417C2;
+ Fri, 22 Oct 2021 16:04:19 +0100 (BST)
+From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To: linux-media@vger.kernel.org
+Cc: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>, kernel@collabora.com,
+ acourbot@chromium.org, andrew-ct.chen@mediatek.com, courbot@chromium.org,
+ dafna3@gmail.com, eizan@chromium.org, houlong.wei@mediatek.com,
+ hsinyi@chromium.org, hverkuil@xs4all.nl, irui.wang@mediatek.com,
+ linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ maoguang.meng@mediatek.com, matthias.bgg@gmail.com, mchehab@kernel.org,
+ minghsiu.tsai@mediatek.com, tfiga@chromium.org, tiffany.lin@mediatek.com
+Subject: [PATCH 3/3] meida: mtk-vcodec: remove unused func parameter
+Date: Fri, 22 Oct 2021 17:04:10 +0200
+Message-Id: <20211022150410.29335-4-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211022150410.29335-1-dafna.hirschfeld@collabora.com>
+References: <20211022150410.29335-1-dafna.hirschfeld@collabora.com>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211022_080421_940935_D7920A8E 
+X-CRM114-Status: GOOD (  10.75  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+MIME-Version: 1.0
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: 
+ linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+
+The prarameter bs_size to function vpu_enc_encode
+is not used. Remove it.
+
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+---
+ drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c | 9 +++------
+ drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c  | 3 +--
+ drivers/media/platform/mtk-vcodec/venc_vpu_if.c       | 1 -
+ drivers/media/platform/mtk-vcodec/venc_vpu_if.h       | 1 -
+ 4 files changed, 4 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c b/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
+index b6a4f2074fa5..bf03888a824f 100644
+--- a/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
++++ b/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
+@@ -367,8 +367,7 @@ static int h264_encode_sps(struct venc_h264_inst *inst,
+ 
+ 	mtk_vcodec_debug_enter(inst);
+ 
+-	ret = vpu_enc_encode(&inst->vpu_inst, H264_BS_MODE_SPS, NULL,
+-			     bs_buf, bs_size, NULL);
++	ret = vpu_enc_encode(&inst->vpu_inst, H264_BS_MODE_SPS, NULL, bs_buf, NULL);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -394,8 +393,7 @@ static int h264_encode_pps(struct venc_h264_inst *inst,
+ 
+ 	mtk_vcodec_debug_enter(inst);
+ 
+-	ret = vpu_enc_encode(&inst->vpu_inst, H264_BS_MODE_PPS, NULL,
+-			     bs_buf, bs_size, NULL);
++	ret = vpu_enc_encode(&inst->vpu_inst, H264_BS_MODE_PPS, NULL, bs_buf, NULL);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -451,8 +449,7 @@ static int h264_encode_frame(struct venc_h264_inst *inst,
+ 	mtk_vcodec_debug(inst, "frm_count = %d,skip_frm_count =%d,frm_type=%d.\n",
+ 			 frame_info.frm_count, frame_info.skip_frm_count,
+ 			 frame_info.frm_type);
+-	ret = vpu_enc_encode(&inst->vpu_inst, H264_BS_MODE_FRAME, frm_buf,
+-			     bs_buf, bs_size, &frame_info);
++	ret = vpu_enc_encode(&inst->vpu_inst, H264_BS_MODE_FRAME, frm_buf, bs_buf, &frame_info);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c b/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c
+index 8267a9c4fd25..6b66957d5192 100644
+--- a/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c
++++ b/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c
+@@ -302,8 +302,7 @@ static int vp8_enc_encode_frame(struct venc_vp8_inst *inst,
+ 
+ 	mtk_vcodec_debug(inst, "->frm_cnt=%d", inst->frm_cnt);
+ 
+-	ret = vpu_enc_encode(&inst->vpu_inst, 0, frm_buf, bs_buf, bs_size,
+-			     NULL);
++	ret = vpu_enc_encode(&inst->vpu_inst, 0, frm_buf, bs_buf, NULL);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/drivers/media/platform/mtk-vcodec/venc_vpu_if.c b/drivers/media/platform/mtk-vcodec/venc_vpu_if.c
+index be6d8790a41e..e7899d8a3e4e 100644
+--- a/drivers/media/platform/mtk-vcodec/venc_vpu_if.c
++++ b/drivers/media/platform/mtk-vcodec/venc_vpu_if.c
+@@ -225,7 +225,6 @@ int vpu_enc_set_param(struct venc_vpu_inst *vpu,
+ int vpu_enc_encode(struct venc_vpu_inst *vpu, unsigned int bs_mode,
+ 		   struct venc_frm_buf *frm_buf,
+ 		   struct mtk_vcodec_mem *bs_buf,
+-		   unsigned int *bs_size,
+ 		   struct venc_frame_info *frame_info)
+ {
+ 	const bool is_ext = MTK_ENC_CTX_IS_EXT(vpu->ctx);
+diff --git a/drivers/media/platform/mtk-vcodec/venc_vpu_if.h b/drivers/media/platform/mtk-vcodec/venc_vpu_if.h
+index f9be9cab7ff7..f83bc1b3f2bf 100644
+--- a/drivers/media/platform/mtk-vcodec/venc_vpu_if.h
++++ b/drivers/media/platform/mtk-vcodec/venc_vpu_if.h
+@@ -45,7 +45,6 @@ int vpu_enc_set_param(struct venc_vpu_inst *vpu,
+ int vpu_enc_encode(struct venc_vpu_inst *vpu, unsigned int bs_mode,
+ 		   struct venc_frm_buf *frm_buf,
+ 		   struct mtk_vcodec_mem *bs_buf,
+-		   unsigned int *bs_size,
+ 		   struct venc_frame_info *frame_info);
+ int vpu_enc_deinit(struct venc_vpu_inst *vpu);
+ 

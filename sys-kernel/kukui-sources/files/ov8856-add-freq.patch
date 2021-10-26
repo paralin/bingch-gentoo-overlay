@@ -1,0 +1,21 @@
+diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
+index aa74744..8122bf6 100644
+--- a/drivers/media/i2c/ov8856.c
++++ b/drivers/media/i2c/ov8856.c
+@@ -20,6 +20,7 @@
+ 
+ #define OV8856_SCLK			144000000ULL
+ #define OV8856_XVCLK_19_2		19200000
++#define OV8856_XVCLK_24			24000000
+ #define OV8856_DATA_LANES		4
+ #define OV8856_RGB_DEPTH		10
+ 
+@@ -2320,7 +2321,7 @@ static int ov8856_get_hwcfg(struct ov8856 *ov8856, struct device *dev)
+ 			return ret;
+ 	}
+ 
+-	if (xvclk_rate != OV8856_XVCLK_19_2)
++	if (xvclk_rate != OV8856_XVCLK_19_2 && xvclk_rate != OV8856_XVCLK_24)
+ 		dev_warn(dev, "external clock rate %u is unsupported",
+ 			 xvclk_rate);
+ 

@@ -104,7 +104,7 @@ index 3aa7940..72eb6ec 100644
  	qcom,ath10k-calibration-variant = "GO_KODAMA";
  };
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
-index a7b0cb3..6d94b3a 100644
+index a7b0cb3..749cc77 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
 @@ -80,6 +80,50 @@ eeprom@58 {
@@ -127,7 +127,7 @@ index a7b0cb3..6d94b3a 100644
 +                assigned-clock-parents = <&topckgen CLK_TOP_UNIVP_192M_D8>;
 +                assigned-clock-rates = <0>, <24000000>;
 +
-+                reset-gpios = <&pio 111 GPIO_ACTIVE_HIGH>;
++                reset-gpios = <&pio 111 GPIO_ACTIVE_LOW>;
 +                pinctrl-names = "default";
 +                pinctrl-0 = <&camera_pins_cam0>;
 +
@@ -158,7 +158,7 @@ index a7b0cb3..6d94b3a 100644
  };
  
  &i2c4 {
-@@ -95,6 +139,42 @@ eeprom@54 {
+@@ -95,6 +139,43 @@ eeprom@54 {
  		pagesize = <32>;
  		vcc-supply = <&mt6358_vcn18_reg>;
  	};
@@ -189,90 +189,91 @@ index a7b0cb3..6d94b3a 100644
 +                dvdd-supply = <&mt6358_vcn18_reg>;
 +                dovdd-supply = <&mt6358_vcamio_reg>;
 +
-+                port {
-+                        ov02a10_endpoint: endpoint {
-+                                data-lanes = <1>;
-+                                clock-noncontinuous;
-+                                link-frequencies = /bits/ 64 <390000000>;
-+                                remote-endpoint = <&seninf_port1_endpoint>;
-+                        };
-+                };
-+        };
++		port {
++			ov02a10_endpoint: endpoint {
++				data-lanes = <1>;
++				clock-noncontinuous;
++				link-frequencies = /bits/ 64 <390000000>;
++				ovti,mipi-clock-voltage = <3>;
++				remote-endpoint = <&seninf_port1_endpoint>;
++			};
++		};
++	};
  };
  
  &pio {
-@@ -347,6 +427,52 @@ &qca_wifi {
+@@ -347,6 +428,52 @@ &qca_wifi {
  	qcom,ath10k-calibration-variant = "LE_Krane";
  };
  
 +&seninf {
-+        status = "okay";
++	status = "okay";
 +
-+        ports {
-+                port@0 {
-+                        reg = <0>;
++	ports {
++		port@0 {
++			reg = <0>;
 +
-+                        seninf_port0_endpoint: endpoint {
-+                                clock-lanes = <2>;
-+                                clock-noncontinuous;
-+                                data-lanes = <0 1 3 4>;
-+                                link-frequencies = /bits/ 64 <360000000 180000000>;
-+                                remote-endpoint = <&ov8856_endpoint>;
-+                        };
-+                };
++			seninf_port0_endpoint: endpoint {
++				clock-lanes = <2>;
++				clock-noncontinuous;
++				data-lanes = <0 1 3 4>;
++				link-frequencies = /bits/ 64 <360000000 180000000>;
++				remote-endpoint = <&ov8856_endpoint>;
++			};
++		};
 +
-+                port@1 {
-+                        reg = <1>;
++		port@1 {
++			reg = <1>;
 +
-+                        seninf_port1_endpoint: endpoint {
-+                                data-lanes = <1>;
-+                                remote-endpoint = <&ov02a10_endpoint>;
-+                        };
-+                };
-+        };
++			seninf_port1_endpoint: endpoint {
++				data-lanes = <1>;
++				remote-endpoint = <&ov02a10_endpoint>;
++			};
++		};
++	};
 +};
 +
 +&camera_pins_cam0 {
-+        pins_reset {
-+                pinmux = <PINMUX_GPIO111__FUNC_GPIO111>;
-+                output-low;
-+        };
++	pins_reset {
++		pinmux = <PINMUX_GPIO111__FUNC_GPIO111>;
++		output-low;
++	};
 +};
 +
 +&camera_pins_cam1 {
-+        pins_powerdown {
-+                pinmux = <PINMUX_GPIO107__FUNC_GPIO107>;
-+                output-high;
-+        };
++	pins_powerdown {
++		pinmux = <PINMUX_GPIO107__FUNC_GPIO107>;
++		output-high;
++	};
 +
-+        pins_reset {
-+                pinmux = <PINMUX_GPIO109__FUNC_GPIO109>;
-+                output-low;
-+        };
++	pins_reset {
++		pinmux = <PINMUX_GPIO109__FUNC_GPIO109>;
++		output-low;
++	};
 +};
 +
  &sound {
  	compatible = "mediatek,mt8183_mt6358_ts3a227_max98357";
  };
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 8e79060..775577c 100644
+index 7f5e5a0..46ba44f 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -507,6 +507,18 @@ pins_bt_en {
+@@ -516,6 +516,18 @@ pins_bt_en {
  		};
  	};
  
 +	camera_pins_cam0: cam0@2 {
-+                pins_cmd_dat {
-+                        pinmux = <PINMUX_GPIO99__FUNC_CMMCLK0>;
-+                };
-+        };
++		pins_cmd_dat {
++			pinmux = <PINMUX_GPIO99__FUNC_CMMCLK0>;
++		};
++	};
 +
-+        camera_pins_cam1: cam1@2 {
-+                pins_cmd_dat {
-+                        pinmux = <PINMUX_GPIO100__FUNC_CMMCLK1>;
-+                };
-+        };
++	camera_pins_cam1: cam1@2 {
++		pins_cmd_dat {
++			pinmux = <PINMUX_GPIO100__FUNC_CMMCLK1>;
++		};
++	};
 +
  	dpi_pin_default: dpi_pin_default {
  		pins_cmd_dat {

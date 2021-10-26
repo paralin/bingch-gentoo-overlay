@@ -3,77 +3,59 @@ Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-Patchwork-Submitter: Moudy Ho <moudy.ho@mediatek.com>
-X-Patchwork-Id: 12561375
-Return-Path: 
- <SRS0=QAkp=PD=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Patchwork-Id: 12561363
+Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BFD4C4332F
-	for <linux-mediatek@archiver.kernel.org>;
- Fri, 15 Oct 2021 12:39:33 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org
- [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F216060F44
-	for <linux-mediatek@archiver.kernel.org>;
- Fri, 15 Oct 2021 12:39:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F216060F44
-Authentication-Results: mail.kernel.org;
- dmarc=fail (p=none dis=none) header.from=mediatek.com
-Authentication-Results: mail.kernel.org;
- spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=z74iAiUMZwyLOZxf+tmpN/UPcPIqSs0BRPdic5MXaQc=; b=VlFvWEzQ91oOhv
-	ToAGyvx6fjXMnYFqHeNM1airAP6GLnaKOU7B991yFTlEU5CBiCBnz+2EgCjXY7o92PFMdDVpQkh7F
-	yuiz1+jB0O7dAIOe6RxlQGLdRHb84q+XC47ISEC4awgRUnPNDGpmuPV6Wv5xeSbvt3AxPcY1X1QLP
-	Gnu6/mV3KCHuvxq2srNRmSJRqcG2/p0oLBugx2/tW6qQOsi1bUDX+uITc9MTQcgPDnlD6UxFD5W2Q
-	jTIIqTVMlHqKFpGp96HKg4MqCBLCtBdywpOVwzL3AvgrGOzd/cq0z6keW5QPZ7p/M4AOmdXWPbPen
-	5tHdIzm+JyBKAzV6fuOw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbMUd-006wZF-3x; Fri, 15 Oct 2021 12:39:23 +0000
-Received: from mailgw01.mediatek.com ([216.200.240.184])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mbMU8-006wOj-Vj; Fri, 15 Oct 2021 12:38:56 +0000
-X-UUID: 312d92cc386e4e578e551396a6fe2d29-20211015
-X-UUID: 312d92cc386e4e578e551396a6fe2d29-20211015
-Received: from mtkcas66.mediatek.inc [(172.29.193.44)] by
- mailgw01.mediatek.com
- (envelope-from <moudy.ho@mediatek.com>)
- (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
- with ESMTP id 2129491417; Fri, 15 Oct 2021 05:38:50 -0700
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- MTKMBS62N2.mediatek.inc (172.29.193.42) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 15 Oct 2021 05:38:49 -0700
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 734B6C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 15 Oct 2021 12:39:47 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 59D136108E
+	for <linux-media@archiver.kernel.org>; Fri, 15 Oct 2021 12:39:47 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S238965AbhJOMlq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Oct 2021 08:41:46 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:50618 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S238773AbhJOMlB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 15 Oct 2021 08:41:01 -0400
+X-UUID: a0e884747d4d43c19accdd147de583f3-20211015
+X-UUID: a0e884747d4d43c19accdd147de583f3-20211015
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by
+ mailgw02.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 241528104; Fri, 15 Oct 2021 20:38:48 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
  mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Fri, 15 Oct 2021 20:38:47 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via
- Frontend Transport; Fri, 15 Oct 2021 20:38:47 +0800
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 15 Oct 2021 20:38:47 +0800
 From: Moudy Ho <moudy.ho@mediatek.com>
-To: <moudy.ho@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Rob
- Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- "Hans Verkuil" <hverkuil-cisco@xs4all.nl>, Jernej Skrabec
- <jernej.skrabec@siol.net>
-CC: Maoguang Meng <maoguang.meng@mediatek.com>, daoyuan huang
- <daoyuan.huang@mediatek.com>, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
- "Geert Uytterhoeven" <geert+renesas@glider.be>, Rob Landley
- <rob@landley.net>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
- <drinkcat@chromium.org>, <acourbot@chromium.org>, <pihsun@chromium.org>,
- <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
- <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
- <srv_heupstream@mediatek.com>, <hsinyi@google.com>
+To: <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+CC: Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+        <drinkcat@chromium.org>, <acourbot@chromium.org>,
+        <pihsun@chromium.org>, <menghui.lin@mediatek.com>,
+        <sj.huang@mediatek.com>, <allen-kh.cheng@mediatek.com>,
+        <randy.wu@mediatek.com>, <srv_heupstream@mediatek.com>,
+        <hsinyi@google.com>
 Subject: [PATCH v8 1/7] soc: mediatek: mmsys: add support for MDP
 Date: Fri, 15 Oct 2021 20:38:26 +0800
 Message-ID: <20211015123832.17914-2-moudy.ho@mediatek.com>
@@ -82,23 +64,9 @@ In-Reply-To: <20211015123832.17914-1-moudy.ho@mediatek.com>
 References: <20211015123832.17914-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 X-MTK: N
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211015_053853_063324_FDB28303 
-X-CRM114-Status: GOOD (  20.31  )
-X-BeenThere: linux-mediatek@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-mediatek.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
- <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
-List-Post: <mailto:linux-mediatek@lists.infradead.org>
-List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
- <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
-Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
-Errors-To: 
- linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Precedence: bulk
+List-ID: <linux-media.vger.kernel.org>
+X-Mailing-List: linux-media@vger.kernel.org
 
 For the purpose of module independence, related settings should be moved
 from MDP to the corresponding driver.
@@ -106,6 +74,7 @@ This patch adds more 8183 MDP settings and interface. and MDP
 related settings must be set via CMDQ to avoid frame unsynchronized.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+Acked-By: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
  drivers/soc/mediatek/Kconfig           |   1 +
  drivers/soc/mediatek/mt8183-mmsys.h    | 219 +++++++++++++++++++++++++
@@ -568,78 +537,60 @@ Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-Patchwork-Submitter: Moudy Ho <moudy.ho@mediatek.com>
-X-Patchwork-Id: 12561373
-Return-Path: 
- <SRS0=QAkp=PD=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Patchwork-Id: 12561353
+Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDED3C433F5
-	for <linux-mediatek@archiver.kernel.org>;
- Fri, 15 Oct 2021 12:39:07 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org
- [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AF9956108E
-	for <linux-mediatek@archiver.kernel.org>;
- Fri, 15 Oct 2021 12:39:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF9956108E
-Authentication-Results: mail.kernel.org;
- dmarc=fail (p=none dis=none) header.from=mediatek.com
-Authentication-Results: mail.kernel.org;
- spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=koflvGlhTdXkj9cl5/yMOmL/IY12l/haN4yL5J5B3h8=; b=uMDP0WLpfv9PhJ
-	uqZABtcd5NDDLaxP+AzeIwsINQw0iN9cuzM5PmsEDerYkMeyufIva4HiTpP0RvsfsOLgmROL0VCmS
-	aKzW0qYXIszicqR691gJKgDQ4/OajGcCwW7+3qaMYKvsM30mm00P8perFUKSbDjRkaerp63YN2vuT
-	uNRnu7AIGY3szSotAU2hHIDUw/NTV8xxbrLSedH2iREA03RlKv0isTOfEVV8gMybj+A7C7VsEYvRY
-	eAKlOBGg/6EdnSjVyCTQ2F3cieFu+qIKmyjnY/y0U1TOsFFzZ2CCAlFLvqUIfG580kTSLLuEsMePa
-	HnzpjQ5+QUn0+Lx361dw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbMUB-006wQS-J9; Fri, 15 Oct 2021 12:38:55 +0000
-Received: from mailgw01.mediatek.com ([216.200.240.184])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mbMU8-006wO0-81; Fri, 15 Oct 2021 12:38:54 +0000
-X-UUID: 788f4732bb8741d9b007bd1097436e15-20211015
-X-UUID: 788f4732bb8741d9b007bd1097436e15-20211015
-Received: from mtkcas66.mediatek.inc [(172.29.193.44)] by
- mailgw01.mediatek.com
- (envelope-from <moudy.ho@mediatek.com>)
- (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
- with ESMTP id 456821176; Fri, 15 Oct 2021 05:38:50 -0700
-Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
- MTKMBS62N2.mediatek.inc (172.29.193.42) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 15 Oct 2021 05:38:49 -0700
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FFAAC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 15 Oct 2021 12:39:11 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 1556E6109E
+	for <linux-media@archiver.kernel.org>; Fri, 15 Oct 2021 12:39:11 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S238871AbhJOMlO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Oct 2021 08:41:14 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:50544 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235967AbhJOMk7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 15 Oct 2021 08:40:59 -0400
+X-UUID: c900bb6a7b89405eb36bd83d3c47f59f-20211015
+X-UUID: c900bb6a7b89405eb36bd83d3c47f59f-20211015
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by
+ mailgw02.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 921389298; Fri, 15 Oct 2021 20:38:49 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
  Fri, 15 Oct 2021 20:38:47 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via
- Frontend Transport; Fri, 15 Oct 2021 20:38:47 +0800
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 15 Oct 2021 20:38:47 +0800
 From: Moudy Ho <moudy.ho@mediatek.com>
-To: <moudy.ho@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Rob
- Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- Hans Verkuil <hverkuil-cisco@xs4all.nl>, Jernej Skrabec
- <jernej.skrabec@siol.net>
-CC: Maoguang Meng <maoguang.meng@mediatek.com>, daoyuan huang
- <daoyuan.huang@mediatek.com>, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Rob Landley <rob@landley.net>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
- <drinkcat@chromium.org>, <acourbot@chromium.org>, <pihsun@chromium.org>,
- <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
- <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
- <srv_heupstream@mediatek.com>, <hsinyi@google.com>
+To: <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+CC: Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+        <drinkcat@chromium.org>, <acourbot@chromium.org>,
+        <pihsun@chromium.org>, <menghui.lin@mediatek.com>,
+        <sj.huang@mediatek.com>, <allen-kh.cheng@mediatek.com>,
+        <randy.wu@mediatek.com>, <srv_heupstream@mediatek.com>,
+        <hsinyi@google.com>
 Subject: [PATCH v8 2/7] soc: mediatek: mmsys: add support for ISP control
 Date: Fri, 15 Oct 2021 20:38:27 +0800
 Message-ID: <20211015123832.17914-3-moudy.ho@mediatek.com>
@@ -648,23 +599,9 @@ In-Reply-To: <20211015123832.17914-1-moudy.ho@mediatek.com>
 References: <20211015123832.17914-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 X-MTK: N
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211015_053852_318257_54994D6E 
-X-CRM114-Status: GOOD (  17.13  )
-X-BeenThere: linux-mediatek@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-mediatek.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
- <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
-List-Post: <mailto:linux-mediatek@lists.infradead.org>
-List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
- <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
-Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
-Errors-To: 
- linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Precedence: bulk
+List-ID: <linux-media.vger.kernel.org>
+X-Mailing-List: linux-media@vger.kernel.org
 
 This patch adds 8183 ISP settings in MMSYS domain and interface.
 
@@ -894,77 +831,63 @@ Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-Patchwork-Submitter: Moudy Ho <moudy.ho@mediatek.com>
-X-Patchwork-Id: 12561387
-Return-Path: 
- <SRS0=QAkp=PD=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Patchwork-Id: 12561351
+Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18F46C433FE
-	for <linux-mediatek@archiver.kernel.org>;
- Fri, 15 Oct 2021 12:41:32 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org
- [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DA65260F44
-	for <linux-mediatek@archiver.kernel.org>;
- Fri, 15 Oct 2021 12:41:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DA65260F44
-Authentication-Results: mail.kernel.org;
- dmarc=fail (p=none dis=none) header.from=mediatek.com
-Authentication-Results: mail.kernel.org;
- spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=yi1ToLG3GL4c12BHK/Vr4JSeOI31rhsmOEdLJnwpuYk=; b=r3kgsZPYS1Uk7E
-	LZC2UljH9HsRwZ2NbSTov2GBWJGzQSSUqtOODuLsVPck2lA5okm5mW5ypr/H4EpFz4z4Zg+NiNPKP
-	86YekZTr0x4wFoiMVB0SDqqcvRno7IoByHfD3M00PVf2eQABomoaQ1unYUg0SWph0E+s7fJfjA6La
-	eScyK56RWxNy5CDWK1qT+FgD6lOmkSFRkDk4QRW0m9ACmfqgPznBTK6DIZ6F5a71eyj1EaJOVVb/s
-	ak3dJCZC/vnAhcyWMuY7YToeH2nTCpf2RR1+JXH4Usz1HT/LyAJ7mi/i7Z1rZWSy79Ad7xPuWXp18
-	+ltn1SGh+WyqAalruHsw==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbMWV-006xiu-OO; Fri, 15 Oct 2021 12:41:19 +0000
-Received: from mailgw02.mediatek.com ([216.200.240.185])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mbMVW-006x7e-82; Fri, 15 Oct 2021 12:40:19 +0000
-X-UUID: 36b02ad38525452ba8fb4e06ff1091cf-20211015
-X-UUID: 36b02ad38525452ba8fb4e06ff1091cf-20211015
-Received: from mtkcas66.mediatek.inc [(172.29.193.44)] by
- mailgw02.mediatek.com
- (envelope-from <moudy.ho@mediatek.com>)
- (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
- with ESMTP id 1557104748; Fri, 15 Oct 2021 05:40:16 -0700
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 577CFC433FE
+	for <linux-media@archiver.kernel.org>; Fri, 15 Oct 2021 12:39:08 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 3CB2F61090
+	for <linux-media@archiver.kernel.org>; Fri, 15 Oct 2021 12:39:08 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S235979AbhJOMlM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Oct 2021 08:41:12 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:57802 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235537AbhJOMk6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 15 Oct 2021 08:40:58 -0400
+X-UUID: 70aebc6bb8ea4edcaf595c89ccb09807-20211015
+X-UUID: 70aebc6bb8ea4edcaf595c89ccb09807-20211015
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by
+ mailgw01.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 219763466; Fri, 15 Oct 2021 20:38:49 +0800
 Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- MTKMBS62DR.mediatek.inc (172.29.94.18) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 15 Oct 2021 05:38:55 -0700
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 15 Oct 2021 20:38:48 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
- Fri, 15 Oct 2021 20:38:47 +0800
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 15 Oct
+ 2021 20:38:47 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via
- Frontend Transport; Fri, 15 Oct 2021 20:38:47 +0800
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 15 Oct 2021 20:38:47 +0800
 From: Moudy Ho <moudy.ho@mediatek.com>
-To: <moudy.ho@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Rob
- Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- "Hans Verkuil" <hverkuil-cisco@xs4all.nl>, Jernej Skrabec
- <jernej.skrabec@siol.net>
-CC: Maoguang Meng <maoguang.meng@mediatek.com>, daoyuan huang
- <daoyuan.huang@mediatek.com>, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
- "Geert Uytterhoeven" <geert+renesas@glider.be>, Rob Landley
- <rob@landley.net>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
- <drinkcat@chromium.org>, <acourbot@chromium.org>, <pihsun@chromium.org>,
- <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
- <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
- <srv_heupstream@mediatek.com>, <hsinyi@google.com>
+To: <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+CC: Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+        <drinkcat@chromium.org>, <acourbot@chromium.org>,
+        <pihsun@chromium.org>, <menghui.lin@mediatek.com>,
+        <sj.huang@mediatek.com>, <allen-kh.cheng@mediatek.com>,
+        <randy.wu@mediatek.com>, <srv_heupstream@mediatek.com>,
+        <hsinyi@google.com>
 Subject: [PATCH v8 3/7] soc: mediatek: mutex: add support for MDP
 Date: Fri, 15 Oct 2021 20:38:28 +0800
 Message-ID: <20211015123832.17914-4-moudy.ho@mediatek.com>
@@ -973,29 +896,16 @@ In-Reply-To: <20211015123832.17914-1-moudy.ho@mediatek.com>
 References: <20211015123832.17914-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 X-MTK: N
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211015_054018_315054_AFFA559F 
-X-CRM114-Status: GOOD (  14.20  )
-X-BeenThere: linux-mediatek@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-mediatek.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
- <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
-List-Post: <mailto:linux-mediatek@lists.infradead.org>
-List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
- <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
-Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
-Errors-To: 
- linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Precedence: bulk
+List-ID: <linux-media.vger.kernel.org>
+X-Mailing-List: linux-media@vger.kernel.org
 
 For the purpose of module independence, related settings should be moved
 from MDP to the corresponding driver.
 This patch adds more 8183 MDP settings and interface.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+Acked-By: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
  drivers/soc/mediatek/mtk-mutex.c       | 33 ++++++++++++++++++++++++++
  include/linux/soc/mediatek/mtk-mutex.h |  2 ++
@@ -1092,76 +1002,63 @@ Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-Patchwork-Submitter: Moudy Ho <moudy.ho@mediatek.com>
-X-Patchwork-Id: 12561379
-Return-Path: 
- <SRS0=QAkp=PD=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Patchwork-Id: 12561357
+Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4ECAC433FE
-	for <linux-mediatek@archiver.kernel.org>;
- Fri, 15 Oct 2021 12:40:06 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org
- [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B6F9560F44
-	for <linux-mediatek@archiver.kernel.org>;
- Fri, 15 Oct 2021 12:40:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B6F9560F44
-Authentication-Results: mail.kernel.org;
- dmarc=fail (p=none dis=none) header.from=mediatek.com
-Authentication-Results: mail.kernel.org;
- spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=kBS9Xwtc9P23RvUqWhZ1e1SeRiz3vxfixR+Th/hptvE=; b=JZXv78lLlXsCX7
-	0GMKC9PvPZ4xnzJ486Vkk1RhcDLlcloNO/Q8hAJ9hVphOndAkjLRMlYWB02OcNg7jzjZVFU5tmxsN
-	ukKfI3vgAkldzyHyCdSLVkK145w/MXIpy7+uRl7zOKGjUwMlgxZoQJxgCv5I/Uq7QZzlDiTOye8nB
-	d/w1Uhfo+liSvxhiyrlQ8j34FZf5O3+AZqSgadqdTsdEsxDsWGLfj8ekt2QpuM1rJM2Q+DHHn43wC
-	1zOeVEABtgD/UeFu74I9H62h5e47ytSTvkrvi0gCBYMHhQnzW4NWYQqsAI2BuBAIaQcM8iPssOv60
-	TunO0b3PvXpCWKGSKVlQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbMV7-006wp6-R1; Fri, 15 Oct 2021 12:39:53 +0000
-Received: from mailgw01.mediatek.com ([216.200.240.184])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mbMUH-006wRw-0P; Fri, 15 Oct 2021 12:39:03 +0000
-X-UUID: 6ee8f59e17634c47a2ab5a7308829705-20211015
-X-UUID: 6ee8f59e17634c47a2ab5a7308829705-20211015
-Received: from mtkcas68.mediatek.inc [(172.29.94.19)] by mailgw01.mediatek.com
- (envelope-from <moudy.ho@mediatek.com>)
- (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
- with ESMTP id 750298532; Fri, 15 Oct 2021 05:38:57 -0700
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 211E1C433EF
+	for <linux-media@archiver.kernel.org>; Fri, 15 Oct 2021 12:39:16 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 0F05B6109E
+	for <linux-media@archiver.kernel.org>; Fri, 15 Oct 2021 12:39:16 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S235537AbhJOMlT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Oct 2021 08:41:19 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:57836 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S236006AbhJOMk7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 15 Oct 2021 08:40:59 -0400
+X-UUID: 291d0bf172c6429484549104d11887cc-20211015
+X-UUID: 291d0bf172c6429484549104d11887cc-20211015
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by
+ mailgw01.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1856160959; Fri, 15 Oct 2021 20:38:49 +0800
 Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- MTKMBS62N2.mediatek.inc (172.29.193.42) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 15 Oct 2021 05:38:55 -0700
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 15 Oct 2021 20:38:48 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
- Fri, 15 Oct 2021 20:38:47 +0800
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 15 Oct
+ 2021 20:38:47 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via
- Frontend Transport; Fri, 15 Oct 2021 20:38:47 +0800
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 15 Oct 2021 20:38:47 +0800
 From: Moudy Ho <moudy.ho@mediatek.com>
-To: <moudy.ho@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Rob
- Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- "Hans Verkuil" <hverkuil-cisco@xs4all.nl>, Jernej Skrabec
- <jernej.skrabec@siol.net>
-CC: Maoguang Meng <maoguang.meng@mediatek.com>, daoyuan huang
- <daoyuan.huang@mediatek.com>, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
- "Geert Uytterhoeven" <geert+renesas@glider.be>, Rob Landley
- <rob@landley.net>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
- <drinkcat@chromium.org>, <acourbot@chromium.org>, <pihsun@chromium.org>,
- <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
- <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
- <srv_heupstream@mediatek.com>, <hsinyi@google.com>
+To: <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+CC: Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+        <drinkcat@chromium.org>, <acourbot@chromium.org>,
+        <pihsun@chromium.org>, <menghui.lin@mediatek.com>,
+        <sj.huang@mediatek.com>, <allen-kh.cheng@mediatek.com>,
+        <randy.wu@mediatek.com>, <srv_heupstream@mediatek.com>,
+        <hsinyi@google.com>
 Subject: [PATCH v8 4/7] soc: mediatek: mutex: add functions that operate
  registers by CMDQ
 Date: Fri, 15 Oct 2021 20:38:29 +0800
@@ -1171,23 +1068,9 @@ In-Reply-To: <20211015123832.17914-1-moudy.ho@mediatek.com>
 References: <20211015123832.17914-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 X-MTK: N
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211015_053901_109527_969D6CEF 
-X-CRM114-Status: GOOD (  16.37  )
-X-BeenThere: linux-mediatek@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-mediatek.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
- <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
-List-Post: <mailto:linux-mediatek@lists.infradead.org>
-List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
- <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
-Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
-Errors-To: 
- linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Precedence: bulk
+List-ID: <linux-media.vger.kernel.org>
+X-Mailing-List: linux-media@vger.kernel.org
 
 Considering that some functions have timing requirements
 in specific situation, this patch adds several interface that
@@ -1344,77 +1227,59 @@ Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-Patchwork-Submitter: Moudy Ho <moudy.ho@mediatek.com>
-X-Patchwork-Id: 12561377
-Return-Path: 
- <SRS0=QAkp=PD=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Patchwork-Id: 12561359
+Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F6FDC433F5
-	for <linux-mediatek@archiver.kernel.org>;
- Fri, 15 Oct 2021 12:39:47 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org
- [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C971F6109E
-	for <linux-mediatek@archiver.kernel.org>;
- Fri, 15 Oct 2021 12:39:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C971F6109E
-Authentication-Results: mail.kernel.org;
- dmarc=fail (p=none dis=none) header.from=mediatek.com
-Authentication-Results: mail.kernel.org;
- spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=FsReTtNDeSWmlajQj1BN8edwdLueYWhVA8WvSWFv/78=; b=eDek0JZbfo+aQD
-	5RTkFIm9NNagZwhaCWw26Jkdd401dMZyP3IpxaIMKtN4IL36mep+yoMmUrnFxJ/GvCM3zwV/Eme3b
-	0Imr5GKkSo6WII2E4nv+FWkSI9OWsKL1WzmwpHqevQKQht54lLJ7wP04GdGLukEz+2/vZdhgvaLjW
-	mHYkVkfhLCFB99pdpfSi3iKwx8ZnC21OhvpFYkzX32PU70bL8Ix9rerxCJtAZtBhwyxvTEkfMHUzA
-	nY/Jn9F/aHYesRPZq5gVfvbS9vKNCQdAXhPMpVEArDvwMkthn6JoE4UBB0S7+LyiFUuX1kgyelDfK
-	BS5ffpkYbygWGgtOrNBQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbMUp-006wes-93; Fri, 15 Oct 2021 12:39:35 +0000
-Received: from mailgw01.mediatek.com ([216.200.240.184])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mbMUA-006wO0-2t; Fri, 15 Oct 2021 12:38:57 +0000
-X-UUID: f5f97f82180f463785d81aea7c1e00ad-20211015
-X-UUID: f5f97f82180f463785d81aea7c1e00ad-20211015
-Received: from mtkcas66.mediatek.inc [(172.29.193.44)] by
- mailgw01.mediatek.com
- (envelope-from <moudy.ho@mediatek.com>)
- (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
- with ESMTP id 1904365500; Fri, 15 Oct 2021 05:38:50 -0700
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- MTKMBS62N2.mediatek.inc (172.29.193.42) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 15 Oct 2021 05:38:49 -0700
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A616C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 15 Oct 2021 12:39:30 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id F16906108E
+	for <linux-media@archiver.kernel.org>; Fri, 15 Oct 2021 12:39:29 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S238937AbhJOMlb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Oct 2021 08:41:31 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:50642 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S238783AbhJOMlB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 15 Oct 2021 08:41:01 -0400
+X-UUID: 4913f83aa54b4e53a634425b6756e743-20211015
+X-UUID: 4913f83aa54b4e53a634425b6756e743-20211015
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by
+ mailgw02.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 950567805; Fri, 15 Oct 2021 20:38:48 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
  mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Fri, 15 Oct 2021 20:38:48 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via
- Frontend Transport; Fri, 15 Oct 2021 20:38:47 +0800
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 15 Oct 2021 20:38:47 +0800
 From: Moudy Ho <moudy.ho@mediatek.com>
-To: <moudy.ho@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Rob
- Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- "Hans Verkuil" <hverkuil-cisco@xs4all.nl>, Jernej Skrabec
- <jernej.skrabec@siol.net>
-CC: Maoguang Meng <maoguang.meng@mediatek.com>, daoyuan huang
- <daoyuan.huang@mediatek.com>, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
- "Geert Uytterhoeven" <geert+renesas@glider.be>, Rob Landley
- <rob@landley.net>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
- <drinkcat@chromium.org>, <acourbot@chromium.org>, <pihsun@chromium.org>,
- <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
- <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
- <srv_heupstream@mediatek.com>, <hsinyi@google.com>
+To: <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+CC: Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+        <drinkcat@chromium.org>, <acourbot@chromium.org>,
+        <pihsun@chromium.org>, <menghui.lin@mediatek.com>,
+        <sj.huang@mediatek.com>, <allen-kh.cheng@mediatek.com>,
+        <randy.wu@mediatek.com>, <srv_heupstream@mediatek.com>,
+        <hsinyi@google.com>
 Subject: [PATCH v8 5/7] dt-binding: mt8183: add Mediatek MDP3 dt-bindings
 Date: Fri, 15 Oct 2021 20:38:30 +0800
 Message-ID: <20211015123832.17914-6-moudy.ho@mediatek.com>
@@ -1423,23 +1288,9 @@ In-Reply-To: <20211015123832.17914-1-moudy.ho@mediatek.com>
 References: <20211015123832.17914-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 X-MTK: N
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211015_053854_204041_304565F9 
-X-CRM114-Status: GOOD (  18.19  )
-X-BeenThere: linux-mediatek@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-mediatek.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
- <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
-List-Post: <mailto:linux-mediatek@lists.infradead.org>
-List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
- <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
-Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
-Errors-To: 
- linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Precedence: bulk
+List-ID: <linux-media.vger.kernel.org>
+X-Mailing-List: linux-media@vger.kernel.org
 
 This patch adds DT binding document for Media Data Path 3 (MDP3)
 a unit in multimedia system used for scaling and color format convert.
@@ -1973,77 +1824,59 @@ Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-Patchwork-Submitter: Moudy Ho <moudy.ho@mediatek.com>
-X-Patchwork-Id: 12561383
-Return-Path: 
- <SRS0=QAkp=PD=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Patchwork-Id: 12561355
+Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E920C433FE
-	for <linux-mediatek@archiver.kernel.org>;
- Fri, 15 Oct 2021 12:41:03 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org
- [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B90BA61090
-	for <linux-mediatek@archiver.kernel.org>;
- Fri, 15 Oct 2021 12:41:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B90BA61090
-Authentication-Results: mail.kernel.org;
- dmarc=fail (p=none dis=none) header.from=mediatek.com
-Authentication-Results: mail.kernel.org;
- spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=mEafFsSsjc1cz0PmMQLe+3yAUvRKC/z7p4EPykWLQ6I=; b=0g8BnkpNLh3rhi
-	3so29FazqwcDRsDPQC2+WKMcoiRtDSftv0EfN+KEpoSFwJ+mV6Fd8DTCP9EUEQ+pGlOYtDPbv8YHX
-	iBJmyw9cu15Bph3qmchoBxpby1TyE52dHBijmPQwxs0pRIvo4oeZ1biUD+hq61oBEYhktGe86flJA
-	amIe6lmT/GiI6OEfq7QPAETjIIgTyhDiQpa4mQgA71FGf0FDsBUuCQhYnpblm5c2YBLPEf6dEu7vu
-	BWq7rOSSjDV9tcPLB16kFnkKkRdipCzjHmp6iZtPMzqLY8nd1FjsLM1pUyjOnGV1BFKC1chWcaaJc
-	hScIrjW0sCjum1zeQ3UA==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbMVz-006xNr-7J; Fri, 15 Oct 2021 12:40:47 +0000
-Received: from mailgw02.mediatek.com ([216.200.240.185])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mbMVV-006x6r-BQ; Fri, 15 Oct 2021 12:40:18 +0000
-X-UUID: f35e3b559f5b4dac9f33fd48d25031cb-20211015
-X-UUID: f35e3b559f5b4dac9f33fd48d25031cb-20211015
-Received: from mtkcas66.mediatek.inc [(172.29.193.44)] by
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68E9CC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 15 Oct 2021 12:39:13 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 4C7376108E
+	for <linux-media@archiver.kernel.org>; Fri, 15 Oct 2021 12:39:13 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S238893AbhJOMlR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Oct 2021 08:41:17 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:50588 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S236015AbhJOMk7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 15 Oct 2021 08:40:59 -0400
+X-UUID: 963b8408a3e94136ab4b633c69c5d80b-20211015
+X-UUID: 963b8408a3e94136ab4b633c69c5d80b-20211015
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by
  mailgw02.mediatek.com
- (envelope-from <moudy.ho@mediatek.com>)
- (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
- with ESMTP id 184835592; Fri, 15 Oct 2021 05:40:16 -0700
-Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
- MTKMBS62DR.mediatek.inc (172.29.94.18) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 15 Oct 2021 05:38:49 -0700
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 648341388; Fri, 15 Oct 2021 20:38:49 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
  mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Fri, 15 Oct 2021 20:38:48 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via
- Frontend Transport; Fri, 15 Oct 2021 20:38:48 +0800
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 15 Oct 2021 20:38:48 +0800
 From: Moudy Ho <moudy.ho@mediatek.com>
-To: <moudy.ho@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Rob
- Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- "Hans Verkuil" <hverkuil-cisco@xs4all.nl>, Jernej Skrabec
- <jernej.skrabec@siol.net>
-CC: Maoguang Meng <maoguang.meng@mediatek.com>, daoyuan huang
- <daoyuan.huang@mediatek.com>, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
- "Geert Uytterhoeven" <geert+renesas@glider.be>, Rob Landley
- <rob@landley.net>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
- <drinkcat@chromium.org>, <acourbot@chromium.org>, <pihsun@chromium.org>,
- <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
- <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
- <srv_heupstream@mediatek.com>, <hsinyi@google.com>
+To: <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+CC: Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+        <drinkcat@chromium.org>, <acourbot@chromium.org>,
+        <pihsun@chromium.org>, <menghui.lin@mediatek.com>,
+        <sj.huang@mediatek.com>, <allen-kh.cheng@mediatek.com>,
+        <randy.wu@mediatek.com>, <srv_heupstream@mediatek.com>,
+        <hsinyi@google.com>
 Subject: [PATCH v8 6/7] dts: arm64: mt8183: add Mediatek MDP3 nodes
 Date: Fri, 15 Oct 2021 20:38:31 +0800
 Message-ID: <20211015123832.17914-7-moudy.ho@mediatek.com>
@@ -2052,23 +1885,9 @@ In-Reply-To: <20211015123832.17914-1-moudy.ho@mediatek.com>
 References: <20211015123832.17914-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 X-MTK: N
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20211015_054017_424609_4A4ECE4F 
-X-CRM114-Status: GOOD (  10.42  )
-X-BeenThere: linux-mediatek@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-mediatek.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
- <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
-List-Post: <mailto:linux-mediatek@lists.infradead.org>
-List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
- <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
-Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
-Errors-To: 
- linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Precedence: bulk
+List-ID: <linux-media.vger.kernel.org>
+X-Mailing-List: linux-media@vger.kernel.org
 
 Add device nodes for Media Data Path 3 (MDP3) modules.
 
@@ -2220,78 +2039,60 @@ Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-Patchwork-Submitter: Moudy Ho <moudy.ho@mediatek.com>
-X-Patchwork-Id: 12561381
-Return-Path: 
- <SRS0=QAkp=PD=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Patchwork-Id: 12561361
+Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 705CAC433F5
-	for <linux-mediatek@archiver.kernel.org>;
- Fri, 15 Oct 2021 12:40:17 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org
- [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2F8176108E
-	for <linux-mediatek@archiver.kernel.org>;
- Fri, 15 Oct 2021 12:40:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2F8176108E
-Authentication-Results: mail.kernel.org;
- dmarc=fail (p=none dis=none) header.from=mediatek.com
-Authentication-Results: mail.kernel.org;
- spf=none smtp.mailfrom=lists.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
-	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
-	List-Archive:List-Unsubscribe:List-Id:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:CC:To:From:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Owner; bh=phAgfpEFfWIN0yGV+v9roEMe7kIhPwTdvdjKMD+nEjE=; b=WYgGf3spgeMJh8
-	HQzmrz46cKpzU+5KD59UrQDsImZKqMiQiEJ6F783L90ytKzcpv+YVlMZLlwZPbvCj+z8JNnKqU5Yz
-	EAAMG5f99oCKAutdDmjZt6nVYdEbOtdbl79fB0mh8TRG30YU/nt9Q77UcSDOmEENU+dgW5ZwYwt0R
-	hRwpmZ1J2X3imb66kJM20q9/Ca/pdlLwDY0TiZl2qboVxucnhvEvNBCR5ZMTnjCjl9HPHWMQbWltu
-	Ssjb9u+IihDHFRkjwx+l4eCZjxhzBBK5osIpPpFOlBfZRck2oHtn57SXfyQ9LpGrogIW1Y9IaLBwx
-	hzLKzutbIh38UTiryDzQ==;
-Received: from localhost ([::1] helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1mbMVA-006wqw-Oq; Fri, 15 Oct 2021 12:39:56 +0000
-Received: from mailgw02.mediatek.com ([216.200.240.185])
- by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
- id 1mbMUC-006wP8-Sd; Fri, 15 Oct 2021 12:39:04 +0000
-X-UUID: 03ba23b1ddee4f09adf21b968542b91e-20211015
-X-UUID: 03ba23b1ddee4f09adf21b968542b91e-20211015
-Received: from mtkcas67.mediatek.inc [(172.29.193.45)] by
- mailgw02.mediatek.com
- (envelope-from <moudy.ho@mediatek.com>)
- (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
- with ESMTP id 974422203; Fri, 15 Oct 2021 05:38:52 -0700
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- MTKMBS62N2.mediatek.inc (172.29.193.42) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 15 Oct 2021 05:38:50 -0700
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89F4CC433EF
+	for <linux-media@archiver.kernel.org>; Fri, 15 Oct 2021 12:39:40 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id 4B9D36108E
+	for <linux-media@archiver.kernel.org>; Fri, 15 Oct 2021 12:39:40 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S238947AbhJOMlg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Oct 2021 08:41:36 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:57888 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S236017AbhJOMlB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 15 Oct 2021 08:41:01 -0400
+X-UUID: 3bbfc19b91464095a4a8fdc740cce3d8-20211015
+X-UUID: 3bbfc19b91464095a4a8fdc740cce3d8-20211015
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by
+ mailgw01.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 884150142; Fri, 15 Oct 2021 20:38:49 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
  15.2.792.15; Fri, 15 Oct 2021 20:38:48 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via
- Frontend Transport; Fri, 15 Oct 2021 20:38:48 +0800
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 15 Oct 2021 20:38:48 +0800
 From: Moudy Ho <moudy.ho@mediatek.com>
-To: <moudy.ho@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Rob
- Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- Hans Verkuil <hverkuil-cisco@xs4all.nl>, Jernej Skrabec
- <jernej.skrabec@siol.net>
-CC: Maoguang Meng <maoguang.meng@mediatek.com>, daoyuan huang
- <daoyuan.huang@mediatek.com>, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Rob Landley <rob@landley.net>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
- <drinkcat@chromium.org>, <acourbot@chromium.org>, <pihsun@chromium.org>,
- <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
- <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
- <srv_heupstream@mediatek.com>, <hsinyi@google.com>
+To: <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+CC: Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <tfiga@chromium.org>,
+        <drinkcat@chromium.org>, <acourbot@chromium.org>,
+        <pihsun@chromium.org>, <menghui.lin@mediatek.com>,
+        <sj.huang@mediatek.com>, <allen-kh.cheng@mediatek.com>,
+        <randy.wu@mediatek.com>, <srv_heupstream@mediatek.com>,
+        <hsinyi@google.com>
 Subject: [PATCH v8 7/7] media: platform: mtk-mdp3: add Mediatek MDP3 driver
 Date: Fri, 15 Oct 2021 20:38:32 +0800
 Message-ID: <20211015123832.17914-8-moudy.ho@mediatek.com>
@@ -2300,20 +2101,9 @@ In-Reply-To: <20211015123832.17914-1-moudy.ho@mediatek.com>
 References: <20211015123832.17914-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 X-MTK: N
-X-BeenThere: linux-mediatek@lists.infradead.org
-X-Mailman-Version: 2.1.34
-Precedence: list
-List-Id: <linux-mediatek.lists.infradead.org>
-List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
- <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
-List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
-List-Post: <mailto:linux-mediatek@lists.infradead.org>
-List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
-List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
- <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
-Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
-Errors-To: 
- linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+Precedence: bulk
+List-ID: <linux-media.vger.kernel.org>
+X-Mailing-List: linux-media@vger.kernel.org
 
 This patch adds driver for Mediatek's Media Data Path ver.3 (MDP3).
 It provides the following functions:
@@ -2336,6 +2126,7 @@ mtk-mdp3-core.c
 Signed-off-by: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
 Signed-off-by: daoyuan huang <daoyuan.huang@mediatek.com>
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+Reported-by: kernel test robot <lkp@intel.com>
 ---
 Depend on:
    [1] https://patchwork.kernel.org/project/linux-mediatek/patch/20190906115513.159705-9-acourbot@chromium.org/

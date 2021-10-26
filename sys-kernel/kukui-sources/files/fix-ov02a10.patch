@@ -1,0 +1,13 @@
+diff --git a/drivers/media/i2c/ov02a10.c b/drivers/media/i2c/ov02a10.c
+index 0f08c05..87c7fc9 100644
+--- a/drivers/media/i2c/ov02a10.c
++++ b/drivers/media/i2c/ov02a10.c
+@@ -832,6 +832,8 @@ static int ov02a10_check_hwcfg(struct device *dev, struct ov02a10 *ov02a10)
+ 
+ 	if (!ret)
+ 		ov02a10->mipi_clock_voltage = clk_volt;
++	/* reset ret if above fwnode_property_read_u32 fails */
++	ret = 0;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(link_freq_menu_items); i++) {
+ 		for (j = 0; j < bus_cfg.nr_of_link_frequencies; j++) {

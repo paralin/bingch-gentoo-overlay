@@ -1,0 +1,59 @@
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+index 1651612..7daa971 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+@@ -268,14 +268,6 @@ infracfg: syscon@10001000 {
+ 			compatible = "mediatek,mt8192-infracfg", "syscon";
+ 			reg = <0 0x10001000 0 0x1000>;
+ 			#clock-cells = <1>;
+-
+-			infracfg_rst: reset-controller {
+-				compatible = "mediatek,infra-reset", "ti,syscon-reset";
+-				#reset-cells = <1>;
+-				ti,reset-bits = <
+-					0x150 5 0x154 5 0 0     (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* 0: svs */
+-				>;
+-			};
+ 		};
+ 
+ 		pericfg: syscon@10003000 {
+@@ -370,20 +362,6 @@ spi0: spi@1100a000 {
+ 			status = "disabled";
+ 		};
+ 
+-		svs: svs@1100b000 {
+-			compatible = "mediatek,mt8192-svs";
+-			reg = <0 0x1100b000 0 0x1000>;
+-			interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH 0>;
+-			clocks = <&infracfg CLK_INFRA_THERM>;
+-			clock-names = "main";
+-			nvmem-cells = <&svs_calibration>,
+-				      <&lvts_e_data1>;
+-			nvmem-cell-names = "svs-calibration-data",
+-					   "t-calibration-data";
+-			resets = <&infracfg_rst 0>;
+-			reset-names = "svs_rst";
+-		};
+-
+ 		spi1: spi@11010000 {
+ 			compatible = "mediatek,mt8192-spi",
+ 				     "mediatek,mt6765-spi";
+@@ -501,18 +479,6 @@ audsys: syscon@11210000 {
+ 			#clock-cells = <1>;
+ 		};
+ 
+-		efuse: efuse@11c10000 {
+-			compatible = "mediatek,efuse";
+-			reg = <0 0x11c10000 0 0x1000>;
+-
+-			lvts_e_data1: data1 {
+-				reg = <0x1C0 0x58>;
+-			};
+-			svs_calibration: calib@580 {
+-				reg = <0x580 0x68>;
+-			};
+-		};
+-
+ 		i2c3: i2c3@11cb0000 {
+ 			compatible = "mediatek,mt8192-i2c";
+ 			reg = <0 0x11cb0000 0 0x1000>,

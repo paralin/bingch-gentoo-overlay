@@ -1,0 +1,87 @@
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
+index 6d94b3a..6cdf481 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
+@@ -428,49 +428,49 @@ &qca_wifi {
+ };
+ 
+ &seninf {
+-        status = "okay";
+-
+-        ports {
+-                port@0 {
+-                        reg = <0>;
++	status = "okay";
+ 
+-                        seninf_port0_endpoint: endpoint {
+-                                clock-lanes = <2>;
+-                                clock-noncontinuous;
+-                                data-lanes = <0 1 3 4>;
+-                                link-frequencies = /bits/ 64 <360000000 180000000>;
+-                                remote-endpoint = <&ov8856_endpoint>;
+-                        };
+-                };
++	ports {
++		port@0 {
++			reg = <0>;
++
++			seninf_port0_endpoint: endpoint {
++				clock-lanes = <2>;
++				clock-noncontinuous;
++				data-lanes = <0 1 3 4>;
++				link-frequencies = /bits/ 64 <360000000 180000000>;
++				remote-endpoint = <&ov8856_endpoint>;
++			};
++		};
+ 
+-                port@1 {
+-                        reg = <1>;
++		port@1 {
++			reg = <1>;
+ 
+-                        seninf_port1_endpoint: endpoint {
+-                                data-lanes = <1>;
+-                                remote-endpoint = <&ov02a10_endpoint>;
+-                        };
+-                };
+-        };
++			seninf_port1_endpoint: endpoint {
++				data-lanes = <1>;
++				remote-endpoint = <&ov02a10_endpoint>;
++			};
++		};
++	};
+ };
+ 
+ &camera_pins_cam0 {
+-        pins_reset {
+-                pinmux = <PINMUX_GPIO111__FUNC_GPIO111>;
+-                output-low;
+-        };
++	pins_reset {
++		pinmux = <PINMUX_GPIO111__FUNC_GPIO111>;
++		output-low;
++	};
+ };
+ 
+ &camera_pins_cam1 {
+-        pins_powerdown {
+-                pinmux = <PINMUX_GPIO107__FUNC_GPIO107>;
+-                output-high;
+-        };
++	pins_powerdown {
++		pinmux = <PINMUX_GPIO107__FUNC_GPIO107>;
++		output-high;
++	};
+ 
+-        pins_reset {
+-                pinmux = <PINMUX_GPIO109__FUNC_GPIO109>;
+-                output-low;
+-        };
++	pins_reset {
++		pinmux = <PINMUX_GPIO109__FUNC_GPIO109>;
++		output-low;
++	};
+ };
+ 
+ &sound {

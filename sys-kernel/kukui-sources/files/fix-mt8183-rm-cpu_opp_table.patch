@@ -1,0 +1,13 @@
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index f904f02..7390466 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -1655,8 +1655,6 @@ gpu: gpu@13040000 {
+ 				<&spm MT8183_POWER_DOMAIN_MFG_2D>;
+ 			power-domain-names = "core0", "core1", "core2";
+ 
+-			operating-points-v2 = <&gpu_opp_table>;
+-
+ 		};
+ 
+ 		gpu_core1: mali_gpu_core1 {

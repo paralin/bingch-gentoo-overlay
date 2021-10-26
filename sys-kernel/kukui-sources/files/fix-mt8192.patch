@@ -1,0 +1,13 @@
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+index 1651612..5803736 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+@@ -273,7 +273,7 @@ infracfg_rst: reset-controller {
+ 				compatible = "mediatek,infra-reset", "ti,syscon-reset";
+ 				#reset-cells = <1>;
+ 				ti,reset-bits = <
+-					0x150 5 0x154 5 0 0     (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* 0: svs */
++					0x150 5 0x154 5 0 0 0 /* 0: svs */
+ 				>;
+ 			};
+ 		};

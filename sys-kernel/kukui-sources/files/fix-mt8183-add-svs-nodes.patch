@@ -1,0 +1,32 @@
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index af0992b..8cad27f 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -753,6 +775,27 @@ svs: svs@1100b000 {
+ 				      <&thermal_calibration>;
+ 			nvmem-cell-names = "svs-calibration-data",
+ 					   "t-calibration-data";
++
++			svs_cpu_little: svs_cpu_little {
++				compatible = "mediatek,mt8183-svs-cpu-little";
++				operating-points-v2 = <&cluster0_opp>;
++			};
++
++			svs_cpu_big: svs_cpu_big {
++				compatible = "mediatek,mt8183-svs-cpu-big";
++				operating-points-v2 = <&cluster1_opp>;
++			};
++
++			svs_cci: svs_cci {
++				compatible = "mediatek,mt8183-svs-cci";
++				operating-points-v2 = <&cci_opp>;
++			};
++
++			svs_gpu: svs_gpu {
++				compatible = "mediatek,mt8183-svs-gpu";
++				power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_2D>;
++				operating-points-v2 = <&gpu_opp_table>;
++			};
+ 		};
+ 
+ 		thermal: thermal@1100b000 {

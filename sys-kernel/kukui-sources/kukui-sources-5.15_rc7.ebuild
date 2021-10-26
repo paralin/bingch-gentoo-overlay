@@ -38,37 +38,48 @@ DEPEND="${RDEPEND}
 
 PATCHES=(
 	# From https://github.com/Maccraft123/Cadmium/tree/master/baseboard/kukui/patches
-    ${FILESDIR}/drm.patch
-    #${FILESDIR}/gpu-vsram.patch
-    ${FILESDIR}/move-gpu-opp-to-3.patch
-    #${FILESDIR}/mutex-gce-events.patch
-    ${FILESDIR}/opp-multi-regulator.patch
-    #${FILESDIR}/panel-dts-rotation.patch
-    #${FILESDIR}/panel-dts-rotation_sku0.patch
-    ${FILESDIR}/sound_1.patch
-    ${FILESDIR}/sound_2.patch
+	${FILESDIR}/drm.patch
+	#${FILESDIR}/gpu-vsram.patch
+	${FILESDIR}/move-gpu-opp-to-3.patch
+	#${FILESDIR}/mutex-gce-events.patch
+	${FILESDIR}/opp-multi-regulator.patch
+	#${FILESDIR}/panel-dts-rotation.patch
+	##${FILESDIR}/panel-dts-rotation_sku0.patch
+	${FILESDIR}/sound_1.patch
+	${FILESDIR}/sound_2.patch
 	# From https://github.com/hexdump0815/linux-mainline-mediatek-mt81xx-kernel/tree/master/misc.cbm/patches/5.13.2
 	#${FILESDIR}/mt8183-disable-unsupported-thermal-zones.patch
 	#${FILESDIR}/mt8183-panel-orientation.patch
 	#${FILESDIR}/mt8183-silence-some-log-spam.patch
 
 	# cherry-pick from https://patchwork.kernel.org/project/linux-mediatek
-	${FILESDIR}/Add-cpufreq-and-cci-devfreq-for-mt8183-and-SVS-support-fix.patch
-	${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix-5.15.patch
-	# fix rotation
-	${FILESDIR}/v6-RESEND-1-3-gpu-drm-separate-panel-orientation-property-creating-and-value-setting.patch
-	#${FILESDIR}/mediatek-Set-default-value-for-Panel-Orientation-connector-prop.patch
-	#${FILESDIR}/drm-mediatek-Set-Rotation-default-value-to-1.patch
 	# it6505
-    ${FILESDIR}/drm-bridge-Drop-deprecated-functions-fix.patch
-    ${FILESDIR}/v10-drm-bridge-add-it6505-driver.patch
-    ${FILESDIR}/fix-mt8183-dpi.patch
-    # mdp3 support depends on vcodec support
+	${FILESDIR}/drm-bridge-Drop-deprecated-functions-fix.patch
+	${FILESDIR}/v10-drm-bridge-add-it6505-driver.patch
+	${FILESDIR}/fix-mt8183-dpi.patch
+	# drm
+	${FILESDIR}/Add-cpufreq-and-cci-devfreq-for-mt8183-and-SVS-support.patch
+	${FILESDIR}/Add-cpufreq-and-cci-devfreq-for-mt8183-and-SVS-support-fix.patch
+	${FILESDIR}/v6-RESEND-1-3-gpu-drm-separate-panel-orientation-property-creating-and-value-setting.patch
+	${FILESDIR}/fix-mt8183-add-gpu-core-nodes.patch
+	${FILESDIR}/fix-mt8183-rm-cpu_opp_table.patch
+	# mdp3 support depends on vcodec support
 	${FILESDIR}/media-mtk-vcodec-support-for-MT8183-decoder.patch
 	${FILESDIR}/media-mtk-vcodec-few-fixes.patch
 	${FILESDIR}/fix-mt8183-vcodec.patch
-	${FILESDIR}/soc-mediatek-SVS-introduce-MTK-SVS-engine-fix.patch
-	${FILESDIR}/media-mediatek-support-mdp3-on-mt8183-platform-fix-5.15.patch
+	# soc-mediatek-SVS-introduce-MTK-SVS-engine depend on mt8192 clock patch
+	${FILESDIR}/Add-MediaTek-MT8192-clock-provider-device-nodes.patch
+	${FILESDIR}/soc-mediatek-SVS-introduce-MTK-SVS-engine.patch
+	${FILESDIR}/rm-mt8192-svs-nodes.patch
+	${FILESDIR}/fix-mt8183-add-svs-nodes.patch
+	${FILESDIR}/media-mediatek-support-mdp3-on-mt8183-platform.patch
+	# mmsys
+	${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix-5.15.patch
+
+	#${FILESDIR}/fix-mt8192.patch
+	#${FILESDIR}/mediatek-Set-default-value-for-Panel-Orientation-connector-prop.patch
+	##${FILESDIR}/drm-mediatek-Set-Rotation-default-value-to-1.patch
+
 	# DIP  
 	${FILESDIR}/media-platform-Add-support-for-Digital-Image-Processing-DIP-on-mt8183-SoC-fix.patch
 	${FILESDIR}/fix-v4l2-ioctl-2.patch
@@ -85,13 +96,13 @@ PATCHES=(
 	# JPEG
 	${FILESDIR}/v5-1-3-dt-bindings-mediatek-convert-mtk-jpeg-decoder-encoder-to-yaml.patch
 	${FILESDIR}/v4-3-3-arm64-dts-mt8183-add-jpeg-enc-node-for-mt8183.diff
-	# add cam node
-	${FILESDIR}/add-ov02a10-ov8856.patch
-    # fsource
+	# add cam nodes
+	${FILESDIR}/add-ov02a10-ov8856-nodes.patch
+	${FILESDIR}/ov8856-add-freq.patch
+	# fsource
 	${FILESDIR}/fix-mt8183-fssource.patch
 	# MDP nodes
 	${FILESDIR}/fix-mt8183-mdp-5.15.patch
-
 
 #   #${FILESDIR}/Fix-the-issues-caused-by-CMDQ-refinement-of-mtk-drm.patch
 #   ${FILESDIR}/mailbox-Remove-WARN_ON-for-async_cb.cb-in-cmdq_exec_done.patch
@@ -102,7 +113,7 @@ PATCHES=(
 #   ${FILESDIR}/Support-multi-hardware-decode-using-of_platform_populate.patch
 #   ${FILESDIR}/ASoC-mediatek-Constify-static-snd_soc_ops.patch
 #   ${FILESDIR}/Bluetooth-btusb-fix-memory-leak-in-btusb_mtk_submit_wmt_recv_urb.patch
-
+#
 #   ${FILESDIR}/Introducing-an-attribute-to-select-the-time-setting.patch
 #   #${FILESDIR}/ASoC-mediatek-common-handle-NULL-case-in-suspend-resume-function.patch
 #   ${FILESDIR}/v4-media-mtk-vpu-Ensure-alignment-of-8-for-DTCM-buffer.patch
@@ -114,15 +125,18 @@ PATCHES=(
 #	${FILESDIR}/v3-PCI-mediatek-gen3-Disable-DVFSRC-voltage-request.patch
 #	${FILESDIR}/mailbox-cmdq-Add-of_node_put-before-return.patch
 #	#${FILESDIR}/Using-component-framework-to-support-multi-hardware-decode.patch
-#	# 
-##	${FILESDIR}/Multigenerational-LRU-Framework.patch
+	# 
+#	${FILESDIR}/Multigenerational-LRU-Framework.patch
 #
 #
 #	
-#	# various fixes
+	# various fixes
 #	${FILESDIR}/fix-kukui-snd.patch
 	${FILESDIR}/Clean-up-mediatek-larb.patch
 	${FILESDIR}/fix-mt8183-mutex.patch
+	${FILESDIR}/v2-mailbox-remove-the-error-message-when-gce-clk-is-defer.patch
+	${FILESDIR}/Bluetooth-btusb-Fix-failed-to-send-func-ctrl-for-MediaTek-devices..patch
+	${FILESDIR}/v4-1-3-PM-wakeirq-support-enabling-wake-up-irq-after-runtime_suspend-called.patch
 )
 
 src_prepare() {

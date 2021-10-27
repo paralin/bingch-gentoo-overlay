@@ -7,17 +7,17 @@ inherit pam vala meson git-r3 gnome2-utils systemd readme.gentoo-r1 xdg
 
 KEYWORDS="~amd64 ~arm64"
 
-EGIT_REPO_URI="https://source.puri.sm/Librem5/phosh.git"
+EGIT_REPO_URI="https://gitlab.gnome.org/World/Phosh/${PN}.git"
 if [[ ${PV} != 9999 ]]; then
 	#EGIT_COMMIT="tags/v${PV}"
-	EGIT_COMMIT="14b50b9546216921cbeea1774c86a008031d7a83"
+	EGIT_COMMIT="5db6a9bf3686c05619d228d9b499d37d5f1e3b4b"
 else
 	KEYWORDS=""
 fi
 EGIT_SUBMODULES=("subprojects/gvc")
 
 DESCRIPTION="A pure Wayland shell prototype for GNOME on mobile devices"
-HOMEPAGE="https://source.puri.sm/Librem5/phosh"
+HOMEPAGE="https://gitlab.gnome.org/World/Phosh/phosh"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -44,14 +44,22 @@ BDEPEND="
 PATCHES=(
 	${FILESDIR}/0001-system-prompt-allow-blank-passwords.patch
 	${FILESDIR}/0002-fix-locale-issue.patch
-	${FILESDIR}/0003-fix-locale-issue-in-service-file.patch
-	${FILESDIR}/777.patch
+	${FILESDIR}/0003-fix-locale-issue-in-service-file-1.patch
+	${FILESDIR}/917.patch
 )
 
 src_prepare() {
 	default
 	eapply_user
 }
+
+#src_configure() {
+#	local emesonargs=(
+#		-Dsystemd=true
+#		-Dtests=false
+#	)
+#	meson_src_configure
+#}
 
 src_install() {
 	default

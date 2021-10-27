@@ -1,0 +1,432 @@
+From 30d852bb8751320231d2b478137e0d3f4767ce65 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Mon, 18 Oct 2021 15:58:58 +0200
+Subject: [PATCH 1/8] lockscreen: Use margin-{start,end} instead of
+ margin-{left,right}
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The later ones are deprecated and complicate the GTK4 migration.
+
+Signed-off-by: Guido Günther <guido.gunther@puri.sm>
+---
+ src/ui/lockscreen.ui | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/src/ui/lockscreen.ui b/src/ui/lockscreen.ui
+index 1162718e..09def4d2 100644
+--- a/src/ui/lockscreen.ui
++++ b/src/ui/lockscreen.ui
+@@ -129,8 +129,8 @@
+                             <property name="valign">start</property>
+                             <property name="halign">end</property>
+                             <property name="hexpand">False</property>
+-                            <property name="margin_left">6</property>
+-                            <property name="margin_right">6</property>
++                            <property name="margin-start">6</property>
++                            <property name="margin-end">6</property>
+                             <property name="icon-size">GTK_ICON_SIZE_LARGE_TOOLBAR</property>
+                           </object>
+                           <packing>
+@@ -147,8 +147,8 @@
+                             <property name="halign">end</property>
+                             <property name="hexpand">False</property>
+                             <property name="icon-size">GTK_ICON_SIZE_LARGE_TOOLBAR</property>
+-                            <property name="margin_left">6</property>
+-                            <property name="margin_right">6</property>
++                            <property name="margin-start">6</property>
++                            <property name="margin-end">6</property>
+                             <property name="no_show_all">True</property>
+                           </object>
+                           <packing>
+@@ -164,8 +164,8 @@
+                             <property name="valign">start</property>
+                             <property name="halign">end</property>
+                             <property name="hexpand">False</property>
+-                            <property name="margin_left">6</property>
+-                            <property name="margin_right">6</property>
++                            <property name="margin-start">6</property>
++                            <property name="margin-end">6</property>
+                             <property name="icon-size">GTK_ICON_SIZE_LARGE_TOOLBAR</property>
+                           </object>
+                           <packing>
+@@ -182,8 +182,8 @@
+                             <property name="halign">end</property>
+                             <property name="hexpand">False</property>
+                             <property name="icon-size">GTK_ICON_SIZE_LARGE_TOOLBAR</property>
+-                            <property name="margin_left">6</property>
+-                            <property name="margin_right">6</property>
++                            <property name="margin-start">6</property>
++                            <property name="margin-end">6</property>
+                           </object>
+                           <packing>
+                             <property name="expand">False</property>
+@@ -357,7 +357,7 @@
+                 <property name="visible">True</property>
+                 <property name="halign">start</property>
+                 <property name="expand">False</property>
+-                <property name="margin-left">16</property>
++                <property name="margin-start">16</property>
+                 <property name="margin-top">16</property>
+                 <signal name="clicked" handler="deck_back_clicked_cb"/>
+                 <style>
+-- 
+GitLab
+
+
+From 216fad9d16095d52a1b28f1ab882ddfe2e33369a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Mon, 18 Oct 2021 16:00:29 +0200
+Subject: [PATCH 2/8] lockscreen: Remove superfluous no_show_all property
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Guido Günther <guido.gunther@puri.sm>
+---
+ src/ui/lockscreen.ui | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/ui/lockscreen.ui b/src/ui/lockscreen.ui
+index 09def4d2..65a8b949 100644
+--- a/src/ui/lockscreen.ui
++++ b/src/ui/lockscreen.ui
+@@ -149,7 +149,6 @@
+                             <property name="icon-size">GTK_ICON_SIZE_LARGE_TOOLBAR</property>
+                             <property name="margin-start">6</property>
+                             <property name="margin-end">6</property>
+-                            <property name="no_show_all">True</property>
+                           </object>
+                           <packing>
+                             <property name="expand">False</property>
+-- 
+GitLab
+
+
+From f65ecbb72b427b8c99bc488b9bd8d0e96be3b204 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Mon, 18 Oct 2021 15:58:58 +0200
+Subject: [PATCH 3/8] top-panel: Use margin-{start,end} instead of
+ margin-{left,right}
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The later ones are deprecated and complicate the GTK4 migration.
+
+Signed-off-by: Guido Günther <guido.gunther@puri.sm>
+---
+ src/ui/top-panel.ui | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/src/ui/top-panel.ui b/src/ui/top-panel.ui
+index 2d730a01..7ebaa542 100644
+--- a/src/ui/top-panel.ui
++++ b/src/ui/top-panel.ui
+@@ -69,8 +69,8 @@
+                           <object class="PhoshWWanInfo" id="wwaninfo">
+                             <property name="visible" bind-source="wwaninfo" bind-property="present" bind-flags="sync-create"/>
+                             <property name="can_focus">False</property>
+-                            <property name="margin-left">0</property>
+-                            <property name="margin_right">8</property>
++                            <property name="margin-start">0</property>
++                            <property name="margin-end">8</property>
+                             <property name="icon-size">GTK_ICON_SIZE_SMALL_TOOLBAR</property>
+                             <property name="show_detail">True</property>
+                           </object>
+@@ -85,7 +85,7 @@
+                             <property name="visible" bind-source="wifiinfo" bind-property="present" bind-flags="sync-create"/>
+                             <property name="can_focus">False</property>
+                             <property name="icon-size">GTK_ICON_SIZE_SMALL_TOOLBAR</property>
+-                            <property name="margin_right">8</property>
++                            <property name="margin-end">8</property>
+                           </object>
+                           <packing>
+                             <property name="expand">False</property>
+@@ -98,7 +98,7 @@
+                             <property name="visible" bind-source="btinfo" bind-property="present" bind-flags="sync-create"/>
+                             <property name="can_focus">False</property>
+                             <property name="icon-size">GTK_ICON_SIZE_SMALL_TOOLBAR</property>
+-                            <property name="margin_right">8</property>
++                            <property name="margin-end">8</property>
+                           </object>
+                           <packing>
+                             <property name="expand">False</property>
+@@ -111,7 +111,7 @@
+                             <property name="visible" bind-source="connectivity_info" bind-property="connectivity" bind-flags="invert-boolean|sync-create"/>
+                             <property name="can_focus">False</property>
+                             <property name="icon-size">GTK_ICON_SIZE_SMALL_TOOLBAR</property>
+-                            <property name="margin_right">8</property>
++                            <property name="margin-end">8</property>
+                           </object>
+                           <packing>
+                             <property name="expand">False</property>
+@@ -124,7 +124,7 @@
+                             <property name="visible" bind-source="docked_info" bind-property="enabled" bind-flags="sync-create"/>
+                             <property name="can_focus">False</property>
+                             <property name="icon-size">GTK_ICON_SIZE_SMALL_TOOLBAR</property>
+-                            <property name="margin_right">8</property>
++                            <property name="margin-end">8</property>
+                           </object>
+                           <packing>
+                             <property name="expand">False</property>
+@@ -168,7 +168,7 @@
+                           <object class="GtkLabel" id="lbl_lang">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="margin_right">8</property>
++                            <property name="margin-end">8</property>
+                             <property name="margin_top">2</property>
+                             <property name="justify">center</property>
+                           </object>
+@@ -184,7 +184,7 @@
+                             <property name="visible" bind-source="hks_info_mic" bind-property="blocked" bind-flags="sync-create"/>
+                             <property name="can_focus">False</property>
+                             <property name="icon-size">GTK_ICON_SIZE_SMALL_TOOLBAR</property>
+-                            <property name="margin-right">8</property>
++                            <property name="margin-end">8</property>
+                           </object>
+                           <packing>
+                             <property name="expand">False</property>
+@@ -198,7 +198,7 @@
+                             <property name="visible" bind-source="hks_info_camera" bind-property="blocked" bind-flags="sync-create"/>
+                             <property name="can_focus">False</property>
+                             <property name="icon-size">GTK_ICON_SIZE_SMALL_TOOLBAR</property>
+-                            <property name="margin-right">8</property>
++                            <property name="margin-end">8</property>
+                           </object>
+                           <packing>
+                             <property name="expand">False</property>
+@@ -211,7 +211,7 @@
+                             <property name="visible" bind-source="location_info" bind-property="active" bind-flags="sync-create"/>
+                             <property name="can_focus">False</property>
+                             <property name="icon-size">GTK_ICON_SIZE_SMALL_TOOLBAR</property>
+-                            <property name="margin-right">8</property>
++                            <property name="margin-end">8</property>
+                           </object>
+                           <packing>
+                             <property name="expand">False</property>
+@@ -223,7 +223,7 @@
+                           <object class="PhoshBatteryInfo" id="batteryinfo">
+                             <property name="visible">True</property>
+                             <property name="can_focus">False</property>
+-                            <property name="margin-right">0</property>
++                            <property name="margin-end">0</property>
+                             <property name="icon-size">GTK_ICON_SIZE_SMALL_TOOLBAR</property>
+                           </object>
+                           <packing>
+-- 
+GitLab
+
+
+From a7b523f840f3aa9d8d1c10803e9c6f4ad4967aa7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Mon, 18 Oct 2021 15:58:58 +0200
+Subject: [PATCH 4/8] app-grid-button: Use margin-{start,end} instead of
+ margin-{left,right}
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The later ones are deprecated and complicate the GTK4 migration.
+
+Signed-off-by: Guido Günther <guido.gunther@puri.sm>
+---
+ src/ui/app-grid-button.ui | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/ui/app-grid-button.ui b/src/ui/app-grid-button.ui
+index bdf2dbab..b54bc0e7 100644
+--- a/src/ui/app-grid-button.ui
++++ b/src/ui/app-grid-button.ui
+@@ -21,8 +21,8 @@
+             <property name="can_focus">False</property>
+             <property name="halign">center</property>
+             <property name="valign">start</property>
+-            <property name="margin_left">3</property>
+-            <property name="margin_right">3</property>
++            <property name="margin-start">3</property>
++            <property name="margin-end">3</property>
+             <property name="margin_top">3</property>
+             <property name="margin_bottom">3</property>
+             <property name="orientation">vertical</property>
+-- 
+GitLab
+
+
+From 78e4b744ebfbcc3dd5a66e32a694101a4894ff4f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Mon, 18 Oct 2021 15:58:58 +0200
+Subject: [PATCH 5/8] app-grid: Use margin-{start,end} instead of
+ margin-{left,right}
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The later ones are deprecated and complicate the GTK4 migration.
+
+Signed-off-by: Guido Günther <guido.gunther@puri.sm>
+---
+ src/ui/app-grid.ui | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/ui/app-grid.ui b/src/ui/app-grid.ui
+index 5af539fc..9332322f 100644
+--- a/src/ui/app-grid.ui
++++ b/src/ui/app-grid.ui
+@@ -88,8 +88,8 @@
+                       <object class="GtkFlowBox" id="favs">
+                         <property name="visible">True</property>
+                         <property name="can_focus">False</property>
+-                        <property name="margin_left">3</property>
+-                        <property name="margin_right">3</property>
++                        <property name="margin-start">3</property>
++                        <property name="margin-end">3</property>
+                         <property name="margin_top">6</property>
+                         <property name="margin_bottom">12</property>
+                         <property name="hexpand">True</property>
+@@ -109,8 +109,8 @@
+                       <object class="GtkSeparator">
+                         <property name="visible">True</property>
+                         <property name="can_focus">False</property>
+-                        <property name="margin_left">6</property>
+-                        <property name="margin_right">6</property>
++                        <property name="margin-start">6</property>
++                        <property name="margin-end">6</property>
+                       </object>
+                     </child>
+                   </object>
+@@ -127,8 +127,8 @@
+                 <property name="visible">True</property>
+                 <property name="can_focus">False</property>
+                 <property name="margin_top">12</property>
+-                <property name="margin_left">3</property>
+-                <property name="margin_right">3</property>
++                <property name="margin-start">3</property>
++                <property name="margin-end">3</property>
+                 <property name="margin_bottom">3</property>
+                 <property name="hexpand">True</property>
+                 <property name="vexpand">False</property>
+-- 
+GitLab
+
+
+From 3356296244c43a3f6d183be1e73ae5b668aecfc9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Mon, 18 Oct 2021 15:58:58 +0200
+Subject: [PATCH 6/8] home: Use margin-{start,end} instead of
+ margin-{left,right}
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The later ones are deprecated and complicate the GTK4 migration.
+
+Signed-off-by: Guido Günther <guido.gunther@puri.sm>
+---
+ src/ui/home.ui | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/ui/home.ui b/src/ui/home.ui
+index 62d03e28..ba3a23a5 100644
+--- a/src/ui/home.ui
++++ b/src/ui/home.ui
+@@ -52,7 +52,7 @@
+                     <property name="can_focus">True</property>
+                     <property name="halign">end</property>
+                     <property name="valign">center</property>
+-                    <property name="margin_right">6</property>
++                    <property name="margin-end">6</property>
+                     <property name="receives_default">True</property>
+                     <signal name="clicked" handler="osk_clicked_cb" swapped="true"/>
+                     <style>
+-- 
+GitLab
+
+
+From c22a7f0c88de3c22fc37d0f5471d1e3480e06599 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Mon, 18 Oct 2021 15:58:58 +0200
+Subject: [PATCH 7/8] media-player: Use margin-{start,end} instead of
+ margin-{left,right}
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The later ones are deprecated and complicate the GTK4 migration.
+
+Signed-off-by: Guido Günther <guido.gunther@puri.sm>
+---
+ src/ui/media-player.ui | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/ui/media-player.ui b/src/ui/media-player.ui
+index fe348598..751b650f 100644
+--- a/src/ui/media-player.ui
++++ b/src/ui/media-player.ui
+@@ -146,7 +146,7 @@
+               <object class="GtkBox">
+                 <property name="visible">True</property>
+                 <property name="orientation">vertical</property>
+-                <property name="margin-left">6</property>
++                <property name="margin-start">6</property>
+                 <property name="valign">center</property>
+                 <child>
+                   <object class="GtkLabel" id="lbl_artist">
+-- 
+GitLab
+
+
+From a83a9c02c3fb14273180d87cbca1dfb408e87669 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Mon, 18 Oct 2021 15:58:58 +0200
+Subject: [PATCH 8/8] settings-menu: Use margin-{start,end} instead of
+ margin-{left,right}
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The later ones are deprecated and complicate the GTK4 migration.
+
+Signed-off-by: Guido Günther <guido.gunther@puri.sm>
+---
+ src/ui/settings-menu.ui | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/ui/settings-menu.ui b/src/ui/settings-menu.ui
+index a232d960..cfde32ab 100644
+--- a/src/ui/settings-menu.ui
++++ b/src/ui/settings-menu.ui
+@@ -15,8 +15,8 @@
+           <object class="GtkBox" id="box_settings">
+             <property name="visible">True</property>
+             <property name="can_focus">False</property>
+-            <property name="margin_left">10</property>
+-            <property name="margin_right">10</property>
++            <property name="margin-start">10</property>
++            <property name="margin-end">10</property>
+             <property name="margin_top">20</property>
+             <property name="margin_bottom">10</property>
+             <property name="orientation">vertical</property>
+@@ -173,7 +173,7 @@
+                   <object class="GtkImage">
+                     <property name="visible">True</property>
+                     <property name="can_focus">False</property>
+-                    <property name="margin_right">6</property>
++                    <property name="margin-end">6</property>
+                     <property name="icon_name">display-brightness-symbolic</property>
+                   </object>
+                   <packing>
+@@ -215,7 +215,7 @@
+                       <object class="GtkImage">
+                         <property name="visible">True</property>
+                         <property name="can_focus">False</property>
+-                        <property name="margin_right">6</property>
++                        <property name="margin-end">6</property>
+                         <property name="icon_name">torch-enabled-symbolic</property>
+                       </object>
+                       <packing>
+-- 
+GitLab
+

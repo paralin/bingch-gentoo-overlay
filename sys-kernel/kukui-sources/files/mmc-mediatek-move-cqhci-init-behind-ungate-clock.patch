@@ -1,0 +1,160 @@
+From patchwork Thu Oct 28 02:20:49 2021
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Patchwork-Submitter: Wenbin Mei <wenbin.mei@mediatek.com>
+X-Patchwork-Id: 12589119
+Return-Path: 
+ <SRS0=IDfX=PQ=lists.infradead.org=linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@kernel.org>
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+	aws-us-west-2-korg-lkml-1.web.codeaurora.org
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E6AFC433EF
+	for <linux-mediatek@archiver.kernel.org>;
+ Thu, 28 Oct 2021 02:21:24 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org
+ [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 4BBEC61073
+	for <linux-mediatek@archiver.kernel.org>;
+ Thu, 28 Oct 2021 02:21:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4BBEC61073
+Authentication-Results: mail.kernel.org;
+ dmarc=fail (p=none dis=none) header.from=mediatek.com
+Authentication-Results: mail.kernel.org;
+ spf=none smtp.mailfrom=lists.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+	List-Archive:List-Unsubscribe:List-Id:MIME-Version:Message-ID:Date:Subject:CC
+	:To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Owner; bh=XReJURbp+6aTCUzInVpp9/AYmpAGnxlRcZAHMC6OSFw=; b=n4omdyjWCuI9RT
+	N86Oq8csQ9fJxno/CAWaFpSed8NIAkvV4uv0BaUF/eKuPaYjgnbNK0wzBDEY6E8gV+4+skBUMmz9e
+	uIppWXXSytuMCuN0CM7xmvg7/QlJWWuH1nB5JXCYyH0OQx5RVJBAtpWEBDUwts0TeBOxA67QbzsQi
+	CUfvOJUFZp4Om4mHQdlxjpkazZKnd4XZY5QECaqZTSyHRpjUszRB1LwdoglF8B/HVk6rOlzP40aqY
+	sDilVgxKwCDHfhEarEuCyd03mOBy3x7cVn9ly2OvFG6L0327ExlvRrLaYsY8q+6gIKMxQkjpQ2pko
+	DimnmsQt4Mxa+wSo9ddw==;
+Received: from localhost ([::1] helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtp (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1mfv2X-006jSX-MB; Thu, 28 Oct 2021 02:21:13 +0000
+Received: from mailgw01.mediatek.com ([216.200.240.184])
+ by bombadil.infradead.org with esmtps (Exim 4.94.2 #2 (Red Hat Linux))
+ id 1mfv2K-006jQQ-IY; Thu, 28 Oct 2021 02:21:03 +0000
+X-UUID: 40324842d5e8450db218ac64d58e937e-20211027
+X-UUID: 40324842d5e8450db218ac64d58e937e-20211027
+Received: from mtkcas66.mediatek.inc [(172.29.193.44)] by
+ mailgw01.mediatek.com
+ (envelope-from <wenbin.mei@mediatek.com>)
+ (musrelay.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+ with ESMTP id 750440461; Wed, 27 Oct 2021 19:20:56 -0700
+Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
+ MTKMBS62N1.mediatek.inc (172.29.193.41) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 27 Oct 2021 19:20:54 -0700
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 28 Oct 2021 10:20:52 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs10n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via
+ Frontend Transport; Thu, 28 Oct 2021 10:20:52 +0800
+From: Wenbin Mei <wenbin.mei@mediatek.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+CC: Matthias Brugger <matthias.bgg@gmail.com>, Chaotian Jing
+ <chaotian.jing@mediatek.com>, Chun-Hung Wu <chun-hung.wu@mediatek.com>, "Yong
+ Mao" <yong.mao@mediatek.com>, <linux-mmc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-mediatek@lists.infradead.org>, <srv_heupstream@mediatek.com>, "Wenbin
+ Mei" <wenbin.mei@mediatek.com>, <stable@vger.kernel.org>
+Subject: [PATCH] mmc: mediatek: move cqhci init behind ungate clock
+Date: Thu, 28 Oct 2021 10:20:49 +0800
+Message-ID: <20211028022049.22129-1-wenbin.mei@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+X-MTK: N
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20211027_192100_664014_5ABD87E2 
+X-CRM114-Status: GOOD (  10.53  )
+X-BeenThere: linux-mediatek@lists.infradead.org
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <linux-mediatek.lists.infradead.org>
+List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=unsubscribe>
+List-Archive: <http://lists.infradead.org/pipermail/linux-mediatek/>
+List-Post: <mailto:linux-mediatek@lists.infradead.org>
+List-Help: <mailto:linux-mediatek-request@lists.infradead.org?subject=help>
+List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-mediatek>,
+ <mailto:linux-mediatek-request@lists.infradead.org?subject=subscribe>
+Sender: "Linux-mediatek" <linux-mediatek-bounces@lists.infradead.org>
+Errors-To: 
+ linux-mediatek-bounces+linux-mediatek=archiver.kernel.org@lists.infradead.org
+
+We must enable clock before cqhci init, because crypto needs
+read information from CQHCI registers, otherwise, it will hang
+in MediaTek mmc host controller.
+
+Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
+Fixes: 88bd652b3c74 ("mmc: mediatek: command queue support")
+Cc: stable@vger.kernel.org
+---
+ drivers/mmc/host/mtk-sd.c | 38 +++++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+index b124cfee05a1..943940b44e83 100644
+--- a/drivers/mmc/host/mtk-sd.c
++++ b/drivers/mmc/host/mtk-sd.c
+@@ -2656,6 +2656,25 @@ static int msdc_drv_probe(struct platform_device *pdev)
+ 		host->dma_mask = DMA_BIT_MASK(32);
+ 	mmc_dev(mmc)->dma_mask = &host->dma_mask;
+ 
++	host->timeout_clks = 3 * 1048576;
++	host->dma.gpd = dma_alloc_coherent(&pdev->dev,
++				2 * sizeof(struct mt_gpdma_desc),
++				&host->dma.gpd_addr, GFP_KERNEL);
++	host->dma.bd = dma_alloc_coherent(&pdev->dev,
++				MAX_BD_NUM * sizeof(struct mt_bdma_desc),
++				&host->dma.bd_addr, GFP_KERNEL);
++	if (!host->dma.gpd || !host->dma.bd) {
++		ret = -ENOMEM;
++		goto release_mem;
++	}
++	msdc_init_gpd_bd(host, &host->dma);
++	INIT_DELAYED_WORK(&host->req_timeout, msdc_request_timeout);
++	spin_lock_init(&host->lock);
++
++	platform_set_drvdata(pdev, mmc);
++	msdc_ungate_clock(host);
++	msdc_init_hw(host);
++
+ 	if (mmc->caps2 & MMC_CAP2_CQE) {
+ 		host->cq_host = devm_kzalloc(mmc->parent,
+ 					     sizeof(*host->cq_host),
+@@ -2676,25 +2695,6 @@ static int msdc_drv_probe(struct platform_device *pdev)
+ 		mmc->max_seg_size = 64 * 1024;
+ 	}
+ 
+-	host->timeout_clks = 3 * 1048576;
+-	host->dma.gpd = dma_alloc_coherent(&pdev->dev,
+-				2 * sizeof(struct mt_gpdma_desc),
+-				&host->dma.gpd_addr, GFP_KERNEL);
+-	host->dma.bd = dma_alloc_coherent(&pdev->dev,
+-				MAX_BD_NUM * sizeof(struct mt_bdma_desc),
+-				&host->dma.bd_addr, GFP_KERNEL);
+-	if (!host->dma.gpd || !host->dma.bd) {
+-		ret = -ENOMEM;
+-		goto release_mem;
+-	}
+-	msdc_init_gpd_bd(host, &host->dma);
+-	INIT_DELAYED_WORK(&host->req_timeout, msdc_request_timeout);
+-	spin_lock_init(&host->lock);
+-
+-	platform_set_drvdata(pdev, mmc);
+-	msdc_ungate_clock(host);
+-	msdc_init_hw(host);
+-
+ 	ret = devm_request_irq(&pdev->dev, host->irq, msdc_irq,
+ 			       IRQF_TRIGGER_NONE, pdev->name, host);
+ 	if (ret)

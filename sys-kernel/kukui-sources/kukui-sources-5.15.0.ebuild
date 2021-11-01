@@ -1,40 +1,24 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="7"
-UNIPATCH_STRICTORDER="yes"
+EAPI="8"
 K_NOUSENAME="yes"
 K_NOSETEXTRAVERSION="yes"
-K_NOUSEPR="yes"
 K_SECURITY_UNSUPPORTED="1"
-K_BASE_VER="5.14"
-K_EXP_GENPATCHES_NOUSE="1"
-K_FROM_GIT="yes"
 ETYPE="sources"
-CKV="${PVR/-r/-git}"
-
-# only use this if it's not an _rc/_pre release
-[ "${PV/_pre}" == "${PV}" ] && [ "${PV/_rc}" == "${PV}" ] && OKV="${PV}"
 inherit kernel-2
 detect_version
 
-DESCRIPTION="The very latest -git version of the Linux kernel"
 HOMEPAGE="https://www.kernel.org"
 SRC_URI="${KERNEL_URI}"
 
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sparc ~x86"
-IUSE=""
+KEYWORDS="~arm64"
 
-K_EXTRAEINFO="This kernel is not supported by Gentoo due to its unstable and
-experimental nature. If you have any issues, try a matching vanilla-sources
-ebuild -- if the problem is not there, please contact the upstream kernel
-developers at https://bugzilla.kernel.org and on the linux-kernel mailing list to
-report the problem so it can be fixed in time for the next kernel release."
+DESCRIPTION="Full sources for the Linux kernel, with patches for kukui chromebook"
 
 RDEPEND=""
 DEPEND="${RDEPEND}
 	>=sys-devel/patch-2.7.5"
-
 
 PATCHES=(
 	# From https://github.com/Maccraft123/Cadmium/tree/master/baseboard/kukui/patches
@@ -137,6 +121,7 @@ PATCHES=(
 	${FILESDIR}/v2-mailbox-remove-the-error-message-when-gce-clk-is-defer.patch
 	${FILESDIR}/Bluetooth-btusb-Fix-failed-to-send-func-ctrl-for-MediaTek-devices..patch
 	${FILESDIR}/v4-1-3-PM-wakeirq-support-enabling-wake-up-irq-after-runtime_suspend-called.patch
+#	${FILESDIR}/mmc-mediatek-move-cqhci-init-behind-ungate-clock-fix.patch
 )
 
 src_prepare() {

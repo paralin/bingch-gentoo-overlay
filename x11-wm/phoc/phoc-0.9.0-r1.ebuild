@@ -9,7 +9,7 @@ EGIT_REPO_URI="https://gitlab.gnome.org/World/Phosh/${PN}.git"
 KEYWORDS="~amd64 ~arm64"
 if [[ ${PV} != 9999 ]]; then
     #EGIT_COMMIT="tags/v${PV}"
-	EGIT_COMMIT="3cd31d3761fe4c34260e509684fe4d7a09662a08"
+	EGIT_COMMIT="cc74528e0b0a2e985c4592413433daffad38bcae"
 else
     KEYWORDS=""
 fi

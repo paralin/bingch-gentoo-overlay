@@ -57,6 +57,7 @@ PATCHES=(
 	${FILESDIR}/rm-mt8192-svs-nodes.patch
 	${FILESDIR}/fix-mt8183-add-svs-nodes.patch
 	${FILESDIR}/media-mediatek-support-mdp3-on-mt8183-platform.patch
+	#${FILESDIR}/v2-media-platform-mtk-mdp3-Revise-frame-change-criteria.patch
 	# mmsys
 	${FILESDIR}/Add-support-to-the-mmsys-driver-to-be-a-reset-controller-fix-5.15.patch
 
@@ -121,6 +122,7 @@ PATCHES=(
 	${FILESDIR}/v2-mailbox-remove-the-error-message-when-gce-clk-is-defer.patch
 	${FILESDIR}/Bluetooth-btusb-Fix-failed-to-send-func-ctrl-for-MediaTek-devices..patch
 	${FILESDIR}/v4-1-3-PM-wakeirq-support-enabling-wake-up-irq-after-runtime_suspend-called.patch
+	${FILESDIR}/v2-remoteproc-use-pe-format-string-to-print-return-error-code.patch
 #	${FILESDIR}/mmc-mediatek-move-cqhci-init-behind-ungate-clock-fix.patch
 )
 

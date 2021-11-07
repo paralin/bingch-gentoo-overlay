@@ -15,8 +15,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 if [[ ${PV} != 9999 ]]; then
-        EGIT_COMMIT="tags/${PV}"
-		#EGIT_COMMIT="7b45de69df5a5312f702d79a23ae5e87979857ef"
+	EGIT_BRANCH="gnome-41"
+	EGIT_COMMIT="tags/${PV}"
+	#EGIT_COMMIT="7b45de69df5a5312f702d79a23ae5e87979857ef"
 else
         KEYWORDS=""
 fi

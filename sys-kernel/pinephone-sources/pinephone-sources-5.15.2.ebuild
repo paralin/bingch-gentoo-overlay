@@ -30,9 +30,6 @@ PATCHES=(
 	${FILESDIR}/0107-quirk-kernel-org-bug-210681-firmware_rome_error.patch
 	${FILESDIR}/0177-leds-gpio-make-max_brightness-configurable.patch
     ${FILESDIR}/panic-led-5.12.patch
-	#${FILESDIR}/0178-sun8i-codec-fix-headphone-jack-pin-name.patch
-	#${FILESDIR}/0179-arm64-dts-allwinner-pinephone-improve-device-tree-5.12.patch
-    #${FILESDIR}/improve-jack-button-handling-and-mic.patch
 
 	# keyboard
     ${FILESDIR}/d1d849cae12db71aa81ceedaedc1b17a34790367.patch
